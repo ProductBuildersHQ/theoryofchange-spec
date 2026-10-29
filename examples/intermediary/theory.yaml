@@ -1,0 +1,2472 @@
+kind: TheoryOfChange
+specVersion: "0.1"
+id: riverbend-network
+metadata:
+  name: Riverbend Nonprofit Network theory of change
+  description: Fictional example for an intermediary organization with three program areas.
+  status: draft
+  owner: Riverbend Nonprofit Network staff
+  tags:
+    - intermediary
+    - example
+    - fictional
+perspective:
+  actorId: act-network
+  role: proponent
+context:
+  problemStatement: Small and mid-sized nonprofits in Riverbend County spend scarce staff time on back-office work and grant hunting, work alone on shared problems, and are rarely heard in local planning, so residents get fewer and less reliable services than the need requires.
+  rootCauses:
+    - Leaders are promoted for program skill and get little management support or peer exchange.
+    - Each organization buys back-office help and tracks funding alone, so costs are high and effort is duplicated.
+    - There is no standing channel through which members speak with one voice to local government and funders.
+  targetPopulation: About 150 member nonprofits, and through them the residents of Riverbend County who use their services.
+  geography: Riverbend County (a fictional county)
+  timeHorizon:
+    start: "2026-01-01"
+    end: "2028-12-31"
+  narrative: Riverbend Nonprofit Network is a membership network with about 8 staff. It works through three program areas, each a pathway in this theory. Learning Exchange builds leadership and peer ties, Shared Services lowers overhead and widens the grant pipeline, and Civic Voice helps members take joint positions and be heard by local government and funders. The three pathways converge on shared long-term outcomes about member collaboration, then on resident-level impact. Layer 1 is change in member nonprofits, which the network influences and measures directly. Layer 2 is change for residents, which the network tracks and contributes to but does not own.
+ceilingOfAccountability:
+  level: long_term
+  rationale: The network answers for the capability, collaboration, funding stability, and collective voice of its members. Resident-level change depends on many forces besides the members' strength, such as demand, public funding, and the economy, so it is tracked and contributed to but not owned.
+outcomes:
+  - id: oc-resident-access
+    title: Residents get timely, good-quality services from local nonprofits
+    description: Layer 2 impact. People in the county who need community services can reach them without long waits.
+    level: impact
+    sphere: interest
+    logic:
+      type: all
+    category: service access
+    changeType: condition
+    population: Residents of Riverbend County who use nonprofit services
+    actorIds:
+      - act-residents
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-county-services
+      note: Inferred from the county services report that wait times track member capacity.
+  - id: oc-resident-voice
+    title: Residents' priorities shape local public decisions
+    description: Layer 2 impact. Planning and funding decisions reflect what residents say they need.
+    level: impact
+    sphere: interest
+    logic:
+      type: all
+    category: civic voice
+    changeType: condition
+    population: Residents of Riverbend County
+    actorIds:
+      - act-residents
+    provenance:
+      basis: hypothesis
+      note: Proposed in the staff workshop; no direct evidence yet.
+  - id: oc-lt-capable-members
+    title: Member nonprofits run strong, well-managed organizations
+    description: Layer 1. Members show sound leadership practice with low overhead.
+    level: long_term
+    sphere: influence
+    category: capability
+    changeType: practice
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: oc-lt-collab
+    title: Members routinely collaborate instead of duplicating effort
+    description: Layer 1. Members share contracts, referrals, and joint work. Three pathways converge here.
+    level: long_term
+    sphere: influence
+    category: collaboration
+    changeType: behavior
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: oc-lt-sustainable
+    title: Members have diversified, stable funding
+    description: Layer 1. Members hold several funding sources and are less exposed to the loss of one.
+    level: long_term
+    sphere: influence
+    logic:
+      type: any
+    category: sustainability
+    changeType: condition
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+      note: Either lower costs or more grant applications could improve stability.
+  - id: oc-lt-collective-voice
+    title: Local government and funders consult members through a coordinated channel
+    description: Layer 1. Officials and funders ask the network, not each member, for input on local issues.
+    level: long_term
+    sphere: influence
+    category: voice
+    changeType: norm
+    population: Local government offices and regional funders
+    actorIds:
+      - act-county-office
+      - act-regional-funder
+      - act-city-council
+    provenance:
+      basis: hypothesis
+      note: Depends on officials accepting a coordinated channel.
+  - id: oc-im-leaders-practice
+    title: Member leaders apply improved management practices
+    level: intermediate
+    sphere: influence
+    category: capability
+    changeType: practice
+    population: Executive directors and senior staff of members
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-peer-learning
+      note: The review reports that peer cohorts with coaching change leadership practice.
+  - id: oc-im-peer-network
+    title: Members turn to each other for advice and joint work
+    level: intermediate
+    sphere: influence
+    category: collaboration
+    changeType: behavior
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-peer-learning
+  - id: oc-im-lower-overhead
+    title: Members spend less staff time and money on back-office work
+    level: intermediate
+    sphere: influence
+    category: capability
+    changeType: condition
+    population: Members using pooled services
+    actorIds:
+      - act-members-small
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-member-survey
+        - ev-pooled-purchasing
+      note: Members named back-office load as their largest drag on program time.
+  - id: oc-im-grant-pipeline
+    title: Members apply for more grants that fit their mission
+    level: intermediate
+    sphere: influence
+    category: sustainability
+    changeType: behavior
+    population: Members using the shared grants calendar
+    actorIds:
+      - act-members-small
+      - act-regional-funder
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+  - id: oc-im-joint-positions
+    title: Members adopt and share joint positions on local issues
+    level: intermediate
+    sphere: influence
+    logic:
+      type: all
+    category: voice
+    changeType: policy
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: hypothesis
+  - id: oc-im-officials-engage
+    title: Local officials and funders engage members in planning
+    level: intermediate
+    sphere: influence
+    category: voice
+    changeType: adoption
+    population: County and municipal planning staff, regional funder program staff
+    actorIds:
+      - act-county-office
+      - act-city-council
+      - act-regional-funder
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: oc-st-leader-skills
+    title: Leaders gain coaching-based skills and confidence
+    level: short_term
+    sphere: influence
+    category: capability
+    changeType: skill
+    population: Executive directors and senior staff of members
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-peer-learning
+  - id: oc-st-peer-ties
+    title: Members form peer relationships across sizes
+    level: short_term
+    sphere: influence
+    category: collaboration
+    changeType: attitude
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-peer-learning
+  - id: oc-st-pooled-use
+    title: Members use pooled back-office services
+    level: short_term
+    sphere: influence
+    category: capability
+    changeType: adoption
+    population: Member nonprofits
+    actorIds:
+      - act-members-small
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: oc-st-calendar-use
+    title: Members consult the shared grants calendar when planning
+    level: short_term
+    sphere: influence
+    category: sustainability
+    changeType: behavior
+    population: Member development staff
+    actorIds:
+      - act-members-small
+    provenance:
+      basis: hypothesis
+  - id: oc-st-policy-know
+    title: Members understand local policy and funding processes
+    level: short_term
+    sphere: influence
+    category: voice
+    changeType: knowledge
+    population: Member leaders and board members
+    actorIds:
+      - act-members-small
+      - act-members-large
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-workshop-notes
+  - id: oc-st-channel
+    title: A standing channel exists between members and the county planning office
+    level: short_term
+    sphere: influence
+    category: voice
+    changeType: condition
+    population: County planning staff and member representatives
+    actorIds:
+      - act-county-office
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+  - id: oc-out-cohorts
+    title: Peer-learning cohorts and coaching sessions delivered
+    level: output
+    sphere: control
+    category: learning
+    changeType: condition
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: oc-out-services
+    title: Pooled service contracts and group purchasing deals in place
+    level: output
+    sphere: control
+    category: services
+    changeType: condition
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: oc-out-calendar
+    title: Shared grants calendar published and kept current
+    level: output
+    sphere: control
+    category: services
+    changeType: condition
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+  - id: oc-out-briefings
+    title: Policy briefings and joint-position drafts produced
+    level: output
+    sphere: control
+    category: voice
+    changeType: condition
+    provenance:
+      basis: hypothesis
+  - id: oc-certified-members
+    title: Members hold a network-issued quality certification
+    description: Considered as a fourth program area and rejected by the member assembly.
+    level: long_term
+    sphere: influence
+    category: capability
+    changeType: condition
+    provenance:
+      basis: rejected
+      note: Members feared a two-tier network and the cost of audits.
+      decidedAt: "2026-03-20"
+      decidedBy: Member assembly
+preconditionGroups:
+  - id: grp-capable
+    target: oc-lt-capable-members
+    members:
+      - oc-im-leaders-practice
+      - oc-im-lower-overhead
+    logic:
+      type: all
+    sufficiency: Good practice without time freed from overhead does not stick, and freed time without better practice is not enough.
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-peer-learning
+  - id: grp-collab
+    target: oc-lt-collab
+    members:
+      - oc-im-peer-network
+      - oc-im-lower-overhead
+      - oc-im-joint-positions
+    logic:
+      type: at_least
+      k: 2
+    sufficiency: Any two of peer exchange, freed capacity, and shared positions are enough for routine collaboration to start.
+    provenance:
+      basis: hypothesis
+  - id: grp-voice
+    target: oc-lt-collective-voice
+    members:
+      - oc-im-joint-positions
+      - oc-im-officials-engage
+    logic:
+      type: all
+    sufficiency: A coordinated channel needs both a shared position to carry and an official who asks for it.
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+links:
+  - id: ln-cohorts-skills
+    from: oc-out-cohorts
+    to: oc-st-leader-skills
+    type: causes
+    rationale: Leaders who attend cohorts and coaching practice the skills with peers.
+    assumptionIds:
+      - asm-time-to-attend
+    evidenceIds:
+      - ev-peer-learning
+    interventionIds:
+      - int-leader-coaching
+      - int-training-series
+    polarity: positive
+    lag: P3M
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-peer-learning
+  - id: ln-cohorts-ties
+    from: oc-out-cohorts
+    to: oc-st-peer-ties
+    type: causes
+    rationale: Mixed-size cohorts give small and large members repeated contact.
+    assumptionIds:
+      - asm-time-to-attend
+    interventionIds:
+      - int-peer-cohorts
+    polarity: positive
+    lag: P3M
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-peer-learning
+  - id: ln-skills-practice
+    from: oc-st-leader-skills
+    to: oc-im-leaders-practice
+    type: causes
+    rationale: Skills practiced in coaching are applied to staffing, finance, and board work once leaders return.
+    assumptionIds:
+      - asm-skills-applied
+    evidenceIds:
+      - ev-peer-learning
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-peer-learning
+  - id: ln-ties-network
+    from: oc-st-peer-ties
+    to: oc-im-peer-network
+    type: enables
+    rationale: Members ask peers they know and trust before they ask outsiders.
+    assumptionIds:
+      - asm-peer-trust
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: inferred
+  - id: ln-practice-capable
+    from: oc-im-leaders-practice
+    to: oc-lt-capable-members
+    type: necessary_condition
+    rationale: Strong organizations need leaders who manage deliberately, not only program staff with strong skills.
+    assumptionIds:
+      - asm-leadership-turnover
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: ln-network-collab
+    from: oc-im-peer-network
+    to: oc-lt-collab
+    type: contributes_to
+    rationale: Members who already exchange advice find it easier to share contracts and referrals.
+    assumptionIds:
+      - asm-peer-trust
+    evidenceIds:
+      - ev-collab-study
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-collab-study
+  - id: ln-services-use
+    from: oc-out-services
+    to: oc-st-pooled-use
+    type: causes
+    rationale: Members cannot use a service that does not exist, and clear terms lower the cost of trying it.
+    assumptionIds:
+      - asm-vendor-terms
+    interventionIds:
+      - int-pooled-backoffice
+      - int-group-purchasing
+    polarity: positive
+    lag: P3M
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: ln-calendar-use
+    from: oc-out-calendar
+    to: oc-st-calendar-use
+    type: causes
+    rationale: A current calendar replaces the member's own scanning of funder websites.
+    assumptionIds:
+      - asm-calendar-reliable
+    interventionIds:
+      - int-grants-calendar
+    polarity: positive
+    lag: P3M
+    provenance:
+      basis: hypothesis
+  - id: ln-pooled-overhead
+    from: oc-st-pooled-use
+    to: oc-im-lower-overhead
+    type: causes
+    rationale: Pooled bookkeeping and group purchasing replace duplicated work and lower unit costs.
+    assumptionIds:
+      - asm-vendor-terms
+    evidenceIds:
+      - ev-pooled-purchasing
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: ln-calendar-pipeline
+    from: oc-st-calendar-use
+    to: oc-im-grant-pipeline
+    type: enables
+    rationale: Members see deadlines earlier and apply to funders whose priorities match their mission.
+    assumptionIds:
+      - asm-calendar-reliable
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+  - id: ln-overhead-capable
+    from: oc-im-lower-overhead
+    to: oc-lt-capable-members
+    type: necessary_condition
+    rationale: Freed staff time is what lets leaders apply what they learn.
+    assumptionIds:
+      - asm-savings-reinvested
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+  - id: ln-overhead-collab
+    from: oc-im-lower-overhead
+    to: oc-lt-collab
+    type: contributes_to
+    rationale: Members with spare capacity say yes to joint projects; stretched members do not.
+    assumptionIds:
+      - asm-savings-reinvested
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: hypothesis
+  - id: ln-overhead-sustain
+    from: oc-im-lower-overhead
+    to: oc-lt-sustainable
+    type: contributes_to
+    rationale: Lower fixed costs mean a smaller revenue gap and a smaller shock when a grant ends.
+    assumptionIds:
+      - asm-savings-reinvested
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: ln-pipeline-sustain
+    from: oc-im-grant-pipeline
+    to: oc-lt-sustainable
+    type: contributes_to
+    rationale: More well-matched applications add sources of funding and lower dependence on any one funder.
+    assumptionIds:
+      - asm-funders-fit
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+  - id: ln-briefings-know
+    from: oc-out-briefings
+    to: oc-st-policy-know
+    type: causes
+    rationale: Plain-language briefings explain the process, the calendar, and who decides.
+    interventionIds:
+      - int-policy-briefings
+    polarity: positive
+    lag: P3M
+    provenance:
+      basis: hypothesis
+  - id: ln-know-positions
+    from: oc-st-policy-know
+    to: oc-im-joint-positions
+    type: enables
+    rationale: Members cannot agree on a position about a process they do not understand.
+    assumptionIds:
+      - asm-positions-hold
+    interventionIds:
+      - int-joint-forums
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-workshop-notes
+  - id: ln-ties-positions
+    from: oc-st-peer-ties
+    to: oc-im-joint-positions
+    type: enables
+    rationale: Members who know each other settle on shared positions faster and with less friction. This link joins the Learning Exchange to Civic Voice.
+    assumptionIds:
+      - asm-peer-trust
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: hypothesis
+  - id: ln-positions-collab
+    from: oc-im-joint-positions
+    to: oc-lt-collab
+    type: contributes_to
+    rationale: Agreeing on a position is itself a form of joint work that members repeat on other topics.
+    assumptionIds:
+      - asm-positions-hold
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: hypothesis
+  - id: ln-positions-voice
+    from: oc-im-joint-positions
+    to: oc-lt-collective-voice
+    type: necessary_condition
+    rationale: Officials can consult one network only if it has a position to carry.
+    assumptionIds:
+      - asm-positions-hold
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+  - id: ln-officials-voice
+    from: oc-im-officials-engage
+    to: oc-lt-collective-voice
+    type: necessary_condition
+    rationale: A coordinated channel exists only when officials actually use it.
+    assumptionIds:
+      - asm-officials-receptive
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+  - id: ln-channel-officials
+    from: oc-st-channel
+    to: oc-im-officials-engage
+    type: enables
+    rationale: A named contact and a regular meeting make it easy for planning staff to include members.
+    assumptionIds:
+      - asm-officials-receptive
+    interventionIds:
+      - int-liaison-channel
+      - int-funder-roundtable
+    polarity: positive
+    lag: P6M
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-funder-interview
+  - id: ln-capable-access
+    from: oc-lt-capable-members
+    to: oc-resident-access
+    type: contributes_to
+    rationale: Better-run members deliver more and better services with the same funding.
+    assumptionIds:
+      - asm-members-deliver
+    evidenceIds:
+      - ev-county-services
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-county-services
+  - id: ln-collab-access
+    from: oc-lt-collab
+    to: oc-resident-access
+    type: contributes_to
+    rationale: Joint work and referrals reduce gaps and duplicate waiting lists for residents.
+    assumptionIds:
+      - asm-members-deliver
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: hypothesis
+  - id: ln-sustain-access
+    from: oc-lt-sustainable
+    to: oc-resident-access
+    type: contributes_to
+    rationale: Stable funding keeps programs open instead of closing when a grant ends.
+    assumptionIds:
+      - asm-members-deliver
+    polarity: positive
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-county-services
+  - id: ln-voice-resvoice
+    from: oc-lt-collective-voice
+    to: oc-resident-voice
+    type: contributes_to
+    rationale: When officials consult the members who serve residents, resident priorities reach decisions.
+    assumptionIds:
+      - asm-officials-receptive
+    polarity: positive
+    lag: P2Y
+    provenance:
+      basis: hypothesis
+  - id: ln-collab-resvoice
+    from: oc-lt-collab
+    to: oc-resident-voice
+    type: contributes_to
+    rationale: Members that work together carry resident feedback to officials with more weight.
+    assumptionIds:
+      - asm-positions-hold
+    polarity: positive
+    lag: P2Y
+    provenance:
+      basis: hypothesis
+  - id: ln-collab-recruit
+    from: oc-lt-collab
+    to: oc-st-peer-ties
+    type: enables
+    rationale: Members who benefit from collaborating recruit peers into cohorts and events, which widens the peer ties the network builds.
+    assumptionIds:
+      - asm-peers-recruit
+    polarity: positive
+    feedback: true
+    loopType: reinforcing
+    lag: P1Y
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-workshop-notes
+  - id: ln-cert-capable
+    from: oc-certified-members
+    to: oc-lt-capable-members
+    type: contributes_to
+    rationale: A certification was expected to signal and enforce good practice.
+    polarity: positive
+    provenance:
+      basis: rejected
+      decidedAt: "2026-03-20"
+      decidedBy: Member assembly
+interventions:
+  - id: int-peer-cohorts
+    title: Run mixed-size peer-learning cohorts
+    description: Cohorts of 10 to 12 leaders meet monthly for a year, mixing small and large members.
+    type: program
+    targets:
+      - oc-out-cohorts
+      - oc-st-peer-ties
+    outputs:
+      - Cohort sessions held
+      - Peer-pairing introductions
+    ownerActorId: act-network
+    status: in_progress
+    resources: Two program staff and meeting space donated by the county library system
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: int-leader-coaching
+    title: Offer one-to-one leadership coaching
+    type: program
+    targets:
+      - oc-out-cohorts
+      - oc-st-leader-skills
+    outputs:
+      - Coaching hours delivered
+    ownerActorId: act-network
+    status: in_progress
+    resources: One program staff member and a pool of volunteer coaches
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: int-training-series
+    title: Deliver a management skills training series
+    type: partnership
+    targets:
+      - oc-st-leader-skills
+    outputs:
+      - Workshops delivered
+      - Participant materials
+    ownerActorId: act-training-partner
+    status: planned
+    resources: Fee-for-service agreement with the training partner
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-peer-learning
+  - id: int-pooled-backoffice
+    title: Run pooled bookkeeping and payroll help
+    type: product
+    targets:
+      - oc-out-services
+      - oc-st-pooled-use
+    outputs:
+      - Member accounts onboarded
+      - Shared service desk
+    ownerActorId: act-network
+    status: in_progress
+    resources: One shared-services coordinator and contracted bookkeepers
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: int-group-purchasing
+    title: Negotiate group purchasing agreements
+    type: partnership
+    targets:
+      - oc-out-services
+    outputs:
+      - Vendor agreements signed
+    ownerActorId: act-network
+    status: in_progress
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: int-grants-calendar
+    title: Maintain a shared grants calendar
+    type: product
+    targets:
+      - oc-out-calendar
+      - oc-st-calendar-use
+    outputs:
+      - Monthly calendar update
+      - Deadline reminders
+    ownerActorId: act-network
+    status: completed
+    resources: Part of one staff role
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: int-policy-briefings
+    title: Publish plain-language policy briefings
+    type: communication
+    targets:
+      - oc-out-briefings
+      - oc-st-policy-know
+    outputs:
+      - Briefings published
+    ownerActorId: act-network
+    status: planned
+    provenance:
+      basis: hypothesis
+  - id: int-joint-forums
+    title: Convene member forums to draft joint positions
+    type: advocacy
+    targets:
+      - oc-st-policy-know
+      - oc-im-joint-positions
+    outputs:
+      - Forums held
+      - Joint position drafts
+    ownerActorId: act-network
+    status: in_progress
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+  - id: int-liaison-channel
+    title: Set up a standing liaison channel with the county planning office
+    type: partnership
+    targets:
+      - oc-st-channel
+    outputs:
+      - Quarterly liaison meeting
+      - Named contacts on both sides
+    ownerActorId: act-county-office
+    status: in_progress
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+  - id: int-funder-roundtable
+    title: Host a funder and member roundtable
+    type: communication
+    targets:
+      - oc-st-channel
+      - oc-im-officials-engage
+    outputs:
+      - Roundtable held twice a year
+    ownerActorId: act-regional-funder
+    status: planned
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-funder-interview
+  - id: int-certification
+    title: Design a member quality certification
+    type: standardization
+    targets:
+      - oc-certified-members
+    ownerActorId: act-network
+    status: cancelled
+    provenance:
+      basis: rejected
+      note: Rejected together with the certification pathway.
+      decidedAt: "2026-03-20"
+      decidedBy: Member assembly
+assumptions:
+  - id: asm-time-to-attend
+    statement: Member leaders can free enough time to attend cohort sessions and coaching.
+    ifThenBecause:
+      if: sessions are held at off-peak times and at no cost
+      then: leaders attend most sessions
+      because: attendance in past pilot sessions fell mainly when sessions clashed with service delivery
+    type: implementation
+    appliesTo:
+      - ln-cohorts-skills
+      - ln-cohorts-ties
+    criticality: high
+    plausibility: medium
+    explainsFully: false
+    needsTesting: true
+    test: Track the share of enrolled leaders who attend at least three quarters of sessions, and ask drop-outs why they left.
+    indicatorIds:
+      - ind-attendance-rate
+    evidenceIds:
+      - ev-attendance-records
+    status: holding
+    ownerActorId: act-network
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-attendance-records
+  - id: asm-skills-applied
+    statement: Leaders put coaching-based skills into practice back at their organizations.
+    ifThenBecause:
+      if: leaders finish coaching with a concrete plan
+      then: they change how they manage staff, money, and the board
+      because: plans with named next steps are more likely to be carried out
+    type: behavioral
+    appliesTo:
+      - ln-skills-practice
+    criticality: critical
+    plausibility: medium
+    explainsFully: false
+    needsTesting: true
+    test: Interview a sample of cohort graduates six months later and score their practice with the maturity rubric.
+    indicatorIds:
+      - ind-practice-maturity
+    evidenceIds:
+      - ev-peer-learning
+    status: untested
+    ownerActorId: act-network
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-peer-learning
+  - id: asm-peer-trust
+    statement: Small and large members come to see each other as peers rather than as competitors for the same funding.
+    type: contextual
+    appliesTo:
+      - ln-ties-network
+      - ln-network-collab
+      - ln-ties-positions
+    criticality: medium
+    plausibility: medium
+    evidenceIds:
+      - ev-collab-study
+    status: untested
+    provenance:
+      basis: hypothesis
+      note: The collaboration study warns that large members may dominate.
+  - id: asm-vendor-terms
+    statement: Vendors offer meaningful discounts and service terms at the volume the members can pool.
+    ifThenBecause:
+      if: members commit volume together
+      then: vendors offer lower prices and simpler terms than members get alone
+      because: vendors value predictable volume and fewer small accounts
+    type: external
+    appliesTo:
+      - ln-services-use
+      - ln-pooled-overhead
+    criticality: high
+    plausibility: medium
+    needsTesting: true
+    test: Compare pooled vendor quotes with the prices a sample of members pay now, before signing each agreement.
+    indicatorIds:
+      - ind-overhead-share
+    evidenceIds:
+      - ev-pooled-purchasing
+    status: holding
+    ownerActorId: act-network
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: asm-calendar-reliable
+    statement: The grants calendar stays accurate enough that members trust it.
+    type: implementation
+    appliesTo:
+      - ln-calendar-use
+      - ln-calendar-pipeline
+    criticality: medium
+    plausibility: high
+    status: holding
+    ownerActorId: act-network
+    provenance:
+      basis: hypothesis
+  - id: asm-savings-reinvested
+    statement: Time and money saved on overhead are reinvested in programs, leadership, and joint work rather than absorbed elsewhere.
+    ifThenBecause:
+      if: back-office cost and effort fall
+      then: leaders put the capacity into mission work and joint projects
+      because: members told us overhead is what crowds those activities out
+    type: causal
+    appliesTo:
+      - ln-overhead-capable
+      - ln-overhead-collab
+      - ln-overhead-sustain
+    criticality: medium
+    plausibility: medium
+    explainsFully: false
+    evidenceIds:
+      - ev-member-survey
+    status: untested
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-member-survey
+  - id: asm-funders-fit
+    statement: Regional funders keep funding priorities open enough that better-matched applications succeed.
+    type: external
+    appliesTo:
+      - ln-pipeline-sustain
+    criticality: medium
+    plausibility: medium
+    evidenceIds:
+      - ev-funder-interview
+    status: at_risk
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-funder-interview
+  - id: asm-officials-receptive
+    statement: The county planning office and municipal councils stay open to a standing channel with the network.
+    ifThenBecause:
+      if: a named contact and a regular meeting exist
+      then: planning staff invite members into planning work
+      because: staff say they lack a quick way to reach the sector
+    type: partnership
+    appliesTo:
+      - ln-channel-officials
+      - ln-officials-voice
+      - ln-voice-resvoice
+    criticality: high
+    plausibility: medium
+    explainsFully: false
+    needsTesting: true
+    test: Review the county planning calendar each quarter for processes that invited members, and ask planning staff whether the channel was used.
+    indicatorIds:
+      - ind-officials-meetings
+    status: at_risk
+    ownerActorId: act-county-office
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-funder-interview
+  - id: asm-positions-hold
+    statement: Once members adopt a joint position, they keep to it in public rather than splintering.
+    type: behavioral
+    appliesTo:
+      - ln-know-positions
+      - ln-positions-collab
+      - ln-positions-voice
+      - ln-collab-resvoice
+    criticality: high
+    plausibility: low
+    needsTesting: true
+    test: After each joint position, record whether any member publicly took a conflicting stance within the following quarter.
+    indicatorIds:
+      - ind-joint-positions
+    status: untested
+    ownerActorId: act-network
+    provenance:
+      basis: hypothesis
+  - id: asm-members-deliver
+    statement: Stronger, more connected, better-funded members deliver more and better services to residents.
+    ifThenBecause:
+      if: members are better managed, collaborate, and have stable funding
+      then: more residents are served with shorter waits
+      because: capacity and continuity are the limits that members name in the county services report
+    type: causal
+    appliesTo:
+      - ln-capable-access
+      - ln-collab-access
+      - ln-sustain-access
+    criticality: critical
+    plausibility: medium
+    explainsFully: false
+    needsTesting: true
+    test: Compare service volumes and waits at members with high and low maturity ratings, using the annual member service-count report.
+    indicatorIds:
+      - ind-residents-served
+    evidenceIds:
+      - ev-county-services
+    status: untested
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-county-services
+  - id: asm-peers-recruit
+    statement: Members who benefit from the network recruit their peers.
+    type: behavioral
+    appliesTo:
+      - ln-collab-recruit
+    criticality: low
+    plausibility: high
+    evidenceIds:
+      - ev-workshop-notes
+    status: holding
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-workshop-notes
+  - id: asm-leadership-turnover
+    statement: Leadership turnover at members stays low enough for new practices to take root.
+    type: contextual
+    appliesTo:
+      - ln-practice-capable
+    criticality: medium
+    plausibility: medium
+    status: untested
+    provenance:
+      basis: hypothesis
+indicators:
+  - id: ind-hours-learning
+    measures: int-peer-cohorts
+    name: 'Attendee hours: Learning Exchange'
+    definition: Trailing twelve-month attendee hours at cohort sessions, coaching, and trainings.
+    measurementType: quantitative
+    unit: hours
+    direction: increase
+    baseline:
+      value: 3200
+      date: "2026-01-01"
+      source: 2025 attendance sheets
+    targets:
+      - value: 4000
+        date: "2026-12-31"
+      - value: 4800
+        date: "2027-12-31"
+      - value: 5400
+        date: "2028-12-31"
+    dataSource: Attendance sheets
+    method: Sum of attendees times session length, from sign-in sheets
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-attendee-hours
+    pathwayIds:
+      - pw-learning
+    claim: attribution
+    dataAvailability: internal_existing
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-04-14"
+      decidedBy: Staff measurement group
+  - id: ind-hours-shared
+    measures: int-pooled-backoffice
+    name: 'Attendee hours: Shared Services'
+    definition: Trailing twelve-month attendee hours at onboarding sessions, vendor briefings, and service-desk workshops.
+    measurementType: quantitative
+    unit: hours
+    direction: increase
+    baseline:
+      value: 600
+      date: "2026-01-01"
+      source: 2025 attendance sheets
+    targets:
+      - value: 900
+        date: "2026-12-31"
+      - value: 1300
+        date: "2027-12-31"
+      - value: 1600
+        date: "2028-12-31"
+    dataSource: Attendance sheets
+    method: Sum of attendees times session length, from sign-in sheets
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-attendee-hours
+    pathwayIds:
+      - pw-shared
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-hours-civic
+    measures: int-joint-forums
+    name: 'Attendee hours: Civic Voice'
+    definition: Trailing twelve-month attendee hours at member forums and policy briefings.
+    measurementType: quantitative
+    unit: hours
+    direction: increase
+    baseline:
+      value: 350
+      date: "2026-01-01"
+      source: 2025 attendance sheets
+    targets:
+      - value: 600
+        date: "2026-12-31"
+      - value: 900
+        date: "2027-12-31"
+      - value: 1100
+        date: "2028-12-31"
+    dataSource: Attendance sheets
+    method: Sum of attendees times session length, from sign-in sheets
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-attendee-hours
+    pathwayIds:
+      - pw-civic
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-hours-total
+    measures: oc-st-peer-ties
+    name: Attendee hours across all three program areas
+    definition: Network-wide attendee hours, a proxy for the time members spend together. Rolls up the three program-area indicators because hours can be added.
+    measurementType: quantitative
+    unit: hours
+    direction: increase
+    baseline:
+      value: 4150
+      date: "2026-01-01"
+      source: Sum of the 2025 program-area figures
+    targets:
+      - value: 5500
+        date: "2026-12-31"
+      - value: 7000
+        date: "2027-12-31"
+      - value: 8100
+        date: "2028-12-31"
+    dataSource: Roll-up of program-area indicators
+    method: Sum of the three program-area values
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-attendee-hours
+    pathwayIds:
+      - pw-learning
+      - pw-shared
+      - pw-civic
+    claim: attribution
+    rollupFrom:
+      - ind-hours-learning
+      - ind-hours-shared
+      - ind-hours-civic
+    dataAvailability: internal_existing
+  - id: ind-reach-learning
+    measures: oc-out-cohorts
+    name: 'Member organizations reached: Learning Exchange'
+    definition: Distinct member organizations with at least one leader in a cohort, coaching, or training in the last twelve months.
+    measurementType: quantitative
+    unit: member organizations
+    direction: increase
+    baseline:
+      value: 48
+      date: "2026-01-01"
+      source: 2025 attendance sheets
+    targets:
+      - value: 60
+        date: "2026-12-31"
+      - value: 72
+        date: "2027-12-31"
+      - value: 80
+        date: "2028-12-31"
+    population:
+      description: Member nonprofits
+      size: 150
+    disaggregation:
+      - member size
+    dataSource: Attendance sheets matched to the member list
+    method: Count distinct member organization ids
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-orgs-reached
+    pathwayIds:
+      - pw-learning
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-reach-shared
+    measures: oc-st-pooled-use
+    name: 'Member organizations reached: Shared Services'
+    definition: Distinct member organizations using at least one pooled service in the last twelve months.
+    measurementType: quantitative
+    unit: member organizations
+    direction: increase
+    baseline:
+      value: 22
+      date: "2026-01-01"
+      source: Service desk records
+    targets:
+      - value: 35
+        date: "2026-12-31"
+      - value: 50
+        date: "2027-12-31"
+      - value: 60
+        date: "2028-12-31"
+    population:
+      description: Member nonprofits
+      size: 150
+    dataSource: Shared service desk records
+    method: Count distinct member organization ids
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-orgs-reached
+    pathwayIds:
+      - pw-shared
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-reach-civic
+    measures: oc-st-policy-know
+    name: 'Member organizations reached: Civic Voice'
+    definition: Distinct member organizations attending a forum or receiving a briefing in the last twelve months.
+    measurementType: quantitative
+    unit: member organizations
+    direction: increase
+    baseline:
+      value: 40
+      date: "2026-01-01"
+      source: 2025 attendance sheets
+    targets:
+      - value: 55
+        date: "2026-12-31"
+      - value: 70
+        date: "2027-12-31"
+      - value: 80
+        date: "2028-12-31"
+    population:
+      description: Member nonprofits
+      size: 150
+    dataSource: Attendance sheets and briefing mailing list
+    method: Count distinct member organization ids
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-orgs-reached
+    pathwayIds:
+      - pw-civic
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-reach-network
+    measures: oc-st-peer-ties
+    name: Member organizations reached across the whole network
+    definition: Distinct member organizations reached by any program area. This is counted directly, not summed from the program-area indicators, because the same member often appears in more than one of them.
+    measurementType: quantitative
+    unit: member organizations
+    direction: increase
+    baseline:
+      value: 71
+      date: "2026-01-01"
+      source: 2025 attendance sheets and service desk records
+    targets:
+      - value: 85
+        date: "2026-12-31"
+      - value: 100
+        date: "2027-12-31"
+      - value: 110
+        date: "2028-12-31"
+    population:
+      description: Member nonprofits
+      size: 150
+    disaggregation:
+      - member size
+    dataSource: Attendance sheets, service desk records, briefing list
+    method: Count distinct member organization ids across all sources
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-orgs-reached
+    pathwayIds:
+      - pw-learning
+      - pw-shared
+      - pw-civic
+    claim: attribution
+    caveats:
+      - Not equal to the sum of the program-area counts, which double count members in more than one program.
+    dataAvailability: internal_existing
+  - id: ind-retention-learning
+    measures: oc-st-leader-skills
+    name: 'Participant retention: Learning Exchange'
+    definition: Share of enrolled cohort and coaching participants still active at the end of the program year.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 78
+      date: "2026-01-01"
+      source: 2025 cohort records
+    targets:
+      - value: 82
+        date: "2026-12-31"
+      - value: 85
+        date: "2027-12-31"
+      - value: 88
+        date: "2028-12-31"
+    dataSource: Cohort rosters
+    method: Active participants at year end divided by enrolled participants
+    frequency: P6M
+    ownerActorId: act-network
+    metricId: met-retention-rate
+    pathwayIds:
+      - pw-learning
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-retention-shared
+    measures: oc-st-pooled-use
+    name: 'Participant retention: Shared Services'
+    definition: Share of member organizations on a pooled service at the start of the year that still use it at year end.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 85
+      date: "2026-01-01"
+      source: Service desk records
+    targets:
+      - value: 88
+        date: "2026-12-31"
+      - value: 90
+        date: "2027-12-31"
+      - value: 92
+        date: "2028-12-31"
+    dataSource: Service desk records
+    method: Organizations still active at year end divided by organizations active at year start
+    frequency: P6M
+    ownerActorId: act-network
+    metricId: met-retention-rate
+    pathwayIds:
+      - pw-shared
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-practice-maturity
+    measures: oc-im-leaders-practice
+    name: Leadership practice maturity
+    definition: Median level of participating members on the four-step leadership practice rubric, rated by a coach and the member together.
+    measurementType: qualitative
+    direction: increase
+    levels:
+      - Ad hoc
+      - Emerging
+      - Established
+      - Exemplary
+    baseline:
+      level: Emerging
+      date: "2026-01-01"
+      source: Rubric ratings of the first cohort
+    targets:
+      - level: Emerging
+        date: "2026-12-31"
+        milestone: true
+      - level: Established
+        date: "2027-12-31"
+      - level: Established
+        threshold: Three quarters of participating members at Established or above
+        date: "2028-12-31"
+    population:
+      description: Members in a cohort or coaching
+      size: 80
+    dataSource: Coach and member rubric ratings
+    method: Rubric rating at enrollment and at six and twelve months
+    frequency: P6M
+    ownerActorId: act-network
+    proxyFor:
+      - oc-lt-capable-members
+    metricId: met-practice-maturity
+    pathwayIds:
+      - pw-learning
+    claim: contribution
+    caveats:
+      - Rated by coaches and members, so it reflects self-assessment as well as observed practice.
+    dataAvailability: internal_new
+    provenance:
+      basis: hypothesis
+      note: The rubric is still a draft.
+  - id: ind-collab-maturity
+    measures: oc-lt-collab
+    name: Member collaboration maturity
+    definition: Typical level of member collaboration on a four-step scale, from members working in parallel to co-delivering services.
+    measurementType: qualitative
+    direction: increase
+    levels:
+      - Parallel
+      - Coordinating
+      - Cooperating
+      - Co-delivering
+    baseline:
+      level: Parallel
+      date: "2026-01-01"
+      source: Member interviews
+    targets:
+      - level: Coordinating
+        date: "2027-12-31"
+      - level: Cooperating
+        date: "2028-12-31"
+    dataSource: Annual member interviews
+    method: Interviewers rate each member against the scale and report the most common level
+    frequency: P1Y
+    ownerActorId: act-network
+    proxyFor:
+      - oc-im-peer-network
+    claim: contribution
+    dataAvailability: internal_new
+  - id: ind-voice-level
+    measures: oc-lt-collective-voice
+    name: Level of members' voice with local government and funders
+    definition: How officials and funders treat the members' coordinated channel, rated by network staff and checked with the officials concerned.
+    measurementType: qualitative
+    direction: increase
+    levels:
+      - Not heard
+      - Heard
+      - Consulted
+      - Co-designing
+    baseline:
+      level: Not heard
+      date: "2026-01-01"
+      source: Staff assessment
+    targets:
+      - level: Heard
+        date: "2026-12-31"
+        milestone: true
+      - level: Consulted
+        date: "2027-12-31"
+      - level: Co-designing
+        date: "2028-12-31"
+    dataSource: Staff assessment checked with county office and regional funder
+    method: Annual rating with a short call to each official concerned
+    frequency: P6M
+    ownerActorId: act-network
+    claim: contribution
+    caveats:
+      - Depends on officials' own account, which may be generous or guarded.
+    dataAvailability: partner_held
+  - id: ind-overhead-share
+    measures: oc-im-lower-overhead
+    name: Back-office share of operating budget
+    definition: Share of a member's operating budget spent on bookkeeping, payroll, insurance, and purchased supplies, averaged across members using pooled services.
+    measurementType: quantitative
+    unit: percent
+    direction: decrease
+    baseline:
+      value: 21.5
+      date: "2026-01-01"
+      source: 2025 member cost survey
+    targets:
+      - value: 20
+        date: "2026-12-31"
+      - value: 18.5
+        date: "2027-12-31"
+      - value: 17
+        date: "2028-12-31"
+    dataSource: Annual member cost survey
+    method: Members report back-office spending and total budget
+    frequency: P1Y
+    ownerActorId: act-network
+    metricId: met-overhead-share
+    pathwayIds:
+      - pw-shared
+    claim: contribution
+    caveats:
+      - Self-reported by members; other cost changes can also move the figure.
+    dataAvailability: internal_new
+  - id: ind-grant-applications
+    measures: oc-im-grant-pipeline
+    name: Grant applications submitted by members using the calendar
+    definition: Count of applications submitted in the last twelve months by members who consulted the calendar.
+    measurementType: quantitative
+    unit: applications
+    direction: increase
+    baseline:
+      value: 120
+      date: "2026-01-01"
+      source: Member survey
+    targets:
+      - value: 140
+        date: "2026-12-31"
+      - value: 170
+        date: "2027-12-31"
+      - value: 200
+        date: "2028-12-31"
+    dataSource: Quarterly member check-in
+    method: Short form listing applications submitted
+    frequency: P3M
+    ownerActorId: act-network
+    proxyFor:
+      - oc-st-calendar-use
+    metricId: met-grant-applications
+    pathwayIds:
+      - pw-shared
+    claim: contribution
+    dataAvailability: internal_new
+  - id: ind-funding-mix
+    measures: oc-lt-sustainable
+    name: Members with three or more distinct funding sources
+    definition: Share of responding members whose revenue comes from at least three separate funders or income types.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 38
+      date: "2026-01-01"
+      source: 2025 member survey
+    targets:
+      - value: 42
+        date: "2026-12-31"
+      - value: 48
+        date: "2027-12-31"
+      - value: 55
+        date: "2028-12-31"
+    dataSource: Annual member survey
+    method: Survey question on funding sources
+    frequency: P1Y
+    ownerActorId: act-network
+    claim: contribution
+    caveats:
+      - Based on responding members only; response rates differ by member size.
+    dataAvailability: internal_new
+  - id: ind-joint-positions
+    measures: oc-im-joint-positions
+    name: Joint positions adopted by members
+    definition: Count of positions on local issues formally adopted by at least ten member organizations in the last twelve months.
+    measurementType: quantitative
+    unit: positions
+    direction: increase
+    baseline:
+      value: 1
+      date: "2026-01-01"
+      source: Forum minutes
+    targets:
+      - value: 3
+        date: "2026-12-31"
+      - value: 5
+        date: "2027-12-31"
+      - value: 6
+        date: "2028-12-31"
+    dataSource: Forum minutes and sign-on lists
+    method: Count adopted positions meeting the sign-on threshold
+    frequency: P3M
+    ownerActorId: act-network
+    claim: attribution
+    dataAvailability: internal_existing
+  - id: ind-officials-meetings
+    measures: oc-im-officials-engage
+    name: Public planning processes that invited members
+    definition: Count of county or municipal planning processes in the last twelve months that formally invited member representatives.
+    measurementType: quantitative
+    unit: processes
+    direction: increase
+    baseline:
+      value: 2
+      date: "2026-01-01"
+      source: County planning calendar
+    targets:
+      - value: 4
+        date: "2026-12-31"
+      - value: 6
+        date: "2027-12-31"
+      - value: 8
+        date: "2028-12-31"
+    dataSource: County planning calendar and municipal agendas
+    method: Review of published calendars and agendas
+    frequency: P3M
+    ownerActorId: act-county-office
+    proxyFor:
+      - oc-st-channel
+    claim: contribution
+    dataAvailability: partner_held
+  - id: ind-residents-served
+    measures: oc-resident-access
+    name: Residents served by member organizations
+    definition: Residents who used at least one service of a member organization in the year, as reported by members.
+    measurementType: quantitative
+    unit: residents
+    direction: increase
+    baseline:
+      value: 61000
+      date: "2026-01-01"
+      source: 2025 member service-count report
+    targets:
+      - value: 63000
+        date: "2026-12-31"
+      - value: 66000
+        date: "2027-12-31"
+      - value: 70000
+        date: "2028-12-31"
+    population:
+      description: Residents of Riverbend County
+      size: 240000
+    disaggregation:
+      - neighborhood
+      - age group
+    dataSource: Annual member service-count report
+    method: Members submit counts; the network removes obvious duplicates but cannot match individuals across members
+    frequency: P1Y
+    ownerActorId: act-network
+    metricId: met-residents-reached
+    pathwayIds:
+      - pw-learning
+      - pw-shared
+      - pw-civic
+    claim: contribution
+    caveats:
+      - Reflects members' reported reach; Riverbend Nonprofit Network cannot attribute resident outcomes to its own work.
+      - Residents who use several members are counted more than once.
+    dataAvailability: unknown
+  - id: ind-residents-voice
+    measures: oc-resident-voice
+    name: Residents who say local organizations help them be heard
+    definition: Share of surveyed residents who agree that local organizations help them influence local decisions.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 31
+      date: "2026-01-01"
+      source: 2025 county resident survey
+    targets:
+      - value: 34
+        date: "2026-12-31"
+      - value: 38
+        date: "2027-12-31"
+      - value: 42
+        date: "2028-12-31"
+    population:
+      description: Adult residents of Riverbend County
+      size: 190000
+    disaggregation:
+      - neighborhood
+    dataSource: County resident survey
+    method: Published results of the annual county resident survey
+    frequency: P1Y
+    ownerActorId: act-network
+    claim: contribution
+    caveats:
+      - Reflects residents' general view of local organizations; Riverbend Nonprofit Network cannot attribute changes to its own work.
+    dataAvailability: public
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-county-services
+  - id: ind-attendance-rate
+    measures: asm-time-to-attend
+    name: Cohort attendance rate
+    definition: Share of enrolled leaders who attend at least three quarters of their cohort sessions.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 71
+      date: "2026-01-01"
+      source: 2025 cohort rosters
+    targets:
+      - value: 75
+        date: "2026-12-31"
+      - value: 80
+        date: "2027-12-31"
+    dataSource: Cohort rosters
+    method: Leaders meeting the attendance bar divided by enrolled leaders
+    frequency: P3M
+    ownerActorId: act-network
+    claim: attribution
+    dataAvailability: internal_new
+actors:
+  - id: act-network
+    name: Riverbend Nonprofit Network
+    type: organization
+    roles:
+      - implementer
+      - champion
+    stance: champion
+    influence: medium
+    interest: high
+    description: A membership network of about 150 nonprofits with about 8 staff. The author of this theory.
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: act-members-small
+    name: Small member nonprofits
+    type: group
+    roles:
+      - beneficiary
+      - adopter
+    stance: supporter
+    influence: medium
+    interest: high
+    description: Members with budgets under 500,000, usually no dedicated finance or development staff.
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-member-survey
+  - id: act-members-large
+    name: Larger member nonprofits
+    type: group
+    roles:
+      - boundary_partner
+      - influencer
+    stance: neutral
+    influence: high
+    interest: medium
+    description: Members with budgets of 2 million or more and their own back-office staff. Their commitment is not assured.
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-collab-study
+  - id: act-county-office
+    name: Riverbend County Office of Community Planning
+    type: organization
+    roles:
+      - gatekeeper
+      - boundary_partner
+    stance: neutral
+    influence: high
+    interest: medium
+    description: The county office that convenes planning processes affecting community services.
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-county-services
+  - id: act-city-council
+    name: Millbrook Town Council
+    type: regulator
+    roles:
+      - gatekeeper
+    stance: unknown
+    influence: medium
+    interest: low
+    description: The council of the largest town in the county.
+    provenance:
+      basis: hypothesis
+  - id: act-regional-funder
+    name: Lowland Regional Fund
+    type: investor
+    roles:
+      - funder
+      - influencer
+    stance: supporter
+    influence: high
+    interest: medium
+    description: A regional funder that supports many members and the network.
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-funder-interview
+  - id: act-library
+    name: Riverbend County Library System
+    type: organization
+    roles:
+      - boundary_partner
+      - champion
+    stance: supporter
+    influence: low
+    interest: medium
+    description: Hosts cohort sessions and forums in branch meeting rooms.
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: act-training-partner
+    name: Northfield Learning Studio
+    type: vendor
+    roles:
+      - implementer
+    stance: supporter
+    influence: low
+    interest: medium
+    description: A training provider contracted to deliver the management skills series.
+  - id: act-vendors
+    name: Pooled-service vendors
+    type: vendor
+    roles:
+      - adopter
+    stance: neutral
+    influence: medium
+    interest: medium
+    description: Bookkeeping, payroll, and supply vendors invited to bid for pooled volume.
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-pooled-purchasing
+  - id: act-residents
+    name: Residents of Riverbend County
+    type: community
+    roles:
+      - beneficiary
+    stance: unknown
+    influence: low
+    interest: medium
+    description: People who use member services and who live under local government decisions.
+  - id: act-board
+    name: Network board of directors
+    type: group
+    roles:
+      - gatekeeper
+      - champion
+    stance: champion
+    influence: high
+    interest: high
+    description: Elected representatives of member organizations who approve the network's strategy.
+evidence:
+  - id: ev-member-survey
+    title: Riverbend member needs survey 2025
+    type: research
+    strength: moderate
+    direction: supports
+    processTracingTest: straw_in_the_wind
+    source: Riverbend Nonprofit Network
+    url: https://example.org/riverbend/member-survey-2025
+    summary: Members ranked back-office load and funding search among their top constraints.
+    excerpt: Seven in ten members said back-office work crowds out program time.
+    sensitivity: public
+    accessedAt: "2026-01-12"
+  - id: ev-peer-learning
+    title: Peer learning cohorts and nonprofit practice change, a review
+    type: research
+    strength: moderate
+    direction: supports
+    processTracingTest: hoop
+    source: Example Institute for Nonprofit Studies
+    url: https://example.org/institute/peer-learning-review
+    summary: Cohorts combined with coaching were more likely to change leadership practice than workshops alone.
+    excerpt: Programs that paired cohorts with coaching reported the largest shifts in management practice.
+    sensitivity: public
+    accessedAt: "2026-01-14"
+  - id: ev-pooled-purchasing
+    title: Group purchasing among small nonprofits in a neighboring region
+    type: case_study
+    strength: moderate
+    direction: supports
+    processTracingTest: straw_in_the_wind
+    source: Example Regional Nonprofit Association
+    url: https://example.org/association/group-purchasing-case
+    summary: A comparable network cut members' shared-services costs after it pooled bookkeeping and supply orders.
+    excerpt: Participating members reduced back-office spending after the first full year of pooled services.
+    sensitivity: public
+    accessedAt: "2026-01-20"
+  - id: ev-county-services
+    title: County community services report 2025
+    type: monitoring_data
+    strength: moderate
+    direction: supports
+    source: Riverbend County (fictional)
+    url: https://example.org/county/community-services-2025
+    summary: Reports service volumes, waits, and the annual resident survey for the county.
+    excerpt: Waits for nonprofit-delivered services were longest in areas served only by small organizations.
+    sensitivity: public
+    accessedAt: "2026-01-22"
+  - id: ev-funder-interview
+    title: Interview notes with a regional funder program officer
+    type: stakeholder_testimony
+    strength: weak
+    direction: supports
+    source: Network staff interview
+    summary: The funder is open to a members' roundtable but reserves the right to change priorities each cycle. Notes include candid remarks that are not for circulation.
+    sensitivity: restricted
+    accessedAt: "2026-02-18"
+  - id: ev-workshop-notes
+    title: Staff theory of change workshop notes
+    type: stakeholder_testimony
+    strength: weak
+    direction: supports
+    source: Network staff workshop
+    url: https://example.org/riverbend/staff-workshop-notes
+    summary: Staff described members recruiting peers after good experiences and doubted that members could hold a joint position.
+    excerpt: Members who enjoyed a cohort kept bringing a friend to the next one.
+    sensitivity: public
+    accessedAt: "2026-02-05"
+  - id: ev-collab-study
+    title: Collaboration and power imbalance in nonprofit networks
+    type: research
+    strength: moderate
+    direction: contradicts
+    processTracingTest: hoop
+    source: Example Journal of Civic Networks
+    url: https://example.org/journal/collaboration-power-imbalance
+    summary: Large members can dominate shared agendas, which weakens collaboration unless norms protect small members.
+    excerpt: Where larger members set the agenda, small members reduced their participation within a year.
+    sensitivity: public
+    accessedAt: "2026-01-30"
+  - id: ev-attendance-records
+    title: Network attendance records 2025
+    type: internal_metric
+    strength: strong
+    direction: supports
+    source: Riverbend Nonprofit Network
+    url: https://example.org/riverbend/attendance-summary-2025
+    summary: Aggregated attendance by program area and member, with no individual names.
+    sensitivity: public
+    accessedAt: "2026-01-10"
+externalFactors:
+  - id: ef-county-budget
+    description: The county's annual budget cycle sets how much it can fund community planning and services.
+    kind: constraint
+    affects:
+      - oc-im-officials-engage
+      - oc-resident-access
+    likelihood: high
+    trend: flat
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-county-services
+  - id: ef-funder-priorities
+    description: Regional funders may shift priorities away from general operating support.
+    kind: trend
+    affects:
+      - oc-lt-sustainable
+      - oc-im-grant-pipeline
+    likelihood: medium
+    trend: up
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-funder-interview
+  - id: ef-downturn
+    description: A regional economic downturn would raise service demand and cut donations at the same time.
+    kind: shock
+    affects:
+      - oc-resident-access
+      - oc-lt-sustainable
+    likelihood: low
+    trend: unknown
+    provenance:
+      basis: hypothesis
+  - id: ef-open-meetings
+    description: A planned county rule would require planning bodies to publish early notice of meetings.
+    kind: enabler
+    affects:
+      - oc-st-channel
+      - oc-im-officials-engage
+    likelihood: medium
+    trend: up
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-county-services
+risks:
+  - id: rsk-time-burden
+    description: Leaders drop out of cohorts because they cannot spare the time.
+    impact: medium
+    probability: medium
+    mitigation: Hold sessions at off-peak hours, offer remote options, and review attendance each quarter.
+    status: open
+    owner: Learning Exchange lead
+    appliesTo:
+      - ln-cohorts-skills
+    category: operational
+    relatedAssumptionIds:
+      - asm-time-to-attend
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-attendance-records
+  - id: rsk-large-dominate
+    description: Larger members dominate shared agendas and smaller members withdraw.
+    impact: high
+    probability: medium
+    mitigation: Rotate facilitation, cap vote weights, and give small members a seat on each steering group.
+    status: open
+    owner: Network board
+    appliesTo:
+      - oc-lt-collab
+      - oc-im-joint-positions
+    category: partnership
+    relatedAssumptionIds:
+      - asm-peer-trust
+      - asm-positions-hold
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-collab-study
+  - id: rsk-vendor-lockin
+    description: A single pooled-service vendor becomes a critical dependency and raises prices after the first term.
+    impact: medium
+    probability: low
+    mitigation: Sign short initial terms, keep two qualified vendors, and review prices each year.
+    status: open
+    owner: Shared Services coordinator
+    appliesTo:
+      - int-pooled-backoffice
+      - int-group-purchasing
+    category: market
+    relatedAssumptionIds:
+      - asm-vendor-terms
+    provenance:
+      basis: hypothesis
+  - id: rsk-funder-shift
+    description: The regional funder changes priorities and withdraws support for the network or its members.
+    impact: high
+    probability: medium
+    mitigation: Diversify the network's own funding and keep funders informed of results.
+    status: open
+    owner: Network executive director
+    appliesTo:
+      - oc-lt-sustainable
+    category: environmental_political
+    relatedAssumptionIds:
+      - asm-funders-fit
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-funder-interview
+  - id: rsk-staff-capacity
+    description: With about 8 staff, the network cannot sustain three program areas if one grows faster than planned.
+    impact: medium
+    probability: medium
+    mitigation: Stage launches, review workload each half year, and use partners for delivery.
+    status: open
+    owner: Network executive director
+    appliesTo:
+      - pw-learning
+      - pw-shared
+      - pw-civic
+    category: operational
+    relatedAssumptionIds:
+      - asm-skills-applied
+    provenance:
+      basis: inferred
+      evidenceIds:
+        - ev-workshop-notes
+alignments:
+  - elementId: oc-lt-capable-members
+    target:
+      framework: bsc
+      ref: obj-member-capability
+      relation: supports
+      attributes:
+        perspective: learning and growth
+  - elementId: ind-reach-network
+    target:
+      framework: okr
+      ref: kr-2026-members-reached
+      url: https://example.org/riverbend/okrs/2026
+      relation: measures
+      attributes:
+        period: "2026"
+  - elementId: int-grants-calendar
+    target:
+      framework: okr
+      ref: kr-2026-calendar-live
+      relation: implements
+      attributes:
+        period: "2026"
+decisions:
+  - id: dec-certification
+    question: Should the network add a member quality certification as a fourth program area?
+    options:
+      - Add it now
+      - Defer to 2028
+      - Do not pursue
+    ownerActorId: act-board
+    status: decided
+    relatedIds:
+      - pw-certification
+      - oc-certified-members
+      - int-certification
+  - id: dec-liaison-staff
+    question: Should the network hire a part-time civic liaison for the county channel?
+    options:
+      - Hire part-time
+      - Share a role with Shared Services
+      - Rely on the steering group
+    dueDate: "2026-12-15"
+    ownerActorId: act-board
+    status: open
+    relatedIds:
+      - int-liaison-channel
+      - rsk-staff-capacity
+  - id: dec-service-fees
+    question: Should pooled services move from free trial to member fees in 2027?
+    options:
+      - Introduce sliding fees
+      - Keep free through 2027
+      - Fee only large members
+    dueDate: "2027-03-31"
+    ownerActorId: act-network
+    status: open
+    relatedIds:
+      - int-pooled-backoffice
+revisions:
+  - version: "0.1"
+    date: "2026-02-10"
+    summary: Initial theory drafted by staff from the member survey and the review of peer-learning programs.
+    trigger: evidence
+    changedIds:
+      - oc-lt-capable-members
+      - oc-lt-collab
+    triggerEvidenceIds:
+      - ev-member-survey
+      - ev-peer-learning
+    qualityReview:
+      plausible: pass
+      feasible: partial
+      testable: partial
+      notes: Staff capacity and the civic pathway need more evidence.
+    approvers:
+      - name: Network board
+        approved: true
+  - version: "0.2"
+    date: "2026-03-20"
+    summary: Dropped the proposed certification pathway after the member assembly rejected it and added a feedback loop from collaboration to peer ties.
+    trigger: strategy_change
+    changedIds:
+      - pw-certification
+      - oc-certified-members
+      - ln-collab-recruit
+    triggerEvidenceIds:
+      - ev-workshop-notes
+    qualityReview:
+      plausible: pass
+      feasible: pass
+      testable: partial
+    approvers:
+      - name: Member assembly
+        approved: true
+pathways:
+  - id: pw-learning
+    title: Learning Exchange
+    kind: program
+    description: Peer learning and leadership coaching for member leaders.
+    ownerActorId: act-network
+    outcomeIds:
+      - oc-out-cohorts
+      - oc-st-leader-skills
+      - oc-st-peer-ties
+      - oc-im-leaders-practice
+      - oc-im-peer-network
+    interventionIds:
+      - int-peer-cohorts
+      - int-leader-coaching
+      - int-training-series
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: pw-shared
+    title: Shared Services
+    kind: program
+    description: Pooled back-office help, group purchasing, and a shared grants calendar.
+    ownerActorId: act-network
+    outcomeIds:
+      - oc-out-services
+      - oc-out-calendar
+      - oc-st-pooled-use
+      - oc-st-calendar-use
+      - oc-im-lower-overhead
+      - oc-im-grant-pipeline
+    interventionIds:
+      - int-pooled-backoffice
+      - int-group-purchasing
+      - int-grants-calendar
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-02-10"
+      decidedBy: Network board
+  - id: pw-civic
+    title: Civic Voice
+    kind: program
+    description: Helping members speak together to local government and funders.
+    ownerActorId: act-network
+    outcomeIds:
+      - oc-out-briefings
+      - oc-st-policy-know
+      - oc-st-channel
+      - oc-im-joint-positions
+      - oc-im-officials-engage
+    interventionIds:
+      - int-policy-briefings
+      - int-joint-forums
+      - int-liaison-channel
+      - int-funder-roundtable
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-03-05"
+      decidedBy: Civic Voice steering group
+  - id: pw-certification
+    title: Member Certification
+    kind: program
+    description: A proposed fourth program area that would certify members against a quality standard. Rejected by the member assembly.
+    ownerActorId: act-network
+    outcomeIds:
+      - oc-certified-members
+    interventionIds:
+      - int-certification
+    provenance:
+      basis: rejected
+      note: Members preferred voluntary peer learning to a standard that could exclude them.
+      decidedAt: "2026-03-20"
+      decidedBy: Member assembly
+metrics:
+  - id: met-attendee-hours
+    name: Attendee hours
+    definition: Total time that member staff and board members spend in network sessions.
+    formula: Sum over all sessions in the trailing twelve months of (attendees from member organizations times session length in hours)
+    unit: hours
+    direction: increase
+    aggregation: sum
+    layer: common
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-04-14"
+      decidedBy: Staff measurement group
+  - id: met-orgs-reached
+    name: Member organizations reached
+    definition: How many different member organizations took part in a network activity. This is a distinct count, so values from different program areas must not be added, because one member that joins a cohort and a forum would be counted twice. Count the network-wide figure directly.
+    formula: Count of distinct member organization ids with at least one attendee or service record in the trailing twelve months
+    unit: member organizations
+    direction: increase
+    aggregation: none
+    layer: common
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-04-14"
+      decidedBy: Staff measurement group
+  - id: met-enrollments
+    name: Participant enrollments
+    definition: Participants who joined a program cycle, used to weight retention rates.
+    formula: Count of participants enrolled at the start of the program cycle
+    unit: participants
+    direction: increase
+    aggregation: sum
+    layer: pathway
+  - id: met-retention-rate
+    name: Participant retention rate
+    definition: Share of participants who stay active to the end of a program cycle. Combining program areas weights each rate by its enrollments.
+    formula: Participants active at cycle end divided by participants enrolled at cycle start, times 100
+    unit: percent
+    direction: increase
+    aggregation: weighted_mean
+    weightMetricId: met-enrollments
+    layer: pathway
+  - id: met-practice-maturity
+    name: Leadership practice maturity
+    definition: A member's level on a four-step rubric of leadership practice. Ordered levels cannot be averaged, so they are reported as a median level.
+    formula: Median rubric level across rated members, where levels are Ad hoc, Emerging, Established, Exemplary
+    unit: rubric level
+    direction: increase
+    aggregation: none
+    layer: pathway
+  - id: met-overhead-share
+    name: Back-office share of budget
+    definition: The portion of a member's operating budget spent on back-office functions.
+    formula: Back-office spending divided by total operating expenses, times 100, averaged across reporting members
+    unit: percent
+    direction: decrease
+    aggregation: mean
+    layer: pathway
+  - id: met-grant-applications
+    name: Grant applications submitted
+    definition: Applications that members send to funders.
+    formula: Count of applications submitted by reporting members in the trailing twelve months
+    unit: applications
+    direction: increase
+    aggregation: sum
+    layer: pathway
+  - id: met-residents-reached
+    name: Residents reached
+    definition: Residents who used a member service. Residents who use several members are counted more than once, so values from members cannot be added into a count of unique people.
+    formula: Count of residents reported by members as having used at least one service in the year
+    unit: residents
+    direction: increase
+    aggregation: none
+    layer: pathway
+glossary:
+  - id: term-output
+    term: Output
+    definition: A direct product of the network's own work, within its control.
+    examples:
+      - Twelve cohort sessions held in a year
+      - A pooled bookkeeping contract signed
+    relatedIds:
+      - oc-out-cohorts
+      - oc-out-services
+  - id: term-outcome
+    term: Outcome
+    definition: A change in members or in the actors around them that must happen for the theory to work, stated as a condition and not as an activity.
+    examples:
+      - Member leaders apply improved management practices
+      - Local officials and funders engage members in planning
+    relatedIds:
+      - oc-im-leaders-practice
+      - oc-im-officials-engage
+  - id: term-impact
+    term: Impact
+    definition: Change for residents of the county, which the network contributes to but does not own.
+    examples:
+      - Residents get timely, good-quality services from local nonprofits
+    relatedIds:
+      - oc-resident-access
+      - oc-resident-voice
+  - id: term-member
+    term: Member organization
+    definition: A nonprofit in the county that has joined the network. The network counts members, not individual staff.
+    relatedIds:
+      - act-members-small
+      - act-members-large
+  - id: term-joint-position
+    term: Joint position
+    definition: A written position on a local issue that at least ten member organizations have formally signed.
+    examples:
+      - A shared statement asking the county for earlier notice of planning meetings
+    relatedIds:
+      - oc-im-joint-positions
+  - id: term-pooled-services
+    term: Pooled services
+    definition: Back-office services such as bookkeeping and payroll that several members buy together to lower cost and effort.
+    relatedIds:
+      - int-pooled-backoffice
+  - id: term-attribution
+    term: Attribution and contribution
+    definition: Attribution means the network can credit a result to its own work, as with hours it delivered. Contribution means the network played a part but other forces matter, as with resident outcomes.
+    relatedIds:
+      - ind-hours-total
+      - ind-residents-served
+consultations:
+  - id: con-staff-workshop
+    date: "2026-02-05"
+    step: whole
+    method: workshop
+    stakeholderGroups:
+      - Network staff
+    count: 8
+    findings:
+      - Staff agreed on the three program areas and on the two impact layers.
+      - Staff doubted that members would hold a joint position when funders compete.
+    changedIds:
+      - oc-lt-collab
+      - asm-positions-hold
+  - id: con-member-interviews
+    date: "2026-02-24"
+    step: change_analysis
+    method: interview
+    stakeholderGroups:
+      - Small member nonprofits
+      - Larger member nonprofits
+    count: 12
+    findings:
+      - Small members asked for help with bookkeeping before any other service.
+      - Larger members questioned the value of cohorts for them and asked for a say in the agenda.
+    changedIds:
+      - oc-im-lower-overhead
+      - rsk-large-dominate
+  - id: con-funder-interview
+    date: "2026-03-02"
+    step: assumptions_risks
+    method: interview
+    stakeholderGroups:
+      - Regional funders
+    count: 2
+    findings:
+      - The funder is open to a roundtable but may change its priorities each cycle.
+    changedIds:
+      - asm-funders-fit
+      - rsk-funder-shift
+  - id: con-assembly
+    date: "2026-03-20"
+    step: focus
+    method: meeting
+    stakeholderGroups:
+      - Member assembly
+    count: 41
+    findings:
+      - The assembly rejected a certification program and asked the network to focus on the three program areas.
+    changedIds:
+      - pw-certification
+      - dec-certification

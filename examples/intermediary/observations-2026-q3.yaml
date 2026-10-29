@@ -1,0 +1,135 @@
+kind: ObservationSet
+specVersion: "0.1"
+tocId: riverbend-network
+period: 2026-Q3
+observations:
+  - indicatorId: ind-hours-learning
+    date: "2026-09-30"
+    value: 3650
+    source: Attendance sheets
+    quality: verified
+  - indicatorId: ind-hours-shared
+    date: "2026-09-30"
+    value: 760
+    source: Attendance sheets
+    quality: verified
+  - indicatorId: ind-hours-civic
+    date: "2026-09-30"
+    value: 470
+    source: Attendance sheets
+    quality: verified
+  - indicatorId: ind-hours-total
+    date: "2026-09-30"
+    value: 4880
+    source: Roll-up of program-area values
+    note: Equals 3650 + 760 + 470.
+    quality: verified
+  - indicatorId: ind-reach-learning
+    date: "2026-09-30"
+    value: 55
+    source: Attendance sheets matched to the member list
+    quality: verified
+  - indicatorId: ind-reach-shared
+    date: "2026-09-30"
+    value: 29
+    source: Shared service desk records
+    quality: verified
+  - indicatorId: ind-reach-civic
+    date: "2026-09-30"
+    value: 47
+    source: Attendance sheets and briefing list
+    quality: reported
+  - indicatorId: ind-reach-network
+    date: "2026-09-30"
+    value: 84
+    source: All sources, deduplicated
+    note: Less than the 131 that the program-area counts add up to, because 47 members take part in more than one program area.
+    quality: verified
+    disaggregation:
+      member size: all
+  - indicatorId: ind-retention-learning
+    date: "2026-09-30"
+    value: 80
+    source: Cohort rosters
+    quality: reported
+  - indicatorId: ind-retention-shared
+    date: "2026-09-30"
+    value: 87
+    source: Shared service desk records
+    quality: verified
+  - indicatorId: ind-practice-maturity
+    date: "2026-09-30"
+    level: Emerging
+    source: Coach and member rubric ratings
+    note: The first cohort has not yet reached its twelve-month rating.
+    quality: reported
+  - indicatorId: ind-collab-maturity
+    date: "2026-09-30"
+    level: Parallel
+    source: Member interviews
+    quality: estimated
+  - indicatorId: ind-voice-level
+    date: "2026-09-30"
+    level: Heard
+    source: Staff assessment checked with the county office
+    note: The county office confirmed it now copies the network on planning notices.
+    quality: reported
+  - indicatorId: ind-overhead-share
+    date: "2026-09-30"
+    value: 20.8
+    source: Mid-year member cost survey
+    quality: reported
+    disaggregation:
+      member size: small
+  - indicatorId: ind-grant-applications
+    date: "2026-09-30"
+    value: 131
+    source: Quarterly member check-in
+    quality: reported
+  - indicatorId: ind-joint-positions
+    date: "2026-09-30"
+    value: 2
+    source: Forum minutes
+    quality: verified
+  - indicatorId: ind-officials-meetings
+    date: "2026-09-30"
+    value: 3
+    source: County planning calendar
+    quality: reported
+  - indicatorId: ind-residents-served
+    date: "2026-09-30"
+    value: 62000
+    source: Mid-year member service-count report
+    note: Partial-year estimate from 61 responding members.
+    quality: estimated
+  - indicatorId: ind-attendance-rate
+    date: "2026-09-30"
+    value: 73
+    source: Cohort rosters
+    quality: verified
+assumptionAssessments:
+  - assumptionId: asm-time-to-attend
+    date: "2026-09-30"
+    status: holding
+    rationale: Attendance rose after sessions moved to early evening.
+    evidenceIds:
+      - ev-attendance-records
+  - assumptionId: asm-officials-receptive
+    date: "2026-09-30"
+    status: at_risk
+    rationale: The county office has agreed to the liaison meeting, but its staff changed in September and the next meeting is not yet scheduled.
+  - assumptionId: asm-positions-hold
+    date: "2026-09-30"
+    status: holding
+    rationale: Both joint positions so far kept their signers through the quarter, though two larger members asked for changes to the second.
+notes:
+  - date: "2026-09-30"
+    text: Reach is ahead of plan in Shared Services but hours in the Learning Exchange are behind the interpolated target for the year.
+    relatedIds:
+      - ind-reach-shared
+      - ind-hours-learning
+  - date: "2026-09-30"
+    text: A funder roundtable is planned for the fourth quarter, so the funding assumption is still being watched.
+    relatedIds:
+      - asm-funders-fit
+      - int-funder-roundtable
