@@ -2,7 +2,7 @@
 // every operation lives in pkg/service.
 //
 // Exit codes: 0 success; 1 the input is invalid or a change was rejected;
-// 2 usage or I/O error. Results go to stdout, diagnostics to stderr.
+// 2 usage or I/O error; 3 an external tool needed for export is missing. Results go to stdout, diagnostics to stderr.
 package cli
 
 import (
@@ -19,9 +19,10 @@ var Version = "dev"
 
 // Exit codes.
 const (
-	ExitOK       = 0
-	ExitInvalid  = 1
-	ExitUsageErr = 2
+	ExitOK          = 0
+	ExitInvalid     = 1
+	ExitUsageErr    = 2
+	ExitToolMissing = 3
 )
 
 // ExitError ends the command with a specific exit code. A nil Err means the
@@ -84,6 +85,7 @@ Exit codes: 0 success; 1 the input is invalid or a change was rejected;
 		newInitCmd(e),
 		newFmtCmd(e),
 		newPatchCmd(e),
+		newDeckCmd(e),
 	)
 	root.AddCommand(newElementCmds(e)...)
 	return root
