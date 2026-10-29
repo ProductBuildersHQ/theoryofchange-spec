@@ -1,0 +1,2 @@
+id,name,pathways,mode,system,minutes_per_period,period,questions_per_respondent,sample_rate,minutes_per_week,questions_per_year
+ind-idp-count,Identity providers with generally available support,pw-supply,derived,Provider roadmap tracker,30,P1M,,1,6.92,0

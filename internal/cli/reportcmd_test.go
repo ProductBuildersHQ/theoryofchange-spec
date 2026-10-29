@@ -253,3 +253,22 @@ func TestReviewPacketDocx(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestSelectionAndCollectionReportsAndTables(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "theory.json")
+	for _, kind := range []string{"metric-selection", "collection-plan"} {
+		r := run(t, "", "report", kind, path)
+		wantCode(t, r, ExitOK)
+		if !strings.Contains(r.stdout, "content-hash: ") || !strings.Contains(r.stdout, "## ") {
+			t.Errorf("report %s = %.200s", kind, r.stdout)
+		}
+		c := run(t, "", "export", "csv", kind, path)
+		wantCode(t, c, ExitOK)
+		if !strings.HasPrefix(c.stdout, "# toc:open-agent-auth") || !strings.Contains(c.stdout, "\r\nid,name,") {
+			t.Errorf("csv %s = %.200s", kind, c.stdout)
+		}
+	}
+	if r := run(t, "", "report", "collection-plan", path); !strings.Contains(r.stdout, "Against the budget") {
+		t.Errorf("budget comparison missing:\n%s", r.stdout)
+	}
+}

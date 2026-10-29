@@ -1,0 +1,3 @@
+id,name,status,crit-decision-value,crit-cost,weighted_score,rationale
+ind-idp-count,Identity providers with generally available support,selected,5,2,4.60,Cheap to compute and directly tied to the outcome.
+ind-idp-roadmaps,Providers with the standard on their public roadmap,candidate,3,,3.00,
