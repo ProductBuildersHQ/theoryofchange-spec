@@ -1,0 +1,7 @@
+id,name,definition,measures,metric,type,unit,direction,claim,pathways,baseline,targets,data_source,method,frequency,owner,data_availability,basis
+ind-idp-count,Identity providers with generally available support,Count of providers shipping the standard in a GA release.,oc-idp-support,met-providers,quantitative,providers,increase,contribution,pw-supply,0 providers (as of 2026-01-01),2 providers (by 2026-12-31) — First movers; 5 providers (by 2027-12-31) (Covers half the market by seats),Provider release notes,Desk review,P3M,Standards working group,public,hypothesis
+ind-idp-roadmaps,Providers with the standard on their public roadmap,,asm-idp-incentive,,qualitative,,,contribution,,exploring (as of 2026-01-01),committed (by 2026-09-30),,,,,internal_existing,
+ind-reference-downloads,Reference implementation downloads,,int-reference,,quantitative,,maintain,contribution,,,,,,,,internal_new,
+ind-idp-count-na,Providers with GA support (North America),,oc-idp-support,met-providers,quantitative,providers,,contribution,pw-supply,,,,,,,partner_held,
+ind-idp-count-eu,Providers with GA support (Europe),,oc-idp-support,met-providers,quantitative,providers,,contribution,pw-supply,,,,,,,unknown,
+ind-idp-total,Providers with GA support (total),,oc-idp-support,met-providers,quantitative,providers,,attribution,,,,,,,,,

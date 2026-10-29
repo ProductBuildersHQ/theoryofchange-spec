@@ -1,0 +1,3 @@
+id,name,definition,formula,unit,direction,aggregation,weighted_by,layer,indicators,basis
+met-providers,Providers with GA support,Identity providers shipping the standard in a general-availability release.,Count of distinct providers with a GA release implementing the standard.,providers,increase,sum,,common,ind-idp-count; ind-idp-count-na; ind-idp-count-eu; ind-idp-total,
+met-provider-share,Share of provider seats covered,Share of provider seats that can use the standard.,"Seats at providers with GA support divided by seats at all tracked providers, weighted by seats.",percent,increase,weighted_mean,Providers with GA support,pathway,,

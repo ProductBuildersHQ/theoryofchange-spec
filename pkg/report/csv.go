@@ -1,0 +1,89 @@
+package report
+
+import (
+	"bytes"
+	"encoding/csv"
+	"fmt"
+	"strings"
+)
+
+// CSV tables are RFC 4180: comma separated, CRLF line ends, fields quoted
+// only when needed. Multi-valued cells are joined with "; ". Rows follow the
+// view's order, so output is deterministic.
+
+// CSVTables lists the tables ExportCSV can write from a theory alone.
+var CSVTables = []string{"indicators", "metrics", "glossary"}
+
+// CSV renders one named table from a view.
+func CSV(table string, v *View) (string, error) {
+	switch table {
+	case "indicators":
+		return indicatorsCSV(v)
+	case "metrics":
+		return metricsCSV(v)
+	case "glossary":
+		return glossaryCSV(v)
+	default:
+		return "", fmt.Errorf("unknown table %q (want one of %s)", table, strings.Join(CSVTables, ", "))
+	}
+}
+
+func writeCSV(header []string, rows [][]string) (string, error) {
+	var buf bytes.Buffer
+	w := csv.NewWriter(&buf)
+	w.UseCRLF = true
+	if err := w.Write(header); err != nil {
+		return "", err
+	}
+	if err := w.WriteAll(rows); err != nil {
+		return "", err
+	}
+	return buf.String(), w.Error()
+}
+
+func join(items []string) string { return strings.Join(items, "; ") }
+
+func basisCell(b BasisView) string {
+	if !b.Marked {
+		return ""
+	}
+	return string(b.Basis)
+}
+
+func indicatorsCSV(v *View) (string, error) {
+	rows := make([][]string, 0, len(v.Indicators))
+	for _, i := range v.Indicators {
+		rows = append(rows, []string{
+			i.ID, i.Name, i.Definition, i.Measures, i.Metric, i.Type, i.Unit, i.Direction, string(i.Claim),
+			join(i.Pathways), i.Baseline, join(i.Targets), i.DataSource, i.Method, i.Frequency, i.Owner,
+			i.DataAvailability, basisCell(i.Basis),
+		})
+	}
+	return writeCSV([]string{
+		"id", "name", "definition", "measures", "metric", "type", "unit", "direction", "claim",
+		"pathways", "baseline", "targets", "data_source", "method", "frequency", "owner",
+		"data_availability", "basis",
+	}, rows)
+}
+
+func metricsCSV(v *View) (string, error) {
+	rows := make([][]string, 0, len(v.Metrics))
+	for _, m := range v.Metrics {
+		rows = append(rows, []string{
+			m.ID, m.Name, m.Definition, m.Formula, m.Unit, m.Direction, m.Aggregation, m.WeightedBy,
+			m.Layer, join(m.Indicators), basisCell(m.Basis),
+		})
+	}
+	return writeCSV([]string{
+		"id", "name", "definition", "formula", "unit", "direction", "aggregation", "weighted_by",
+		"layer", "indicators", "basis",
+	}, rows)
+}
+
+func glossaryCSV(v *View) (string, error) {
+	rows := make([][]string, 0, len(v.Glossary))
+	for _, t := range v.Glossary {
+		rows = append(rows, []string{t.ID, t.Term, t.Definition, join(t.Examples)})
+	}
+	return writeCSV([]string{"id", "term", "definition", "examples"}, rows)
+}
