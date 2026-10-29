@@ -310,6 +310,7 @@ const (
 	ActorGroup           ActorType = "group"
 	ActorCommunity       ActorType = "community"
 	ActorCustomerSegment ActorType = "customer_segment"
+	ActorGovernment      ActorType = "government"
 	ActorStandardsBody   ActorType = "standards_body"
 	ActorRegulator       ActorType = "regulator"
 	ActorVendor          ActorType = "vendor"
@@ -322,7 +323,7 @@ const (
 func AllActorTypes() []ActorType {
 	return []ActorType{
 		ActorOrganization, ActorPerson, ActorGroup, ActorCommunity, ActorCustomerSegment,
-		ActorStandardsBody, ActorRegulator, ActorVendor, ActorPlatform, ActorInvestor, ActorOther,
+		ActorGovernment, ActorStandardsBody, ActorRegulator, ActorVendor, ActorPlatform, ActorInvestor, ActorOther,
 	}
 }
 
@@ -500,15 +501,16 @@ func (v Sensitivity) Renderable() bool {
 type FactorKind string
 
 const (
-	FactorEnabler    FactorKind = "enabler"
-	FactorConstraint FactorKind = "constraint"
-	FactorTrend      FactorKind = "trend"
-	FactorShock      FactorKind = "shock"
+	FactorEnabler     FactorKind = "enabler"
+	FactorOpportunity FactorKind = "opportunity"
+	FactorConstraint  FactorKind = "constraint"
+	FactorTrend       FactorKind = "trend"
+	FactorShock       FactorKind = "shock"
 )
 
 // AllFactorKinds returns all factor kinds.
 func AllFactorKinds() []FactorKind {
-	return []FactorKind{FactorEnabler, FactorConstraint, FactorTrend, FactorShock}
+	return []FactorKind{FactorEnabler, FactorOpportunity, FactorConstraint, FactorTrend, FactorShock}
 }
 
 // Valid reports whether v is a known FactorKind.
@@ -565,6 +567,8 @@ const (
 	AggregationSum          Aggregation = "sum"
 	AggregationMean         Aggregation = "mean"
 	AggregationWeightedMean Aggregation = "weighted_mean"
+	AggregationMedian       Aggregation = "median"
+	AggregationMode         Aggregation = "mode"
 	AggregationMin          Aggregation = "min"
 	AggregationMax          Aggregation = "max"
 	AggregationLatest       Aggregation = "latest"
@@ -577,8 +581,8 @@ const (
 // AllAggregations returns all aggregations.
 func AllAggregations() []Aggregation {
 	return []Aggregation{
-		AggregationSum, AggregationMean, AggregationWeightedMean, AggregationMin,
-		AggregationMax, AggregationLatest, AggregationNone,
+		AggregationSum, AggregationMean, AggregationWeightedMean, AggregationMedian, AggregationMode,
+		AggregationMin, AggregationMax, AggregationLatest, AggregationNone,
 	}
 }
 

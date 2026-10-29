@@ -16,7 +16,7 @@ func TestMetricAndIndicatorIssues(t *testing.T) {
 		{"metric without name", func(d *toc.Document) { d.Metrics[0].Name = "" }, "VAL-MET-001", "/metrics/0/name"},
 		{"metric without definition", func(d *toc.Document) { d.Metrics[0].Definition = " " }, "VAL-MET-001", "/metrics/0/definition"},
 		{"metric without formula", func(d *toc.Document) { d.Metrics[0].Formula = "" }, "VAL-MET-001", "/metrics/0/formula"},
-		{"metric aggregation invalid", func(d *toc.Document) { d.Metrics[0].Aggregation = "median" }, "VAL-ENUM-001", "/metrics/0/aggregation"},
+		{"metric aggregation invalid", func(d *toc.Document) { d.Metrics[0].Aggregation = "geometric_mean" }, "VAL-ENUM-001", "/metrics/0/aggregation"},
 		{"metric layer invalid", func(d *toc.Document) { d.Metrics[0].Layer = "global" }, "VAL-ENUM-001", "/metrics/0/layer"},
 		{"weighted mean without weight", func(d *toc.Document) { d.Metrics[1].WeightMetricID = "" }, "VAL-MET-003", "/metrics/1/weightMetricId"},
 		{"weight on a non-weighted metric", func(d *toc.Document) { d.Metrics[0].WeightMetricID = "met-provider-share" }, "VAL-MET-004", "/metrics/0/weightMetricId"},
@@ -59,4 +59,47 @@ func TestEffectiveClaimDefaultsToContribution(t *testing.T) {
 	if (toc.Indicator{Claim: toc.ClaimAttribution}).EffectiveClaim() != toc.ClaimAttribution {
 		t.Fatal("an explicit claim must be kept")
 	}
+}
+
+func TestIndicatorsMayMeasureAPathway(t *testing.T) {
+	// A network-wide roll-up has no single outcome to measure; a pathway is
+	// an honest subject for it.
+	doc := fullDoc(t)
+	doc.Indicators[5].Measures = "pw-supply"
+	if issues := Document(doc); len(issues) != 0 {
+		t.Fatalf("measuring a pathway should be valid:%s", describe(issues))
+	}
+}
+
+func TestNewEnumValuesAreAccepted(t *testing.T) {
+	doc := fullDoc(t)
+	doc.Metrics[0].Aggregation = toc.AggregationMedian
+	doc.Metrics[1].Aggregation = toc.AggregationMode
+	doc.Metrics[1].WeightMetricID = ""
+	doc.Actors[0].Type = toc.ActorGovernment
+	doc.ExternalFactors[0].Kind = toc.FactorOpportunity
+	// The roll-up cannot use an aggregation the library defines as median? It can:
+	// median is an aggregating metric, so a roll-up from it remains valid.
+	if issues := Document(doc); len(issues) != 0 {
+		t.Fatalf("new enum values rejected:%s", describe(issues))
+	}
+}
+
+func TestNestedGroupMustTargetTheSameOutcome(t *testing.T) {
+	doc := fullDoc(t)
+	doc.Groups = append(doc.Groups, toc.PreconditionGroup{
+		ID: "grp-outer", Target: "oc-enterprise-require",
+		Members: []string{"grp-supply", "oc-reference-impl"},
+		Logic:   toc.Logic{Type: toc.LogicAny},
+	})
+	if issues := Document(doc); len(issues) != 0 {
+		t.Fatalf("a nested group with the same target is valid:%s", describe(issues))
+	}
+	doc.Groups[len(doc.Groups)-1].Target = "oc-safer-agents"
+	for _, i := range Document(doc) {
+		if i.Code == "VAL-GRP-004" && i.Path == "/preconditionGroups/1/members/0" {
+			return
+		}
+	}
+	t.Fatalf("expected VAL-GRP-004; got:%s", describe(Document(doc)))
 }

@@ -296,6 +296,14 @@ func (c *checker) groups() {
 			c.errorf("VAL-GRP-003", p+"/logic/type", g.ID, "group has no logic type")
 		}
 		c.logic(p+"/logic", g.ID, g.Logic)
+		// A nested group combines preconditions of the same outcome as the
+		// group that contains it.
+		for j, m := range g.Members {
+			if inner, ok := c.doc.Group(m); ok && inner.Target != g.Target {
+				c.errorf("VAL-GRP-004", p+"/members/"+strconv.Itoa(j), g.ID,
+					"nested group %q targets %q, not %q like %q", m, inner.Target, g.Target, g.ID)
+			}
+		}
 		if g.Logic.Type == toc.LogicAtLeast && g.Logic.K > len(g.Members) {
 			c.errorf("VAL-LOGIC-003", p+"/logic/k", g.ID, "k=%d exceeds the %d members", g.Logic.K, len(g.Members))
 		}
@@ -382,7 +390,7 @@ func (c *checker) indicators() {
 		if ind.Measures == "" {
 			c.errorf("VAL-IND-003", p+"/measures", ind.ID, "indicator measures nothing")
 		}
-		c.ref(p+"/measures", ind.ID, ind.Measures, toc.ElementOutcome, toc.ElementIntervention, toc.ElementAssumption)
+		c.ref(p+"/measures", ind.ID, ind.Measures, toc.ElementOutcome, toc.ElementIntervention, toc.ElementAssumption, toc.ElementPathway)
 		enum(c, p+"/measurementType", ind.ID, ind.MeasurementType)
 		enum(c, p+"/direction", ind.ID, ind.Direction)
 		c.duration(p+"/frequency", ind.ID, ind.Frequency)

@@ -19,6 +19,7 @@
             "group",
             "community",
             "customer_segment",
+            "government",
             "standards_body",
             "regulator",
             "vendor",
@@ -737,6 +738,7 @@
           "type": "string",
           "enum": [
             "enabler",
+            "opportunity",
             "constraint",
             "trend",
             "shock"
@@ -1194,6 +1196,8 @@
             "sum",
             "mean",
             "weighted_mean",
+            "median",
+            "mode",
             "min",
             "max",
             "latest",
