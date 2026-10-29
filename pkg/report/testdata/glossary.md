@@ -1,0 +1,6 @@
+## Glossary
+
+| Term | Definition | Examples |
+|------|------------|----------|
+| General availability | A release available to all customers without special arrangement, as opposed to a preview. | A vendor's public release notes list the feature without a preview label. |
+
