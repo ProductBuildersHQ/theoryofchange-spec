@@ -18,6 +18,7 @@ const (
 	ElementExternalFactor ElementKind = "externalFactor"
 	ElementRisk           ElementKind = "risk"
 	ElementDecision       ElementKind = "decision"
+	ElementPathway        ElementKind = "pathway"
 )
 
 // ElementRef locates an identified element in a document.
@@ -54,6 +55,7 @@ func (d *Document) Elements() []ElementRef {
 	add(ElementExternalFactor, "externalFactors", idsOf(d.ExternalFactors, func(v ExternalFactor) string { return v.ID }))
 	add(ElementRisk, "risks", idsOf(d.Risks, func(v Risk) string { return v.ID }))
 	add(ElementDecision, "decisions", idsOf(d.Decisions, func(v Decision) string { return v.ID }))
+	add(ElementPathway, "pathways", idsOf(d.Pathways, func(v Pathway) string { return v.ID }))
 	return out
 }
 
@@ -183,6 +185,11 @@ func AllElementKinds() []ElementKind {
 	return []ElementKind{
 		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
 		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
-		ElementDecision,
+		ElementDecision, ElementPathway,
 	}
+}
+
+// Pathway returns the pathway with the given ID.
+func (d *Document) Pathway(id string) (*Pathway, bool) {
+	return find(d.Pathways, id, func(v Pathway) string { return v.ID })
 }

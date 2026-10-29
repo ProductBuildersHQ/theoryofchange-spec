@@ -23,7 +23,10 @@ type Outcome struct {
 	Population string `json:"population,omitempty"`
 	// ActorIDs are actors who change or co-own the outcome.
 	ActorIDs []string `json:"actorIds,omitempty"`
-	Tags     []string `json:"tags,omitempty"`
+	// ContributesTo lists outcomes in a parent theory this outcome
+	// contributes to, as element references (toc:<doc>#<outcome>).
+	ContributesTo []string `json:"contributesTo,omitempty"`
+	Tags          []string `json:"tags,omitempty"`
 }
 
 // Logic is how preconditions combine. K is used only with LogicAtLeast.
@@ -227,6 +230,22 @@ type Risk struct {
 	AppliesTo            []string     `json:"appliesTo,omitempty"`
 	Category             RiskCategory `json:"category,omitempty"`
 	RelatedAssumptionIDs []string     `json:"relatedAssumptionIds,omitempty"`
+}
+
+// Pathway is a named grouping of outcomes and interventions, such as a
+// program area or a strategy. Detail for a pathway may live in a child
+// theory that points back with the document's parent field.
+type Pathway struct {
+	ID              string      `json:"id" jsonschema:"required"`
+	Title           string      `json:"title" jsonschema:"required"`
+	Kind            PathwayKind `json:"kind,omitempty"`
+	Description     string      `json:"description,omitempty"`
+	OwnerID         string      `json:"ownerActorId,omitempty"`
+	OutcomeIDs      []string    `json:"outcomeIds,omitempty"`
+	InterventionIDs []string    `json:"interventionIds,omitempty"`
+	// ChildToc references a theory that elaborates this pathway
+	// (toc:<doc>).
+	ChildToc string `json:"childToc,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
 }
 
 // ExternalRef points at an element of another framework or system.

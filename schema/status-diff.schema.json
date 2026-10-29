@@ -21,7 +21,8 @@
             "evidence",
             "externalFactor",
             "risk",
-            "decision"
+            "decision",
+            "pathway"
           ]
         },
         "field": {

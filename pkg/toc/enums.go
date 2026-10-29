@@ -538,6 +538,25 @@ func AllRiskCategories() []RiskCategory {
 // Valid reports whether v is a known RiskCategory.
 func (v RiskCategory) Valid() bool { return slices.Contains(AllRiskCategories(), v) }
 
+// PathwayKind classifies what a pathway groups.
+type PathwayKind string
+
+const (
+	PathwayProgram   PathwayKind = "program"
+	PathwayStrategy  PathwayKind = "strategy"
+	PathwayTheme     PathwayKind = "theme"
+	PathwayGeography PathwayKind = "geography"
+	PathwaySegment   PathwayKind = "segment"
+)
+
+// AllPathwayKinds returns all pathway kinds.
+func AllPathwayKinds() []PathwayKind {
+	return []PathwayKind{PathwayProgram, PathwayStrategy, PathwayTheme, PathwayGeography, PathwaySegment}
+}
+
+// Valid reports whether v is a known PathwayKind.
+func (v PathwayKind) Valid() bool { return slices.Contains(AllPathwayKinds(), v) }
+
 // Framework identifies an external framework an alignment points into.
 type Framework string
 

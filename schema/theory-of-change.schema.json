@@ -534,6 +534,16 @@
             "$ref": "#/$defs/Revision"
           },
           "type": "array"
+        },
+        "parent": {
+          "type": "string",
+          "pattern": "^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "pathways": {
+          "items": {
+            "$ref": "#/$defs/Pathway"
+          },
+          "type": "array"
         }
       },
       "additionalProperties": false,
@@ -1045,6 +1055,12 @@
           },
           "type": "array"
         },
+        "contributesTo": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "tags": {
           "items": {
             "type": "string"
@@ -1058,6 +1074,54 @@
         "id",
         "title",
         "level"
+      ]
+    },
+    "Pathway": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "program",
+            "strategy",
+            "theme",
+            "geography",
+            "segment"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "ownerActorId": {
+          "type": "string"
+        },
+        "outcomeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "interventionIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "childToc": {
+          "type": "string",
+          "pattern": "^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "title"
       ]
     },
     "Person": {

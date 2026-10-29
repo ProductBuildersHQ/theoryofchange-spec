@@ -53,6 +53,10 @@ type Document struct {
 	Alignments      []Alignment         `json:"alignments,omitempty"`
 	Decisions       []Decision          `json:"decisions,omitempty"`
 	Revisions       []Revision          `json:"revisions,omitempty"`
+
+	// Parent references the theory this one elaborates (toc:<doc>).
+	Parent   string    `json:"parent,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
+	Pathways []Pathway `json:"pathways,omitempty"`
 }
 
 // NewDocument returns a document with Kind and SpecVersion set.

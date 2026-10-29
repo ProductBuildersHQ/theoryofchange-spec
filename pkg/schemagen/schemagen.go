@@ -126,6 +126,7 @@ func EnumValues() map[reflect.Type][]string {
 	add(typeOf[toc.Sensitivity](), strs(toc.AllSensitivities()))
 	add(typeOf[toc.FactorKind](), strs(toc.AllFactorKinds()))
 	add(typeOf[toc.RiskCategory](), strs(toc.AllRiskCategories()))
+	add(typeOf[toc.PathwayKind](), strs(toc.AllPathwayKinds()))
 	add(typeOf[toc.Framework](), strs(toc.AllFrameworks()))
 	add(typeOf[toc.Relation](), strs(toc.AllRelations()))
 	add(typeOf[toc.RevisionTrigger](), strs(toc.AllRevisionTriggers()))

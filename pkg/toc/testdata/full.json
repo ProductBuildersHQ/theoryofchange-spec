@@ -3,6 +3,7 @@
   "kind": "TheoryOfChange",
   "specVersion": "0.1",
   "id": "open-agent-auth",
+  "parent": "toc:agent-ecosystem-trust",
   "metadata": {
     "name": "Open agent authorization standard adoption",
     "status": "draft",
@@ -40,7 +41,8 @@
       "description": "Agents act with delegated, least-privilege, auditable credentials.",
       "level": "impact",
       "sphere": "interest",
-      "category": "respond"
+      "category": "respond",
+      "contributesTo": ["toc:agent-ecosystem-trust#oc-trusted-agents"]
     },
     {
       "id": "oc-enterprise-require",
@@ -342,6 +344,18 @@
       "triggerEvidenceIds": ["ev-survey"],
       "qualityReview": { "plausible": "pass", "feasible": "partial", "testable": "pass", "notes": "Needs provider interviews." },
       "approvers": [{ "name": "Working group chair", "approved": true }]
+    }
+  ],
+  "pathways": [
+    {
+      "id": "pw-supply",
+      "title": "Supply side: providers and platforms",
+      "kind": "strategy",
+      "description": "Getting identity providers and agent platforms to ship the standard.",
+      "ownerActorId": "act-proponent",
+      "outcomeIds": ["oc-spec-stable", "oc-idp-support", "oc-platform-support", "oc-reference-impl"],
+      "interventionIds": ["int-interop", "int-reference"],
+      "childToc": "toc:open-agent-auth-supply"
     }
   ]
 }
