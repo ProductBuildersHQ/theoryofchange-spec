@@ -23,6 +23,8 @@ type Outcome struct {
 	Population string `json:"population,omitempty"`
 	// ActorIDs are actors who change or co-own the outcome.
 	ActorIDs []string `json:"actorIds,omitempty"`
+	// AudienceIDs are the audiences who need to see this outcome reported.
+	AudienceIDs []string `json:"audienceIds,omitempty"`
 	// ContributesTo lists outcomes in a parent theory this outcome
 	// contributes to, as element references (toc:<doc>#<outcome>).
 	ContributesTo []string    `json:"contributesTo,omitempty"`
@@ -174,6 +176,10 @@ type Indicator struct {
 	// public, already held internally, new to collect, held by a partner,
 	// or not yet known.
 	DataAvailability DataAvailability `json:"dataAvailability,omitempty"`
+	// AudienceIDs are the audiences this indicator is reported to.
+	AudienceIDs []string `json:"audienceIds,omitempty"`
+	// ThemeIDs are the story themes a theme_count indicator counts.
+	ThemeIDs []string `json:"themeIds,omitempty"`
 	// Collection says how the data is gathered and what that costs.
 	Collection *Collection `json:"collection,omitempty"`
 	// Selection records whether the indicator is a candidate, selected, or
@@ -275,6 +281,29 @@ type GlossaryTerm struct {
 	Definition string   `json:"definition" jsonschema:"required"`
 	Examples   []string `json:"examples,omitempty"`
 	RelatedIDs []string `json:"relatedIds,omitempty"`
+}
+
+// Audience is a group who needs to see results, and what they need to see.
+type Audience struct {
+	ID    string `json:"id" jsonschema:"required"`
+	Name  string `json:"name" jsonschema:"required"`
+	Needs string `json:"needs,omitempty"`
+	// Channels are where they are reached, e.g. annual report, grant
+	// proposal, board deck, newsletter.
+	Channels []string `json:"channels,omitempty"`
+}
+
+// Theme is an entry of the story codebook, so stories are coded the same
+// way by every person or model that codes them.
+type Theme struct {
+	ID         string   `json:"id" jsonschema:"required"`
+	Label      string   `json:"label" jsonschema:"required"`
+	Definition string   `json:"definition" jsonschema:"required"`
+	Includes   []string `json:"includes,omitempty"`
+	Excludes   []string `json:"excludes,omitempty"`
+	Examples   []string `json:"examples,omitempty"`
+	// OutcomeIDs are the outcomes the theme is evidence about.
+	OutcomeIDs []string `json:"outcomeIds,omitempty"`
 }
 
 // Baseline is an indicator's starting point.

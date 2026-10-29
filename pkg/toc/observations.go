@@ -15,6 +15,8 @@ type ObservationSet struct {
 	Period       string                 `json:"period,omitempty"`
 	Observations []Observation          `json:"observations,omitempty"`
 	Assessments  []AssumptionAssessment `json:"assumptionAssessments,omitempty"`
+	Stories      []Story                `json:"stories,omitempty"`
+	Reviews      []LearningReview       `json:"learningReviews,omitempty"`
 	Notes        []Note                 `json:"notes,omitempty"`
 }
 
@@ -63,6 +65,42 @@ type AssumptionAssessment struct {
 	Status       AssumptionStatus `json:"status" jsonschema:"required"`
 	Rationale    string           `json:"rationale,omitempty"`
 	EvidenceIDs  []string         `json:"evidenceIds,omitempty"`
+}
+
+// Story is one account of change, coded against the theory's theme codebook.
+// Stories describe aggregate patterns; ActorID may be an anonymized label.
+type Story struct {
+	ID    string `json:"id" jsonschema:"required"`
+	Date  string `json:"date" jsonschema:"required,format=date"`
+	Title string `json:"title" jsonschema:"required"`
+	// Summary is a paraphrase that is safe to show.
+	Summary string `json:"summary" jsonschema:"required"`
+	// Quote is shown only when Consent is granted.
+	Quote   string `json:"quote,omitempty"`
+	ActorID string `json:"actorId,omitempty"`
+	// Domain is the domain of change the story is about.
+	Domain      string   `json:"domain,omitempty"`
+	ThemeIDs    []string `json:"themeIds,omitempty"`
+	OutcomeIDs  []string `json:"outcomeIds,omitempty"`
+	AudienceIDs []string `json:"audienceIds,omitempty"`
+	Consent     Consent  `json:"consent" jsonschema:"required"`
+	// Sensitivity decides whether the story may be shown at all; restricted
+	// stories never are.
+	Sensitivity Sensitivity `json:"sensitivity" jsonschema:"required"`
+	// CodedBy records who assigned the themes: a role, or "model:<name>".
+	CodedBy string `json:"codedBy,omitempty"`
+	// Significance says why the story was selected.
+	Significance string `json:"significance,omitempty"`
+}
+
+// LearningReview records what a period's review concluded.
+type LearningReview struct {
+	Period     string   `json:"period" jsonschema:"required"`
+	Questions  []string `json:"questions,omitempty"`
+	Findings   []string `json:"findings,omitempty"`
+	Decisions  []string `json:"decisions,omitempty"`
+	Actions    []string `json:"actions,omitempty"`
+	RelatedIDs []string `json:"relatedIds,omitempty"`
 }
 
 // Note is a dated free-text note about the period.

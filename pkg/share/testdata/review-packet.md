@@ -53,6 +53,7 @@ Rows marked inferred or hypothesis are our reading, not something the organizati
 | ind-idp-count-na | Providers with GA support (North America), measuring Major identity providers support the standard | — | — |  |  |  |
 | ind-idp-count-eu | Providers with GA support (Europe), measuring Major identity providers support the standard | — | — |  |  |  |
 | ind-idp-total | Providers with GA support (total), measuring Major identity providers support the standard | — | — |  |  |  |
+| ind-adoption-stories | Stories of provider adoption, measuring Agent access across the market is scoped and auditable | — | — |  |  |  |
 
 ## Metrics
 

@@ -40,6 +40,48 @@
         "status"
       ]
     },
+    "LearningReview": {
+      "properties": {
+        "period": {
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "findings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "decisions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "actions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "relatedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "period"
+      ]
+    },
     "Note": {
       "properties": {
         "date": {
@@ -143,6 +185,18 @@
           },
           "type": "array"
         },
+        "stories": {
+          "items": {
+            "$ref": "#/$defs/Story"
+          },
+          "type": "array"
+        },
+        "learningReviews": {
+          "items": {
+            "$ref": "#/$defs/LearningReview"
+          },
+          "type": "array"
+        },
         "notes": {
           "items": {
             "$ref": "#/$defs/Note"
@@ -156,6 +210,82 @@
         "kind",
         "specVersion",
         "tocId"
+      ]
+    },
+    "Story": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "title": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "actorId": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "themeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outcomeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "audienceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "consent": {
+          "type": "string",
+          "enum": [
+            "granted",
+            "not_granted",
+            "unknown"
+          ]
+        },
+        "sensitivity": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "restricted"
+          ]
+        },
+        "codedBy": {
+          "type": "string"
+        },
+        "significance": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "title",
+        "summary",
+        "consent",
+        "sensitivity"
       ]
     }
   },

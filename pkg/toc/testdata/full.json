@@ -53,6 +53,9 @@
       "category": "respond",
       "contributesTo": [
         "toc:agent-ecosystem-trust#oc-trusted-agents"
+      ],
+      "audienceIds": [
+        "aud-board"
       ]
     },
     {
@@ -378,7 +381,11 @@
       },
       "provenance": {
         "basis": "hypothesis"
-      }
+      },
+      "audienceIds": [
+        "aud-board",
+        "aud-funders"
+      ]
     },
     {
       "id": "ind-idp-roadmaps",
@@ -466,6 +473,19 @@
         "ind-idp-count-na",
         "ind-idp-count-eu"
       ]
+    },
+    {
+      "id": "ind-adoption-stories",
+      "measures": "oc-safer-agents",
+      "name": "Stories of provider adoption",
+      "measurementType": "theme_count",
+      "themeIds": [
+        "thm-first-adoption"
+      ],
+      "pathwayIds": [
+        "pw-supply"
+      ],
+      "dataAvailability": "internal_new"
     }
   ],
   "actors": [
@@ -696,6 +716,45 @@
       ],
       "relatedIds": [
         "oc-idp-support"
+      ]
+    }
+  ],
+  "audiences": [
+    {
+      "id": "aud-board",
+      "name": "Steering board",
+      "needs": "Whether adoption is on track and where it is stuck.",
+      "channels": [
+        "board deck",
+        "quarterly summary"
+      ]
+    },
+    {
+      "id": "aud-funders",
+      "name": "Funders",
+      "needs": "Evidence the standard is being adopted.",
+      "channels": [
+        "annual report",
+        "grant report"
+      ]
+    }
+  ],
+  "themes": [
+    {
+      "id": "thm-first-adoption",
+      "label": "First adoption",
+      "definition": "A provider ships support for the standard for the first time.",
+      "includes": [
+        "announced general availability"
+      ],
+      "excludes": [
+        "beta announcements only"
+      ],
+      "examples": [
+        "A provider adds the standard to its console."
+      ],
+      "outcomeIds": [
+        "oc-safer-agents"
       ]
     }
   ],

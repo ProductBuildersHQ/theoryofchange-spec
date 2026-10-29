@@ -2,7 +2,7 @@
 title: "Open agent authorization standard adoption"
 version: "0.1"
 toc-id: "open-agent-auth"
-content-hash: "8f325b26d584d6a034b3c09cf451095cc98e92ae23aaea427dc810fad4f88f3f"
+content-hash: "aa5ec2912e5f9c2c8ff2422d65c3f638f7548b50df4846de3807dcdb380de6bd"
 ---
 
 # The problem
@@ -122,7 +122,7 @@ Agree the words before you debate the content. Which of these would your funders
 | Inferred | 2 |
 | Hypothesis | 2 |
 | Confirmed | 4 |
-| No basis recorded | 18 |
+| No basis recorded | 19 |
 
 ::: notes
 Stated means a source says it. Inferred and hypothesis are our reading and are the first things to challenge. Confirmed means the people it concerns agreed.
@@ -146,4 +146,4 @@ Work down this list. For each: agree, change, remove, or not sure. Record what t
 
 # Export details
 
-Theory of Change open-agent-auth · version 0.1 · hash 8f325b26d584
+Theory of Change open-agent-auth · version 0.1 · hash aa5ec2912e5f

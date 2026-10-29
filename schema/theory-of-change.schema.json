@@ -226,6 +226,31 @@
         "statement"
       ]
     },
+    "Audience": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "needs": {
+          "type": "string"
+        },
+        "channels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
     "Baseline": {
       "properties": {
         "value": {
@@ -692,6 +717,18 @@
           },
           "type": "array"
         },
+        "audiences": {
+          "items": {
+            "$ref": "#/$defs/Audience"
+          },
+          "type": "array"
+        },
+        "themes": {
+          "items": {
+            "$ref": "#/$defs/Theme"
+          },
+          "type": "array"
+        },
         "selectionCriteria": {
           "items": {
             "$ref": "#/$defs/SelectionCriterion"
@@ -971,7 +1008,8 @@
           "enum": [
             "quantitative",
             "qualitative",
-            "hybrid"
+            "hybrid",
+            "theme_count"
           ]
         },
         "unit": {
@@ -1073,6 +1111,18 @@
             "partner_held",
             "unknown"
           ]
+        },
+        "audienceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "themeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "collection": {
           "$ref": "#/$defs/Collection"
@@ -1377,6 +1427,12 @@
           "type": "string"
         },
         "actorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "audienceIds": {
           "items": {
             "type": "string"
           },
@@ -1826,6 +1882,50 @@
       "type": "object",
       "required": [
         "date"
+      ]
+    },
+    "Theme": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "includes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "excludes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "examples": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outcomeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "definition"
       ]
     },
     "TimeHorizon": {

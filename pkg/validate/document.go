@@ -79,6 +79,7 @@ func Document(doc *toc.Document, opts ...Option) []Issue {
 	c.metrics()
 	c.glossary()
 	c.selection()
+	c.audiencesAndThemes()
 	c.provenance()
 	c.consultations()
 	return c.issues
@@ -276,6 +277,7 @@ func (c *checker) outcomes() {
 			c.logic(p+"/logic", o.ID, *o.Logic)
 		}
 		c.actorRefs(p+"/actorIds", o.ID, o.ActorIDs)
+		c.refs(p+"/audienceIds", o.ID, o.AudienceIDs, toc.ElementAudience)
 		c.contributesTo(p+"/contributesTo", o)
 	}
 }
@@ -400,6 +402,14 @@ func (c *checker) indicators() {
 		c.externalRefs(p+"/externalRefs", ind.ID, ind.ExternalRefs)
 		c.indicatorMetric(p, ind)
 		c.collectionAndSelection(p, ind)
+		c.refs(p+"/audienceIds", ind.ID, ind.AudienceIDs, toc.ElementAudience)
+		c.refs(p+"/themeIds", ind.ID, ind.ThemeIDs, toc.ElementTheme)
+		switch {
+		case ind.MeasurementType == toc.MeasurementThemeCount && len(ind.ThemeIDs) == 0:
+			c.errorf("VAL-THM-003", p+"/themeIds", ind.ID, "a theme_count indicator needs themeIds, the themes it counts")
+		case ind.MeasurementType != toc.MeasurementThemeCount && len(ind.ThemeIDs) > 0:
+			c.errorf("VAL-THM-004", p+"/themeIds", ind.ID, "themeIds is only used by theme_count indicators")
+		}
 		if pop := ind.Population; pop != nil {
 			c.actorRefs(p+"/population/actorIds", ind.ID, pop.ActorIDs)
 		}
@@ -764,5 +774,23 @@ func (c *checker) selection() {
 		if r := b.TargetSelectedMetrics; r.Max > 0 && r.Min > r.Max {
 			c.errorf("VAL-SEL-006", "/measurementBudget/targetSelectedMetrics", "", "the minimum %d is above the maximum %d", r.Min, r.Max)
 		}
+	}
+}
+
+// audiencesAndThemes checks the audiences and the story codebook.
+func (c *checker) audiencesAndThemes() {
+	for i, a := range c.doc.Audiences {
+		if strings.TrimSpace(a.Name) == "" {
+			c.errorf("VAL-AUD-001", "/audiences/"+strconv.Itoa(i)+"/name", a.ID, "audience has no name")
+		}
+	}
+	for i, t := range c.doc.Themes {
+		p := "/themes/" + strconv.Itoa(i)
+		for _, f := range []struct{ field, value string }{{"label", t.Label}, {"definition", t.Definition}} {
+			if strings.TrimSpace(f.value) == "" {
+				c.errorf("VAL-THM-001", p+"/"+f.field, t.ID, "theme has no %s", f.field)
+			}
+		}
+		c.refs(p+"/outcomeIds", t.ID, t.OutcomeIDs, toc.ElementOutcome)
 	}
 }

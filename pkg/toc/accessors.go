@@ -22,6 +22,8 @@ const (
 	ElementMetric         ElementKind = "metric"
 	ElementTerm           ElementKind = "term"
 	ElementCriterion      ElementKind = "criterion"
+	ElementAudience       ElementKind = "audience"
+	ElementTheme          ElementKind = "theme"
 	ElementConsultation   ElementKind = "consultation"
 )
 
@@ -62,6 +64,8 @@ func (d *Document) Elements() []ElementRef {
 	add(ElementPathway, "pathways", idsOf(d.Pathways, func(v Pathway) string { return v.ID }))
 	add(ElementMetric, "metrics", idsOf(d.Metrics, func(v Metric) string { return v.ID }))
 	add(ElementTerm, "glossary", idsOf(d.Glossary, func(v GlossaryTerm) string { return v.ID }))
+	add(ElementAudience, "audiences", idsOf(d.Audiences, func(v Audience) string { return v.ID }))
+	add(ElementTheme, "themes", idsOf(d.Themes, func(v Theme) string { return v.ID }))
 	add(ElementCriterion, "selectionCriteria", idsOf(d.SelectionCriteria, func(v SelectionCriterion) string { return v.ID }))
 	add(ElementConsultation, "consultations", idsOf(d.Consultations, func(v Consultation) string { return v.ID }))
 	return out
@@ -193,8 +197,18 @@ func AllElementKinds() []ElementKind {
 	return []ElementKind{
 		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
 		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
-		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementCriterion, ElementConsultation,
+		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementAudience, ElementTheme, ElementCriterion, ElementConsultation,
 	}
+}
+
+// Audience returns the audience with the given ID.
+func (d *Document) Audience(id string) (*Audience, bool) {
+	return find(d.Audiences, id, func(v Audience) string { return v.ID })
+}
+
+// Theme returns the story theme with the given ID.
+func (d *Document) Theme(id string) (*Theme, bool) {
+	return find(d.Themes, id, func(v Theme) string { return v.ID })
 }
 
 // Criterion returns the selection criterion with the given ID.

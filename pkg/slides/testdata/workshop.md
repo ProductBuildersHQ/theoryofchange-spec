@@ -235,7 +235,7 @@ Agree the words before you debate the content. Which of these would your funders
 | Inferred | 2 |
 | Hypothesis | 2 |
 | Confirmed | 4 |
-| No basis recorded | 18 |
+| No basis recorded | 19 |
 
 <!--
 Stated means a source says it. Inferred and hypothesis are our reading and are the first things to challenge. Confirmed means the people it concerns agreed.

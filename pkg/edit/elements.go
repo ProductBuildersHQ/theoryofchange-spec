@@ -35,6 +35,8 @@ var elementKinds = []ElementKind{
 	{"pathway", "pathways"},
 	{"metric", "metrics"},
 	{"term", "glossary"},
+	{"audience", "audiences"},
+	{"theme", "themes"},
 	{"criterion", "selectionCriteria"},
 	{"consultation", "consultations"},
 }
@@ -200,6 +202,10 @@ type refSite struct {
 // reference to a later-removed element is only a warning.
 var refSites = []refSite{
 	{"outcomes", []string{"actorIds"}, dropItem, 0},
+	{"outcomes", []string{"audienceIds"}, dropItem, 0},
+	{"indicators", []string{"audienceIds"}, dropItem, 0},
+	{"indicators", []string{"themeIds"}, dropItem, 1},
+	{"themes", []string{"outcomeIds"}, dropItem, 0},
 	{"preconditionGroups", []string{"target"}, dropElement, 0},
 	{"preconditionGroups", []string{"members"}, dropItem, 2},
 	{"links", []string{"from"}, dropElement, 0},

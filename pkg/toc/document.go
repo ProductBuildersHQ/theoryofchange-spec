@@ -63,6 +63,10 @@ type Document struct {
 	Metrics  []Metric       `json:"metrics,omitempty"`
 	Glossary []GlossaryTerm `json:"glossary,omitempty"`
 
+	// Audiences say who needs to see results; Themes are the story codebook.
+	Audiences []Audience `json:"audiences,omitempty"`
+	Themes    []Theme    `json:"themes,omitempty"`
+
 	// SelectionCriteria score candidate indicators; Budget is what the
 	// organization can sustain measuring.
 	SelectionCriteria []SelectionCriterion `json:"selectionCriteria,omitempty"`

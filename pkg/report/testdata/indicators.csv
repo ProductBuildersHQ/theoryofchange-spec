@@ -5,3 +5,4 @@ ind-reference-downloads,Reference implementation downloads,,int-reference,,quant
 ind-idp-count-na,Providers with GA support (North America),,oc-idp-support,met-providers,quantitative,providers,,contribution,pw-supply,,,,,,,partner_held,
 ind-idp-count-eu,Providers with GA support (Europe),,oc-idp-support,met-providers,quantitative,providers,,contribution,pw-supply,,,,,,,unknown,
 ind-idp-total,Providers with GA support (total),,oc-idp-support,met-providers,quantitative,providers,,attribution,,,,,,,,,
+ind-adoption-stories,Stories of provider adoption,,oc-safer-agents,,theme_count,,,contribution,pw-supply,,,,,,,internal_new,

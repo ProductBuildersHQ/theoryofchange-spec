@@ -274,11 +274,13 @@ const (
 	MeasurementQuantitative MeasurementType = "quantitative"
 	MeasurementQualitative  MeasurementType = "qualitative"
 	MeasurementHybrid       MeasurementType = "hybrid"
+	// MeasurementThemeCount counts the stories coded with the indicator's themes.
+	MeasurementThemeCount MeasurementType = "theme_count"
 )
 
 // AllMeasurementTypes returns all measurement types.
 func AllMeasurementTypes() []MeasurementType {
-	return []MeasurementType{MeasurementQuantitative, MeasurementQualitative, MeasurementHybrid}
+	return []MeasurementType{MeasurementQuantitative, MeasurementQualitative, MeasurementHybrid, MeasurementThemeCount}
 }
 
 // Valid reports whether v is a known MeasurementType.
@@ -867,3 +869,18 @@ func AllSelectionSubjects() []SelectionSubject {
 
 // Valid reports whether v is a known SelectionSubject.
 func (v SelectionSubject) Valid() bool { return slices.Contains(AllSelectionSubjects(), v) }
+
+// Consent says whether the person a story is about agreed to its use.
+type Consent string
+
+const (
+	ConsentGranted    Consent = "granted"
+	ConsentNotGranted Consent = "not_granted"
+	ConsentUnknown    Consent = "unknown"
+)
+
+// AllConsents returns all consent values.
+func AllConsents() []Consent { return []Consent{ConsentGranted, ConsentNotGranted, ConsentUnknown} }
+
+// Valid reports whether v is a known Consent.
+func (v Consent) Valid() bool { return slices.Contains(AllConsents(), v) }

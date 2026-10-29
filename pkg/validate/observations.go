@@ -57,6 +57,18 @@ func (c *checker) observationSet(set *toc.ObservationSet) {
 		enum(c, p+"/status", a.AssumptionID, a.Status)
 		c.refs(p+"/evidenceIds", a.AssumptionID, a.EvidenceIDs, toc.ElementEvidence)
 	}
+	c.stories(set)
+	for i, r := range set.Reviews {
+		p := "/learningReviews/" + strconv.Itoa(i)
+		if r.Period == "" {
+			c.errorf("VAL-REV-001", p+"/period", "", "learning review has no period")
+		}
+		for j, id := range r.RelatedIDs {
+			if _, ok := c.kinds[id]; !ok && id != "" {
+				c.add("VAL-REF-003", SeverityWarning, p+"/relatedIds/"+strconv.Itoa(j), "", "learning review refers to unknown element %q", id)
+			}
+		}
+	}
 	for i, n := range set.Notes {
 		p := "/notes/" + strconv.Itoa(i)
 		c.date(p+"/date", "", n.Date)
@@ -109,5 +121,37 @@ func (c *checker) observation(p string, o toc.Observation) {
 	}
 	if hasLevel && len(ind.Levels) > 0 && !slices.Contains(ind.Levels, o.Level) {
 		c.errorf("VAL-OBS-008", p+"/level", o.IndicatorID, "level %q is not one of the indicator's levels %v", o.Level, ind.Levels)
+	}
+}
+
+// stories checks stories against the theory's codebook and audiences, and
+// holds them to the consent rules: every story states its consent, and a
+// quote without granted consent is reported so it is never shown by accident.
+func (c *checker) stories(set *toc.ObservationSet) {
+	seen := map[string]bool{}
+	for i, s := range set.Stories {
+		p := "/stories/" + strconv.Itoa(i)
+		if s.ID == "" {
+			c.errorf("VAL-STORY-001", p+"/id", "", "story has no id")
+		} else if seen[s.ID] {
+			c.errorf("VAL-STORY-001", p+"/id", s.ID, "story id %q is used twice", s.ID)
+		}
+		seen[s.ID] = true
+		if s.Date == "" {
+			c.errorf("VAL-DATE-003", p+"/date", s.ID, "story has no date")
+		}
+		c.date(p+"/date", s.ID, s.Date)
+		if s.Consent == "" {
+			c.errorf("VAL-STORY-002", p+"/consent", s.ID, "story does not say whether consent was given (granted, not_granted, or unknown)")
+		}
+		enum(c, p+"/consent", s.ID, s.Consent)
+		enum(c, p+"/sensitivity", s.ID, s.Sensitivity)
+		if s.Quote != "" && s.Consent != toc.ConsentGranted {
+			c.add("VAL-STORY-003", SeverityWarning, p+"/quote", s.ID, "the quote will not be shown: consent is not granted")
+		}
+		c.refs(p+"/themeIds", s.ID, s.ThemeIDs, toc.ElementTheme)
+		c.refs(p+"/outcomeIds", s.ID, s.OutcomeIDs, toc.ElementOutcome)
+		c.refs(p+"/audienceIds", s.ID, s.AudienceIDs, toc.ElementAudience)
+		c.actor(p+"/actorId", s.ID, s.ActorID)
 	}
 }

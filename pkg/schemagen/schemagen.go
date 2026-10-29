@@ -134,6 +134,7 @@ func EnumValues() map[reflect.Type][]string {
 	add(typeOf[toc.Basis](), strs(toc.AllBases()))
 	add(typeOf[toc.DataAvailability](), strs(toc.AllDataAvailabilities()))
 	add(typeOf[toc.ConsultationStep](), strs(toc.AllConsultationSteps()))
+	add(typeOf[toc.Consent](), strs(toc.AllConsents()))
 	add(typeOf[toc.CollectionMode](), strs(toc.AllCollectionModes()))
 	add(typeOf[toc.SelectionStatus](), strs(toc.AllSelectionStatuses()))
 	add(typeOf[toc.SelectionSubject](), strs(toc.AllSelectionSubjects()))

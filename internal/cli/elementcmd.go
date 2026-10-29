@@ -115,6 +115,8 @@ var elementFlags = map[string][]elementFlag{
 		ss("pathways", "pathwayIds", "pathway IDs the indicator serves"),
 		s("claim", "claim", "attribution or contribution (default contribution)"),
 		ss("caveats", "caveats", "caveats to show wherever it is reported"),
+		ss("audiences", "audienceIds", "audience IDs the indicator is reported to"),
+		ss("themes", "themeIds", "story theme IDs a theme_count indicator counts"),
 		ss("rollup-from", "rollupFrom", "indicator IDs of the same metric that combine into this one"),
 		s("collection-mode", "collection.mode", "passive, form, survey, interview, manual, or derived"),
 		s("collection-system", "collection.system", "where the data lives or is entered"),
@@ -178,6 +180,19 @@ var elementFlags = map[string][]elementFlag{
 		sr("definition", "definition", "what it means here"),
 		ss("examples", "examples", "examples from this organization"),
 		ss("related", "relatedIds", "related element IDs"),
+	},
+	"audience": {
+		sr("name", "name", "audience name"),
+		s("needs", "needs", "what they need to see"),
+		ss("channels", "channels", "where they are reached, e.g. annual report"),
+	},
+	"theme": {
+		sr("label", "label", "short name of the theme"),
+		sr("definition", "definition", "what counts as this theme"),
+		ss("includes", "includes", "what to include"),
+		ss("excludes", "excludes", "what to leave out"),
+		ss("examples", "examples", "example stories"),
+		ss("outcomes", "outcomeIds", "outcomes the theme is evidence about"),
 	},
 	"criterion": {
 		sr("name", "name", "criterion name"),
@@ -488,6 +503,10 @@ func shortPrefix(kind string) string {
 		return "term"
 	case "criterion":
 		return "crit"
+	case "audience":
+		return "aud"
+	case "theme":
+		return "thm"
 	case "consultation":
 		return "con"
 	default:

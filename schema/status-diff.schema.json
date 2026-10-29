@@ -25,6 +25,8 @@
             "pathway",
             "metric",
             "term",
+            "audience",
+            "theme",
             "criterion",
             "consultation"
           ]
