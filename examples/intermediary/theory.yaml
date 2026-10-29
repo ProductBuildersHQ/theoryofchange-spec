@@ -1133,12 +1133,14 @@ assumptions:
     test: Review the county planning calendar each quarter for processes that invited members, and ask planning staff whether the channel was used.
     indicatorIds:
       - ind-officials-meetings
+    evidenceIds:
+      - ev-county-planning-notes
     status: at_risk
     ownerActorId: act-county-office
     provenance:
       basis: stated
       evidenceIds:
-        - ev-funder-interview
+        - ev-county-planning-notes
   - id: asm-positions-hold
     statement: Once members adopt a joint position, they keep to it in public rather than splintering.
     type: behavioral
@@ -1153,10 +1155,14 @@ assumptions:
     test: After each joint position, record whether any member publicly took a conflicting stance within the following quarter.
     indicatorIds:
       - ind-joint-positions
+    evidenceIds:
+      - ev-coalition-case
     status: untested
     ownerActorId: act-network
     provenance:
       basis: hypothesis
+      evidenceIds:
+        - ev-coalition-case
   - id: asm-members-deliver
     statement: Stronger, more connected, better-funded members deliver more and better services to residents.
     ifThenBecause:
@@ -1966,6 +1972,8 @@ indicators:
       - Reflects members' reported reach; Riverbend Nonprofit Network cannot attribute resident outcomes to its own work.
       - Residents who use several members are counted more than once.
     dataAvailability: unknown
+    targetGroupIds:
+      - tg-low-access-residents
     collection:
       mode: manual
       system: Member reports
@@ -2055,6 +2063,16 @@ indicators:
     name: Stories of members helping each other
     definition: Stories coded with the peer-help theme in the period.
     measurementType: theme_count
+    baseline:
+      value: 0
+      date: "2026-01-01"
+      source: No stories were collected before 2026
+    targets:
+      - value: 8
+        date: "2026-12-31"
+      - value: 12
+        date: "2027-12-31"
+    dataSource: Story log
     frequency: P3M
     ownerActorId: act-network
     pathwayIds:
@@ -2086,6 +2104,17 @@ indicators:
     measurementType: quantitative
     unit: deals
     direction: increase
+    baseline:
+      value: 2
+      date: "2026-01-01"
+      source: 2025 contract file
+    targets:
+      - value: 5
+        date: "2026-12-31"
+      - value: 8
+        date: "2027-12-31"
+    dataSource: Contract file
+    frequency: P6M
     ownerActorId: act-network
     dataAvailability: internal_existing
   - id: ind-calendar-current
@@ -2094,6 +2123,17 @@ indicators:
     measurementType: quantitative
     unit: months
     direction: increase
+    baseline:
+      value: 6
+      date: "2026-01-01"
+      source: 2025 calendar edit log
+    targets:
+      - value: 12
+        date: "2026-12-31"
+      - value: 12
+        date: "2027-12-31"
+    dataSource: Calendar edit log
+    frequency: P3M
     ownerActorId: act-network
     dataAvailability: internal_existing
   - id: ind-briefings
@@ -2102,8 +2142,81 @@ indicators:
     measurementType: quantitative
     unit: documents
     direction: increase
+    baseline:
+      value: 3
+      date: "2026-01-01"
+      source: 2025 publication list
+    targets:
+      - value: 8
+        date: "2026-12-31"
+      - value: 10
+        date: "2027-12-31"
+    dataSource: Civic Voice publication list
+    frequency: P3M
     ownerActorId: act-network
     dataAvailability: internal_existing
+  - id: ind-enroll-learning
+    measures: oc-out-cohorts
+    name: 'Enrollments: Learning Exchange'
+    definition: Participants enrolled in the period, the weight for the retention rate.
+    measurementType: quantitative
+    unit: participants
+    direction: increase
+    baseline:
+      value: 120
+      date: "2026-01-01"
+      source: 2025 enrollment sheets
+    targets:
+      - value: 150
+        date: "2026-12-31"
+      - value: 170
+        date: "2027-12-31"
+    dataSource: Enrollment sheets
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-enrollments
+    pathwayIds:
+      - pw-learning
+    dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Enrollment sheets
+      minutesPerPeriod: 5
+      period: P3M
+    selection:
+      status: candidate
+      rationale: Needed only as the weight for the retention rate; it comes free with enrollment.
+  - id: ind-enroll-shared
+    measures: int-pooled-backoffice
+    name: 'Enrollments: Shared Services'
+    definition: Participants enrolled in the period, the weight for the retention rate.
+    measurementType: quantitative
+    unit: participants
+    direction: increase
+    baseline:
+      value: 60
+      date: "2026-01-01"
+      source: 2025 enrollment sheets
+    targets:
+      - value: 80
+        date: "2026-12-31"
+      - value: 100
+        date: "2027-12-31"
+    dataSource: Enrollment sheets
+    frequency: P3M
+    ownerActorId: act-network
+    metricId: met-enrollments
+    pathwayIds:
+      - pw-shared
+    dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Enrollment sheets
+      minutesPerPeriod: 5
+      period: P3M
+    selection:
+      status: candidate
+      rationale: Needed only as the weight for the retention rate; it comes free with enrollment.
 actors:
   - id: act-network
     name: Riverbend Nonprofit Network
@@ -2331,6 +2444,27 @@ evidence:
     summary: Aggregated attendance by program area and member, with no individual names.
     sensitivity: public
     accessedAt: "2026-01-10"
+  - id: ev-county-planning-notes
+    title: County planning staff comments on engaging the nonprofit sector
+    type: stakeholder_testimony
+    strength: moderate
+    direction: supports
+    source: Riverbend County planning office (fictional)
+    url: https://example.org/riverbend/planning-comments
+    summary: Planning staff said they lack a quick way to reach the nonprofit sector and would use a named contact.
+    excerpt: We would invite providers earlier if there were one contact to ask.
+    sensitivity: public
+    accessedAt: "2026-03-19"
+  - id: ev-coalition-case
+    title: Joint positions in a neighboring county's nonprofit coalition
+    type: case_study
+    strength: weak
+    direction: supports
+    source: Example Institute for Nonprofit Studies
+    url: https://example.org/institute/coalition-positions
+    summary: Coalitions that agreed a process for dissent kept most members publicly aligned after a joint position.
+    sensitivity: public
+    accessedAt: "2026-03-10"
 externalFactors:
   - id: ef-county-budget
     description: The county's annual budget cycle sets how much it can fund community planning and services.
@@ -2993,3 +3127,30 @@ consultations:
       - The board agreed that funding volatility is real but outside the network's reach.
     changedIds:
       - cause-funding-volatility
+  - id: con-resident-listening
+    date: "2026-03-12"
+    step: focus
+    method: interview
+    stakeholderGroups:
+      - Residents of low-access areas
+      - Neighborhood association volunteers
+    count: 14
+    findings:
+      - Residents named travel time and unclear eligibility as the main barriers to services.
+      - Residents asked that members share intake forms so people tell their story once.
+    changedIds:
+      - tg-low-access-residents
+      - oc-resident-access
+  - id: con-county-staff
+    date: "2026-03-19"
+    step: actors
+    method: meeting
+    stakeholderGroups:
+      - County planning staff
+    count: 3
+    findings:
+      - Staff would use a named contact and a quarterly meeting.
+      - Staff cannot commit to inviting members into every planning process.
+    changedIds:
+      - asm-officials-receptive
+      - oc-st-channel
