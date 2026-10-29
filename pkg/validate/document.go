@@ -78,6 +78,8 @@ func Document(doc *toc.Document, opts ...Option) []Issue {
 	c.pathways()
 	c.metrics()
 	c.glossary()
+	c.provenance()
+	c.consultations()
 	return c.issues
 }
 
@@ -623,6 +625,83 @@ func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
 		}
 		if src, ok := c.doc.Indicator(srcID); ok && src.MetricID != ind.MetricID {
 			c.errorf("VAL-MET-002", sp, ind.ID, "%q instantiates metric %q, not %q", srcID, src.MetricID, ind.MetricID)
+		}
+	}
+}
+
+// provenance checks every element's provenance block.
+func (c *checker) provenance() {
+	d := c.doc
+	for i, v := range d.Outcomes {
+		c.prov("outcomes", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Groups {
+		c.prov("preconditionGroups", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Links {
+		c.prov("links", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Interventions {
+		c.prov("interventions", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Assumptions {
+		c.prov("assumptions", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Indicators {
+		c.prov("indicators", i, v.ID, v.Provenance)
+		enum(c, "/indicators/"+strconv.Itoa(i)+"/dataAvailability", v.ID, v.DataAvailability)
+	}
+	for i, v := range d.Actors {
+		c.prov("actors", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.ExternalFactors {
+		c.prov("externalFactors", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Risks {
+		c.prov("risks", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Metrics {
+		c.prov("metrics", i, v.ID, v.Provenance)
+	}
+	for i, v := range d.Pathways {
+		c.prov("pathways", i, v.ID, v.Provenance)
+	}
+}
+
+func (c *checker) prov(array string, i int, element string, p *toc.Provenance) {
+	if p == nil {
+		return
+	}
+	path := "/" + array + "/" + strconv.Itoa(i) + "/provenance"
+	if p.Basis == "" {
+		c.errorf("VAL-PRV-001", path+"/basis", element, "provenance has no basis")
+	}
+	enum(c, path+"/basis", element, p.Basis)
+	c.refs(path+"/evidenceIds", element, p.EvidenceIDs, toc.ElementEvidence)
+	c.date(path+"/decidedAt", element, p.DecidedAt)
+}
+
+func (c *checker) consultations() {
+	for i, k := range c.doc.Consultations {
+		p := "/consultations/" + strconv.Itoa(i)
+		if k.Date == "" {
+			c.errorf("VAL-DATE-003", p+"/date", k.ID, "consultation has no date")
+		}
+		c.date(p+"/date", k.ID, k.Date)
+		if k.Step == "" {
+			c.errorf("VAL-CON-001", p+"/step", k.ID, "consultation has no step")
+		}
+		enum(c, p+"/step", k.ID, k.Step)
+		enum(c, p+"/method", k.ID, k.Method)
+		if k.Count < 0 {
+			c.errorf("VAL-CON-002", p+"/count", k.ID, "count cannot be negative")
+		}
+		// Changed elements may have been removed by the consultation's outcome.
+		for j, id := range k.ChangedIDs {
+			if _, ok := c.kinds[id]; !ok && id != "" {
+				c.add("VAL-REF-003", SeverityWarning, p+"/changedIds/"+strconv.Itoa(j), k.ID,
+					"changed element %q no longer exists", id)
+			}
 		}
 	}
 }
