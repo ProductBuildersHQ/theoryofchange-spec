@@ -177,3 +177,12 @@ func (o Outcome) EffectiveLogic() Logic {
 	}
 	return *o.Logic
 }
+
+// AllElementKinds returns element kinds in document order.
+func AllElementKinds() []ElementKind {
+	return []ElementKind{
+		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
+		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
+		ElementDecision,
+	}
+}

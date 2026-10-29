@@ -218,7 +218,7 @@ type ExternalFactor struct {
 	Affects     []string   `json:"affects,omitempty"`
 	Likelihood  Rating     `json:"likelihood,omitempty"`
 	// Trend is a prism-core trend direction (up, down, flat, unknown).
-	Trend string `json:"trend,omitempty"`
+	Trend string `json:"trend,omitempty" jsonschema:"enum=up,enum=down,enum=flat,enum=unknown"`
 }
 
 // Risk is a prism-core risk attached to elements of the theory.

@@ -122,7 +122,7 @@ type IndicatorStatus struct {
 	IndicatorID string `json:"indicatorId" jsonschema:"required"`
 	State       State  `json:"state" jsonschema:"required"`
 	// Health is a prism-core health value (green, yellow, red) or empty.
-	Health string `json:"health,omitempty"`
+	Health string `json:"health,omitempty" jsonschema:"enum=green,enum=yellow,enum=red"`
 	// Progress and Expected are fractions of the way from baseline to the
 	// final target.
 	Progress         *float64     `json:"progress,omitempty"`
@@ -137,7 +137,7 @@ type OutcomeStatus struct {
 	OutcomeID    string   `json:"outcomeId" jsonschema:"required"`
 	State        State    `json:"state" jsonschema:"required"`
 	PathwayState State    `json:"pathwayState" jsonschema:"required"`
-	Health       string   `json:"health,omitempty"`
+	Health       string   `json:"health,omitempty" jsonschema:"enum=green,enum=yellow,enum=red"`
 	Confidence   *float64 `json:"confidence,omitempty"`
 	IndicatorIDs []string `json:"indicatorIds,omitempty"`
 	// AssumptionBroken lists invalidated or at-risk assumptions on links
@@ -165,7 +165,7 @@ type AssumptionState struct {
 type ImpactStatus struct {
 	OutcomeID    string   `json:"outcomeId" jsonschema:"required"`
 	PathwayState State    `json:"pathwayState" jsonschema:"required"`
-	Health       string   `json:"health,omitempty"`
+	Health       string   `json:"health,omitempty" jsonschema:"enum=green,enum=yellow,enum=red"`
 	Confidence   *float64 `json:"confidence,omitempty"`
 }
 
