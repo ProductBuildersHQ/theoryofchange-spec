@@ -95,24 +95,37 @@ func Build(doc *toc.Document) (*Graph, error) {
 	if issues := validate.Document(doc); validate.HasErrors(issues) {
 		return nil, invalidError(issues)
 	}
+	// Rejected elements stay in the document for history but take no part
+	// in the graph: neither they nor any edge touching them.
 	g := &Graph{index: make(map[string]int, len(doc.Outcomes)+len(doc.Interventions))}
 	for _, o := range doc.Outcomes {
-		g.addNode(Node{ID: o.ID, Kind: toc.ElementOutcome, Level: o.Level})
+		if !o.Rejected() {
+			g.addNode(Node{ID: o.ID, Kind: toc.ElementOutcome, Level: o.Level})
+		}
 	}
 	for _, in := range doc.Interventions {
-		g.addNode(Node{ID: in.ID, Kind: toc.ElementIntervention})
+		if !in.Rejected() {
+			g.addNode(Node{ID: in.ID, Kind: toc.ElementIntervention})
+		}
 	}
+	active := func(id string) bool { _, ok := g.index[id]; return ok }
 
 	type pair struct{ from, to string }
 	seen := make(map[pair]bool, len(doc.Links))
 	for _, l := range doc.Links {
+		if l.Rejected() || !active(l.From) || !active(l.To) {
+			continue
+		}
 		g.edges = append(g.edges, Edge{LinkID: l.ID, From: l.From, To: l.To, Feedback: l.Feedback})
 		seen[pair{l.From, l.To}] = true
 	}
 	for _, in := range doc.Interventions {
+		if in.Rejected() {
+			continue
+		}
 		for _, t := range in.Targets {
 			p := pair{in.ID, t}
-			if seen[p] {
+			if seen[p] || !active(t) {
 				continue
 			}
 			seen[p] = true
@@ -137,14 +150,29 @@ func Build(doc *toc.Document) (*Graph, error) {
 		}
 	}
 
-	g.groups = make([]toc.PreconditionGroup, len(doc.Groups))
-	for i, grp := range doc.Groups {
-		grp.Members = slices.Clone(grp.Members)
-		g.groups[i] = grp
+	activeGroup := map[string]bool{}
+	for _, grp := range doc.Groups {
+		if !grp.Rejected() && active(grp.Target) {
+			activeGroup[grp.ID] = true
+		}
+	}
+	g.groups = make([]toc.PreconditionGroup, 0, len(doc.Groups))
+	for _, grp := range doc.Groups {
+		if !activeGroup[grp.ID] {
+			continue
+		}
+		members := make([]string, 0, len(grp.Members))
+		for _, m := range grp.Members {
+			if active(m) || activeGroup[m] {
+				members = append(members, m)
+			}
+		}
+		grp.Members = members
+		g.groups = append(g.groups, grp)
 	}
 	if doc.Ceiling != nil {
 		c := *doc.Ceiling
-		c.OutcomeIDs = slices.Clone(c.OutcomeIDs)
+		c.OutcomeIDs = slices.DeleteFunc(slices.Clone(c.OutcomeIDs), func(id string) bool { return !active(id) })
 		g.ceiling = &c
 		g.ownedByID = g.closure(g.pred, c.OutcomeIDs)
 	}
