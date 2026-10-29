@@ -1,0 +1,40 @@
+{
+  "kind": "TheoryOfChangeStatus",
+  "specVersion": "0.1",
+  "tocId": "open-agent-auth",
+  "asOf": "2026-12-31",
+  "options": {
+    "tolerance": 0.1,
+    "rollup": "worst",
+    "confidenceWeights": { "evidence": 0.4, "assumptions": 0.4, "rationale": 0.2 }
+  },
+  "indicators": [
+    {
+      "indicatorId": "ind-idp-count",
+      "state": "achieved",
+      "health": "green",
+      "progress": 1,
+      "expected": 1,
+      "latest": { "indicatorId": "ind-idp-count", "date": "2026-12-15", "value": 2 },
+      "observationCount": 1
+    }
+  ],
+  "outcomes": [
+    {
+      "outcomeId": "oc-idp-support",
+      "state": "achieved",
+      "pathwayState": "on_track",
+      "health": "green",
+      "confidence": 0.62,
+      "indicatorIds": ["ind-idp-count"],
+      "assumptionBroken": ["asm-no-fork"]
+    }
+  ],
+  "links": [{ "linkId": "ln-spec-idp", "state": "ok", "confidence": 0.78 }],
+  "assumptions": [
+    { "assumptionId": "asm-idp-incentive", "status": "holding", "source": "assessment", "assessedAt": "2026-12-10" }
+  ],
+  "overall": [
+    { "outcomeId": "oc-safer-agents", "pathwayState": "at_risk", "health": "yellow", "confidence": 0.41 }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "ActorRegistry",
+  "specVersion": "0.1",
+  "id": "agent-auth-actors",
+  "name": "Agent authorization market actors",
+  "actors": [
+    { "id": "act-idp", "name": "Identity providers", "type": "vendor", "roles": ["adopter"] },
+    { "id": "act-platforms", "name": "Agent platforms", "type": "platform", "roles": ["adopter", "gatekeeper"] }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "kind": "ObservationSet",
+  "specVersion": "0.1",
+  "tocId": "open-agent-auth",
+  "period": "2026-Q4",
+  "observations": [
+    {
+      "indicatorId": "ind-idp-count",
+      "date": "2026-12-15",
+      "value": 2,
+      "source": "Provider release notes",
+      "evidenceIds": ["ev-survey"],
+      "note": "Two providers shipped GA support.",
+      "quality": "verified",
+      "disaggregation": { "region": "north-america" }
+    },
+    {
+      "indicatorId": "ind-idp-roadmaps",
+      "date": "2026-12-15",
+      "level": "committed",
+      "quality": "reported"
+    }
+  ],
+  "assumptionAssessments": [
+    {
+      "assumptionId": "asm-idp-incentive",
+      "date": "2026-12-10",
+      "status": "holding",
+      "rationale": "Four of five interviewed providers cite customer demand.",
+      "evidenceIds": ["ev-survey"]
+    }
+  ],
+  "notes": [
+    { "date": "2026-12-20", "text": "Interop event attendance doubled.", "relatedIds": ["int-interop"] }
+  ]
+}
