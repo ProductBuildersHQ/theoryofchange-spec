@@ -37,9 +37,10 @@ func TestDefinitionsPackContainsEveryReport(t *testing.T) {
 }
 
 func TestCSVGolden(t *testing.T) {
-	whole := build(t, fullDoc(t), nil, Options{})
+	doc := fullDoc(t)
+	whole := build(t, doc, nil, Options{})
 	for _, table := range CSVTables {
-		got, err := CSV(table, whole)
+		got, err := CSV(table, whole, doc)
 		if err != nil {
 			t.Fatalf("%s: %v", table, err)
 		}
@@ -50,7 +51,7 @@ func TestCSVGolden(t *testing.T) {
 func TestCSVIsRFC4180(t *testing.T) {
 	whole := build(t, fullDoc(t), nil, Options{})
 	whole.Glossary[0].Definition = "has, a comma and \"quotes\"\nand a newline"
-	got, err := CSV("glossary", whole)
+	got, err := CSV("glossary", whole, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +64,7 @@ func TestCSVIsRFC4180(t *testing.T) {
 }
 
 func TestCSVUnknownTable(t *testing.T) {
-	if _, err := CSV("nope", &View{}); err == nil || !strings.Contains(err.Error(), "indicators") {
+	if _, err := CSV("nope", &View{}, nil); err == nil || !strings.Contains(err.Error(), "indicators") {
 		t.Errorf("want an error naming the valid tables, got %v", err)
 	}
 }

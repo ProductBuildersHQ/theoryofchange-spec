@@ -5,6 +5,9 @@ import (
 	"encoding/csv"
 	"fmt"
 	"strings"
+
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 )
 
 // CSV tables are RFC 4180: comma separated, CRLF line ends, fields quoted
@@ -12,11 +15,23 @@ import (
 // view's order, so output is deterministic.
 
 // CSVTables lists the tables ExportCSV can write from a theory alone.
-var CSVTables = []string{"indicators", "metrics", "glossary"}
+var CSVTables = []string{"indicators", "metrics", "glossary", "metric-selection", "collection-plan"}
 
-// CSV renders one named table from a view.
-func CSV(table string, v *View) (string, error) {
+// CSV renders one named table. The selection and collection tables are built
+// from the document, so doc must be set for them; the others use the view.
+func CSV(table string, v *View, doc *toc.Document) (string, error) {
+	if (table == "metric-selection" || table == "collection-plan") && doc == nil {
+		return "", fmt.Errorf("table %q needs the document", table)
+	}
 	switch table {
+	case "metric-selection":
+		return metricSelectionCSV(doc)
+	case "collection-plan":
+		rep, err := burden.Compute(doc)
+		if err != nil {
+			return "", err
+		}
+		return collectionPlanCSV(doc, rep)
 	case "indicators":
 		return indicatorsCSV(v)
 	case "metrics":

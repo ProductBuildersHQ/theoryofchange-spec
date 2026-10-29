@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
@@ -60,6 +61,14 @@ func DefinitionReport(doc *toc.Document, kind, pathway string) (string, error) {
 		return report.MetricDefinitions(whole), nil
 	case "glossary":
 		return report.Glossary(whole), nil
+	case "metric-selection":
+		return report.MetricSelection(whole, doc), nil
+	case "collection-plan":
+		rep, err := burden.Compute(doc)
+		if err != nil {
+			return "", err
+		}
+		return report.CollectionPlan(doc, rep), nil
 	case "assessment":
 		return report.Assessment(whole, doc), nil
 	default:
@@ -77,5 +86,5 @@ func ExportCSV(doc *toc.Document, table string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return report.CSV(table, v)
+	return report.CSV(table, v, doc)
 }

@@ -7,7 +7,7 @@ import (
 
 // DefinitionKinds lists the definition report kinds that need no
 // observations, in the order the definitions pack presents them.
-var DefinitionKinds = []string{"pathway", "logic-model", "metrics", "glossary", "assessment", "definitions"}
+var DefinitionKinds = []string{"pathway", "logic-model", "metrics", "metric-selection", "collection-plan", "glossary", "assessment", "definitions"}
 
 // PathwayDiagrams renders the causal-pathway diagram of the whole theory,
 // then one per pathway, each as a titled Mermaid block.

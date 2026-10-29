@@ -92,8 +92,18 @@ type Budget struct {
 	} `json:"selectedMetrics"`
 }
 
+// Line is the cost of one selected indicator.
+type Line struct {
+	ID string `json:"id"`
+	// Mode is empty for an indicator with no collection data.
+	Mode string `json:"mode,omitempty"`
+	Totals
+}
+
 // Report is the collection burden of a theory.
 type Report struct {
+	// Lines are the selected indicators in document order.
+	Lines []Line `json:"lines"`
 	// Overall counts each selected indicator once.
 	Overall Totals `json:"overall"`
 	// ByPathway lists the pathways with selected indicators, in document
@@ -113,7 +123,7 @@ type Report struct {
 // Compute totals the selected indicators of doc. Retired and candidate
 // indicators, and indicators with no selection record, are not counted.
 func Compute(doc *toc.Document) (*Report, error) {
-	r := &Report{ByPathway: []Group{}, ByMode: []Group{}, Uncosted: []string{}}
+	r := &Report{Lines: []Line{}, ByPathway: []Group{}, ByMode: []Group{}, Uncosted: []string{}}
 	byPathway := map[string]*Totals{}
 	byMode := map[string]*Totals{}
 	for _, ind := range doc.Indicators {
@@ -132,6 +142,7 @@ func Compute(doc *toc.Document) (*Report, error) {
 		} else {
 			mode = string(ind.Collection.Mode)
 		}
+		r.Lines = append(r.Lines, Line{ID: ind.ID, Mode: mode, Totals: cost})
 		addTo(byMode, mode, cost)
 		if len(ind.PathwayIDs) == 0 {
 			addTo(byPathway, "", cost)
