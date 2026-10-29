@@ -1,0 +1,130 @@
+kind: ObservationSet
+specVersion: "0.1"
+tocId: delegation-standard-adoption
+period: 2026-H2
+observations:
+  - indicatorId: ind-idps-ga
+    date: "2026-06-30"
+    value: 0
+    source: Provider release notes
+    quality: verified
+  - indicatorId: ind-idps-ga
+    date: "2026-09-30"
+    value: 1
+    source: Provider release notes
+    note: One large provider reached general availability in the third quarter.
+    quality: verified
+    disaggregation:
+      region: north
+  - indicatorId: ind-regional-idps-ga
+    date: "2026-09-30"
+    value: 2
+    source: Library issue tracker and release notes
+    quality: reported
+  - indicatorId: ind-platforms-emitting
+    date: "2026-09-30"
+    value: 4
+    source: Participant attestations
+    quality: reported
+  - indicatorId: ind-adopters-total
+    date: "2026-09-30"
+    value: 7
+    source: Roll-up of the three adopter indicators
+    quality: reported
+  - indicatorId: ind-pilots-live
+    date: "2026-09-30"
+    value: 5
+    source: Pilot reports
+    evidenceIds:
+      - ev-pilot-cost
+    quality: verified
+  - indicatorId: ind-stage-idp
+    date: "2026-09-30"
+    level: committed
+    source: Coded interviews and roadmaps
+    quality: estimated
+  - indicatorId: ind-buyer-rfp-share
+    date: "2026-09-30"
+    value: 4
+    source: Contributed RFP sample
+    note: Small sample of 25 RFPs.
+    quality: estimated
+  - indicatorId: ind-interop-pass-rate
+    date: "2026-09-30"
+    value: 94
+    source: Conformance suite nightly run
+    note: Within tolerance of the 96 baseline.
+    quality: verified
+  - indicatorId: ind-procurement-clauses
+    date: "2026-09-30"
+    value: 1
+    source: Buyer association template repository
+    quality: verified
+  - indicatorId: ind-auditor-stage
+    date: "2026-09-30"
+    level: mapped
+    source: Assurance firm interviews
+    evidenceIds:
+      - ev-auditor-interviews
+    quality: reported
+  - indicatorId: ind-regulator-stage
+    date: "2026-09-30"
+    level: consulting
+    source: Regulator publications
+    evidenceIds:
+      - ev-regulator-paper
+    quality: verified
+  - indicatorId: ind-asm-fork-profiles
+    date: "2026-09-30"
+    value: 2
+    source: Conformance results
+    evidenceIds:
+      - ev-fork-profiles
+    quality: verified
+  - indicatorId: ind-asm-extension-multihop
+    date: "2026-09-30"
+    level: draft
+    source: Extension working draft
+    evidenceIds:
+      - ev-extension-multihop
+    quality: verified
+  - indicatorId: ind-out-conformance-runs
+    date: "2026-09-30"
+    value: 31
+    source: Submission log
+    quality: verified
+  - indicatorId: ind-out-pilot-agreements
+    date: "2026-09-30"
+    value: 9
+    source: Working group records
+    quality: verified
+assumptionAssessments:
+  - assumptionId: asm-idp-no-fork
+    date: "2026-09-30"
+    status: at_risk
+    rationale: Two large providers published profiles that do not pass the common suite.
+    evidenceIds:
+      - ev-fork-profiles
+  - assumptionId: asm-extension-multihop
+    date: "2026-09-30"
+    status: invalidated
+    rationale: The extension working draft describes chained delegation.
+    evidenceIds:
+      - ev-extension-multihop
+  - assumptionId: asm-first-mover
+    date: "2026-09-30"
+    status: holding
+    rationale: Two regional providers followed the first large provider within a quarter.
+    evidenceIds:
+      - ev-oss-downloads
+notes:
+  - date: "2026-09-30"
+    text: Competitive response is visible earlier than planned, so the balancing loop is now being monitored each quarter.
+    relatedIds:
+      - oc-rival-momentum
+      - ln-rival-platform-loop
+  - date: "2026-09-30"
+    text: Profile divergence is the most urgent item for the next steering group meeting.
+    relatedIds:
+      - rsk-profile-split
+      - dec-profile-governance

@@ -1,0 +1,46 @@
+kind: ActorRegistry
+specVersion: "0.1"
+id: delegation-market-actors
+name: Delegation market shared actors (fictional)
+actors:
+  - id: act-wg
+    name: Delegation Standard Working Group
+    type: group
+    roles:
+      - implementer
+      - champion
+    stance: champion
+    influence: medium
+    interest: high
+  - id: act-std-body
+    name: Neutral standards body
+    type: standards_body
+    roles:
+      - boundary_partner
+    stance: supporter
+    influence: medium
+    interest: medium
+  - id: act-regulator
+    name: Digital accountability regulator
+    type: regulator
+    roles:
+      - gatekeeper
+    stance: unknown
+    influence: high
+    interest: low
+  - id: act-comp-proprietary
+    name: Proprietary single-vendor scheme
+    type: organization
+    roles:
+      - competitor
+    stance: opponent
+    influence: high
+    interest: high
+  - id: act-comp-extension
+    name: Extension of an older authorization framework
+    type: other
+    roles:
+      - competitor
+    stance: skeptic
+    influence: medium
+    interest: medium
