@@ -6,6 +6,7 @@ require (
 	github.com/grokify/prism-core v0.5.0
 	github.com/invopop/jsonschema v0.14.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
