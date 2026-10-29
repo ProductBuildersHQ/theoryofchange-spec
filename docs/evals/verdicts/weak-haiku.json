@@ -1,0 +1,191 @@
+{
+  "bundleHash": "be312dad9ebabfc336996d829cf36453acd194f1bdff34db8434f4ffbec43d1c",
+  "metadata": {
+    "document": "weak.yaml",
+    "generatedAt": "2026-03-01T00:00:00Z",
+    "reviewerId": "haiku"
+  },
+  "reviewType": "toc",
+  "judge": {
+    "judge_id": "haiku",
+    "evaluated_at": "0001-01-01T00:00:00Z"
+  },
+  "pass": false,
+  "categories": [
+    {
+      "category": "process",
+      "score": "fail",
+      "reasoning": "No consultation is recorded for any step. The document has no consultation, actor-consultation or participation record, and no statement that consultation is missing (metadata and context contain only problemStatement, 'Our community has problems and people need more support'). Target groups are never named, so none can be checked. Nothing is credited without a record."
+    },
+    {
+      "category": "logic_flow",
+      "score": "fail",
+      "reasoning": "Links ln-awareness-better (oc-awareness -\u003e oc-better-community) and ln-events-awareness (oc-events -\u003e oc-awareness) carry no rationale and no assumption. Lint TOC-LOG-001 and TOC-LOG-002 both warn on ln-awareness-better. The leap from 'People are aware' to 'The community is better' is asserted with no reason, and the chain also skips the intermediate and long-term levels (the logic model table shows '-' for Intermediate and Long-term outcomes). No combination logic is stated."
+    },
+    {
+      "category": "root_causes",
+      "score": "fail",
+      "reasoning": "The problem statement ('Our community has problems and people need more support') is not analysed. No causes are listed anywhere in the document, and no outcome has addressesCauses. Nothing is traced to underlying or structural causes, and no cause is set aside with a reason. Lint TOC-CAU-001 reports GO only because no causes exist to check."
+    },
+    {
+      "category": "assumptions_risks",
+      "score": "fail",
+      "reasoning": "The document has 0 assumptions and no risks (assessment Summary: '0 assumptions'; 'Assumptions needing testing: None'). Lint TOC-ASM-001, 002 and 004 are GO only vacuously. The link ln-awareness-better has no assumption (TOC-LOG-002), which is the link the theory most depends on. No assumption about context or partners appears."
+    },
+    {
+      "category": "actors",
+      "score": "fail",
+      "reasoning": "Nobody is named as responsible for delivery. Intervention int-events ('Do more events') has no owner, and lint TOC-INT-002 warns on /interventions/0. No partners are identified and no stance is recorded. The organization is not named as owner of oc-events or any other outcome."
+    },
+    {
+      "category": "evidence",
+      "score": "fail",
+      "reasoning": "Claims are made without sources. The assessment reports 0 elements stated by cited sources, 0 inferred, 0 hypotheses, 0 confirmed, and 7 elements with 'No basis recorded'. Lint TOC-PRV-002 is GO only because no stated element exists. The causal links and the impact claim are presented as established with no basis, and no evidence gap is identified."
+    },
+    {
+      "category": "targeting",
+      "score": "fail",
+      "reasoning": "No target group is named and no outcome says what changes for a particular group. Benefit to 'the community' is assumed, not specified. The impact outcome oc-better-community ('The community is better') has no breakdown, and there is no indicator with a disaggregation. Lint TOC-EQU-001 is GO only because no target group exists to check."
+    },
+    {
+      "category": "presentation",
+      "score": "partial",
+      "reasoning": "Both a pathway diagram (mermaid block in narrative) and a plain-language narrative exist, and they agree with the model: the same four nodes and the same two links. The glossary is missing: the narrative states 'This theory defines no glossary terms'. The pass criteria need a glossary, so this is not a pass. The partial criterion fits, since the diagram and narrative exist and agree but the terms are not defined."
+    },
+    {
+      "category": "plausible",
+      "score": "partial",
+      "reasoning": "The first link, events to awareness (ln-events-awareness), is believable. The second, awareness to a better community (ln-awareness-better), is a stretch: awareness alone is not shown to change community conditions, and no time horizon or lag is stated. Lint TOC-MEA-004 and TOC-MEA-005 are GO on timing but do not test plausibility. The activities could produce the outputs, but the path to the impact is stretched."
+    },
+    {
+      "category": "feasible",
+      "score": "partial",
+      "reasoning": "Feasibility is plausible for events (oc-events, int-events) but no resources, staff, or authority are described. The ceiling of accountability is flagged by lint TOC-ACC-001 (no ceiling declared), so it cannot be checked that the owner controls what it is accountable for. The narrative assessment has 'Open decisions: None' and does not examine resources."
+    },
+    {
+      "category": "testable",
+      "score": "fail",
+      "reasoning": "The impact outcome oc-better-community and the intermediate-level outcome oc-awareness have no indicator, and the narrative lists both under 'Outcomes within accountability with no indicator'. The only indicator, ind-events ('Number of events', measures oc-events), lacks baseline, target, data source and frequency (TOC-MEA-002) and a unit and direction (TOC-MEA-003). Lint TOC-MEA-001 reports GO, which conflicts with the narrative gap list; this is recorded as a finding. As stated, the outcomes the theory relies on cannot be measured."
+    },
+    {
+      "category": "structural_integrity",
+      "score": "partial",
+      "reasoning": "The document is well formed and the lint report is WARN, not GO, with no errors. Warnings present: TOC-ACC-001 (no ceiling of accountability), TOC-INT-002 (no owner), TOC-LOG-001 and TOC-LOG-002 (link ln-awareness-better), TOC-MEA-002 and TOC-MEA-003 (ind-events). The document does not explain these warnings, so the partial criterion applies. Lint is treated as settled and not re-derived."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "category": "process",
+      "severity": "high",
+      "title": "No consultation recorded",
+      "description": "No consultation, participation, or stakeholder record exists, and no absence is acknowledged. Target groups are not named.",
+      "recommendation": "Record the consultation steps and the groups consulted, including the least-heard groups, or state that consultation is missing."
+    },
+    {
+      "id": "F-02",
+      "category": "logic_flow",
+      "severity": "high",
+      "title": "Unexplained causal leap at ln-awareness-better",
+      "description": "The link from oc-awareness to oc-better-community has no rationale and no assumption (TOC-LOG-001, TOC-LOG-002). The chain also skips the intermediate and long-term levels.",
+      "recommendation": "Explain why awareness makes community improvement more likely, state the assumption that must hold, and add the intermediate outcomes the chain needs."
+    },
+    {
+      "id": "F-03",
+      "category": "root_causes",
+      "severity": "high",
+      "title": "Problem not analysed",
+      "description": "The problem statement is generic and no causes are listed, so no outcome addresses a cause.",
+      "recommendation": "Add a problem analysis with immediate and underlying causes, and link outcomes to the causes they address or set causes aside with reasons."
+    },
+    {
+      "id": "F-04",
+      "category": "assumptions_risks",
+      "severity": "high",
+      "title": "No assumptions or risks",
+      "description": "The document has zero assumptions and no risks, so the critical link ln-awareness-better rests on nothing stated.",
+      "recommendation": "State the assumptions the theory depends on (type, criticality, test) and the risks that mirror them, including context and partner assumptions."
+    },
+    {
+      "id": "F-05",
+      "category": "actors",
+      "severity": "high",
+      "title": "No owner for the only intervention",
+      "description": "int-events has no responsible party (TOC-INT-002), and no partners or their stance are identified.",
+      "recommendation": "Name the owner of int-events and the partners needed, with their stance."
+    },
+    {
+      "id": "F-06",
+      "category": "evidence",
+      "severity": "high",
+      "title": "Claims without sources",
+      "description": "All 7 elements have no recorded basis; no element cites a source, and the impact and links are presented as established.",
+      "recommendation": "Cite sources for key links and assumptions, mark inferences and hypotheses honestly, and identify the evidence gaps."
+    },
+    {
+      "id": "F-07",
+      "category": "testable",
+      "severity": "high",
+      "title": "Impact and awareness outcomes unmeasured; lint and narrative disagree",
+      "description": "oc-better-community and oc-awareness have no indicator, and ind-events lacks baseline, target, source, frequency, unit and direction. Lint TOC-MEA-001 reports GO while the narrative gap list names both outcomes as unmeasured.",
+      "recommendation": "Add indicators with baselines, targets, sources and frequencies for the impact and awareness outcomes, and reconcile the lint result with the narrative gap list."
+    },
+    {
+      "id": "F-08",
+      "category": "targeting",
+      "severity": "high",
+      "title": "Target groups unnamed",
+      "description": "No target group is named and benefit to the community is assumed rather than specified.",
+      "recommendation": "Name the target groups and state what changes for each, with indicators broken down by group."
+    },
+    {
+      "id": "F-09",
+      "category": "presentation",
+      "severity": "medium",
+      "title": "No glossary",
+      "description": "The narrative states that no glossary terms are defined, so terms such as awareness and community improvement are not defined.",
+      "recommendation": "Add a glossary defining the outcome and intervention terms."
+    },
+    {
+      "id": "F-10",
+      "category": "structural_integrity",
+      "severity": "medium",
+      "title": "Unexplained lint warnings",
+      "description": "Lint reports WARN with TOC-ACC-001, TOC-INT-002, TOC-LOG-001, TOC-LOG-002, TOC-MEA-002 and TOC-MEA-003, and the document does not explain them.",
+      "recommendation": "Resolve each warning, or record why it is accepted."
+    },
+    {
+      "id": "F-11",
+      "category": "feasible",
+      "severity": "medium",
+      "title": "Ceiling of accountability undeclared",
+      "description": "No ceiling of accountability is declared (TOC-ACC-001), so it cannot be checked that the owner controls the outcomes it answers for. Resources and authority are not examined.",
+      "recommendation": "Declare the ceiling of accountability and examine resources and authority for the intervention and its owner."
+    }
+  ],
+  "passCriteria": {
+    "minCategoriesPassing": ""
+  },
+  "decision": {
+    "status": "fail",
+    "passed": false,
+    "rationale": "Required categories fail: process, logic_flow, root_causes, assumptions_risks, actors, evidence and testable all fail, and the structural integrity check is partial. The theory has no assumptions, no causal rationale, no owner and no measured impact, so it cannot be relied on.",
+    "findingCounts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "info": 0,
+      "total": 0
+    },
+    "categoryCounts": {
+      "pass": 0,
+      "partial": 0,
+      "fail": 0,
+      "total": 0
+    }
+  },
+  "overallDecision": "fail",
+  "nextSteps": {},
+  "summary": ""
+}

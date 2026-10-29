@@ -1,0 +1,173 @@
+{
+  "bundleHash": "be312dad9ebabfc336996d829cf36453acd194f1bdff34db8434f4ffbec43d1c",
+  "profile": "core",
+  "aggregation": "majority",
+  "judges": [
+    "haiku",
+    "sonnet"
+  ],
+  "categories": [
+    {
+      "category": "process",
+      "name": "Participatory process",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "logic_flow",
+      "name": "Logical flow",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "root_causes",
+      "name": "Root causes",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "assumptions_risks",
+      "name": "Assumptions and risks",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "actors",
+      "name": "Who does what",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "evidence",
+      "name": "Evidence and its limits",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "targeting",
+      "name": "Target groups and equity",
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "presentation",
+      "name": "Presentation",
+      "scores": {
+        "fail": 0,
+        "partial": 2,
+        "pass": 0
+      },
+      "result": "partial",
+      "agreed": true
+    },
+    {
+      "category": "plausible",
+      "name": "Plausible",
+      "required": true,
+      "scores": {
+        "fail": 1,
+        "partial": 1,
+        "pass": 0
+      },
+      "result": "partial",
+      "agreed": false
+    },
+    {
+      "category": "feasible",
+      "name": "Feasible",
+      "required": true,
+      "scores": {
+        "fail": 0,
+        "partial": 2,
+        "pass": 0
+      },
+      "result": "partial",
+      "agreed": true
+    },
+    {
+      "category": "testable",
+      "name": "Testable",
+      "required": true,
+      "scores": {
+        "fail": 2,
+        "partial": 0,
+        "pass": 0
+      },
+      "result": "fail",
+      "agreed": true
+    },
+    {
+      "category": "structural_integrity",
+      "name": "Structural integrity",
+      "required": true,
+      "blocking": true,
+      "scores": {
+        "fail": 0,
+        "partial": 2,
+        "pass": 0
+      },
+      "result": "partial",
+      "agreed": true
+    }
+  ],
+  "agreement": 0.9166666666666666,
+  "disagreements": [
+    "plausible"
+  ],
+  "pass": false,
+  "reasons": [
+    "required category \"process\" is fail",
+    "required category \"logic_flow\" is fail",
+    "required category \"root_causes\" is fail",
+    "required category \"assumptions_risks\" is fail",
+    "required category \"actors\" is fail",
+    "required category \"evidence\" is fail",
+    "required category \"plausible\" is partial",
+    "required category \"feasible\" is partial",
+    "required category \"testable\" is fail",
+    "required category \"structural_integrity\" is partial",
+    "13 high finding(s); the rubric allows 0",
+    "6 medium finding(s); the rubric allows 3"
+  ]
+}

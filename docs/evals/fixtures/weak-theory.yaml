@@ -1,0 +1,33 @@
+kind: TheoryOfChange
+specVersion: "0.1"
+id: lakeside-weak
+metadata:
+  name: Lakeside Community Alliance theory of change
+context:
+  problemStatement: Our community has problems and people need more support.
+outcomes:
+  - id: oc-better-community
+    title: The community is better
+    level: impact
+  - id: oc-awareness
+    title: People are aware
+    level: short_term
+  - id: oc-events
+    title: We hold events
+    level: output
+links:
+  - id: ln-awareness-better
+    from: oc-awareness
+    to: oc-better-community
+  - id: ln-events-awareness
+    from: oc-events
+    to: oc-awareness
+interventions:
+  - id: int-events
+    title: Do more events
+    targets:
+      - oc-events
+indicators:
+  - id: ind-events
+    measures: oc-events
+    name: Number of events

@@ -1,0 +1,175 @@
+{
+  "bundleHash": "be312dad9ebabfc336996d829cf36453acd194f1bdff34db8434f4ffbec43d1c",
+  "metadata": {
+    "document": "weak.yaml",
+    "generatedAt": "2026-03-01T00:00:00Z",
+    "reviewerId": "sonnet"
+  },
+  "reviewType": "toc",
+  "judge": {
+    "judge_id": "sonnet",
+    "evaluated_at": "0001-01-01T00:00:00Z"
+  },
+  "pass": false,
+  "categories": [
+    {
+      "category": "process",
+      "score": "fail",
+      "reasoning": "No consultations, actors or target groups are recorded in the document and no absence is acknowledged."
+    },
+    {
+      "category": "logic_flow",
+      "score": "fail",
+      "reasoning": "Links ln-awareness-better and ln-events-awareness have no rationale (TOC-LOG-001) and no assumption (TOC-LOG-002); the chain jumps from awareness (short_term) straight to oc-better-community (impact), skipping intermediate and long-term levels. No precondition or combination logic."
+    },
+    {
+      "category": "root_causes",
+      "score": "fail",
+      "reasoning": "context.problemStatement is vague (\"Our community has problems...\") with no causes recorded; outcomes address no causes."
+    },
+    {
+      "category": "assumptions_risks",
+      "score": "fail",
+      "reasoning": "No assumptions or risks are stated at all (0 assumptions in the narrative), though both links depend on unstated ones."
+    },
+    {
+      "category": "actors",
+      "score": "fail",
+      "reasoning": "int-events has no owner (TOC-INT-002); no partners or stances are identified."
+    },
+    {
+      "category": "evidence",
+      "score": "fail",
+      "reasoning": "All 7 elements have no basis recorded; no sources, evidence gaps, or provenance are given."
+    },
+    {
+      "category": "targeting",
+      "score": "fail",
+      "reasoning": "No target groups are named; oc-better-community and oc-awareness do not say who changes; ind-events is not disaggregated. Benefit is assumed."
+    },
+    {
+      "category": "presentation",
+      "score": "partial",
+      "reasoning": "A pathway diagram and narrative exist and agree with the model, but the glossary is empty (\"defines no glossary terms\") and outcomes are vague."
+    },
+    {
+      "category": "plausible",
+      "score": "fail",
+      "reasoning": "Holding events (oc-events) producing \"people are aware\" and then \"the community is better\" is unlikely as stated, with no mechanism, timing or lags; a skeptical stakeholder would not accept it. This is a judgment on the text as written."
+    },
+    {
+      "category": "feasible",
+      "score": "partial",
+      "reasoning": "int-events looks modest, but no resources, owner (TOC-INT-002) or ceiling of accountability (TOC-ACC-001) are examined, so feasibility cannot be confirmed."
+    },
+    {
+      "category": "testable",
+      "score": "fail",
+      "reasoning": "oc-better-community and oc-awareness have no indicator; ind-events lacks baseline, target, source, frequency (TOC-MEA-002) and unit/direction (TOC-MEA-003). Outcomes cannot be measured as stated."
+    },
+    {
+      "category": "structural_integrity",
+      "score": "partial",
+      "reasoning": "Lint overall is WARN with six unexplained warnings: TOC-ACC-001, TOC-INT-002, TOC-LOG-001, TOC-LOG-002, TOC-MEA-002, TOC-MEA-003; no errors reported."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "category": "logic_flow",
+      "severity": "high",
+      "title": "Links have no rationale or assumptions",
+      "description": "ln-awareness-better and ln-events-awareness lack rationale and assumptions; chain skips levels.",
+      "recommendation": "Add rationales, assumptions, and intermediate outcomes."
+    },
+    {
+      "id": "F2",
+      "category": "process",
+      "severity": "high",
+      "title": "No consultation or stakeholders recorded",
+      "description": "No consultations, actors or target groups.",
+      "recommendation": "Record consultations and name stakeholder groups, including least-heard voices."
+    },
+    {
+      "id": "F3",
+      "category": "root_causes",
+      "severity": "high",
+      "title": "Problem statement has no causal analysis",
+      "description": "context.problemStatement is generic; no causes.",
+      "recommendation": "Add a problem tree with causes and map outcomes to them."
+    },
+    {
+      "id": "F4",
+      "category": "assumptions_risks",
+      "severity": "high",
+      "title": "No assumptions or risks",
+      "description": "None stated.",
+      "recommendation": "State critical assumptions with tests and risks with mitigations."
+    },
+    {
+      "id": "F5",
+      "category": "actors",
+      "severity": "medium",
+      "title": "No owner for int-events",
+      "description": "TOC-INT-002; no partners.",
+      "recommendation": "Name an owner and key partners."
+    },
+    {
+      "id": "F6",
+      "category": "evidence",
+      "severity": "high",
+      "title": "No provenance on any element",
+      "description": "All 7 elements have no basis recorded.",
+      "recommendation": "Record basis and cite sources."
+    },
+    {
+      "id": "F7",
+      "category": "targeting",
+      "severity": "medium",
+      "title": "No target groups",
+      "description": "Benefit assumed.",
+      "recommendation": "Name groups and disaggregate indicators."
+    },
+    {
+      "id": "F8",
+      "category": "testable",
+      "severity": "high",
+      "title": "Outcomes unmeasured; indicator incomplete",
+      "description": "oc-awareness and oc-better-community have no indicator; ind-events lacks baseline etc.",
+      "recommendation": "Add indicators with baseline, target, source, frequency, unit, direction."
+    },
+    {
+      "id": "F9",
+      "category": "structural_integrity",
+      "severity": "medium",
+      "title": "No ceiling of accountability",
+      "description": "TOC-ACC-001.",
+      "recommendation": "Declare the ceiling of accountability."
+    }
+  ],
+  "passCriteria": {
+    "minCategoriesPassing": ""
+  },
+  "decision": {
+    "status": "fail",
+    "passed": false,
+    "rationale": "Most required categories fail: no consultation, causes, assumptions, owners, evidence or measurement, and links lack rationale. Several high findings.",
+    "findingCounts": {
+      "critical": 0,
+      "high": 6,
+      "medium": 3,
+      "low": 0,
+      "info": 0,
+      "total": 0
+    },
+    "categoryCounts": {
+      "pass": 0,
+      "partial": 0,
+      "fail": 0,
+      "total": 0
+    }
+  },
+  "overallDecision": "fail",
+  "nextSteps": {},
+  "summary": ""
+}
