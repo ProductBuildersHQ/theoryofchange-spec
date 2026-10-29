@@ -1,0 +1,333 @@
+id: toc-core
+name: Theory of Change quality
+version: '1.0'
+description: Sector-neutral quality checklist for a Theory of Change, based on the UN development group
+  quality-assurance checklist and the plausible, feasible, testable criteria.
+evaluationType: analytic
+passCriteria:
+  minCategoriesPassing: all_required
+  maxFindingsSeverity:
+    critical: 0
+    high: 0
+    medium: 3
+    low: -1
+categories:
+- id: process
+  name: Participatory process
+  description: Whether the theory was built and checked with the people it concerns, including those with
+    the least voice.
+  weight: 0.1
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Consultations are recorded for the main steps, with stakeholder groups named
+      - Voices of those least heard are represented, or their absence is acknowledged
+    - value: partial
+      label: Partial
+      criteria:
+      - Some consultation is recorded but a main step or a group is missing
+      - Participation is claimed without records
+    - value: fail
+      label: Fail
+      criteria:
+      - No consultation is recorded and none is acknowledged as missing
+  evaluationPrompt: Use the consultations, the actors, and the target groups. Do not credit participation
+    that the document only asserts.
+- id: logic_flow
+  name: Logical flow
+  description: Whether the causal chain is plausible, clear, and free of leaps of faith.
+  weight: 0.12
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Each link says why the first change makes the second more likely
+      - Preconditions are necessary and, together, sufficient for what they lead to
+      - Combination logic (all, any, some) is stated where several things lead to one outcome
+    - value: partial
+      label: Partial
+      criteria:
+      - Most links are explained but one or two jump levels or leave gaps
+      - Combination logic is left implicit in places
+    - value: fail
+      label: Fail
+      criteria:
+      - Links are asserted without reasons, or the chain skips levels throughout
+  evaluationPrompt: Read the links, their rationales, and the precondition logic. Name the link where
+    a leap occurs.
+- id: root_causes
+  name: Root causes
+  description: Whether root and underlying causes are tackled, not only immediate ones.
+  weight: 0.1
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - The problem is traced to underlying and structural causes
+      - Outcomes address those causes, and causes left alone are named with a reason
+    - value: partial
+      label: Partial
+      criteria:
+      - Causes are listed but outcomes address only the immediate ones
+    - value: fail
+      label: Fail
+      criteria:
+      - The problem is stated with no analysis of its causes
+  evaluationPrompt: Use the problem statement, the causes, and the outcomes' addressesCauses. A cause
+    set aside with a reason counts as addressed.
+- id: assumptions_risks
+  name: Assumptions and risks
+  description: Whether the assumptions and risks that most affect whether change happens are stated, with
+    how they will be tested.
+  weight: 0.12
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - The assumptions that matter most are stated, with their type, criticality, and a test
+      - Risks that mirror them have mitigations
+      - Assumptions about context and about partners appear, not only about the organization
+    - value: partial
+      label: Partial
+      criteria:
+      - Assumptions are stated but the critical ones lack tests, or risks are missing
+    - value: fail
+      label: Fail
+      criteria:
+      - Assumptions are absent or are restatements of the goals
+  evaluationPrompt: Judge whether the stated assumptions are the ones the theory depends on, not how many
+    there are.
+- id: actors
+  name: Who does what
+  description: Whether it is clear who delivers each part and which partners are needed.
+  weight: 0.08
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Each intervention has an owner and each shared or partner outcome names who delivers it
+      - Key partners and their stance are identified
+    - value: partial
+      label: Partial
+      criteria:
+      - Owners are named for some parts; partner roles are vague
+    - value: fail
+      label: Fail
+      criteria:
+      - Nobody is named as responsible for delivery
+- id: evidence
+  name: Evidence and its limits
+  description: Whether claims rest on credible sources and the limits of the evidence are acknowledged.
+  weight: 0.1
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Key links and assumptions cite credible evidence
+      - Gaps in the evidence are identified so evaluation can target them
+      - Each element's basis (stated, inferred, hypothesis, confirmed) is honest
+    - value: partial
+      label: Partial
+      criteria:
+      - Evidence is cited for some claims; limits are not discussed
+    - value: fail
+      label: Fail
+      criteria:
+      - Claims are made without sources, or inferences are presented as established
+  evaluationPrompt: Check provenance against the evidence records. Treat an element marked stated that
+    cites no followable source as a failure of honesty.
+- id: targeting
+  name: Target groups and equity
+  description: Whether specific changes are set for targeted groups instead of assuming they benefit.
+  weight: 0.08
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Target groups are named, outcomes say what changes for them, and indicators break results down
+        by them
+    - value: partial
+      label: Partial
+      criteria:
+      - Target groups are named but results are not broken down by them
+    - value: fail
+      label: Fail
+      criteria:
+      - Benefit to particular groups is assumed, not specified
+- id: presentation
+  name: Presentation
+  description: Whether a diagram and a narrative present the theory so a reader can follow it.
+  weight: 0.05
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - A pathway diagram and a plain-language narrative both exist and agree with the model
+      - Terms are defined in a glossary
+    - value: partial
+      label: Partial
+      criteria:
+      - A diagram or a narrative exists but not both, or they disagree
+    - value: fail
+      label: Fail
+      criteria:
+      - The theory cannot be followed without reading the raw document
+- id: plausible
+  name: Plausible
+  description: 'Whether the theory is believable: the activities could produce the outcomes in the time
+    and context.'
+  weight: 0.08
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - A skeptical stakeholder would accept that the activities could lead to the outcomes
+      - Time horizons and lags are realistic
+    - value: partial
+      label: Partial
+      criteria:
+      - Parts are believable; some timing or scale claims are stretched
+    - value: fail
+      label: Fail
+      criteria:
+      - The activities are unlikely to produce the stated outcomes
+- id: feasible
+  name: Feasible
+  description: Whether the organization and its partners can do what the theory requires with the resources
+    and authority they have.
+  weight: 0.07
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Interventions are within the resources and reach of the named owners
+      - The ceiling of accountability matches what the organization controls
+    - value: partial
+      label: Partial
+      criteria:
+      - Feasibility is plausible but resources or authority are not examined
+    - value: fail
+      label: Fail
+      criteria:
+      - The theory requires resources or authority the organization does not have
+- id: testable
+  name: Testable
+  description: 'Whether the theory can be checked against data: outcomes are measurable and the critical
+    assumptions can be tested.'
+  weight: 0.05
+  required: true
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Every outcome the organization answers for is measured
+      - Indicators have baselines, targets, sources, and frequencies, and the measurement fits the budget
+    - value: partial
+      label: Partial
+      criteria:
+      - Most outcomes are measured; some indicators lack baselines or targets
+    - value: fail
+      label: Fail
+      criteria:
+      - Outcomes cannot be measured as stated
+- id: structural_integrity
+  name: Structural integrity
+  description: Whether the document is well formed and passes the deterministic checks.
+  weight: 0.05
+  required: true
+  class: deterministic_integrity
+  blocking: true
+  evaluation: deterministic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - The document validates, and lint reports GO under the standard profile
+    - value: partial
+      label: Partial
+      criteria:
+      - Lint reports only warnings that the document does not explain
+    - value: fail
+      label: Fail
+      criteria:
+      - The document does not validate, or lint reports errors
+  evaluationPrompt: Use the lint report in the bundle. Do not re-derive it.
+judgeInstructions:
+- Cite the element IDs, sections, or lint rules that support each score.
+- Do not reward length or polish; score what the document establishes.
+- 'Distinguish missing evidence from negative evidence: a gap is not a contradiction.'
+- An element marked inferred or hypothesis is the author's reading; do not treat it as established.
+- Restricted evidence is withheld from the bundle by design; do not penalize its absence.
+- Do not decide matters marked for human judgment; flag them.
+metadata:
+  basedOn:
+  - UNDG Theory of Change companion guidance
+  - Aspen Roundtable plausible, feasible, testable criteria

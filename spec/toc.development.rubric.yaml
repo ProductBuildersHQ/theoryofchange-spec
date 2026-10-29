@@ -1,0 +1,133 @@
+id: toc-development
+name: 'Theory of Change quality: development profile'
+version: '1.0'
+description: Adds the development-sector items of the UN checklist to the core rubric. The core categories
+  keep their order and are scaled to make room.
+evaluationType: analytic
+categories:
+- id: gender
+  name: Gender equality
+  description: Whether the theory specifies how women and girls are reached and what changes for them.
+  weight: 0.06
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Changes for women and girls are specified and measured, not assumed
+    - value: partial
+      label: Partial
+      criteria:
+      - Women and girls are mentioned as beneficiaries without specific changes
+    - value: fail
+      label: Fail
+      criteria:
+      - Gender is not considered
+- id: leave_no_one_behind
+  name: Leaving no one behind
+  description: Whether the theory benefits the most vulnerable and shows how.
+  weight: 0.06
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - The most vulnerable groups are identified, targeted, and measured separately
+    - value: partial
+      label: Partial
+      criteria:
+      - Vulnerable groups are named but results are not broken down
+    - value: fail
+      label: Fail
+      criteria:
+      - The theory ignores who is most left behind
+- id: resilience
+  name: Resilience to shocks
+  description: Whether the theory considers shocks such as climate events, epidemics, hazards, and conflict,
+    and how the change withstands them.
+  weight: 0.05
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Shocks are identified as risks or external factors, with how outcomes withstand them
+    - value: partial
+      label: Partial
+      criteria:
+      - Shocks are mentioned without effect on the design
+    - value: fail
+      label: Fail
+      criteria:
+      - Shocks are not considered
+- id: poverty_environment
+  name: Poverty-environment links
+  description: Whether links between poverty and the environment are considered where they apply.
+  weight: 0.04
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Environmental effects on the outcomes, and of them, are examined
+      - Where they do not apply, the document says so
+    - value: partial
+      label: Partial
+      criteria:
+      - Environmental links are mentioned briefly
+    - value: fail
+      label: Fail
+      criteria:
+      - Environmental links that clearly apply are ignored
+- id: institutions_violence
+  name: Institutions and structural causes of violence
+  description: Whether the theory strengthens institutions and addresses structural causes of violence
+    where relevant.
+  weight: 0.04
+  required: false
+  class: specification_quality
+  blocking: false
+  evaluation: semantic
+  scale:
+    type: categorical
+    options:
+    - value: pass
+      label: Pass
+      criteria:
+      - Institutional strengthening is part of the design, and structural causes of violence are addressed
+        or set aside with a reason
+    - value: partial
+      label: Partial
+      criteria:
+      - Institutions are mentioned without a mechanism
+    - value: fail
+      label: Fail
+      criteria:
+      - Institutions and structural causes of violence are not considered
+passCriteria:
+  minCategoriesPassing: all_required
+  maxFindingsSeverity:
+    critical: 0
+    high: 0
+    medium: 3
+    low: -1
