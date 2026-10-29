@@ -24,7 +24,8 @@
             "decision",
             "pathway",
             "metric",
-            "term"
+            "term",
+            "consultation"
           ]
         },
         "field": {

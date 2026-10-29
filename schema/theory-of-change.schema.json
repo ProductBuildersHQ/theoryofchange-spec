@@ -82,6 +82,9 @@
             "$ref": "#/$defs/ExternalRef"
           },
           "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -210,6 +213,9 @@
         },
         "ownerActorId": {
           "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -313,6 +319,9 @@
         },
         "lag": {
           "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -347,6 +356,67 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "Consultation": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "step": {
+          "type": "string",
+          "enum": [
+            "focus",
+            "change_analysis",
+            "assumptions_risks",
+            "actors",
+            "measurement",
+            "whole"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "workshop",
+            "interview",
+            "survey",
+            "document_review",
+            "evidence_review",
+            "meeting"
+          ]
+        },
+        "stakeholderGroups": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "findings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "changedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "step"
+      ]
     },
     "Context": {
       "properties": {
@@ -556,6 +626,12 @@
             "$ref": "#/$defs/GlossaryTerm"
           },
           "type": "array"
+        },
+        "consultations": {
+          "items": {
+            "$ref": "#/$defs/Consultation"
+          },
+          "type": "array"
         }
       },
       "additionalProperties": false,
@@ -688,6 +764,9 @@
             "flat",
             "unknown"
           ]
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -909,6 +988,19 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "dataAvailability": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal_existing",
+            "internal_new",
+            "partner_held",
+            "unknown"
+          ]
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -985,6 +1077,9 @@
         },
         "resources": {
           "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -1114,6 +1209,9 @@
             "common",
             "pathway"
           ]
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -1195,6 +1293,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -1244,6 +1345,9 @@
         "childToc": {
           "type": "string",
           "pattern": "^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -1333,6 +1437,9 @@
         },
         "sufficiency": {
           "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -1342,6 +1449,41 @@
         "target",
         "members",
         "logic"
+      ]
+    },
+    "Provenance": {
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": [
+            "stated",
+            "inferred",
+            "hypothesis",
+            "confirmed",
+            "rejected"
+          ]
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "note": {
+          "type": "string"
+        },
+        "decidedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "decidedBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "basis"
       ]
     },
     "QualityReview": {
@@ -1475,6 +1617,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,

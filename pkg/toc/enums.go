@@ -616,6 +616,96 @@ func AllClaims() []Claim { return []Claim{ClaimAttribution, ClaimContribution} }
 // Valid reports whether v is a known Claim.
 func (v Claim) Valid() bool { return slices.Contains(AllClaims(), v) }
 
+// Basis records why the theory contains an element: what we know about
+// where it came from.
+type Basis string
+
+const (
+	// BasisStated means a cited source says it.
+	BasisStated Basis = "stated"
+	// BasisInferred means an analyst concluded it from sources.
+	BasisInferred Basis = "inferred"
+	// BasisHypothesis means it is proposed for discussion.
+	BasisHypothesis Basis = "hypothesis"
+	// BasisConfirmed means the people it concerns confirmed it in review.
+	BasisConfirmed Basis = "confirmed"
+	// BasisRejected means it was reviewed and rejected. The element stays in
+	// the document for history but is excluded from analysis.
+	BasisRejected Basis = "rejected"
+)
+
+// AllBases returns all bases.
+func AllBases() []Basis {
+	return []Basis{BasisStated, BasisInferred, BasisHypothesis, BasisConfirmed, BasisRejected}
+}
+
+// Valid reports whether v is a known Basis.
+func (v Basis) Valid() bool { return slices.Contains(AllBases(), v) }
+
+// DataAvailability says whether the data an indicator needs can be had.
+type DataAvailability string
+
+const (
+	DataPublic           DataAvailability = "public"
+	DataInternalExisting DataAvailability = "internal_existing"
+	DataInternalNew      DataAvailability = "internal_new"
+	DataPartnerHeld      DataAvailability = "partner_held"
+	DataUnknown          DataAvailability = "unknown"
+)
+
+// AllDataAvailabilities returns all data availabilities.
+func AllDataAvailabilities() []DataAvailability {
+	return []DataAvailability{DataPublic, DataInternalExisting, DataInternalNew, DataPartnerHeld, DataUnknown}
+}
+
+// Valid reports whether v is a known DataAvailability.
+func (v DataAvailability) Valid() bool { return slices.Contains(AllDataAvailabilities(), v) }
+
+// ConsultationStep is the part of building the theory a consultation
+// validated.
+type ConsultationStep string
+
+const (
+	StepFocus            ConsultationStep = "focus"
+	StepChangeAnalysis   ConsultationStep = "change_analysis"
+	StepAssumptionsRisks ConsultationStep = "assumptions_risks"
+	StepActors           ConsultationStep = "actors"
+	StepMeasurement      ConsultationStep = "measurement"
+	StepWhole            ConsultationStep = "whole"
+)
+
+// AllConsultationSteps returns all consultation steps.
+func AllConsultationSteps() []ConsultationStep {
+	return []ConsultationStep{
+		StepFocus, StepChangeAnalysis, StepAssumptionsRisks, StepActors, StepMeasurement, StepWhole,
+	}
+}
+
+// Valid reports whether v is a known ConsultationStep.
+func (v ConsultationStep) Valid() bool { return slices.Contains(AllConsultationSteps(), v) }
+
+// ConsultationMethod is how a consultation was carried out.
+type ConsultationMethod string
+
+const (
+	MethodWorkshop       ConsultationMethod = "workshop"
+	MethodInterview      ConsultationMethod = "interview"
+	MethodSurvey         ConsultationMethod = "survey"
+	MethodDocumentReview ConsultationMethod = "document_review"
+	MethodEvidenceReview ConsultationMethod = "evidence_review"
+	MethodMeeting        ConsultationMethod = "meeting"
+)
+
+// AllConsultationMethods returns all consultation methods.
+func AllConsultationMethods() []ConsultationMethod {
+	return []ConsultationMethod{
+		MethodWorkshop, MethodInterview, MethodSurvey, MethodDocumentReview, MethodEvidenceReview, MethodMeeting,
+	}
+}
+
+// Valid reports whether v is a known ConsultationMethod.
+func (v ConsultationMethod) Valid() bool { return slices.Contains(AllConsultationMethods(), v) }
+
 // Framework identifies an external framework an alignment points into.
 type Framework string
 

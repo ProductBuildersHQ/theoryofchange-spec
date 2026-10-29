@@ -61,6 +61,9 @@ type Document struct {
 	// Metrics is the shared metric library; Glossary the shared vocabulary.
 	Metrics  []Metric       `json:"metrics,omitempty"`
 	Glossary []GlossaryTerm `json:"glossary,omitempty"`
+
+	// Consultations record validation of the theory with stakeholders.
+	Consultations []Consultation `json:"consultations,omitempty"`
 }
 
 // NewDocument returns a document with Kind and SpecVersion set.

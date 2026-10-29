@@ -25,8 +25,9 @@ type Outcome struct {
 	ActorIDs []string `json:"actorIds,omitempty"`
 	// ContributesTo lists outcomes in a parent theory this outcome
 	// contributes to, as element references (toc:<doc>#<outcome>).
-	ContributesTo []string `json:"contributesTo,omitempty"`
-	Tags          []string `json:"tags,omitempty"`
+	ContributesTo []string    `json:"contributesTo,omitempty"`
+	Tags          []string    `json:"tags,omitempty"`
+	Provenance    *Provenance `json:"provenance,omitempty"`
 }
 
 // Logic is how preconditions combine. K is used only with LogicAtLeast.
@@ -45,7 +46,8 @@ type PreconditionGroup struct {
 	Logic   Logic    `json:"logic" jsonschema:"required"`
 	// Sufficiency records the judgment that the members are jointly
 	// sufficient for the target.
-	Sufficiency string `json:"sufficiency,omitempty"`
+	Sufficiency string      `json:"sufficiency,omitempty"`
+	Provenance  *Provenance `json:"provenance,omitempty"`
 }
 
 // CausalLink is a directed claim that From (an outcome or intervention)
@@ -68,7 +70,8 @@ type CausalLink struct {
 	Feedback bool     `json:"feedback,omitempty"`
 	LoopType LoopType `json:"loopType,omitempty"`
 	// Lag is an ISO 8601 duration, e.g. "P6M".
-	Lag string `json:"lag,omitempty"`
+	Lag        string      `json:"lag,omitempty"`
+	Provenance *Provenance `json:"provenance,omitempty"`
 }
 
 // Intervention is something actors do to bring about outcomes.
@@ -87,6 +90,7 @@ type Intervention struct {
 	// InitiativeRefs points at delivery initiatives (e.g. VisionStudio).
 	InitiativeRefs []ExternalRef `json:"initiativeRefs,omitempty"`
 	Resources      string        `json:"resources,omitempty"`
+	Provenance     *Provenance   `json:"provenance,omitempty"`
 }
 
 // IfThenBecause is the structured form of an assumption: if X, then Y,
@@ -120,6 +124,7 @@ type Assumption struct {
 	EvidenceIDs  []string         `json:"evidenceIds,omitempty"`
 	Status       AssumptionStatus `json:"status,omitempty"`
 	OwnerID      string           `json:"ownerActorId,omitempty"`
+	Provenance   *Provenance      `json:"provenance,omitempty"`
 }
 
 // Indicator is measurable evidence that an outcome, output, or assumption is
@@ -165,6 +170,11 @@ type Indicator struct {
 	// RollupFrom lists indicators of the same metric whose values combine
 	// into this one using the metric's aggregation.
 	RollupFrom []string `json:"rollupFrom,omitempty"`
+	// DataAvailability says whether the data this indicator needs is
+	// public, already held internally, new to collect, held by a partner,
+	// or not yet known.
+	DataAvailability DataAvailability `json:"dataAvailability,omitempty"`
+	Provenance       *Provenance      `json:"provenance,omitempty"`
 }
 
 // EffectiveClaim returns the indicator's claim, defaulting to contribution.
@@ -190,6 +200,7 @@ type Metric struct {
 	// WeightMetricID names the metric that weights a weighted_mean.
 	WeightMetricID string      `json:"weightMetricId,omitempty"`
 	Layer          MetricLayer `json:"layer,omitempty"`
+	Provenance     *Provenance `json:"provenance,omitempty"`
 }
 
 // GlossaryTerm defines a term of the shared vocabulary, for example the
@@ -241,6 +252,7 @@ type Actor struct {
 	Description  string        `json:"description,omitempty"`
 	Contact      *core.Person  `json:"contact,omitempty"`
 	ExternalRefs []ExternalRef `json:"externalRefs,omitempty"`
+	Provenance   *Provenance   `json:"provenance,omitempty"`
 }
 
 // Evidence is a source supporting or contradicting a claim: research, data,
@@ -271,7 +283,8 @@ type ExternalFactor struct {
 	Affects     []string   `json:"affects,omitempty"`
 	Likelihood  Rating     `json:"likelihood,omitempty"`
 	// Trend is a prism-core trend direction (up, down, flat, unknown).
-	Trend string `json:"trend,omitempty" jsonschema:"enum=up,enum=down,enum=flat,enum=unknown"`
+	Trend      string      `json:"trend,omitempty" jsonschema:"enum=up,enum=down,enum=flat,enum=unknown"`
+	Provenance *Provenance `json:"provenance,omitempty"`
 }
 
 // Risk is a prism-core risk attached to elements of the theory.
@@ -280,6 +293,75 @@ type Risk struct {
 	AppliesTo            []string     `json:"appliesTo,omitempty"`
 	Category             RiskCategory `json:"category,omitempty"`
 	RelatedAssumptionIDs []string     `json:"relatedAssumptionIds,omitempty"`
+	Provenance           *Provenance  `json:"provenance,omitempty"`
+}
+
+// Provenance records why an element is in the theory: its basis and the
+// evidence behind it. Most elements carry one, so a draft built from public
+// sources can say what a source stated and what an analyst inferred.
+type Provenance struct {
+	Basis Basis `json:"basis" jsonschema:"required"`
+	// EvidenceIDs cite the sources behind the basis.
+	EvidenceIDs []string `json:"evidenceIds,omitempty"`
+	Note        string   `json:"note,omitempty"`
+	// DecidedAt and DecidedBy record when and by whom (a group or role) a
+	// basis of confirmed or rejected was decided.
+	DecidedAt string `json:"decidedAt,omitempty" jsonschema:"format=date"`
+	DecidedBy string `json:"decidedBy,omitempty"`
+}
+
+// IsRejected reports whether the provenance marks the element rejected.
+// It is safe on a nil Provenance.
+func (p *Provenance) IsRejected() bool { return p != nil && p.Basis == BasisRejected }
+
+// Rejected reports whether the element was reviewed and rejected. Rejected
+// elements stay in the document but are excluded from analysis.
+func (o Outcome) Rejected() bool { return o.Provenance.IsRejected() }
+
+// Rejected reports whether the group was rejected.
+func (g PreconditionGroup) Rejected() bool { return g.Provenance.IsRejected() }
+
+// Rejected reports whether the link was rejected.
+func (l CausalLink) Rejected() bool { return l.Provenance.IsRejected() }
+
+// Rejected reports whether the intervention was rejected.
+func (i Intervention) Rejected() bool { return i.Provenance.IsRejected() }
+
+// Rejected reports whether the assumption was rejected.
+func (a Assumption) Rejected() bool { return a.Provenance.IsRejected() }
+
+// Rejected reports whether the indicator was rejected.
+func (i Indicator) Rejected() bool { return i.Provenance.IsRejected() }
+
+// Rejected reports whether the actor was rejected.
+func (a Actor) Rejected() bool { return a.Provenance.IsRejected() }
+
+// Rejected reports whether the external factor was rejected.
+func (f ExternalFactor) Rejected() bool { return f.Provenance.IsRejected() }
+
+// Rejected reports whether the risk was rejected.
+func (r Risk) Rejected() bool { return r.Provenance.IsRejected() }
+
+// Rejected reports whether the metric was rejected.
+func (m Metric) Rejected() bool { return m.Provenance.IsRejected() }
+
+// Rejected reports whether the pathway was rejected.
+func (p Pathway) Rejected() bool { return p.Provenance.IsRejected() }
+
+// Consultation records one validation of the theory with stakeholders: the
+// step validated, how, who took part (as groups), what they said, and what
+// changed as a result.
+type Consultation struct {
+	ID     string             `json:"id" jsonschema:"required"`
+	Date   string             `json:"date" jsonschema:"required,format=date"`
+	Step   ConsultationStep   `json:"step" jsonschema:"required"`
+	Method ConsultationMethod `json:"method,omitempty"`
+	// StakeholderGroups name groups or roles, not individuals.
+	StakeholderGroups []string `json:"stakeholderGroups,omitempty"`
+	// Count is how many people took part.
+	Count      int      `json:"count,omitempty"`
+	Findings   []string `json:"findings,omitempty"`
+	ChangedIDs []string `json:"changedIds,omitempty"`
 }
 
 // Pathway is a named grouping of outcomes and interventions, such as a
@@ -295,7 +377,8 @@ type Pathway struct {
 	InterventionIDs []string    `json:"interventionIds,omitempty"`
 	// ChildToc references a theory that elaborates this pathway
 	// (toc:<doc>).
-	ChildToc string `json:"childToc,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
+	ChildToc   string      `json:"childToc,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
+	Provenance *Provenance `json:"provenance,omitempty"`
 }
 
 // ExternalRef points at an element of another framework or system.

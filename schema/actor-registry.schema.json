@@ -82,6 +82,9 @@
             "$ref": "#/$defs/ExternalRef"
           },
           "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -191,6 +194,41 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": [
+            "stated",
+            "inferred",
+            "hypothesis",
+            "confirmed",
+            "rejected"
+          ]
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "note": {
+          "type": "string"
+        },
+        "decidedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "decidedBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "basis"
+      ]
     }
   },
   "title": "Theory of Change Actor Registry",

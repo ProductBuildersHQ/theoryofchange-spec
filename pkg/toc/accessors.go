@@ -21,6 +21,7 @@ const (
 	ElementPathway        ElementKind = "pathway"
 	ElementMetric         ElementKind = "metric"
 	ElementTerm           ElementKind = "term"
+	ElementConsultation   ElementKind = "consultation"
 )
 
 // ElementRef locates an identified element in a document.
@@ -60,6 +61,7 @@ func (d *Document) Elements() []ElementRef {
 	add(ElementPathway, "pathways", idsOf(d.Pathways, func(v Pathway) string { return v.ID }))
 	add(ElementMetric, "metrics", idsOf(d.Metrics, func(v Metric) string { return v.ID }))
 	add(ElementTerm, "glossary", idsOf(d.Glossary, func(v GlossaryTerm) string { return v.ID }))
+	add(ElementConsultation, "consultations", idsOf(d.Consultations, func(v Consultation) string { return v.ID }))
 	return out
 }
 
@@ -189,7 +191,7 @@ func AllElementKinds() []ElementKind {
 	return []ElementKind{
 		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
 		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
-		ElementDecision, ElementPathway, ElementMetric, ElementTerm,
+		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementConsultation,
 	}
 }
 
