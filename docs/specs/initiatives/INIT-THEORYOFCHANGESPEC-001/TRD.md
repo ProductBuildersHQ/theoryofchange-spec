@@ -78,15 +78,15 @@ no persistence, no statistical inference).
 | TRD-030 | Element commands MUST compile to patches; `rm` MUST report dangling references and honor `--cascade` | PRD-FR-703 | Command ↔ patch equivalence tests; reference tests |
 | TRD-031 | `pkg/tocio` MUST provide canonical serialization (`Format`) for JSON and YAML; idempotent | PRD-FR-704 | Fixture test runs twice |
 | TRD-032 | `pkg/diff` MUST compute an ID-keyed semantic diff and draft a `Revision` | PRD-FR-705 | Golden diffs |
-| TRD-033 | `pkg/slides` MUST render Marp decks in §6.13 from `report.View`; export runs only in `cmd/toc` via external CLIs | PRD-FR-801, 802; INV-7 | Golden decks; export test skipped when CLIs absent |
+| TRD-033 | `pkg/slides` MUST render Marp decks in §6.13 from `report.View`; export runs only in `cmd/theoryofchange` via external CLIs | PRD-FR-801, 802; INV-7 | Golden decks; export test skipped when CLIs absent |
 | TRD-034 | `pkg/judge` MUST build judge bundles, validate verdicts as structured-evaluation reports, and aggregate with agreement metrics (§6.14) | PRD-FR-803 | Bundle golden; verdict validation tests; aggregation tests |
 | TRD-035 | `pkg/lint` MUST support `draft`, `standard`, `full` profiles; the minimal fixture is GO under `draft` | PRD-FR-804 | Profile tests |
 | TRD-036 | Every element type MUST embed `Provenance` (§7.1); indicators carry `dataAvailability`; `rejected` elements are excluded from graph, measurement, and default reports | PRD-FR-124, 125 | Round-trip; exclusion tests |
-| TRD-037 | `toc evidence add` and the `toc-draft-from-sources` skill per §6.11 | PRD-FR-606, US-19 | Skill smoke test over saved fixture pages |
+| TRD-037 | `theoryofchange evidence add` and the `toc-draft-from-sources` skill per §6.11 | PRD-FR-606, US-19 | Skill smoke test over saved fixture pages |
 | TRD-038 | `assessment` report per §6.6 | PRD-FR-512 | Golden file |
 | TRD-039 | `pkg/share` MUST produce the `pandoc` Markdown profile, review packet, review sheet, and export stamps (§6.15) | PRD-FR-901…903 | Golden files; stamp tests per format |
 | TRD-040 | `pkg/review` MUST validate `ReviewResponse` and produce a proposed patch plus `Consultation` without modifying the document (§6.15) | PRD-FR-904, 905 | Import tests incl. stale hash |
-| TRD-041 | `toc approve` per §6.15 is the only writer of status `approved` | PRD-FR-707, US-21 | Approval tests; grep test |
+| TRD-041 | `theoryofchange approve` per §6.15 is the only writer of status `approved` | PRD-FR-707, US-21 | Approval tests; grep test |
 | TRD-042 | `skills/toc-share-google` per §6.11, with manual fallback | PRD-FR-607 | Skill smoke test with recorded tool outputs |
 
 ## 3. System Invariants
@@ -107,7 +107,7 @@ no persistence, no statistical inference).
   intended for humans (Markdown, HTML, Mermaid labels).
 - **INV-7** The library MUST NOT perform network I/O or execute external
   programs. Only `cmd/` and `pkg/mcp` read or write files, and only paths
-  given by the caller; only `cmd/toc` may invoke the optional external
+  given by the caller; only `cmd/theoryofchange` may invoke the optional external
   export tools (`marp`, `mmdc`, `pandoc`). The module has no Google or other
   cloud API dependency.
 - **INV-10** Review imports never modify a document; they produce proposals
@@ -147,7 +147,7 @@ no persistence, no statistical inference).
           tables, user   journey export)  visionspec / visionstudio)
           templates)
               ▲
-   thin adapters: cmd/toc (Cobra CLI) and pkg/mcp (MCP stdio server)
+   thin adapters: cmd/theoryofchange (Cobra CLI) and pkg/mcp (MCP stdio server)
    both call one service layer: pkg/service
 ```
 
@@ -169,14 +169,14 @@ no persistence, no statistical inference).
 | `pkg/service` | Service layer | One function per user operation (Validate, Lint, Graph, Status, Report, Export, Schema) used by CLI and MCP. |
 | `pkg/mcp` | MCP server | Tool registration and JSON I/O over `pkg/service`. |
 | `spec/` | Spec content | `toc.md` template, `toc.rubric.yaml`, judge instructions; embedded. |
-| `cmd/toc` | CLI | Cobra commands in §6.1; no business logic. |
+| `cmd/theoryofchange` | CLI | Cobra commands in §6.1; no business logic. |
 | `pkg/burden` | Collection burden | Staff-minute and respondent-question totals per period, pathway, and mode; budget comparison. |
 | `pkg/tabular` | Spreadsheet interop | CSV observation import via mapping; CSV export of definition tables. |
-| `skills/` | Agent skills | `SKILL.md` instruction files plus templates; every computation delegated to `toc` CLI / MCP tools. |
+| `skills/` | Agent skills | `SKILL.md` instruction files plus templates; every computation delegated to `theoryofchange` CLI / MCP tools. |
 | `pkg/edit` | Mutations | Patch engine (RFC 6902 + ID addressing), element-command builders, reference cascade. The only way documents change. |
 | `pkg/diff` | Theory diff | ID-keyed semantic diff between two documents; draft `Revision`. |
 | `pkg/slides` | Presentations | Marp Markdown decks from `report.View`; Mermaid sources embedded or referenced as SVG paths. |
-| `pkg/share` | Sharing exports | `pandoc` Markdown profile, review packet, review sheet, export stamps; DOCX/PPTX conversion invoked only by `cmd/toc`. |
+| `pkg/share` | Sharing exports | `pandoc` Markdown profile, review packet, review sheet, export stamps; DOCX/PPTX conversion invoked only by `cmd/theoryofchange`. |
 | `pkg/review` | Review import | `ReviewResponse` validation, mapping rows to proposed patch ops and flagged notes, `Consultation` record. |
 | `pkg/judge` | LLM-as-a-Judge I/O | Judge bundle assembly, verdict validation (structured-evaluation), multi-judge aggregation and agreement. No model calls. |
 | `examples/` | Reference ToCs | Intermediary (multi-pathway, two-layer) example, market-adoption example, competing-futures fixture. |
@@ -212,35 +212,35 @@ no persistence, no statistical inference).
 
 ## 6. Interface Contracts
 
-### 6.1 CLI (`cmd/toc`)
+### 6.1 CLI (`cmd/theoryofchange`)
 
 | Command | Description | Exit codes |
 |---------|-------------|------------|
-| `toc validate <file>...` | Schema + structural validation (ToC or observation set auto-detected via `kind`) | 0 valid; 1 invalid; 2 usage / I/O error |
-| `toc lint <toc> [--format table\|json] [--disable RULE] [--fail-on error\|warning]` | Deterministic quality rules; JSON is a `SummaryReport` | 0 GO; 1 NO-GO; 2 error |
-| `toc graph <toc> [--format mermaid\|json\|dot] [--from ID] [--paths]` | Graph export and queries | 0; 2 |
-| `toc status <toc> -o <obs.yaml>... [--as-of DATE] [--prev status.json]` | Compute status snapshot (JSON) and optional diff | 0; 2 |
-| `toc report <kind> <toc> [-o <obs>...] [--as-of] [--pathway ID] [--audience ID] [--template file] [--out file]` | `kind` (status): `exec`, `results`, `assumptions`, `interventions`, `evidence-gaps`, `story`, `learning-review`, `portfolio`, `narrative`, `actors`, `full`, `custom`; `kind` (definition, no observations needed): `pathway`, `logic-model`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `definitions` (all definition reports) | 0; 2 |
-| `toc import observations --csv <file> --map <mapping.yaml> --toc <toc> [--out obs.yaml]` | CSV → ObservationSet; unmatched rows to stderr and `--unmatched file` | 0 all rows imported; 1 some rows unmatched; 2 error |
-| `toc export csv <table> <toc> [-o obs...]` | `table`: `indicators`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `results`, `themes` | 0; 2 |
-| `toc export okr\|journey <toc> [-o obs...]` | PRISM exports | 0; 2 |
-| `toc schema [name]` | List or print embedded schemas | 0; 2 |
-| `toc init [--template program\|market]` | Write a starter document | 0; 2 |
-| `toc mcp` | Start MCP server on stdio | 0 on clean shutdown |
-| `toc patch <toc> <patch.json\|-> [--dry-run] [--allow-errors]` | Apply RFC 6902 patch atomically (§6.12) | 0 applied; 1 rejected; 2 error |
-| `toc <kind> add\|set\|rm …` (`kind` ∈ outcome, group, link, intervention, assumption, indicator, metric, pathway, actor, evidence, cause, term) | Element commands compiled to patches; `rm --cascade`; all accept `--dry-run` | 0; 1 rejected; 2 |
-| `toc fmt <file>... [--check] [--sort]` | Canonical serialization; `--check` exits 1 if a file would change | 0; 1; 2 |
-| `toc diff <old> <new> [--format md\|json] [--revision]` | Semantic theory diff; optional draft `Revision` | 0; 2 |
-| `toc deck <workshop\|exec\|learning-review\|story> <toc> [-o obs...] [--audience] [--export pdf\|pptx\|html] [--out file]` | Marp deck; export via external `marp` and `mmdc` when installed | 0; 2 (3 when export tool missing) |
-| `toc judge show <toc> [--profile core\|development] [-o obs...]` | Emit judge bundle (§6.14) | 0; 2 |
-| `toc judge record <toc> <verdict.json> [--judge NAME]` | Validate and store a verdict | 0; 1 invalid; 2 |
-| `toc judge summary <toc>` | Aggregate stored verdicts with agreement | 0; 2 |
-| `toc evidence add <toc> --url --title [--excerpt] [--accessed DATE] [--type] [--sensitivity]` | Element command for sources (compiles to a patch) | 0; 1; 2 |
-| `toc export review-packet <toc> [--format md\|docx] [--reference-doc file]` | ID-tagged review document (§6.15) | 0; 2 (3 when `pandoc` missing for docx) |
-| `toc export review-sheet <toc> [--out file.csv]` | Review rows as CSV | 0; 2 |
-| `toc export docx\|pptx <kind> <toc> [-o obs...] [--reference-doc file]` | Any report (docx) or deck (pptx) through the `pandoc` profile | 0; 2; 3 |
-| `toc import review <toc> <review.json>|--from-csv <sheet.csv> [--out proposed.patch.json] [--consultation-out c.json]` | Proposed patch + consultation; never writes the document | 0 all rows mapped; 1 rows need human decision or stale hash; 2 error |
-| `toc approve <toc> --version LABEL --approver NAME[:ROLE]... [--note] [--force --reason]` | Sets `approved`, records approvers and revision | 0; 1 refused; 2 |
+| `theoryofchange validate <file>...` | Schema + structural validation (ToC or observation set auto-detected via `kind`) | 0 valid; 1 invalid; 2 usage / I/O error |
+| `theoryofchange lint <toc> [--format table\|json] [--disable RULE] [--fail-on error\|warning]` | Deterministic quality rules; JSON is a `SummaryReport` | 0 GO; 1 NO-GO; 2 error |
+| `theoryofchange graph <toc> [--format mermaid\|json\|dot] [--from ID] [--paths]` | Graph export and queries | 0; 2 |
+| `theoryofchange status <toc> -o <obs.yaml>... [--as-of DATE] [--prev status.json]` | Compute status snapshot (JSON) and optional diff | 0; 2 |
+| `theoryofchange report <kind> <toc> [-o <obs>...] [--as-of] [--pathway ID] [--audience ID] [--template file] [--out file]` | `kind` (status): `exec`, `results`, `assumptions`, `interventions`, `evidence-gaps`, `story`, `learning-review`, `portfolio`, `narrative`, `actors`, `full`, `custom`; `kind` (definition, no observations needed): `pathway`, `logic-model`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `definitions` (all definition reports) | 0; 2 |
+| `theoryofchange import observations --csv <file> --map <mapping.yaml> --toc <toc> [--out obs.yaml]` | CSV → ObservationSet; unmatched rows to stderr and `--unmatched file` | 0 all rows imported; 1 some rows unmatched; 2 error |
+| `theoryofchange export csv <table> <toc> [-o obs...]` | `table`: `indicators`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `results`, `themes` | 0; 2 |
+| `theoryofchange export okr\|journey <toc> [-o obs...]` | PRISM exports | 0; 2 |
+| `theoryofchange schema [name]` | List or print embedded schemas | 0; 2 |
+| `theoryofchange init [--template program\|market]` | Write a starter document | 0; 2 |
+| `theoryofchange mcp` | Start MCP server on stdio | 0 on clean shutdown |
+| `theoryofchange patch <toc> <patch.json\|-> [--dry-run] [--allow-errors]` | Apply RFC 6902 patch atomically (§6.12) | 0 applied; 1 rejected; 2 error |
+| `theoryofchange <kind> add\|set\|rm …` (`kind` ∈ outcome, group, link, intervention, assumption, indicator, metric, pathway, actor, evidence, cause, term) | Element commands compiled to patches; `rm --cascade`; all accept `--dry-run` | 0; 1 rejected; 2 |
+| `theoryofchange fmt <file>... [--check] [--sort]` | Canonical serialization; `--check` exits 1 if a file would change | 0; 1; 2 |
+| `theoryofchange diff <old> <new> [--format md\|json] [--revision]` | Semantic theory diff; optional draft `Revision` | 0; 2 |
+| `theoryofchange deck <workshop\|exec\|learning-review\|story> <toc> [-o obs...] [--audience] [--export pdf\|pptx\|html] [--out file]` | Marp deck; export via external `marp` and `mmdc` when installed | 0; 2 (3 when export tool missing) |
+| `theoryofchange judge show <toc> [--profile core\|development] [-o obs...]` | Emit judge bundle (§6.14) | 0; 2 |
+| `theoryofchange judge record <toc> <verdict.json> [--judge NAME]` | Validate and store a verdict | 0; 1 invalid; 2 |
+| `theoryofchange judge summary <toc>` | Aggregate stored verdicts with agreement | 0; 2 |
+| `theoryofchange evidence add <toc> --url --title [--excerpt] [--accessed DATE] [--type] [--sensitivity]` | Element command for sources (compiles to a patch) | 0; 1; 2 |
+| `theoryofchange export review-packet <toc> [--format md\|docx] [--reference-doc file]` | ID-tagged review document (§6.15) | 0; 2 (3 when `pandoc` missing for docx) |
+| `theoryofchange export review-sheet <toc> [--out file.csv]` | Review rows as CSV | 0; 2 |
+| `theoryofchange export docx\|pptx <kind> <toc> [-o obs...] [--reference-doc file]` | Any report (docx) or deck (pptx) through the `pandoc` profile | 0; 2; 3 |
+| `theoryofchange import review <toc> <review.json>|--from-csv <sheet.csv> [--out proposed.patch.json] [--consultation-out c.json]` | Proposed patch + consultation; never writes the document | 0 all rows mapped; 1 rows need human decision or stale hash; 2 error |
+| `theoryofchange approve <toc> --version LABEL --approver NAME[:ROLE]... [--note] [--force --reason]` | Sets `approved`, records approvers and revision | 0; 1 refused; 2 |
 
 Global flags: `--as-of` (RFC 3339 date; default: today in UTC), `--format`,
 `--quiet`. All machine output goes to stdout; diagnostics to stderr.
@@ -557,18 +557,18 @@ number comes from a command.
 
 | Skill | Command sequence (abridged) | Checks reported |
 |-------|-----------------------------|-----------------|
-| `toc-author` | `toc init` → edit → `toc validate` → `toc lint` → `toc report definitions` | validation issues, lint GO/NO-GO, definition pack written |
-| `toc-status-refresh` | `toc import observations --csv` → `toc validate` → `toc status --prev` → `toc report exec` | rows imported / unmatched, indicators with new data, changes vs previous snapshot |
-| `toc-learning-review` | `toc status` → `toc report learning-review` → assistant drafts discussion questions | surprises listed, assumptions changed |
-| `toc-audience-story` | `toc report story --audience` → assistant drafts narrative from the scaffold | every number in the draft present in the scaffold; no unconsented quotes |
-| `toc-draft-from-sources` | `toc init` → for each source: assistant reads it, `toc evidence add --url … --excerpt …` → assistant proposes elements → `toc patch` (each element with `provenance.basis` and `evidenceIds`) → `toc validate` → `toc lint --profile draft` → `toc report definitions` and `toc report assessment` | sources recorded, elements by basis, `stated` elements without citation (must be 0), lint GO under `draft` |
-| `toc-share-google` | `toc export review-packet --format docx`, `toc export review-sheet`, `toc deck … --export` / `toc export pptx` → upload with conversion (gogoogle CLI `drive upload --convert`) → after review: read Sheet records, Doc tables, comments, and suggestions (gogoogle CLI or mcp-google tools) → assistant writes `ReviewResponse` → `toc import review` → human runs `toc patch` on accepted proposals | files published with links; rows read per origin; stale-hash warnings; rows needing human decision |
+| `toc-author` | `theoryofchange init` → edit → `theoryofchange validate` → `theoryofchange lint` → `theoryofchange report definitions` | validation issues, lint GO/NO-GO, definition pack written |
+| `toc-status-refresh` | `theoryofchange import observations --csv` → `theoryofchange validate` → `theoryofchange status --prev` → `theoryofchange report exec` | rows imported / unmatched, indicators with new data, changes vs previous snapshot |
+| `toc-learning-review` | `theoryofchange status` → `theoryofchange report learning-review` → assistant drafts discussion questions | surprises listed, assumptions changed |
+| `toc-audience-story` | `theoryofchange report story --audience` → assistant drafts narrative from the scaffold | every number in the draft present in the scaffold; no unconsented quotes |
+| `toc-draft-from-sources` | `theoryofchange init` → for each source: assistant reads it, `theoryofchange evidence add --url … --excerpt …` → assistant proposes elements → `theoryofchange patch` (each element with `provenance.basis` and `evidenceIds`) → `theoryofchange validate` → `theoryofchange lint --profile draft` → `theoryofchange report definitions` and `theoryofchange report assessment` | sources recorded, elements by basis, `stated` elements without citation (must be 0), lint GO under `draft` |
+| `toc-share-google` | `theoryofchange export review-packet --format docx`, `theoryofchange export review-sheet`, `theoryofchange deck … --export` / `theoryofchange export pptx` → upload with conversion (gogoogle CLI `drive upload --convert`) → after review: read Sheet records, Doc tables, comments, and suggestions (gogoogle CLI or mcp-google tools) → assistant writes `ReviewResponse` → `theoryofchange import review` → human runs `theoryofchange patch` on accepted proposals | files published with links; rows read per origin; stale-hash warnings; rows needing human decision |
 
 Manual fallback for `toc-share-google`: upload the DOCX and CSV by hand, ask
 reviewers to use the response columns, download the sheet as CSV, and convert
-it to a `ReviewResponse` with `toc import review --from-csv`.
+it to a `ReviewResponse` with `theoryofchange import review --from-csv`.
 
-Skills that change the theory (`toc-author`) MUST use `toc patch` or element
+Skills that change the theory (`toc-author`) MUST use `theoryofchange patch` or element
 commands, never write the file directly.
 
 ### 6.12 Editing contract (`pkg/edit`)
@@ -597,7 +597,7 @@ func Apply(doc *toc.Document, p Patch, opts Options) (*Result, error) // opts.Al
   `remove` and, with `--cascade`, removes or rewrites references (links
   touching a removed outcome; IDs in `appliesTo`, `assumptionIds`, etc.).
   Without `--cascade`, dangling references make the patch rejected (INV-4).
-- **Writing.** The CLI writes the result in canonical form (`toc fmt`), in
+- **Writing.** The CLI writes the result in canonical form (`theoryofchange fmt`), in
   the input's format. YAML comments are not preserved (PRD R-3).
 - **Canonical form.** JSON: two-space indent, struct field order, no HTML
   escaping, trailing newline. YAML: generated from canonical JSON. Element
@@ -616,24 +616,24 @@ Decks are Marp Markdown with a front-matter theme (`default`, overridable by
 | `story` | Audience need · three to five headline metrics with caveats · one or two consented stories · call to action |
 
 Diagrams: the library embeds Mermaid source in fenced blocks and, when the
-CLI is asked to export, `cmd/toc` renders each to SVG with `mmdc` and rewrites
+CLI is asked to export, `cmd/theoryofchange` renders each to SVG with `mmdc` and rewrites
 the slide to reference the SVG; then runs `marp --pdf|--pptx|--html`. Missing
 tools produce exit code 3 with install guidance; the Markdown deck is still
 written. Same layout conventions as prism-maturity's Marp generator.
 
 ### 6.14 Judging (`pkg/judge`)
 
-- **Bundle** (`toc judge show`): JSON with `rubric` (core or development
+- **Bundle** (`theoryofchange judge show`): JSON with `rubric` (core or development
   `RubricSet`), `document` (canonical ToC JSON), `narrative` (generated
   `narrative` report Markdown), `lint` (SummaryReport), `instructions`
   (judge instructions from `spec/`), and `bundleHash` (SHA-256 of the
   inputs). The judge (an agent session, visionspec, or visionstudio) reads
   the bundle; this module makes no model calls.
-- **Verdict** (`toc judge record`): a structured-evaluation evaluation report
+- **Verdict** (`theoryofchange judge record`): a structured-evaluation evaluation report
   whose `bundleHash` matches; stored as
   `<toc-dir>/.toc/judgements/<bundleHash>/<judge>.json`. Mismatched hashes are
   rejected (the verdict was for a different version).
-- **Summary** (`toc judge summary`): per category, verdict distribution and
+- **Summary** (`theoryofchange judge summary`): per category, verdict distribution and
   inter-rater agreement using structured-evaluation's multi-judge and IRR
   helpers; overall pass requires the rubric's pass criteria under the
   configured aggregation (default: majority, ties → `partial`).
@@ -659,7 +659,7 @@ canonical JSON (§6.12). Where it goes:
 - `\newpage` markers between sections.
 - The basis badge is rendered as text: `[stated]`, `[inferred]`,
   `[hypothesis]`.
-- `toc export docx|pptx` runs
+- `theoryofchange export docx|pptx` runs
   `pandoc -f markdown -t docx|pptx [--reference-doc]` with an argument vector
   (no shell).
 
@@ -697,7 +697,7 @@ type ReviewRow struct {
 }
 ```
 
-**Import mapping** (`toc import review`):
+**Import mapping** (`theoryofchange import review`):
 
 | Row | Proposed op |
 |-----|-------------|
@@ -711,7 +711,7 @@ type ReviewRow struct {
 The import also writes a `Consultation` record (step `whole` unless given;
 method; reviewer groups; findings = row counts by decision).
 
-**Approval.** `toc approve` builds a patch that sets:
+**Approval.** `theoryofchange approve` builds a patch that sets:
 
 - `metadata.status = approved`
 - `metadata.version`
@@ -939,8 +939,8 @@ without `--allow-errors`.
   fields are rejected by schema (`additionalProperties: false`) to catch typos,
   so a newer document fails on an older binary with a clear error.
 - **Mixed-version deployment:** Not applicable — no service.
-- **Migration phases:** major bumps ship `toc migrate` converting the previous major.
-- **Data validation:** migrated documents must pass `toc validate`.
+- **Migration phases:** major bumps ship `theoryofchange migrate` converting the previous major.
+- **Data validation:** migrated documents must pass `theoryofchange validate`.
 - **Rollback boundary:** documents are files in git; rollback is a revert.
 
 ## 11. Dependencies
@@ -988,7 +988,7 @@ types change, `pkg/prismx` is the only package affected.
 ### 13.1 Rollout and Feature Flags
 
 Not applicable — library and CLI released as tagged Go module versions
-(`go install …/cmd/toc@vX.Y.Z`). Releases follow the org release process
+(`go install …/cmd/theoryofchange@vX.Y.Z`). Releases follow the org release process
 (CHANGELOG.json via structured-changelog; tag after CI is green).
 
 ### 13.2 Rollback Plan
@@ -1013,7 +1013,7 @@ Published tags are immutable, so fixes roll forward.
 | Third-party JSON Patch library (e.g. evanphx/json-patch) | Lacks ID-segment addressing and error-delta rejection; wrapping it still needs a custom resolver; the in-house engine over `toc.Document` JSON is small and fully tested |
 | Generate PPTX directly from Go | Large dependency and layout effort; Marp gives Markdown-native decks consistent with prism-maturity, with PDF/PPTX export as an optional step |
 | Import Google Drive SDK into this module to publish and read reviews | Couples a spec library to one cloud; violates INV-7; the file-based `ReviewResponse` lets any channel (Google, Microsoft 365, email, workshop notes) feed the same import |
-| Apply review responses directly | Free-text feedback needs judgment; proposals plus `toc patch` keep a human decision on every change and keep INV-9 |
+| Apply review responses directly | Free-text feedback needs judgment; proposals plus `theoryofchange patch` keep a human decision on every change and keep INV-9 |
 | Marp PPTX for shared decks | Marp's PPTX is image-based, so Google Slides conversion yields non-editable, unreadable slides; Pandoc PPTX keeps native text |
 | Judge inside this module via an LLM SDK | Violates the no-LLM-dependency non-goal; bundle + verdict files let any judge (agent, visionspec, visionstudio) participate and keep results auditable |
 | Closed enum for outcome category | Development (ORS, COM-B), market-systems (AAER), and corporate ToCs need different taxonomies; `category` is an open string with documented recommended vocabularies |

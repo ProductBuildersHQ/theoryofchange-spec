@@ -66,7 +66,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-008`
   - Satisfies: PRD-FR-701, PRD-FR-702, PRD G-14, TRD-029
   - Acceptance: error-introducing patches rejected with input untouched; unknown `@id` fails the whole patch
-- [ ] `RMI-THEORYOFCHANGESPEC-011` `pkg/service` and `cmd/toc` (Cobra) with validate, graph, schema, init, fmt, and patch commands
+- [ ] `RMI-THEORYOFCHANGESPEC-011` `pkg/service` and `cmd/theoryofchange` (Cobra) with validate, graph, schema, init, fmt, and patch commands
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-009`, `RMI-THEORYOFCHANGESPEC-046`
   - Satisfies: PRD US-1, PRD US-16, TRD §6.1
@@ -123,17 +123,17 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-022`
   - Satisfies: PRD-FR-505, PRD US-12, TRD-022
   - Acceptance: golden files over the intermediary example
-- [ ] `RMI-THEORYOFCHANGESPEC-049` `pkg/slides` Marp engine and workshop deck (`toc deck workshop`)
+- [ ] `RMI-THEORYOFCHANGESPEC-049` `pkg/slides` Marp engine and workshop deck (`theoryofchange deck workshop`)
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-023`, `RMI-THEORYOFCHANGESPEC-037`
   - Satisfies: PRD-FR-801, PRD G-15, PRD US-17, TRD-033
   - Acceptance: golden workshop deck; deck numbers and labels equal the reports'
-- [ ] `RMI-THEORYOFCHANGESPEC-039` `toc report` definition kinds, `definitions` pack, and `toc export csv` (indicators, metrics, glossary)
+- [ ] `RMI-THEORYOFCHANGESPEC-039` `theoryofchange report` definition kinds, `definitions` pack, and `theoryofchange export csv` (indicators, metrics, glossary)
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-023`, `RMI-THEORYOFCHANGESPEC-037`, `RMI-THEORYOFCHANGESPEC-011`
   - Satisfies: PRD-FR-204, PRD-FR-505, PRD G-12, TRD-021
   - Acceptance: CLI tests; CSV golden files (RFC 4180)
-- [ ] `RMI-THEORYOFCHANGESPEC-053` `toc evidence add` and the toc-draft-from-sources agent skill
+- [ ] `RMI-THEORYOFCHANGESPEC-053` `theoryofchange evidence add` and the toc-draft-from-sources agent skill
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-047`, `RMI-THEORYOFCHANGESPEC-052`, `RMI-THEORYOFCHANGESPEC-039`
   - Satisfies: PRD-FR-606, PRD US-19, PRD G-17, TRD-037
@@ -149,7 +149,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-022`, `RMI-THEORYOFCHANGESPEC-052`
   - Satisfies: PRD-FR-512, PRD US-19, TRD-038
   - Acceptance: golden file over the intermediary example
-- [ ] `RMI-THEORYOFCHANGESPEC-056` Pandoc Markdown profile with PNG diagrams, export stamps on every artifact, and `toc export docx|pptx`
+- [ ] `RMI-THEORYOFCHANGESPEC-056` Pandoc Markdown profile with PNG diagrams, export stamps on every artifact, and `theoryofchange export docx|pptx`
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-039`, `RMI-THEORYOFCHANGESPEC-049`, `RMI-THEORYOFCHANGESPEC-023`
   - Satisfies: PRD-FR-901, PRD-FR-902, TRD-039
@@ -159,12 +159,12 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-054`, `RMI-THEORYOFCHANGESPEC-056`
   - Satisfies: PRD-FR-903, PRD US-20, TRD-039
   - Acceptance: golden packet and sheet; every element row carries its stable ID
-- [ ] `RMI-THEORYOFCHANGESPEC-058` ReviewResponse schema and `toc import review` (JSON and --from-csv) producing proposed patches and a consultation record
+- [ ] `RMI-THEORYOFCHANGESPEC-058` ReviewResponse schema and `theoryofchange import review` (JSON and --from-csv) producing proposed patches and a consultation record
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-057`, `RMI-THEORYOFCHANGESPEC-046`
   - Satisfies: PRD-FR-904, PRD-FR-905, PRD US-20, TRD-040
   - Acceptance: seeded rows from every origin map to ops or flagged notes; stale hashes flagged; document never modified
-- [ ] `RMI-THEORYOFCHANGESPEC-055` `toc approve` with approvers, revision, version label, and refusal checks
+- [ ] `RMI-THEORYOFCHANGESPEC-055` `theoryofchange approve` with approvers, revision, version label, and refusal checks
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-058`, `RMI-THEORYOFCHANGESPEC-052`
   - Satisfies: PRD-FR-707, PRD US-21, TRD-041
@@ -226,12 +226,12 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-004`
   - Satisfies: PRD-FR-601, TRD-012, TRD-028
   - Acceptance: both rubrics parse into `rubric.RubricSet`, `Validate()` passes, weights sum to 1.0; every UNDG checklist item maps to a criterion
-- [ ] `RMI-THEORYOFCHANGESPEC-050` `pkg/judge` and `toc judge show | record | summary`: bundle hashing, verdict validation, multi-judge agreement
+- [ ] `RMI-THEORYOFCHANGESPEC-050` `pkg/judge` and `theoryofchange judge show | record | summary`: bundle hashing, verdict validation, multi-judge agreement
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-015`, `RMI-THEORYOFCHANGESPEC-039`
   - Satisfies: PRD-FR-803, PRD G-16, PRD US-18, TRD-034
   - Acceptance: bundle golden; verdicts with mismatched bundle hash rejected; aggregation reports per-category agreement
-- [ ] `RMI-THEORYOFCHANGESPEC-016` `toc lint` CLI and rubric discrimination eval with at least two judges and agreement, recorded in `docs/evals/`
+- [ ] `RMI-THEORYOFCHANGESPEC-016` `theoryofchange lint` CLI and rubric discrimination eval with at least two judges and agreement, recorded in `docs/evals/`
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-013`, `RMI-THEORYOFCHANGESPEC-014`, `RMI-THEORYOFCHANGESPEC-050`
   - Satisfies: PRD US-2, PRD success metrics "LLM-judge discrimination" and "Judge agreement recorded"
@@ -267,7 +267,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-007`, `RMI-THEORYOFCHANGESPEC-033`
   - Satisfies: PRD-FR-204, PRD US-13, TRD-021
   - Acceptance: seeded bad rows all reported; 0 silent drops
-- [ ] `RMI-THEORYOFCHANGESPEC-021` `toc status` and `toc import` CLI; performance benchmarks
+- [ ] `RMI-THEORYOFCHANGESPEC-021` `theoryofchange status` and `theoryofchange import` CLI; performance benchmarks
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-020`, `RMI-THEORYOFCHANGESPEC-040`, `RMI-THEORYOFCHANGESPEC-011`
   - Satisfies: PRD US-4, PRD US-13, TRD §8
@@ -308,7 +308,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-049`, `RMI-THEORYOFCHANGESPEC-024`, `RMI-THEORYOFCHANGESPEC-041`, `RMI-THEORYOFCHANGESPEC-042`
   - Satisfies: PRD-FR-801, PRD-FR-802, PRD US-17, TRD-033
   - Acceptance: golden decks; export test produces files when tools are present and exits 3 with guidance when absent
-- [ ] `RMI-THEORYOFCHANGESPEC-026` `toc report` status kinds in CLI and executive-report benchmark
+- [ ] `RMI-THEORYOFCHANGESPEC-026` `theoryofchange report` status kinds in CLI and executive-report benchmark
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-025`, `RMI-THEORYOFCHANGESPEC-041`, `RMI-THEORYOFCHANGESPEC-042`, `RMI-THEORYOFCHANGESPEC-045`, `RMI-THEORYOFCHANGESPEC-021`
   - Satisfies: PRD G-5
@@ -324,7 +324,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-026`, `RMI-THEORYOFCHANGESPEC-046`, `RMI-THEORYOFCHANGESPEC-050`
   - Satisfies: PRD-FR-602, PRD-FR-706, PRD US-6, TRD-013
   - Acceptance: in-memory transport test drives every tool; path traversal rejected; `toc_patch` rejects error-introducing patches
-- [ ] `RMI-THEORYOFCHANGESPEC-048` `pkg/diff` semantic theory diff and `toc diff --revision`
+- [ ] `RMI-THEORYOFCHANGESPEC-048` `pkg/diff` semantic theory diff and `theoryofchange diff --revision`
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-046`, `RMI-THEORYOFCHANGESPEC-009`
   - Satisfies: PRD-FR-705, PRD US-16, PRD US-21, TRD-032
