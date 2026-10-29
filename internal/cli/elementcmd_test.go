@@ -2,6 +2,7 @@ package cli
 
 import (
 	"encoding/json"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -324,5 +325,39 @@ func TestSetCreatesMissingParents(t *testing.T) {
 	o, _ := doc.Outcome("oc-spec-stable")
 	if o.Provenance == nil || o.Provenance.Basis != "stated" || o.Provenance.Note != "Stated on the project page." || o.Logic == nil {
 		t.Fatalf("outcome = %+v", o)
+	}
+}
+
+func TestEvidenceAddDerivesTheIDFromTheTitle(t *testing.T) {
+	path := fixtureCopy(t, "minimal.json", "theory.json")
+	for i, want := range []string{"ev-annual-report-2026", "ev-annual-report-2026-2"} {
+		r := run(t, "", "evidence", "add", path, "--title", "Annual Report, 2026!", "--url", "https://example.org/r")
+		if r.code != ExitOK {
+			t.Fatalf("add %d: code %d, stderr %s", i, r.code, r.err)
+		}
+		if got := run(t, "", "validate", path); got.code != ExitOK {
+			t.Fatalf("validate: %s", got.stdout+got.err)
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(string(data), `"id": "`+want+`"`) {
+			t.Errorf("want evidence %s in:\n%s", want, data)
+		}
+	}
+}
+
+func TestEvidenceAddNeedsAnIDWhenTheTitleHasNoLetters(t *testing.T) {
+	path := fixtureCopy(t, "minimal.json", "theory.json")
+	if r := run(t, "", "evidence", "add", path, "--title", "???"); r.code != ExitUsageErr {
+		t.Errorf("code %d, want %d", r.code, ExitUsageErr)
+	}
+}
+
+func TestOtherElementsStillRequireAnID(t *testing.T) {
+	path := fixtureCopy(t, "minimal.json", "theory.json")
+	if r := run(t, "", "outcome", "add", path, "--title", "X", "--level", "impact"); r.code != ExitUsageErr {
+		t.Errorf("code %d, want %d", r.code, ExitUsageErr)
 	}
 }

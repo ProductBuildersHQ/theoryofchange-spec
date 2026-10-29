@@ -8,6 +8,7 @@ import (
 
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
 )
 
@@ -346,11 +347,18 @@ func newAddCmd(e *env, k edit.ElementKind, flags []elementFlag) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fields["id"] = flagString(cmd, "id")
 			doc, err := tocio.LoadDocument(args[0])
 			if err != nil {
 				return &ExitError{Code: ExitUsageErr, Err: err}
 			}
+			id := flagString(cmd, "id")
+			if id == "" && k.Name == "evidence" {
+				title, _ := fields["title"].(string)
+				if id, err = evidenceID(doc, title); err != nil {
+					return usageErr("%v", err)
+				}
+			}
+			fields["id"] = id
 			p, err := edit.AddElement(doc, k, fields)
 			if err != nil {
 				return usageErr("%v", err)
@@ -358,9 +366,15 @@ func newAddCmd(e *env, k edit.ElementKind, flags []elementFlag) *cobra.Command {
 			return e.applyElementPatch(cmd, args[0], p)
 		},
 	}
-	cmd.Flags().String("id", "", "the new element's ID, a lowercase kebab-case slug (required)")
-	if err := cmd.MarkFlagRequired("id"); err != nil {
-		panic(fmt.Sprintf("cli: mark --id required: %v", err))
+	if k.Name == "evidence" {
+		cmd.Use = "add <toc-file> --title <title> ..."
+		cmd.Example = "  theoryofchange evidence add theory.yaml --title \"Annual report\" --url https://example.org/report --accessed 2026-01-15"
+		cmd.Flags().String("id", "", "the new element's ID, a lowercase kebab-case slug (default: derived from the title)")
+	} else {
+		cmd.Flags().String("id", "", "the new element's ID, a lowercase kebab-case slug (required)")
+		if err := cmd.MarkFlagRequired("id"); err != nil {
+			panic(fmt.Sprintf("cli: mark --id required: %v", err))
+		}
 	}
 	addFieldFlags(cmd, flags, true)
 	addCommonFlags(cmd)
@@ -487,4 +501,38 @@ func article(kind string) string {
 		return "an " + kind
 	}
 	return "a " + kind
+}
+
+// evidenceID derives an unused evidence ID from a title: "ev-" and a
+// kebab-case slug, with a numeric suffix if the slug is taken. The same
+// document and title always yield the same ID.
+func evidenceID(doc *toc.Document, title string) (string, error) {
+	var slug strings.Builder
+	dash := true
+	for _, r := range strings.ToLower(title) {
+		switch {
+		case r >= 'a' && r <= 'z', r >= '0' && r <= '9':
+			slug.WriteRune(r)
+			dash = false
+		case !dash:
+			slug.WriteByte('-')
+			dash = true
+		}
+	}
+	base := strings.Trim(slug.String(), "-")
+	if base == "" {
+		return "", fmt.Errorf("cannot derive an ID from the title %q; give --id", title)
+	}
+	if len(base) > 40 {
+		base = strings.Trim(base[:40], "-")
+	}
+	taken := make(map[string]bool, len(doc.Evidence))
+	for _, ev := range doc.Evidence {
+		taken[ev.ID] = true
+	}
+	id := "ev-" + base
+	for n := 2; taken[id]; n++ {
+		id = fmt.Sprintf("ev-%s-%d", base, n)
+	}
+	return id, nil
 }
