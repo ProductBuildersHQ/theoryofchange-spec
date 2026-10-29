@@ -557,6 +557,17 @@ named version, so that both teams work from the same agreed theory.
   questions for the organization (one per inferred or hypothesis element at
   an accountable level, plus one per gap), with a short definitions-only
   narrative summary.
+- **PRD-FR-513** The tools MUST project the causal graph into the artifacts
+  Theory of Change practice names, each rendered from the document alone, so
+  a view can never disagree with the model: the **pathway of change** (the
+  causal diagram, whole and per pathway), the **outcome map** or outcomes
+  framework (outcomes by level, with sphere, category, responsibility,
+  delivering actors, and what each is measured by, per pathway), the **logic
+  model** (inputs to impact, as a table and as a left-to-right diagram), and
+  the **logframe matrix** (goal, purpose, outputs, activities against
+  narrative, indicators, means of verification, and assumptions). Flattening
+  loses the links and the "why", so every projection says it is a view and
+  points back to the element IDs.
 - **PRD-FR-509** Indicators with a baseline and no target MUST report
   `baseline_only` rather than a failure, so a first measurement year is
   presented as establishing a baseline.

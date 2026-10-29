@@ -487,7 +487,9 @@ Definition reports (no observations required):
 | Kind | Content |
 |------|---------|
 | `pathway` | As above, without status styling when no status is given; `--pathway` restricts to one pathway plus its route to impact |
-| `logic-model` | Per pathway: inputs (intervention resources) → activities (interventions) → outputs (`output`-level outcomes and intervention outputs) → outcomes (short / intermediate / long-term) → impact, as a table |
+| `logic-model` | `--diagram` adds a left-to-right Mermaid flow of the same stages. Per pathway: inputs (intervention resources) → activities (interventions) → outputs (`output`-level outcomes and intervention outputs) → outcomes (short / intermediate / long-term) → impact, as a table |
+| `outcome-map` | The outcomes framework: per pathway, outcomes grouped by level from impact down, each with sphere, category, change type, responsibility and delivering actors, the causes it addresses, and its indicators; outcomes above the ceiling of accountability and monitored-only outcomes are marked |
+| `logframe` | Logframe matrix per pathway: rows goal (impact), purpose (long-term and intermediate outcomes), outputs (short-term and output outcomes), activities (interventions); columns narrative, indicators with targets, means of verification (indicator data source and method), and assumptions (those applying to the row's links and interventions) |
 | `metrics` | Metric definitions: name, definition, formula, unit, aggregation, layer, and which pathways instantiate each |
 | `metric-selection` | Candidate indicators × selection criteria with weighted score, status, rationale; sorted by score |
 | `collection-plan` | Selected indicators: definition, source system, mode, owner, frequency, minutes per period, questions per respondent; totals vs budget |

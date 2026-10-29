@@ -276,7 +276,7 @@
 ## Phase 9 — Reporting, Story, and Presentations
 
 **Theme:** Executive, audience story, learning-review, portfolio, narrative, and division-of-labour reports, plus exec / learning-review / story decks with optional export — adopter milestone M3
-**Status:** Planned — 0 of 7 items completed
+**Status:** Planned — 0 of 8 items completed
 
 - [ ] `RMI-THEORYOFCHANGESPEC-024` Status reports: exec, results, assumptions, interventions, evidence-gaps, full
   - Type: capability · Status: planned
@@ -298,6 +298,11 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-022`, `RMI-THEORYOFCHANGESPEC-044`
   - Satisfies: PRD-FR-510, PRD-FR-511, PRD-FR-120, TRD-026, TRD-027
   - Acceptance: golden files over a mixed-responsibility fixture
+- [ ] `RMI-THEORYOFCHANGESPEC-060` Projection artifacts: outcome map (outcomes framework), logframe matrix, and logic-model diagram, as definition reports and in the definitions pack
+  - Type: capability · Status: planned
+  - Depends on: `RMI-THEORYOFCHANGESPEC-022`, `RMI-THEORYOFCHANGESPEC-044`
+  - Satisfies: PRD-FR-513
+  - Acceptance: golden files; every row names the element IDs it was projected from; a one-pathway theory and a multi-pathway theory both render
 - [ ] `RMI-THEORYOFCHANGESPEC-025` Custom report templates and restricted-evidence suppression
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-024`
