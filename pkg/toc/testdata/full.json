@@ -1,0 +1,347 @@
+{
+  "$schema": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/theory-of-change.schema.json",
+  "kind": "TheoryOfChange",
+  "specVersion": "0.1",
+  "id": "open-agent-auth",
+  "metadata": {
+    "name": "Open agent authorization standard adoption",
+    "status": "draft",
+    "owner": "Standards working group",
+    "tags": ["identity", "agents"]
+  },
+  "perspective": {
+    "actorId": "act-proponent",
+    "role": "proponent",
+    "futureRef": "ufm:open-standard-wins"
+  },
+  "context": {
+    "problemStatement": "AI agents act on behalf of users with credentials designed for humans, so access is over-broad and unauditable.",
+    "rootCauses": ["No standard way to express delegated agent authority"],
+    "targetPopulation": "Identity providers and agent platforms",
+    "market": {
+      "framework": "market_spec",
+      "ref": "market:identity-governance",
+      "url": "https://example.org/markets/identity-governance",
+      "relation": "same_as",
+      "attributes": { "segment": "enterprise" }
+    },
+    "geography": "Global",
+    "timeHorizon": { "start": "2026-01-01", "end": "2028-12-31" },
+    "narrative": "If major identity providers implement the standard, agent platforms adopt it, and enterprises require it."
+  },
+  "ceilingOfAccountability": {
+    "level": "long_term",
+    "rationale": "Market-wide security outcomes depend on many actors."
+  },
+  "outcomes": [
+    {
+      "id": "oc-safer-agents",
+      "title": "Agent access across the market is scoped and auditable",
+      "description": "Agents act with delegated, least-privilege, auditable credentials.",
+      "level": "impact",
+      "sphere": "interest",
+      "category": "respond"
+    },
+    {
+      "id": "oc-enterprise-require",
+      "title": "Enterprises require the standard in procurement",
+      "level": "long_term",
+      "sphere": "influence",
+      "logic": { "type": "at_least", "k": 1 },
+      "category": "expand",
+      "changeType": "policy",
+      "population": "Large enterprises",
+      "actorIds": ["act-enterprises"]
+    },
+    {
+      "id": "oc-idp-support",
+      "title": "Major identity providers support the standard",
+      "level": "intermediate",
+      "sphere": "influence",
+      "category": "adopt",
+      "changeType": "adoption",
+      "actorIds": ["act-idp"],
+      "tags": ["supply"]
+    },
+    {
+      "id": "oc-platform-support",
+      "title": "Agent platforms support the standard",
+      "level": "intermediate",
+      "sphere": "influence",
+      "category": "adapt",
+      "changeType": "adoption"
+    },
+    {
+      "id": "oc-spec-stable",
+      "title": "A stable, interoperable specification exists",
+      "level": "short_term",
+      "sphere": "control",
+      "changeType": "condition"
+    },
+    {
+      "id": "oc-reference-impl",
+      "title": "Open reference implementations are available",
+      "level": "output",
+      "sphere": "control"
+    }
+  ],
+  "preconditionGroups": [
+    {
+      "id": "grp-supply",
+      "target": "oc-enterprise-require",
+      "members": ["oc-idp-support", "oc-platform-support"],
+      "logic": { "type": "all" },
+      "sufficiency": "Enterprises need both sides of the market to support it."
+    }
+  ],
+  "links": [
+    {
+      "id": "ln-spec-idp",
+      "from": "oc-spec-stable",
+      "to": "oc-idp-support",
+      "type": "enables",
+      "rationale": "Providers implement only stable specifications.",
+      "assumptionIds": ["asm-idp-incentive"],
+      "evidenceIds": ["ev-survey"],
+      "interventionIds": ["int-interop"],
+      "polarity": "positive",
+      "lag": "P6M"
+    },
+    {
+      "id": "ln-impl-platform",
+      "from": "oc-reference-impl",
+      "to": "oc-platform-support",
+      "type": "contributes_to",
+      "rationale": "Reference code lowers integration cost."
+    },
+    {
+      "id": "ln-idp-require",
+      "from": "oc-idp-support",
+      "to": "oc-enterprise-require",
+      "type": "necessary_condition"
+    },
+    {
+      "id": "ln-platform-require",
+      "from": "oc-platform-support",
+      "to": "oc-enterprise-require",
+      "type": "necessary_condition"
+    },
+    {
+      "id": "ln-require-safer",
+      "from": "oc-enterprise-require",
+      "to": "oc-safer-agents",
+      "type": "causes",
+      "rationale": "Procurement requirements drive market-wide behavior."
+    },
+    {
+      "id": "ln-require-platform-loop",
+      "from": "oc-enterprise-require",
+      "to": "oc-platform-support",
+      "type": "enables",
+      "feedback": true,
+      "loopType": "reinforcing"
+    }
+  ],
+  "interventions": [
+    {
+      "id": "int-interop",
+      "title": "Run interoperability events",
+      "description": "Quarterly plugfests with providers and platforms.",
+      "type": "standardization",
+      "targets": ["oc-spec-stable", "oc-idp-support"],
+      "outputs": ["Interop test suite", "Event reports"],
+      "ownerActorId": "act-proponent",
+      "status": "in_progress",
+      "capabilities": [
+        { "capabilityId": "cap-conformance-testing", "relation": "enables" }
+      ],
+      "initiativeRefs": [
+        { "framework": "visionstudio", "ref": "INIT-EXAMPLE-001", "relation": "implements" }
+      ],
+      "resources": "Two engineers and an event budget"
+    },
+    {
+      "id": "int-reference",
+      "title": "Publish reference implementations",
+      "type": "product",
+      "targets": ["oc-reference-impl"],
+      "status": "planned"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-idp-incentive",
+      "statement": "Identity providers see commercial advantage in supporting agent delegation.",
+      "ifThenBecause": {
+        "if": "the specification is stable",
+        "then": "providers implement it",
+        "because": "customers are asking for agent controls"
+      },
+      "type": "causal",
+      "appliesTo": ["ln-spec-idp"],
+      "criticality": "high",
+      "plausibility": "medium",
+      "explainsFully": false,
+      "needsTesting": true,
+      "test": "Interview five providers about roadmap priorities.",
+      "indicatorIds": ["ind-idp-roadmaps"],
+      "evidenceIds": ["ev-survey"],
+      "status": "untested",
+      "ownerActorId": "act-proponent"
+    },
+    {
+      "id": "asm-no-fork",
+      "statement": "Large vendors do not fork the standard.",
+      "type": "partnership",
+      "criticality": "critical",
+      "status": "holding"
+    }
+  ],
+  "indicators": [
+    {
+      "id": "ind-idp-count",
+      "measures": "oc-idp-support",
+      "name": "Identity providers with generally available support",
+      "definition": "Count of providers shipping the standard in a GA release.",
+      "measurementType": "quantitative",
+      "unit": "providers",
+      "direction": "increase",
+      "baseline": { "value": 0, "date": "2026-01-01", "source": "Market scan" },
+      "targets": [
+        { "value": 2, "date": "2026-12-31", "label": "First movers", "milestone": true },
+        { "value": 5, "threshold": "Covers half the market by seats", "date": "2027-12-31" }
+      ],
+      "population": { "description": "Top identity providers by seats", "actorIds": ["act-idp"], "size": 10 },
+      "disaggregation": ["region"],
+      "dataSource": "Provider release notes",
+      "method": "Desk review",
+      "frequency": "P3M",
+      "ownerActorId": "act-proponent",
+      "proxyFor": ["oc-spec-stable"],
+      "externalRefs": [
+        { "framework": "okr", "ref": "kr-2026-q4-idp", "relation": "measures", "attributes": { "period": "2026-Q4" } }
+      ]
+    },
+    {
+      "id": "ind-idp-roadmaps",
+      "measures": "asm-idp-incentive",
+      "name": "Providers with the standard on their public roadmap",
+      "measurementType": "qualitative",
+      "levels": ["none", "exploring", "committed", "shipping"],
+      "baseline": { "level": "exploring", "date": "2026-01-01" },
+      "targets": [{ "level": "committed", "date": "2026-09-30" }]
+    },
+    {
+      "id": "ind-reference-downloads",
+      "measures": "int-reference",
+      "name": "Reference implementation downloads",
+      "measurementType": "quantitative",
+      "direction": "maintain",
+      "tolerance": 50
+    }
+  ],
+  "actors": [
+    {
+      "id": "act-proponent",
+      "name": "Standards working group",
+      "type": "group",
+      "roles": ["implementer", "champion"],
+      "stance": "champion",
+      "influence": "medium",
+      "interest": "high",
+      "contact": { "name": "Working group chair", "role": "Chair" }
+    },
+    {
+      "id": "act-idp",
+      "name": "Identity providers",
+      "description": "Vendors that issue and verify credentials.",
+      "type": "vendor",
+      "roles": ["adopter", "gatekeeper"],
+      "stance": "neutral",
+      "influence": "high",
+      "interest": "medium",
+      "externalRefs": [{ "framework": "market_spec", "ref": "segment:identity-providers" }]
+    },
+    {
+      "id": "act-enterprises",
+      "name": "Enterprise security buyers",
+      "type": "customer_segment",
+      "roles": ["beneficiary", "boundary_partner"],
+      "stance": "supporter"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-survey",
+      "title": "Industry survey on agent access controls",
+      "type": "research",
+      "strength": "moderate",
+      "direction": "supports",
+      "processTracingTest": "straw_in_the_wind",
+      "source": "Example research firm",
+      "url": "https://example.org/agent-access-survey",
+      "summary": "Most security leaders want delegated agent credentials.",
+      "excerpt": "A majority of respondents plan to require scoped agent credentials.",
+      "sensitivity": "public",
+      "accessedAt": "2026-01-15"
+    }
+  ],
+  "externalFactors": [
+    {
+      "id": "ef-regulation",
+      "description": "Regulators may mandate auditability for automated agents.",
+      "kind": "enabler",
+      "affects": ["oc-enterprise-require"],
+      "likelihood": "medium",
+      "trend": "up"
+    }
+  ],
+  "risks": [
+    {
+      "id": "rsk-competing",
+      "description": "A competing proprietary approach gains early share.",
+      "impact": "high",
+      "probability": "medium",
+      "mitigation": "Ship reference implementations early.",
+      "status": "open",
+      "owner": "act-proponent",
+      "appliesTo": ["oc-idp-support"],
+      "category": "market",
+      "relatedAssumptionIds": ["asm-no-fork"]
+    }
+  ],
+  "alignments": [
+    {
+      "elementId": "oc-enterprise-require",
+      "target": {
+        "framework": "bsc",
+        "ref": "obj-customer-trust",
+        "relation": "supports",
+        "attributes": { "perspective": "customer" }
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "id": "dec-fund-events",
+      "question": "Fund a second year of interoperability events?",
+      "options": ["Fund", "Pause", "Hand off to a foundation"],
+      "dueDate": "2026-11-30",
+      "ownerActorId": "act-proponent",
+      "status": "open",
+      "relatedIds": ["int-interop"]
+    }
+  ],
+  "revisions": [
+    {
+      "version": "0.1",
+      "date": "2026-01-15",
+      "summary": "Initial draft from desk research.",
+      "trigger": "evidence",
+      "changedIds": ["oc-idp-support"],
+      "triggerEvidenceIds": ["ev-survey"],
+      "qualityReview": { "plausible": "pass", "feasible": "partial", "testable": "pass", "notes": "Needs provider interviews." },
+      "approvers": [{ "name": "Working group chair", "approved": true }]
+    }
+  ]
+}
