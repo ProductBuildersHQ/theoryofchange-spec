@@ -3,7 +3,6 @@ package cli
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,7 +12,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
 )
@@ -53,12 +51,17 @@ can still be written without --export.`,
 			if err != nil {
 				return &ExitError{Code: ExitUsageErr, Err: err}
 			}
-			md, err := service.WorkshopDeck(doc, flagString(cmd, "theme"))
-			if err != nil {
-				if errors.Is(err, graph.ErrInvalidDocument) {
-					return &ExitError{Code: ExitInvalid, Err: fmt.Errorf("%s: %w", args[0], err)}
+			stamp := ""
+			if !flagBool(cmd, "no-stamp") {
+				st, err := stampFor(cmd, doc)
+				if err != nil {
+					return err
 				}
-				return &ExitError{Code: ExitUsageErr, Err: err}
+				stamp = st.Line()
+			}
+			md, err := service.WorkshopDeck(doc, flagString(cmd, "theme"), stamp)
+			if err != nil {
+				return renderError(args[0], err)
 			}
 			if out := flagString(cmd, "output"); out != "" {
 				if err := tocio.WriteFile(out, []byte(md)); err != nil {
@@ -73,6 +76,7 @@ can still be written without --export.`,
 			return nil
 		},
 	}
+	asOfFlags(cmd)
 	cmd.Flags().String("theme", "default", "Marp theme name")
 	cmd.Flags().StringP("output", "o", "", "write the Markdown to this file instead of standard output")
 	cmd.Flags().String("export", "", "render the deck to this .pdf, .pptx, or .html file with marp and mmdc")

@@ -11,9 +11,10 @@ import (
 )
 
 // WorkshopDeck renders the workshop deck for a document as Marp Markdown.
+// stamp, if not empty, is shown on the title slide.
 // It needs no observations. Invalid documents are rejected by the graph
 // build, as for every other read-only command.
-func WorkshopDeck(doc *toc.Document, theme string) (string, error) {
+func WorkshopDeck(doc *toc.Document, theme, stamp string) (string, error) {
 	g, err := BuildGraph(doc)
 	if err != nil {
 		return "", err
@@ -26,7 +27,7 @@ func WorkshopDeck(doc *toc.Document, theme string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return slides.Workshop(whole, pathways, slides.Options{Theme: theme}), nil
+	return slides.Workshop(whole, pathways, slides.Options{Theme: theme, Stamp: stamp}), nil
 }
 
 // DefinitionReport renders a definition report (see report.DefinitionKinds)
