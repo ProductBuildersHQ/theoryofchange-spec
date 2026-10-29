@@ -342,3 +342,34 @@ func TestCanonicalUnsupportedFormat(t *testing.T) {
 		t.Fatalf("error = %v", err)
 	}
 }
+
+func TestWriteFileIsAtomicAndKeepsMode(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "doc.json")
+	if err := WriteFile(path, []byte("one")); err != nil {
+		t.Fatal(err)
+	}
+	if info, err := os.Stat(path); err != nil || info.Mode().Perm() != 0o644 {
+		t.Fatalf("new file mode = %v (%v)", info.Mode().Perm(), err)
+	}
+	if err := os.Chmod(path, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteFile(path, []byte("two")); err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(path)
+	if err != nil || string(got) != "two" {
+		t.Fatalf("content = %q (%v)", got, err)
+	}
+	if info, _ := os.Stat(path); info.Mode().Perm() != 0o600 {
+		t.Fatalf("existing mode not preserved: %v", info.Mode().Perm())
+	}
+	entries, err := os.ReadDir(dir)
+	if err != nil || len(entries) != 1 {
+		t.Fatalf("temporary files left behind: %v (%v)", entries, err)
+	}
+	if err := WriteFile(filepath.Join(dir, "missing-dir", "x.json"), []byte("x")); err == nil {
+		t.Fatal("expected an error writing into a missing directory")
+	}
+}

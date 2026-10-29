@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/schema"
@@ -212,11 +213,40 @@ func Reformat(data []byte, f Format) ([]byte, error) {
 	return Canonical(v, f)
 }
 
-// WriteFile writes data to path, creating or truncating it. Files are
-// written with mode 0o644; they hold specifications meant to be shared.
+// WriteFile writes data to path atomically: it writes a temporary file in
+// the same directory and renames it into place, so a failure never leaves a
+// half-written document. An existing file keeps its permissions; new files
+// are created with mode 0o644 because specifications are meant to be shared.
 func WriteFile(path string, data []byte) error {
-	if err := os.WriteFile(path, data, 0o644); err != nil { //nolint:gosec // specification files are shareable by design
+	dir := filepath.Dir(path)
+	mode := os.FileMode(0o644)
+	if info, err := os.Stat(path); err == nil {
+		mode = info.Mode().Perm()
+	}
+	tmp, err := os.CreateTemp(dir, ".tocio-*")
+	if err != nil {
 		return fmt.Errorf("write %s: %w", path, err)
+	}
+	tmpName := tmp.Name()
+	// fail removes the temporary file and reports why the write failed,
+	// including any failure to remove it.
+	fail := func(err error) error {
+		if rmErr := os.Remove(tmpName); rmErr != nil && !errors.Is(rmErr, os.ErrNotExist) {
+			err = errors.Join(err, rmErr)
+		}
+		return fmt.Errorf("write %s: %w", path, err)
+	}
+	if _, err := tmp.Write(data); err != nil {
+		return fail(errors.Join(err, tmp.Close()))
+	}
+	if err := tmp.Close(); err != nil {
+		return fail(err)
+	}
+	if err := os.Chmod(tmpName, mode); err != nil {
+		return fail(err)
+	}
+	if err := os.Rename(tmpName, path); err != nil {
+		return fail(err)
 	}
 	return nil
 }
