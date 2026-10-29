@@ -126,6 +126,6 @@ export stamp ("# toc:<id> version:<v> hash:<h>"); --no-stamp leaves it off.`,
 	}
 	csv.Flags().String("out", "", "write to this file instead of standard output")
 	asOfFlags(csv)
-	export.AddCommand(csv, newExportDocCmd("docx"), newExportDocCmd("pptx"))
+	export.AddCommand(csv, newExportDocCmd("docx"), newExportDocCmd("pptx"), newReviewPacketCmd(e), newReviewSheetCmd(e))
 	return export
 }

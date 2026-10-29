@@ -187,3 +187,69 @@ func TestExportDocxEndToEnd(t *testing.T) {
 		}
 	}
 }
+
+func TestReviewSheetIsStampedAndEmptyResponses(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "theory.json")
+	r := run(t, "", "export", "review-sheet", path)
+	if r.code != ExitOK {
+		t.Fatalf("code %d, stderr %s", r.code, r.err)
+	}
+	if !strings.HasPrefix(r.stdout, "# toc:open-agent-auth version:") ||
+		!strings.Contains(r.stdout, "\r\nkind,id,statement,basis,sources,decision,suggested_change,comment\r\n") {
+		t.Errorf("unexpected sheet:\n%.300s", r.stdout)
+	}
+	bare := run(t, "", "export", "review-sheet", path, "--no-stamp")
+	if !strings.HasPrefix(bare.stdout, "kind,id,") {
+		t.Errorf("--no-stamp sheet should start with the header:\n%.100s", bare.stdout)
+	}
+}
+
+func TestReviewPacketMarkdownToFile(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "theory.json")
+	out := path + ".md"
+	if r := run(t, "", "export", "review-packet", path, "--out", out); r.code != ExitOK {
+		t.Fatalf("code %d, stderr %s", r.code, r.err)
+	}
+	data, err := os.ReadFile(out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"content-hash: ", "## Outcomes", "| ID | Statement | Basis | Sources | Decision | Suggested change | Comment |", "| oc-spec-stable |"} {
+		if !strings.Contains(string(data), want) {
+			t.Errorf("packet is missing %q", want)
+		}
+	}
+}
+
+func TestReviewPacketFormatChecks(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "theory.json")
+	if r := run(t, "", "export", "review-packet", path, "--format", "pdf"); r.code != ExitUsageErr {
+		t.Errorf("bad format: code %d", r.code)
+	}
+	if r := run(t, "", "export", "review-packet", path, "--format", "docx"); r.code != ExitUsageErr {
+		t.Errorf("docx without --out: code %d", r.code)
+	}
+	t.Setenv("PATH", t.TempDir())
+	r := run(t, "", "export", "review-packet", path, "--format", "docx", "--out", filepath.Join(filepath.Dir(path), "p.docx"))
+	if r.code != ExitToolMissing || !strings.Contains(r.err, "pandoc") {
+		t.Errorf("code %d, stderr %s; want exit 3 naming pandoc", r.code, r.err)
+	}
+}
+
+func TestReviewPacketDocx(t *testing.T) {
+	if _, err := exec.LookPath("pandoc"); err != nil {
+		t.Skip("pandoc is not installed")
+	}
+	path := fixtureCopy(t, "full.json", "theory.json")
+	out := filepath.Join(filepath.Dir(path), "packet.docx")
+	if r := run(t, "", "export", "review-packet", path, "--format", "docx", "--out", out); r.code != ExitOK {
+		t.Fatalf("code %d, stderr %s", r.code, r.err)
+	}
+	zr, err := zip.OpenReader(out)
+	if err != nil {
+		t.Fatalf("not a DOCX: %v", err)
+	}
+	if err := zr.Close(); err != nil {
+		t.Fatal(err)
+	}
+}
