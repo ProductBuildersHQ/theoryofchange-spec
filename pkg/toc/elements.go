@@ -150,6 +150,56 @@ type Indicator struct {
 	// ProxyFor lists outcome IDs this indicator also stands in for.
 	ProxyFor     []string      `json:"proxyFor,omitempty"`
 	ExternalRefs []ExternalRef `json:"externalRefs,omitempty"`
+
+	// MetricID instantiates a shared metric definition, so the same metric
+	// is computed identically in every pathway.
+	MetricID string `json:"metricId,omitempty"`
+	// PathwayIDs are the pathways this indicator serves.
+	PathwayIDs []string `json:"pathwayIds,omitempty"`
+	// Claim says whether the result may be attributed to the initiative or
+	// only contributed to. Omitted means contribution.
+	Claim Claim `json:"claim,omitempty"`
+	// Caveats must be shown wherever the indicator is reported, for
+	// example "based on sign-ups, not attendance".
+	Caveats []string `json:"caveats,omitempty"`
+	// RollupFrom lists indicators of the same metric whose values combine
+	// into this one using the metric's aggregation.
+	RollupFrom []string `json:"rollupFrom,omitempty"`
+}
+
+// EffectiveClaim returns the indicator's claim, defaulting to contribution.
+func (i Indicator) EffectiveClaim() Claim {
+	if i.Claim == "" {
+		return ClaimContribution
+	}
+	return i.Claim
+}
+
+// Metric is a shared metric definition with an exact formula. Indicators
+// instantiate it per pathway, so one metric means one thing everywhere.
+type Metric struct {
+	ID         string `json:"id" jsonschema:"required"`
+	Name       string `json:"name" jsonschema:"required"`
+	Definition string `json:"definition" jsonschema:"required"`
+	// Formula states exactly how the value is computed, in words, for
+	// example "sum over sessions of attendees times session hours".
+	Formula     string      `json:"formula" jsonschema:"required"`
+	Unit        string      `json:"unit,omitempty"`
+	Direction   Direction   `json:"direction,omitempty"`
+	Aggregation Aggregation `json:"aggregation,omitempty"`
+	// WeightMetricID names the metric that weights a weighted_mean.
+	WeightMetricID string      `json:"weightMetricId,omitempty"`
+	Layer          MetricLayer `json:"layer,omitempty"`
+}
+
+// GlossaryTerm defines a term of the shared vocabulary, for example the
+// difference between an output and an outcome for this organization.
+type GlossaryTerm struct {
+	ID         string   `json:"id" jsonschema:"required"`
+	Term       string   `json:"term" jsonschema:"required"`
+	Definition string   `json:"definition" jsonschema:"required"`
+	Examples   []string `json:"examples,omitempty"`
+	RelatedIDs []string `json:"relatedIds,omitempty"`
 }
 
 // Baseline is an indicator's starting point.

@@ -544,6 +544,18 @@
             "$ref": "#/$defs/Pathway"
           },
           "type": "array"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "#/$defs/Metric"
+          },
+          "type": "array"
+        },
+        "glossary": {
+          "items": {
+            "$ref": "#/$defs/GlossaryTerm"
+          },
+          "type": "array"
         }
       },
       "additionalProperties": false,
@@ -735,6 +747,38 @@
         "ref"
       ]
     },
+    "GlossaryTerm": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "examples": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "relatedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "term",
+        "definition"
+      ]
+    },
     "IfThenBecause": {
       "properties": {
         "if": {
@@ -835,6 +879,34 @@
         "externalRefs": {
           "items": {
             "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        },
+        "metricId": {
+          "type": "string"
+        },
+        "pathwayIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "claim": {
+          "type": "string",
+          "enum": [
+            "attribution",
+            "contribution"
+          ]
+        },
+        "caveats": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rollupFrom": {
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }
@@ -995,6 +1067,63 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "Metric": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "increase",
+            "decrease",
+            "maintain"
+          ]
+        },
+        "aggregation": {
+          "type": "string",
+          "enum": [
+            "sum",
+            "mean",
+            "weighted_mean",
+            "min",
+            "max",
+            "latest",
+            "none"
+          ]
+        },
+        "weightMetricId": {
+          "type": "string"
+        },
+        "layer": {
+          "type": "string",
+          "enum": [
+            "common",
+            "pathway"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "definition",
+        "formula"
+      ]
     },
     "Outcome": {
       "properties": {

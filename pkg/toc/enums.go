@@ -557,6 +557,65 @@ func AllPathwayKinds() []PathwayKind {
 // Valid reports whether v is a known PathwayKind.
 func (v PathwayKind) Valid() bool { return slices.Contains(AllPathwayKinds(), v) }
 
+// Aggregation is how indicator values of one metric combine across
+// pathways.
+type Aggregation string
+
+const (
+	AggregationSum          Aggregation = "sum"
+	AggregationMean         Aggregation = "mean"
+	AggregationWeightedMean Aggregation = "weighted_mean"
+	AggregationMin          Aggregation = "min"
+	AggregationMax          Aggregation = "max"
+	AggregationLatest       Aggregation = "latest"
+	// AggregationNone means values cannot be combined, for example distinct
+	// counts across overlapping populations; organization-level values must
+	// be observed directly.
+	AggregationNone Aggregation = "none"
+)
+
+// AllAggregations returns all aggregations.
+func AllAggregations() []Aggregation {
+	return []Aggregation{
+		AggregationSum, AggregationMean, AggregationWeightedMean, AggregationMin,
+		AggregationMax, AggregationLatest, AggregationNone,
+	}
+}
+
+// Valid reports whether v is a known Aggregation.
+func (v Aggregation) Valid() bool { return slices.Contains(AllAggregations(), v) }
+
+// MetricLayer says whether a metric applies across all pathways or to
+// particular ones.
+type MetricLayer string
+
+const (
+	LayerCommon  MetricLayer = "common"
+	LayerPathway MetricLayer = "pathway"
+)
+
+// AllMetricLayers returns all metric layers.
+func AllMetricLayers() []MetricLayer { return []MetricLayer{LayerCommon, LayerPathway} }
+
+// Valid reports whether v is a known MetricLayer.
+func (v MetricLayer) Valid() bool { return slices.Contains(AllMetricLayers(), v) }
+
+// Claim is how strongly an indicator's result may be credited to the
+// initiative. When omitted, contribution is assumed, so reports never
+// overclaim.
+type Claim string
+
+const (
+	ClaimAttribution  Claim = "attribution"
+	ClaimContribution Claim = "contribution"
+)
+
+// AllClaims returns all claims.
+func AllClaims() []Claim { return []Claim{ClaimAttribution, ClaimContribution} }
+
+// Valid reports whether v is a known Claim.
+func (v Claim) Valid() bool { return slices.Contains(AllClaims(), v) }
+
 // Framework identifies an external framework an alignment points into.
 type Framework string
 

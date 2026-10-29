@@ -22,7 +22,9 @@
             "externalFactor",
             "risk",
             "decision",
-            "pathway"
+            "pathway",
+            "metric",
+            "term"
           ]
         },
         "field": {

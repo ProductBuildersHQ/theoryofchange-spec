@@ -57,6 +57,10 @@ type Document struct {
 	// Parent references the theory this one elaborates (toc:<doc>).
 	Parent   string    `json:"parent,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
 	Pathways []Pathway `json:"pathways,omitempty"`
+
+	// Metrics is the shared metric library; Glossary the shared vocabulary.
+	Metrics  []Metric       `json:"metrics,omitempty"`
+	Glossary []GlossaryTerm `json:"glossary,omitempty"`
 }
 
 // NewDocument returns a document with Kind and SpecVersion set.
