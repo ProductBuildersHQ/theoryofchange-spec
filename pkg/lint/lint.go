@@ -97,8 +97,17 @@ func Category(id string) string {
 	return parts[1]
 }
 
+// Profiled is implemented by a rule that runs only from a given profile up,
+// whatever its severity.
+type Profiled interface {
+	MinProfile() Profile
+}
+
 // minProfile is the lowest profile in which a rule runs.
 func minProfile(r Rule) Profile {
+	if p, ok := r.(Profiled); ok {
+		return p.MinProfile()
+	}
 	switch {
 	case r.Severity() == validate.SeverityError || Category(r.ID()) == CategorySTR:
 		return ProfileDraft
@@ -258,8 +267,8 @@ var categoryNames = map[string]string{
 	"STR": "Structure", "LOG": "Causal logic", "ASM": "Assumptions", "MEA": "Measurement",
 	"INT": "Interventions", "ACC": "Accountability", "ACT": "Actors", "EVD": "Evidence",
 	"PTH": "Pathways", "MET": "Metrics", "CLM": "Claims", "BUD": "Budget", "AUD": "Audiences",
-	"CAU": "Problem tree", "RSP": "Responsibility", "RSK": "Risks", "EQT": "Equity",
-	"VLD": "Validation", "PRV": "Provenance",
+	"CAU": "Problem tree", "RSP": "Responsibility", "RSK": "Risks", "EQU": "Equity",
+	"VAL": "Validation", "PRV": "Provenance",
 }
 
 // SummaryReport renders the result as a structured-evaluation summary: one
