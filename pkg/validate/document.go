@@ -76,6 +76,8 @@ func Document(doc *toc.Document, opts ...Option) []Issue {
 	c.alignmentsAndDecisions()
 	c.revisions()
 	c.pathways()
+	c.metrics()
+	c.glossary()
 	return c.issues
 }
 
@@ -385,6 +387,7 @@ func (c *checker) indicators() {
 		c.actor(p+"/ownerActorId", ind.ID, ind.OwnerID)
 		c.refs(p+"/proxyFor", ind.ID, ind.ProxyFor, toc.ElementOutcome)
 		c.externalRefs(p+"/externalRefs", ind.ID, ind.ExternalRefs)
+		c.indicatorMetric(p, ind)
 		if pop := ind.Population; pop != nil {
 			c.actorRefs(p+"/population/actorIds", ind.ID, pop.ActorIDs)
 		}
@@ -554,5 +557,72 @@ func (c *checker) pathways() {
 		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, toc.ElementOutcome)
 		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, toc.ElementIntervention)
 		c.docRef(p+"/childToc", pw.ID, pw.ChildToc)
+	}
+}
+
+func (c *checker) metrics() {
+	for i, m := range c.doc.Metrics {
+		p := "/metrics/" + strconv.Itoa(i)
+		for _, f := range []struct{ field, value string }{
+			{"name", m.Name}, {"definition", m.Definition}, {"formula", m.Formula},
+		} {
+			if strings.TrimSpace(f.value) == "" {
+				c.errorf("VAL-MET-001", p+"/"+f.field, m.ID, "metric has no %s", f.field)
+			}
+		}
+		enum(c, p+"/direction", m.ID, m.Direction)
+		enum(c, p+"/aggregation", m.ID, m.Aggregation)
+		enum(c, p+"/layer", m.ID, m.Layer)
+		switch {
+		case m.Aggregation == toc.AggregationWeightedMean && m.WeightMetricID == "":
+			c.errorf("VAL-MET-003", p+"/weightMetricId", m.ID, "a weighted_mean metric needs weightMetricId")
+		case m.Aggregation != toc.AggregationWeightedMean && m.WeightMetricID != "":
+			c.errorf("VAL-MET-004", p+"/weightMetricId", m.ID, "weightMetricId is only used with weighted_mean aggregation")
+		case m.WeightMetricID == m.ID && m.ID != "":
+			c.errorf("VAL-MET-004", p+"/weightMetricId", m.ID, "a metric cannot weight itself")
+		}
+		c.ref(p+"/weightMetricId", m.ID, m.WeightMetricID, toc.ElementMetric)
+	}
+}
+
+func (c *checker) glossary() {
+	for i, t := range c.doc.Glossary {
+		p := "/glossary/" + strconv.Itoa(i)
+		if strings.TrimSpace(t.Term) == "" {
+			c.errorf("VAL-GLO-001", p+"/term", t.ID, "glossary entry has no term")
+		}
+		if strings.TrimSpace(t.Definition) == "" {
+			c.errorf("VAL-GLO-001", p+"/definition", t.ID, "glossary entry has no definition")
+		}
+		c.refs(p+"/relatedIds", t.ID, t.RelatedIDs)
+	}
+}
+
+// indicatorMetric checks an indicator's metric, pathway, claim, and
+// roll-up fields.
+func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
+	enum(c, p+"/claim", ind.ID, ind.Claim)
+	c.ref(p+"/metricId", ind.ID, ind.MetricID, toc.ElementMetric)
+	c.refs(p+"/pathwayIds", ind.ID, ind.PathwayIDs, toc.ElementPathway)
+	c.refs(p+"/rollupFrom", ind.ID, ind.RollupFrom, toc.ElementIndicator)
+	if len(ind.RollupFrom) == 0 {
+		return
+	}
+	if ind.MetricID == "" {
+		c.errorf("VAL-MET-005", p+"/rollupFrom", ind.ID, "rollupFrom needs metricId, which defines how values combine")
+		return
+	}
+	if m, ok := c.doc.Metric(ind.MetricID); ok && m.Aggregation == toc.AggregationNone {
+		c.errorf("VAL-MET-002", p+"/rollupFrom", ind.ID, "metric %q has aggregation none; its values cannot be rolled up", ind.MetricID)
+	}
+	for i, srcID := range ind.RollupFrom {
+		sp := p + "/rollupFrom/" + strconv.Itoa(i)
+		if srcID == ind.ID {
+			c.errorf("VAL-MET-006", sp, ind.ID, "an indicator cannot roll up from itself")
+			continue
+		}
+		if src, ok := c.doc.Indicator(srcID); ok && src.MetricID != ind.MetricID {
+			c.errorf("VAL-MET-002", sp, ind.ID, "%q instantiates metric %q, not %q", srcID, src.MetricID, ind.MetricID)
+		}
 	}
 }
