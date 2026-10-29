@@ -1686,6 +1686,86 @@ indicators:
       basis: confirmed
       decidedAt: "2026-02-10"
       decidedBy: Delegation Standard Working Group steering group
+  - id: ind-rival-bundles
+    measures: oc-rival-momentum
+    name: Platforms bundling the proprietary scheme
+    measurementType: quantitative
+    unit: platforms
+    direction: decrease
+    ownerActorId: act-wg
+    dataAvailability: public
+  - id: ind-oss-libs
+    measures: oc-oss-libs
+    name: Open-source libraries with receipt support
+    measurementType: quantitative
+    unit: libraries
+    direction: increase
+    dataAvailability: public
+  - id: ind-bridge-mappings
+    measures: oc-competitor-bridge
+    name: Published mappings from competing approaches
+    measurementType: quantitative
+    unit: mappings
+    direction: increase
+    dataAvailability: public
+  - id: ind-pilot-reports
+    measures: oc-pilot-evidence
+    name: Published pilot results
+    measurementType: quantitative
+    unit: reports
+    direction: increase
+    dataAvailability: public
+  - id: ind-auditor-briefed
+    measures: oc-auditor-awareness
+    name: Auditor firms that have been briefed
+    measurementType: quantitative
+    unit: firms
+    direction: increase
+    ownerActorId: act-wg
+    dataAvailability: internal_new
+  - id: ind-ref-languages
+    measures: oc-reference-impl
+    name: Languages with a maintained reference implementation
+    measurementType: quantitative
+    unit: languages
+    direction: increase
+    ownerActorId: act-wg
+    dataAvailability: public
+  - id: ind-regulator-statement
+    measures: oc-regulatory-recognition
+    name: Regulator recognition of receipts
+    measurementType: qualitative
+    levels:
+      - none
+      - informal
+      - guidance
+      - rule
+    dataAvailability: public
+  - id: ind-conformance-suite
+    measures: oc-conformance-suite
+    name: Conformance test suite releases
+    measurementType: quantitative
+    unit: releases
+    direction: increase
+    ownerActorId: act-wg
+    dataAvailability: public
+  - id: ind-liaison
+    measures: oc-std-body-liaison
+    name: Liaison agreement with the standards body
+    measurementType: qualitative
+    levels:
+      - none
+      - drafted
+      - signed
+    ownerActorId: act-wg
+    dataAvailability: internal_existing
+  - id: ind-competitor-interop
+    measures: oc-competitor-converge
+    name: Competing approaches with a tested interop profile
+    measurementType: quantitative
+    unit: approaches
+    direction: increase
+    dataAvailability: public
 actors:
   - id: act-wg
     name: Delegation Standard Working Group

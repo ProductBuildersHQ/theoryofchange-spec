@@ -2080,6 +2080,30 @@ indicators:
         - criterionId: crit-cost
           score: 2
       rationale: Gives funders a human picture alongside the counts.
+  - id: ind-service-deals
+    measures: oc-out-services
+    name: Pooled contracts and purchasing deals in place
+    measurementType: quantitative
+    unit: deals
+    direction: increase
+    ownerActorId: act-network
+    dataAvailability: internal_existing
+  - id: ind-calendar-current
+    measures: oc-out-calendar
+    name: Months the grants calendar was updated on schedule
+    measurementType: quantitative
+    unit: months
+    direction: increase
+    ownerActorId: act-network
+    dataAvailability: internal_existing
+  - id: ind-briefings
+    measures: oc-out-briefings
+    name: Policy briefings and joint-position drafts published
+    measurementType: quantitative
+    unit: documents
+    direction: increase
+    ownerActorId: act-network
+    dataAvailability: internal_existing
 actors:
   - id: act-network
     name: Riverbend Nonprofit Network
