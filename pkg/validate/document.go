@@ -75,6 +75,7 @@ func Document(doc *toc.Document, opts ...Option) []Issue {
 	c.factorsAndRisks()
 	c.alignmentsAndDecisions()
 	c.revisions()
+	c.pathways()
 	return c.issues
 }
 
@@ -270,6 +271,7 @@ func (c *checker) outcomes() {
 			c.logic(p+"/logic", o.ID, *o.Logic)
 		}
 		c.actorRefs(p+"/actorIds", o.ID, o.ActorIDs)
+		c.contributesTo(p+"/contributesTo", o)
 	}
 }
 
@@ -499,5 +501,58 @@ func (c *checker) revisions() {
 			enum(c, p+"/qualityReview/feasible", element, q.Feasible)
 			enum(c, p+"/qualityReview/testable", element, q.Testable)
 		}
+	}
+}
+
+// docRef checks a reference to a whole document (toc:<doc>).
+func (c *checker) docRef(path, element, v string) {
+	if v == "" {
+		return
+	}
+	r, err := ref.Parse(v)
+	switch {
+	case err != nil:
+		c.errorf("VAL-PTH-001", path, element, "%q is not a valid reference: %v", v, err)
+	case r.IsElement():
+		c.errorf("VAL-PTH-001", path, element, "%q must reference a whole document, not an element", v)
+	case r.Doc == c.doc.ID:
+		c.errorf("VAL-PTH-001", path, element, "%q refers to this document itself", v)
+	}
+}
+
+// contributesTo checks an outcome's references to outcomes in another
+// theory. Whether they resolve is checked by Family, which needs both
+// documents.
+func (c *checker) contributesTo(path string, o toc.Outcome) {
+	for i, v := range o.ContributesTo {
+		p := path + "/" + strconv.Itoa(i)
+		r, err := ref.Parse(v)
+		switch {
+		case err != nil:
+			c.errorf("VAL-PTH-002", p, o.ID, "%q is not a valid reference: %v", v, err)
+		case !r.IsElement():
+			c.errorf("VAL-PTH-002", p, o.ID, "%q must reference an outcome (toc:<doc>#<outcome>)", v)
+		case r.Doc == c.doc.ID:
+			c.errorf("VAL-PTH-002", p, o.ID, "%q refers to this document; use a link", v)
+		case c.doc.Parent != "":
+			if parent, perr := ref.Parse(c.doc.Parent); perr == nil && r.Doc != parent.Doc {
+				c.errorf("VAL-PTH-003", p, o.ID, "%q is not in the parent theory %q", v, c.doc.Parent)
+			}
+		}
+	}
+}
+
+func (c *checker) pathways() {
+	c.docRef("/parent", "", c.doc.Parent)
+	for i, pw := range c.doc.Pathways {
+		p := "/pathways/" + strconv.Itoa(i)
+		if strings.TrimSpace(pw.Title) == "" {
+			c.errorf("VAL-PTH-005", p+"/title", pw.ID, "pathway has no title")
+		}
+		enum(c, p+"/kind", pw.ID, pw.Kind)
+		c.actor(p+"/ownerActorId", pw.ID, pw.OwnerID)
+		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, toc.ElementOutcome)
+		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, toc.ElementIntervention)
+		c.docRef(p+"/childToc", pw.ID, pw.ChildToc)
 	}
 }
