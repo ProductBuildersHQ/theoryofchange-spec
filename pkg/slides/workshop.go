@@ -20,6 +20,8 @@ import (
 type Options struct {
 	// Theme is the Marp theme name. The default is "default".
 	Theme string
+	// Stamp is the export stamp line shown on the title slide; empty for none.
+	Stamp string
 }
 
 const (
@@ -90,7 +92,7 @@ func Workshop(whole *report.View, pathways []*report.View, o Options) string {
 	d.line("title: %q", whole.Document.Title+": workshop draft")
 	d.line("---")
 
-	d.title(whole)
+	d.title(whole, o.Stamp)
 	d.problem(whole)
 	d.goal(whole)
 	d.diagram("The theory on one page", report.Mermaid(whole, report.MermaidOptions{}),
@@ -109,7 +111,7 @@ func Workshop(whole *report.View, pathways []*report.View, o Options) string {
 	return d.b.String()
 }
 
-func (d *deck) title(v *report.View) {
+func (d *deck) title(v *report.View, stamp string) {
 	d.slide("lead")
 	d.line("# %s", v.Document.Title)
 	d.line("")
@@ -127,6 +129,10 @@ func (d *deck) title(v *report.View) {
 	}
 	if len(facts) > 0 {
 		d.line("%s", strings.Join(facts, " · "))
+	}
+	if stamp != "" {
+		d.line("")
+		d.line("_%s_", stamp)
 	}
 	d.notes("Open by saying what this is: a draft to be corrected, not a finished plan. Anything marked inferred or hypothesis is our reading, and is yours to change.")
 }
