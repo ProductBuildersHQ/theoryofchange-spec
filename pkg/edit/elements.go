@@ -32,6 +32,7 @@ var elementKinds = []ElementKind{
 	{"factor", "externalFactors"},
 	{"risk", "risks"},
 	{"decision", "decisions"},
+	{"pathway", "pathways"},
 }
 
 // ElementKinds returns the editable element kinds in document order.
@@ -196,6 +197,9 @@ var refSites = []refSite{
 	{"externalFactors", []string{"affects"}, dropItem, 0},
 	{"risks", []string{"appliesTo"}, dropItem, 0},
 	{"risks", []string{"relatedAssumptionIds"}, dropItem, 0},
+	{"pathways", []string{"outcomeIds"}, dropItem, 0},
+	{"pathways", []string{"interventionIds"}, dropItem, 0},
+	{"pathways", []string{"ownerActorId"}, dropValue, 0},
 	{"alignments", []string{"elementId"}, dropElement, 0},
 	{"decisions", []string{"ownerActorId"}, dropValue, 0},
 	{"decisions", []string{"relatedIds"}, dropItem, 0},

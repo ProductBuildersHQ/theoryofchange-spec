@@ -20,10 +20,13 @@ actor registries. The kind is read from each file.
 A Theory of Change is checked against its schema and for structural problems
 (duplicate IDs, unresolved references, invalid enumerations, bad dates).
 Pass --toc to also check observation sets against the theory they measure.
+Pass --parent to also check that the given theories are children of a parent
+theory and that their contributesTo references resolve there.
 
 Exit code 1 means at least one file has errors.`,
 		Example: `  theoryofchange validate theory.yaml
   theoryofchange validate observations-2026-q4.yaml --toc theory.yaml
+  theoryofchange validate program-a.yaml program-b.yaml --parent organization.yaml
   theoryofchange validate --format json theory.json`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -46,10 +49,19 @@ Exit code 1 means at least one file has errors.`,
 				}
 				reports = append(reports, r)
 			}
+			if p := flagString(cmd, "parent"); p != "" {
+				fr, err := service.ValidateFamily(p, args...)
+				if err != nil {
+					return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("--parent: %w", err)}
+				}
+				fr.Source = "parent " + p
+				reports = append(reports, fr)
+			}
 			return e.printReports(cmd, format, reports)
 		},
 	}
 	cmd.Flags().String("toc", "", "Theory of Change file to check observation sets against")
+	cmd.Flags().String("parent", "", "parent Theory of Change; also checks that the given files are its child theories")
 	return cmd
 }
 

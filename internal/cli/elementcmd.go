@@ -148,6 +148,15 @@ var elementFlags = map[string][]elementFlag{
 		ss("applies-to", "appliesTo", "IDs of affected elements"),
 		ss("related-assumptions", "relatedAssumptionIds", "assumptions this risk mirrors"),
 	},
+	"pathway": {
+		sr("title", "title", "pathway name, e.g. a program area"),
+		s("kind", "kind", "program, strategy, theme, geography, or segment"),
+		s("description", "description", "longer description"),
+		s("owner", "ownerActorId", "owning actor ID"),
+		ss("outcomes", "outcomeIds", "outcome IDs in the pathway"),
+		ss("interventions", "interventionIds", "intervention IDs in the pathway"),
+		s("child", "childToc", "theory that elaborates this pathway, as toc:<doc>"),
+	},
 	"decision": {
 		sr("question", "question", "what needs deciding"),
 		ss("options", "options", "the options"),
@@ -385,6 +394,8 @@ func shortPrefix(kind string) string {
 		return "ef"
 	case "risk":
 		return "rsk"
+	case "pathway":
+		return "pw"
 	default:
 		return "dec"
 	}

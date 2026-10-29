@@ -132,6 +132,7 @@ func TestEveryKindCanBeAdded(t *testing.T) {
 		"factor":       {"--id", "ef-x", "--description", "D", "--affects", "oc-safer-agents"},
 		"risk":         {"--id", "rsk-x", "--description", "D", "--category", "market"},
 		"decision":     {"--id", "dec-x", "--question", "Q"},
+		"pathway":      {"--id", "pw-x", "--title", "T", "--outcomes", "oc-idp-support", "--kind", "program"},
 	}
 	for _, k := range edit.ElementKinds() {
 		args, ok := tests[k.Name]

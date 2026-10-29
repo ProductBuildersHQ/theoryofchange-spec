@@ -55,6 +55,29 @@ func ValidateFile(path string, against *toc.Document) (Report, error) {
 	return ValidateBytes(path, data, f, against), nil
 }
 
+// ValidateFamily checks that child theories resolve against their parent:
+// each names the parent, and every outcome reference into the parent
+// exists there. Only Theory of Change files can be children.
+func ValidateFamily(parentPath string, childPaths ...string) (Report, error) {
+	parent, err := tocio.LoadDocument(parentPath)
+	if err != nil {
+		return Report{}, err
+	}
+	children := make([]*toc.Document, 0, len(childPaths))
+	for _, p := range childPaths {
+		child, err := tocio.LoadDocument(p)
+		if err != nil {
+			return Report{}, err
+		}
+		children = append(children, child)
+	}
+	return Report{
+		Source: parentPath,
+		Kind:   toc.KindTheoryOfChange,
+		Issues: append([]validate.Issue{}, validate.Family(parent, children...)...),
+	}, nil
+}
+
 func readInput(path string) ([]byte, tocio.Format, error) {
 	f, err := tocio.FormatFromPath(path)
 	if err != nil {

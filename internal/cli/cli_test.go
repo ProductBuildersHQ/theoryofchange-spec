@@ -401,3 +401,34 @@ func TestExitErrorText(t *testing.T) {
 		t.Fatalf("usageErr = %v", e)
 	}
 }
+
+func TestValidateAgainstParent(t *testing.T) {
+	dir := t.TempDir()
+	write := func(name, content string) string {
+		path := filepath.Join(dir, name)
+		if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+			t.Fatal(err)
+		}
+		return path
+	}
+	parent := write("parent.json", `{
+  "kind": "TheoryOfChange", "specVersion": "0.1", "id": "agent-ecosystem-trust",
+  "metadata": {}, "context": {"problemStatement": "p"},
+  "outcomes": [{"id": "oc-trusted-agents", "title": "Agents are trusted", "level": "impact"}],
+  "pathways": [{"id": "pw-authz", "title": "Authorization", "childToc": "toc:open-agent-auth"}]
+}`)
+	child := fixtureCopy(t, "full.json", "child.json")
+	r := run(t, "", "validate", child, "--parent", parent)
+	wantCode(t, r, 0)
+	if !strings.Contains(r.stdout, "parent "+parent+": ok") {
+		t.Fatalf("stdout = %q", r.stdout)
+	}
+
+	broken := write("broken.json", strings.Replace(mustRead(t, parent), "oc-trusted-agents", "oc-renamed", 1))
+	r = run(t, "", "validate", child, "--parent", broken)
+	wantCode(t, r, 1)
+	if !strings.Contains(r.stdout, "VAL-FAM-002") {
+		t.Fatalf("stdout = %q", r.stdout)
+	}
+	wantCode(t, run(t, "", "validate", child, "--parent", filepath.Join(dir, "none.json")), 2)
+}
