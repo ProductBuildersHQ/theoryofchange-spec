@@ -1,0 +1,86 @@
+package validate
+
+import (
+	"errors"
+	"fmt"
+
+	"github.com/santhosh-tekuri/jsonschema/v6"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
+
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/schema"
+)
+
+// Schema validates raw input against the schema for its declared kind and
+// returns one issue per violation, each with the JSON pointer of the
+// offending value. Input that cannot be parsed, or whose kind is missing or
+// unknown, yields a single issue. A nil result means the input conforms.
+func Schema(data []byte, f tocio.Format) []Issue {
+	j, err := tocio.ToJSON(data, f)
+	if err != nil {
+		return []Issue{{Code: "VAL-SCH-002", Severity: SeverityError, Path: "", Message: err.Error()}}
+	}
+	kind, err := tocio.DetectKind(data, f)
+	if err != nil {
+		return []Issue{{Code: "VAL-SCH-003", Severity: SeverityError, Path: "/kind", Message: err.Error()}}
+	}
+	name, err := tocio.SchemaName(kind)
+	if err != nil {
+		return []Issue{{Code: "VAL-SCH-003", Severity: SeverityError, Path: "/kind", Message: err.Error()}}
+	}
+	return schemaIssues(name, j)
+}
+
+func schemaIssues(name string, j []byte) []Issue {
+	err := schema.Validate(name, j)
+	if err == nil {
+		return nil
+	}
+	var ve *jsonschema.ValidationError
+	if !errors.As(err, &ve) {
+		return []Issue{{Code: "VAL-SCH-002", Severity: SeverityError, Message: err.Error()}}
+	}
+	printer := message.NewPrinter(language.English)
+	var out []Issue
+	seen := map[string]bool{}
+	var walk func(e *jsonschema.ValidationError)
+	walk = func(e *jsonschema.ValidationError) {
+		if len(e.Causes) > 0 {
+			for _, c := range e.Causes {
+				walk(c)
+			}
+			return
+		}
+		path := pointer(e.InstanceLocation...)
+		msg := e.ErrorKind.LocalizedString(printer)
+		key := path + "\x00" + msg
+		if seen[key] {
+			return
+		}
+		seen[key] = true
+		out = append(out, Issue{Code: "VAL-SCH-001", Severity: SeverityError, Path: path, Message: msg})
+	}
+	walk(ve)
+	return out
+}
+
+// Source validates raw input of any document kind and, for a Theory of
+// Change that conforms to its schema, also runs the structural checks of
+// Document. The returned document is nil unless the input passed the schema.
+func Source(data []byte, f tocio.Format, opts ...Option) (*toc.Document, []Issue) {
+	issues := Schema(data, f)
+	if len(issues) > 0 {
+		return nil, issues
+	}
+	kind, err := tocio.DetectKind(data, f)
+	if err != nil || kind != toc.KindTheoryOfChange {
+		return nil, nil
+	}
+	doc, err := tocio.ParseDocument(data, f)
+	if err != nil {
+		return nil, []Issue{{Code: "VAL-SCH-002", Severity: SeverityError, Message: fmt.Sprint(err)}}
+	}
+	return doc, Document(doc, opts...)
+}
