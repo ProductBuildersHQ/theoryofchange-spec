@@ -421,9 +421,10 @@ named version, so that both teams work from the same agreed theory.
   definition, exact formula, unit, aggregation / roll-up rule) that
   indicators instantiate per pathway, so one metric is computed identically
   everywhere.
-- **PRD-FR-114** Every indicator MUST declare a claim (`attribution` or
-  `contribution`) and MAY declare caveats (e.g. "based on sign-ups, not
-  attendance") that reports must render.
+- **PRD-FR-114** Every indicator has a claim (`attribution` or
+  `contribution`; `contribution` when omitted, so reports never overclaim)
+  and MAY declare caveats (e.g. "based on sign-ups, not attendance") that
+  reports must render.
 - **PRD-FR-115** The model MUST represent metric selection (configurable
   criteria, per-indicator scores, status `candidate` / `selected` /
   `retired`, rationale) and collection cost (mode: `passive`, `form`,

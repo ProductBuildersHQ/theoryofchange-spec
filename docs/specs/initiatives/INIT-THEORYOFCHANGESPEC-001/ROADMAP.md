@@ -91,7 +91,7 @@
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-032`
   - Satisfies: PRD-FR-113, PRD-FR-114, PRD-FR-117, PRD US-10, TRD-017
-  - Acceptance: roll-up declarations validated against metric aggregation; claim required on every indicator
+  - Acceptance: roll-up declarations validated against metric aggregation; claim defaults to contribution when omitted
 - [ ] `RMI-THEORYOFCHANGESPEC-052` Provenance on every element (stated / inferred / hypothesis / confirmed / rejected, cited evidence), indicator dataAvailability, and Consultation records; rejected elements excluded from analysis
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-033`
