@@ -1,0 +1,24 @@
+[
+  {"op": "replace", "path": "/context/problemStatement",
+   "value": "Neighborhood groups around the lake do not know about each other's work, so they duplicate effort."},
+  {"op": "replace", "path": "/outcomes", "value": [
+    {"id": "oc-impact", "title": "Neighborhood groups do not duplicate each other's work", "level": "impact",
+     "provenance": {"basis": "inferred", "note": "Restates the stated belief as a condition"}},
+    {"id": "oc-meetups", "title": "Member groups meet regularly", "level": "short_term",
+     "provenance": {"basis": "stated", "evidenceIds": ["ev-about-the-alliance"]}},
+    {"id": "oc-joint", "title": "Member groups run joint events", "level": "intermediate",
+     "provenance": {"basis": "stated", "evidenceIds": ["ev-annual-report"]}}
+  ]},
+  {"op": "replace", "path": "/links", "value": [
+    {"id": "ln-meetups-joint", "from": "oc-meetups", "to": "oc-joint",
+     "rationale": "Groups that meet start joint events",
+     "provenance": {"basis": "stated", "evidenceIds": ["ev-annual-report"]}},
+    {"id": "ln-joint-impact", "from": "oc-joint", "to": "oc-impact",
+     "rationale": "Working together replaces working in parallel",
+     "provenance": {"basis": "hypothesis", "note": "No source states this"}}
+  ]},
+  {"op": "replace", "path": "/indicators", "value": [
+    {"id": "ind-joint-events", "measures": "oc-joint", "name": "Member groups that ran a joint event this year",
+     "provenance": {"basis": "inferred"}}
+  ]}
+]

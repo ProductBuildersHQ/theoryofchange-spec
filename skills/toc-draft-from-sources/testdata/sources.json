@@ -1,0 +1,16 @@
+[
+  {
+    "file": "pages/about.txt",
+    "url": "https://example.org/about",
+    "title": "About the alliance",
+    "excerpt": "when groups know about each other's work, they stop duplicating it",
+    "accessed": "2026-01-15"
+  },
+  {
+    "file": "pages/annual-report.txt",
+    "url": "https://example.org/annual-report",
+    "title": "Annual report",
+    "excerpt": "Fourteen groups told us they started a joint event with another member after meeting there",
+    "accessed": "2026-01-15"
+  }
+]
