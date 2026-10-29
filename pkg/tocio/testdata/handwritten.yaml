@@ -1,0 +1,38 @@
+# A theory written by hand: comments, unquoted dates, a multi-line string.
+kind: TheoryOfChange
+specVersion: "0.1"
+id: handwritten
+metadata:
+  name: Handwritten theory
+context:
+  problemStatement: >-
+    Small organizations lack the time to measure impact,
+    so funders see only anecdotes.
+  narrative: |
+    Line one of the narrative.
+    Line two of the narrative.
+  timeHorizon:
+    start: 2026-01-01   # unquoted date
+    end: 2027-12-31
+outcomes:
+  - id: oc-impact
+    title: Funders see credible evidence of impact
+    level: impact
+  - id: oc-metrics
+    title: A small shared metric set is in use
+    level: short_term
+links:
+  - id: ln-metrics-impact
+    from: oc-metrics
+    to: oc-impact
+    rationale: "Funders trust consistent, comparable numbers."
+indicators:
+  - id: ind-core
+    measures: oc-metrics
+    name: Core metrics reported
+    baseline:
+      value: 0
+      date: 2026-01-31
+    targets:
+      - value: 8
+        date: 2026-09-30
