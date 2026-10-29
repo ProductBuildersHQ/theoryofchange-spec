@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/actor-registry.schema.json",
+  "$ref": "#/$defs/ActorRegistry",
+  "$defs": {
+    "Actor": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "organization",
+            "person",
+            "group",
+            "community",
+            "customer_segment",
+            "standards_body",
+            "regulator",
+            "vendor",
+            "platform",
+            "investor",
+            "other"
+          ]
+        },
+        "roles": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "implementer",
+              "beneficiary",
+              "boundary_partner",
+              "funder",
+              "champion",
+              "influencer",
+              "competitor",
+              "adopter",
+              "gatekeeper"
+            ]
+          },
+          "type": "array"
+        },
+        "stance": {
+          "type": "string",
+          "enum": [
+            "champion",
+            "supporter",
+            "neutral",
+            "skeptic",
+            "opponent",
+            "unknown"
+          ]
+        },
+        "influence": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "interest": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "contact": {
+          "$ref": "#/$defs/Person"
+        },
+        "externalRefs": {
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ActorRegistry": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ActorRegistry"
+          ]
+        },
+        "specVersion": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "actors": {
+          "items": {
+            "$ref": "#/$defs/Actor"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "specVersion",
+        "id",
+        "actors"
+      ]
+    },
+    "ExternalRef": {
+      "properties": {
+        "framework": {
+          "type": "string",
+          "enum": [
+            "okr",
+            "bsc",
+            "v2mom",
+            "capability",
+            "maturity_sli",
+            "market_spec",
+            "usm",
+            "ufm",
+            "sdg",
+            "vsem",
+            "visionstudio",
+            "custom"
+          ]
+        },
+        "ref": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "measures",
+            "implements",
+            "contributes_to",
+            "same_as"
+          ]
+        },
+        "attributes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "framework",
+        "ref"
+      ]
+    },
+    "Person": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "title": "Theory of Change Actor Registry",
+  "description": "A shared list of actors referenced by several theories."
+}

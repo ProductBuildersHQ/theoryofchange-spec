@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/observation-set.schema.json",
+  "$ref": "#/$defs/ObservationSet",
+  "$defs": {
+    "AssumptionAssessment": {
+      "properties": {
+        "assumptionId": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "untested",
+            "holding",
+            "at_risk",
+            "invalidated",
+            "validated"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "assumptionId",
+        "date",
+        "status"
+      ]
+    },
+    "Note": {
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "text": {
+          "type": "string"
+        },
+        "relatedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "text"
+      ]
+    },
+    "Observation": {
+      "properties": {
+        "indicatorId": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "value": {
+          "type": "number"
+        },
+        "level": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "note": {
+          "type": "string"
+        },
+        "quality": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "reported",
+            "estimated"
+          ]
+        },
+        "disaggregation": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "indicatorId",
+        "date"
+      ]
+    },
+    "ObservationSet": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ObservationSet"
+          ]
+        },
+        "specVersion": {
+          "type": "string"
+        },
+        "tocId": {
+          "type": "string"
+        },
+        "period": {
+          "type": "string"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/Observation"
+          },
+          "type": "array"
+        },
+        "assumptionAssessments": {
+          "items": {
+            "$ref": "#/$defs/AssumptionAssessment"
+          },
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "$ref": "#/$defs/Note"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "specVersion",
+        "tocId"
+      ]
+    }
+  },
+  "title": "Theory of Change Observation Set",
+  "description": "Indicator observations, assumption assessments, and notes for one Theory of Change and period."
+}

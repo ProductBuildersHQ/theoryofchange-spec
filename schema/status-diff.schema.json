@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/status-diff.schema.json",
+  "$ref": "#/$defs/StatusDiff",
+  "$defs": {
+    "StatusChange": {
+      "properties": {
+        "elementId": {
+          "type": "string"
+        },
+        "elementKind": {
+          "type": "string",
+          "enum": [
+            "outcome",
+            "preconditionGroup",
+            "link",
+            "intervention",
+            "assumption",
+            "indicator",
+            "actor",
+            "evidence",
+            "externalFactor",
+            "risk",
+            "decision"
+          ]
+        },
+        "field": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "elementId",
+        "elementKind",
+        "field"
+      ]
+    },
+    "StatusDiff": {
+      "properties": {
+        "tocId": {
+          "type": "string"
+        },
+        "fromAsOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "toAsOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "changes": {
+          "items": {
+            "$ref": "#/$defs/StatusChange"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "tocId",
+        "fromAsOf",
+        "toAsOf"
+      ]
+    }
+  },
+  "title": "Theory of Change Status Diff",
+  "description": "Changes between two status snapshots."
+}

@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/theory-of-change-status.schema.json",
+  "$ref": "#/$defs/Status",
+  "$defs": {
+    "AssumptionState": {
+      "properties": {
+        "assumptionId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "untested",
+            "holding",
+            "at_risk",
+            "invalidated",
+            "validated"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "document",
+            "assessment"
+          ]
+        },
+        "assessedAt": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "assumptionId",
+        "status",
+        "source"
+      ]
+    },
+    "ConfidenceWeights": {
+      "properties": {
+        "evidence": {
+          "type": "number"
+        },
+        "assumptions": {
+          "type": "number"
+        },
+        "rationale": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ImpactStatus": {
+      "properties": {
+        "outcomeId": {
+          "type": "string"
+        },
+        "pathwayState": {
+          "type": "string",
+          "enum": [
+            "achieved",
+            "on_track",
+            "at_risk",
+            "off_track",
+            "not_started",
+            "no_data",
+            "stale",
+            "baseline_only",
+            "unmeasured"
+          ]
+        },
+        "health": {
+          "type": "string",
+          "enum": [
+            "green",
+            "yellow",
+            "red"
+          ]
+        },
+        "confidence": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "outcomeId",
+        "pathwayState"
+      ]
+    },
+    "IndicatorStatus": {
+      "properties": {
+        "indicatorId": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "achieved",
+            "on_track",
+            "at_risk",
+            "off_track",
+            "not_started",
+            "no_data",
+            "stale",
+            "baseline_only",
+            "unmeasured"
+          ]
+        },
+        "health": {
+          "type": "string",
+          "enum": [
+            "green",
+            "yellow",
+            "red"
+          ]
+        },
+        "progress": {
+          "type": "number"
+        },
+        "expected": {
+          "type": "number"
+        },
+        "latest": {
+          "$ref": "#/$defs/Observation"
+        },
+        "observationCount": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "indicatorId",
+        "state"
+      ]
+    },
+    "LinkStatus": {
+      "properties": {
+        "linkId": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "at_risk",
+            "broken"
+          ]
+        },
+        "confidence": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "linkId",
+        "state"
+      ]
+    },
+    "Observation": {
+      "properties": {
+        "indicatorId": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "value": {
+          "type": "number"
+        },
+        "level": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "note": {
+          "type": "string"
+        },
+        "quality": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "reported",
+            "estimated"
+          ]
+        },
+        "disaggregation": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "indicatorId",
+        "date"
+      ]
+    },
+    "OutcomeStatus": {
+      "properties": {
+        "outcomeId": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "achieved",
+            "on_track",
+            "at_risk",
+            "off_track",
+            "not_started",
+            "no_data",
+            "stale",
+            "baseline_only",
+            "unmeasured"
+          ]
+        },
+        "pathwayState": {
+          "type": "string",
+          "enum": [
+            "achieved",
+            "on_track",
+            "at_risk",
+            "off_track",
+            "not_started",
+            "no_data",
+            "stale",
+            "baseline_only",
+            "unmeasured"
+          ]
+        },
+        "health": {
+          "type": "string",
+          "enum": [
+            "green",
+            "yellow",
+            "red"
+          ]
+        },
+        "confidence": {
+          "type": "number"
+        },
+        "indicatorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "assumptionBroken": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "outcomeId",
+        "state",
+        "pathwayState"
+      ]
+    },
+    "Status": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "TheoryOfChangeStatus"
+          ]
+        },
+        "specVersion": {
+          "type": "string"
+        },
+        "tocId": {
+          "type": "string"
+        },
+        "asOf": {
+          "type": "string",
+          "format": "date"
+        },
+        "options": {
+          "$ref": "#/$defs/StatusOptions"
+        },
+        "indicators": {
+          "items": {
+            "$ref": "#/$defs/IndicatorStatus"
+          },
+          "type": "array"
+        },
+        "outcomes": {
+          "items": {
+            "$ref": "#/$defs/OutcomeStatus"
+          },
+          "type": "array"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/LinkStatus"
+          },
+          "type": "array"
+        },
+        "assumptions": {
+          "items": {
+            "$ref": "#/$defs/AssumptionState"
+          },
+          "type": "array"
+        },
+        "overall": {
+          "items": {
+            "$ref": "#/$defs/ImpactStatus"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "specVersion",
+        "tocId",
+        "asOf",
+        "options"
+      ]
+    },
+    "StatusOptions": {
+      "properties": {
+        "tolerance": {
+          "type": "number"
+        },
+        "rollup": {
+          "type": "string",
+          "enum": [
+            "worst",
+            "mean"
+          ]
+        },
+        "confidenceWeights": {
+          "$ref": "#/$defs/ConfidenceWeights"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "rollup"
+      ]
+    }
+  },
+  "title": "Theory of Change Status",
+  "description": "A computed status snapshot of indicators, outcomes, pathways, links, and assumptions at a date."
+}
