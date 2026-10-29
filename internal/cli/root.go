@@ -89,6 +89,7 @@ Exit codes: 0 success; 1 the input is invalid or a change was rejected;
 		newReportCmd(e),
 		newExportCmd(e),
 		newImportCmd(e),
+		newApproveCmd(e),
 	)
 	root.AddCommand(newElementCmds(e)...)
 	return root
