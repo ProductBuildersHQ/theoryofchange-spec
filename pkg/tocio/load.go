@@ -119,14 +119,14 @@ func readFile(path string) ([]byte, Format, error) {
 	}
 	info, err := os.Stat(path)
 	if err != nil {
-		return nil, "", fmt.Errorf("stat %s: %w", path, err)
+		return nil, "", err
 	}
 	if info.Size() > MaxFileBytes {
 		return nil, "", fmt.Errorf("%w: %s is %d bytes (limit %d)", ErrTooLarge, path, info.Size(), MaxFileBytes)
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, "", fmt.Errorf("read %s: %w", path, err)
+		return nil, "", err
 	}
 	return data, f, nil
 }
