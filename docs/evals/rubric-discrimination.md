@@ -89,6 +89,15 @@ Under the rule "every required category passes", the reference theory does
 not pass in either run. Under a rule of "no failed category and no high
 findings", it passes in both, and both judges call it conditional.
 
+## Acceptance
+
+The bar for sending the reference example to human review is that no judge
+raises a high or critical finding on it. Both runs meet it: run 1 raised no
+high or critical findings under either judge, and neither did run 2. The
+rubric's own pass rule (every required category passes, at most three medium
+findings) stays as it is; it is the bar for approving a theory, not for
+sharing an example for review.
+
 ## What this means
 
 The rubric separates the two theories clearly and the judges agree closely

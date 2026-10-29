@@ -235,7 +235,7 @@
   - Type: capability · Status: planned
   - Depends on: `RMI-THEORYOFCHANGESPEC-013`, `RMI-THEORYOFCHANGESPEC-014`, `RMI-THEORYOFCHANGESPEC-050`
   - Satisfies: PRD US-2, PRD success metrics "LLM-judge discrimination" and "Judge agreement recorded"
-  - Acceptance: reference example passes; seeded weak ToC fails ≥ 3 rubric categories; agreement reported
+  - Acceptance: no judge raises a high or critical finding on the reference example, after which it goes to human review; seeded weak ToC fails ≥ 3 rubric categories; agreement reported
 
 ## Phase 8 — Measurement
 
