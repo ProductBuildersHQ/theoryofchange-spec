@@ -109,6 +109,11 @@ var elementFlags = map[string][]elementFlag{
 		s("data-source", "dataSource", "where the data comes from"),
 		s("method", "method", "how it is collected"),
 		s("owner", "ownerActorId", "owning actor ID"),
+		s("metric", "metricId", "shared metric this indicator instantiates"),
+		ss("pathways", "pathwayIds", "pathway IDs the indicator serves"),
+		s("claim", "claim", "attribution or contribution (default contribution)"),
+		ss("caveats", "caveats", "caveats to show wherever it is reported"),
+		ss("rollup-from", "rollupFrom", "indicator IDs of the same metric that combine into this one"),
 	},
 	"actor": {
 		sr("name", "name", "display name"),
@@ -147,6 +152,22 @@ var elementFlags = map[string][]elementFlag{
 		s("category", "category", "environmental_political, opportunity, design, partnership, market, technical, or operational"),
 		ss("applies-to", "appliesTo", "IDs of affected elements"),
 		ss("related-assumptions", "relatedAssumptionIds", "assumptions this risk mirrors"),
+	},
+	"metric": {
+		sr("name", "name", "metric name"),
+		sr("definition", "definition", "what it measures"),
+		sr("formula", "formula", "exactly how it is computed"),
+		s("unit", "unit", "unit of measure"),
+		s("direction", "direction", "increase, decrease, or maintain"),
+		s("aggregation", "aggregation", "sum, mean, weighted_mean, min, max, latest, or none"),
+		s("weight-metric", "weightMetricId", "metric that weights a weighted_mean"),
+		s("layer", "layer", "common or pathway"),
+	},
+	"term": {
+		sr("term", "term", "the word or phrase"),
+		sr("definition", "definition", "what it means here"),
+		ss("examples", "examples", "examples from this organization"),
+		ss("related", "relatedIds", "related element IDs"),
 	},
 	"pathway": {
 		sr("title", "title", "pathway name, e.g. a program area"),
@@ -298,7 +319,11 @@ func newAddCmd(e *env, k edit.ElementKind, flags []elementFlag) *cobra.Command {
 				return err
 			}
 			fields["id"] = flagString(cmd, "id")
-			p, err := edit.AddElement(k, fields)
+			doc, err := tocio.LoadDocument(args[0])
+			if err != nil {
+				return &ExitError{Code: ExitUsageErr, Err: err}
+			}
+			p, err := edit.AddElement(doc, k, fields)
 			if err != nil {
 				return usageErr("%v", err)
 			}
@@ -396,6 +421,10 @@ func shortPrefix(kind string) string {
 		return "rsk"
 	case "pathway":
 		return "pw"
+	case "metric":
+		return "met"
+	case "term":
+		return "term"
 	default:
 		return "dec"
 	}

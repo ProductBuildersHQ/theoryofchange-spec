@@ -88,11 +88,11 @@ func outcomeKind(t *testing.T) ElementKind {
 
 func TestAddElementEqualsHandWrittenPatch(t *testing.T) {
 	fields := map[string]any{"id": "oc-new", "title": "A new outcome", "level": "short_term", "logic.type": "any"}
-	p, err := AddElement(outcomeKind(t), fields)
+	doc := loadFull(t)
+	p, err := AddElement(doc, outcomeKind(t), fields)
 	if err != nil {
 		t.Fatal(err)
 	}
-	doc := loadFull(t)
 	viaCommand := apply(t, doc, p...)
 
 	hand := must(Add("/outcomes/-", map[string]any{"id": "oc-new", "title": "A new outcome", "level": "short_term", "logic": map[string]any{"type": "any"}}))
@@ -101,15 +101,15 @@ func TestAddElementEqualsHandWrittenPatch(t *testing.T) {
 		t.Fatalf("command and patch differ:\n%s\n%s", snapshot(t, viaCommand.Document), snapshot(t, viaPatch.Document))
 	}
 
-	if _, err := AddElement(outcomeKind(t), map[string]any{"title": "no id"}); !errors.Is(err, ErrPatch) {
+	if _, err := AddElement(doc, outcomeKind(t), map[string]any{"title": "no id"}); !errors.Is(err, ErrPatch) {
 		t.Fatalf("missing id error = %v", err)
 	}
-	if _, err := AddElement(outcomeKind(t), map[string]any{"id": "x", "a.": 1}); !errors.Is(err, ErrPatch) {
+	if _, err := AddElement(doc, outcomeKind(t), map[string]any{"id": "x", "a.": 1}); !errors.Is(err, ErrPatch) {
 		t.Fatalf("bad dotted key error = %v", err)
 	}
 
 	// A duplicate ID is rejected by validation, not by the builder.
-	dup, err := AddElement(outcomeKind(t), map[string]any{"id": "oc-idp-support", "title": "dup", "level": "output"})
+	dup, err := AddElement(doc, outcomeKind(t), map[string]any{"id": "oc-idp-support", "title": "dup", "level": "output"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -407,5 +407,36 @@ func TestCascadeIsDeterministic(t *testing.T) {
 	jb, _ := json.Marshal(b)
 	if string(ja) != string(jb) {
 		t.Fatal("cascade patches differ between runs")
+	}
+}
+
+func TestAddElementCreatesAnAbsentList(t *testing.T) {
+	doc := loadFull(t)
+	doc.Metrics = nil
+	k, ok := KindByName("metric")
+	if !ok {
+		t.Fatal("metric kind missing")
+	}
+	p, err := AddElement(doc, k, map[string]any{
+		"id": "met-first", "name": "First", "definition": "D", "formula": "count of things",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(p) != 1 || p[0].Path != "/metrics" {
+		t.Fatalf("an absent list should be created, not appended to: %+v", p)
+	}
+	res := apply(t, doc, p...)
+	if !res.Applied || len(res.Document.Metrics) != 1 {
+		t.Fatalf("not applied: %s %v", res.Reason, res.IssuesIntroduced)
+	}
+
+	// With the list present, the second element is appended.
+	k2, _ := KindByName("metric")
+	p2, err := AddElement(res.Document, k2, map[string]any{
+		"id": "met-second", "name": "Second", "definition": "D", "formula": "count of other things",
+	})
+	if err != nil || p2[0].Path != "/metrics/-" {
+		t.Fatalf("an existing list should be appended to: %+v, %v", p2, err)
 	}
 }

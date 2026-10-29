@@ -33,6 +33,8 @@ var elementKinds = []ElementKind{
 	{"risk", "risks"},
 	{"decision", "decisions"},
 	{"pathway", "pathways"},
+	{"metric", "metrics"},
+	{"term", "glossary"},
 }
 
 // ElementKinds returns the editable element kinds in document order.
@@ -97,9 +99,11 @@ func ExpandDotted(fields map[string]any) (map[string]any, error) {
 	return out, nil
 }
 
-// AddElement returns a patch that appends a new element. fields must include
-// "id". Dotted keys become nested objects.
-func AddElement(k ElementKind, fields map[string]any) (Patch, error) {
+// AddElement returns a patch that appends a new element to doc. fields must
+// include "id". Dotted keys become nested objects. When the document has no
+// list of this kind yet, the patch creates it, since an append needs an
+// existing array.
+func AddElement(doc *toc.Document, k ElementKind, fields map[string]any) (Patch, error) {
 	expanded, err := ExpandDotted(fields)
 	if err != nil {
 		return nil, err
@@ -107,7 +111,16 @@ func AddElement(k ElementKind, fields map[string]any) (Patch, error) {
 	if id, _ := expanded["id"].(string); id == "" {
 		return nil, fmt.Errorf("%w: a new %s needs an id", ErrPatch, k.Name)
 	}
-	op, err := Add(Pointer(k.Field, "-"), expanded)
+	tree, err := treeOf(doc)
+	if err != nil {
+		return nil, err
+	}
+	var op Op
+	if existing, _ := tree.(map[string]any)[k.Field].([]any); len(existing) > 0 {
+		op, err = Add(Pointer(k.Field, "-"), expanded)
+	} else {
+		op, err = Add(Pointer(k.Field), []any{expanded})
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -160,6 +173,7 @@ const (
 	dropValue   action = iota // remove the scalar field
 	dropItem                  // remove the entry from the array field
 	dropElement               // remove the whole element that holds the reference
+	dropMetric                // remove an indicator's metricId and the roll-up that depends on it
 )
 
 // refSite describes a field that references other elements.
@@ -193,6 +207,11 @@ var refSites = []refSite{
 	{"indicators", []string{"measures"}, dropElement, 0},
 	{"indicators", []string{"ownerActorId"}, dropValue, 0},
 	{"indicators", []string{"proxyFor"}, dropItem, 0},
+	{"indicators", []string{"metricId"}, dropMetric, 0},
+	{"indicators", []string{"pathwayIds"}, dropItem, 0},
+	{"indicators", []string{"rollupFrom"}, dropItem, 0},
+	{"metrics", []string{"weightMetricId"}, dropElement, 0},
+	{"glossary", []string{"relatedIds"}, dropItem, 0},
 	{"indicators", []string{"population", "actorIds"}, dropItem, 0},
 	{"externalFactors", []string{"affects"}, dropItem, 0},
 	{"risks", []string{"appliesTo"}, dropItem, 0},
@@ -243,15 +262,17 @@ func RemoveElement(doc *toc.Document, k ElementKind, id string, cascade bool) (P
 			if !ok {
 				break
 			}
-			op, dropped, err := site.remedy()
+			ops, dropped, err := site.remedy()
 			if err != nil {
 				return nil, err
 			}
-			tree, err = applyOp(tree, op)
-			if err != nil {
-				return nil, fmt.Errorf("cascade removal of %q: %w", cur, err)
+			for _, op := range ops {
+				tree, err = applyOp(tree, op)
+				if err != nil {
+					return nil, fmt.Errorf("cascade removal of %q: %w", cur, err)
+				}
+				patch = append(patch, op)
 			}
-			patch = append(patch, op)
 			if dropped != "" {
 				queue = append(queue, dropped)
 			}
@@ -351,31 +372,38 @@ func walkTo(el map[string]any, path []string) (map[string]any, string, bool) {
 	return cur, path[len(path)-1], true
 }
 
-// remedy returns the operation that removes this reference, and the ID of
-// any element the operation removes (so its own references get cleaned up).
-func (f found) remedy() (Op, string, error) {
+// remedy returns the operations that remove this reference, and the ID of
+// any element they remove (so its own references get cleaned up).
+func (f found) remedy() ([]Op, string, error) {
+	one := func(op Op) ([]Op, string, error) { return []Op{op}, "", nil }
 	switch f.site.array {
 	case "perspective":
-		return Remove(Pointer("perspective")), "", nil
+		return one(Remove(Pointer("perspective")))
 	case "ceilingOfAccountability":
 		if f.left == 0 && f.holder["level"] == nil {
-			return Remove(Pointer("ceilingOfAccountability")), "", nil
+			return one(Remove(Pointer("ceilingOfAccountability")))
 		}
-		return f.removeItem(), "", nil
+		return one(f.removeItem())
 	}
 	switch f.site.action {
 	case dropElement:
 		return f.removeElement()
 	case dropValue:
-		return Remove(f.fieldPointer()), "", nil
+		return one(Remove(f.fieldPointer()))
+	case dropMetric:
+		ops := []Op{Remove(f.fieldPointer())}
+		if _, has := f.element["rollupFrom"]; has {
+			ops = append(ops, Remove(f.elementPointer()+Pointer("rollupFrom")))
+		}
+		return ops, "", nil
 	default: // dropItem
 		if f.left < f.site.min {
 			return f.removeElement()
 		}
 		if f.left == 0 {
-			return Remove(f.fieldPointer()), "", nil
+			return one(Remove(f.fieldPointer()))
 		}
-		return f.removeItem(), "", nil
+		return one(f.removeItem())
 	}
 }
 
@@ -398,7 +426,7 @@ func (f found) removeItem() Op {
 	return Remove(base + "/" + strconv.Itoa(f.item))
 }
 
-func (f found) removeElement() (Op, string, error) {
+func (f found) removeElement() ([]Op, string, error) {
 	id, _ := f.element["id"].(string)
-	return Remove(f.elementPointer()), id, nil
+	return []Op{Remove(f.elementPointer())}, id, nil
 }
