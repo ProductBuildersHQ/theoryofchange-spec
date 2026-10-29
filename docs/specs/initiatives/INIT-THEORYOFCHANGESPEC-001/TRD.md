@@ -339,15 +339,15 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | TOC-LOG-002 | warning | Every link into an outcome above `short_term` has ≥ 1 linked assumption |
 | TOC-LOG-003 | info | Impact outcomes have ≥ 2 preconditions (single-chain theories are usually incomplete) |
 | TOC-ASM-001 | warning | Every `high`/`critical` assumption has a `test` description |
-| TOC-ASM-002 | warning | Every `high`/`critical` assumption has evidence or an assessment within 180 days |
+| TOC-ASM-002 | warning | Every `high`/`critical` assumption cites evidence (assessments live in observation sets, which lint does not read) |
 | TOC-ASM-003 | info | At least one `contextual` or `external` assumption exists |
-| TOC-MEA-001 | error | Every outcome within the ceiling of accountability is measured: it has ≥ 1 indicator, or is named in another indicator's `proxyFor` |
+| TOC-MEA-001 | error | When a ceiling of accountability is declared (TOC-ACC-001 asks for one), every outcome within it is measured: it has ≥ 1 indicator, or is named in another indicator's `proxyFor` |
 | TOC-MEA-002 | warning | Every indicator has baseline, ≥ 1 target, data source, and frequency |
 | TOC-MEA-003 | warning | Quantitative indicators have a unit and direction |
 | TOC-MEA-004 | warning | Target dates fall within the document's time horizon |
 | TOC-MEA-005 | warning | Timeline consistency: an outcome's final target date is not earlier than the final target dates of its preconditions |
-| TOC-ACC-002 | warning | Outcomes above the ceiling of accountability have no indicators owned by the perspective actor marked as accountable targets (contribution, not achievement, is claimed above the ceiling) |
-| TOC-INT-001 | error | Every intervention targets ≥ 1 outcome |
+| TOC-ACC-002 | warning | Outcomes above the ceiling of accountability are not explicitly marked `responsibility: own` (the organization contributes to them, it does not own them) |
+| TOC-INT-001 | error | Every intervention targets ≥ 1 outcome (enforced by validation as VAL-INT-001, so it is never reached by lint) |
 | TOC-INT-002 | warning | Every intervention has an owner actor |
 | TOC-ACC-001 | warning | A ceiling of accountability is declared |
 | TOC-ACT-001 | info | Outcomes in the `influence` sphere name ≥ 1 actor (boundary partner) |
@@ -355,7 +355,7 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | TOC-PTH-001 | warning | Every pathway contains ≥ 1 outcome with a path to an impact outcome |
 | TOC-PTH-002 | info | Every pathway has ≥ 1 selected indicator |
 | TOC-MET-001 | warning | Every `common`-layer metric is instantiated by an indicator in every pathway, or the omission is explained in the indicator selection rationale |
-| TOC-MET-002 | error | `rollupFrom` is only used when the metric's aggregation is not `none`, and all roll-up sources instantiate the same metric |
+| TOC-MET-002 | error | `rollupFrom` is only used when the metric's aggregation is not `none`, and all roll-up sources instantiate the same metric (enforced by validation as VAL-MET-002, so it is never reached by lint) |
 | TOC-CLM-001 | warning | Indicators measuring outcomes above the ceiling of accountability claim `contribution`, not `attribution` |
 | TOC-BUD-001 | warning | Selected indicators' staff minutes per week ≤ `measurementBudget.staffMinutesPerWeek` |
 | TOC-BUD-002 | warning | Survey / form questions per respondent per year ≤ `maxQuestionsPerRespondentPerYear` |
@@ -371,7 +371,7 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | TOC-RSK-001 | info | `high` / `critical` assumptions have ≥ 1 related risk with mitigation |
 | TOC-EQU-001 | warning | Indicators on outcomes that target groups disaggregate by those groups (specify changes for target groups, not assume them) |
 | TOC-VAL-001 | info | Each of `focus`, `change_analysis`, `assumptions_risks`, `actors` has ≥ 1 consultation record |
-| TOC-PRV-001 | info (warning under `full`) | Every element declares a provenance basis |
+| TOC-PRV-001 | warning (`full` profile only) | Every element declares a provenance basis |
 | TOC-PRV-002 | warning | Every `stated` element cites ≥ 1 evidence record with a URL or document reference |
 | TOC-PRV-003 | warning | An `approved` document has no `hypothesis` elements at accountable levels (responsibility `own` or `shared`) |
 | TOC-PRV-004 | info | Selected indicators declare `dataAvailability` |
