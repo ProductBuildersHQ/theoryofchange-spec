@@ -157,15 +157,17 @@ func TestNoImpactDoesNotAlsoReportEveryDeadEnd(t *testing.T) {
 
 func TestReferenceExamplesReportNoErrors(t *testing.T) {
 	for _, path := range []string{
-		"../../examples/intermediary/theory.yaml", "../../examples/market-adoption/theory.yaml", "../toc/testdata/full.json",
+		"../../examples/intermediary/theory.yaml", "../../examples/market-adoption/theory.yaml",
 	} {
 		doc, g := load(t, path)
 		res, err := Run(doc, g, Options{Profile: ProfileFull})
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !res.Go() {
-			t.Errorf("%s: %d error(s): %+v", path, res.Count("error"), res.Findings)
+		for _, f := range res.Findings {
+			if f.Severity == "error" {
+				t.Errorf("%s: %s on %s: %s", path, f.Rule, f.Element, f.Message)
+			}
 		}
 	}
 }

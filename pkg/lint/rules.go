@@ -15,6 +15,20 @@ type funcRule struct {
 	severity validate.Severity
 	desc     string
 	check    func(*Context) []Finding
+	from     Profile // lowest profile; empty for the default of the severity
+}
+
+func (r funcRule) MinProfile() Profile {
+	if r.from != "" {
+		return r.from
+	}
+	if r.severity == validate.SeverityError || Category(r.id) == CategorySTR {
+		return ProfileDraft
+	}
+	if r.severity == validate.SeverityWarning {
+		return ProfileStandard
+	}
+	return ProfileFull
 }
 
 func (r funcRule) ID() string                  { return r.id }
