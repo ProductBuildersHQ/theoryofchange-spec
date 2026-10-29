@@ -126,7 +126,7 @@ func Assessment(v *View, doc *toc.Document) string {
 
 	b.WriteString("## Gaps\n\n")
 	b.WriteString("### Outcomes within accountability with no indicator\n\n")
-	b.WriteString(bullets(outcomesWithoutIndicators(v), "None."))
+	b.WriteString(bullets(outcomesWithoutIndicators(v, doc), "None."))
 	b.WriteString("### Indicators by data availability\n\n")
 	b.WriteString(dataAvailabilityTable(v))
 	b.WriteString("### Assumptions needing testing\n\n")
@@ -170,10 +170,27 @@ func statedWithoutCitation(els []tagged) int {
 	return n
 }
 
-func outcomesWithoutIndicators(v *View) []string {
+// measuredByProxy returns the outcomes some active indicator stands in for.
+func measuredByProxy(doc *toc.Document) map[string]bool {
+	out := map[string]bool{}
+	for _, ind := range doc.Indicators {
+		if ind.Provenance.IsRejected() {
+			continue
+		}
+		for _, id := range ind.ProxyFor {
+			out[id] = true
+		}
+	}
+	return out
+}
+
+// outcomesWithoutIndicators lists owned outcomes that nothing measures: no
+// indicator of their own, and no indicator standing in for them.
+func outcomesWithoutIndicators(v *View, doc *toc.Document) []string {
 	var out []string
+	proxied := measuredByProxy(doc)
 	for _, o := range v.Outcomes {
-		if o.Owned && len(o.Indicators) == 0 {
+		if o.Owned && len(o.Indicators) == 0 && !proxied[o.ID] {
 			out = append(out, fmt.Sprintf("%s (`%s`)", mdText(o.Title), o.ID))
 		}
 	}
@@ -259,8 +276,9 @@ func questions(v *View, els []tagged, doc *toc.Document) []string {
 		}
 		qs = append(qs, fmt.Sprintf("%s — %s. Is it right, and what would you change? (%s)", e.text(), verb, e.id))
 	}
+	proxied := measuredByProxy(doc)
 	for _, o := range v.Outcomes {
-		if o.Owned && len(o.Indicators) == 0 {
+		if o.Owned && len(o.Indicators) == 0 && !proxied[o.ID] {
 			qs = append(qs, fmt.Sprintf("How would you know that \"%s\" (%s) has happened?", mdText(o.Title), o.ID))
 		}
 	}

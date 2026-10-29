@@ -2,7 +2,7 @@
 
 ## Summary
 
-This draft has 22 outcomes (20 within the organization's accountability), 10 interventions, 12 assumptions, and 25 indicators, organized into 3 pathway(s). Of its 121 elements, 20 are stated by cited sources, 48 are our inference or hypothesis, 22 are confirmed by the organization, and 31 have no basis recorded. The inferred and hypothesis elements are the first to check with the organization.
+This draft has 22 outcomes (20 within the organization's accountability), 10 interventions, 12 assumptions, and 27 indicators, organized into 3 pathway(s). Of its 123 elements, 20 are stated by cited sources, 48 are our inference or hypothesis, 22 are confirmed by the organization, and 33 have no basis recorded. The inferred and hypothesis elements are the first to check with the organization.
 
 ## Where each element comes from
 
@@ -13,7 +13,7 @@ This draft has 22 outcomes (20 within the organization's accountability), 10 int
 | Hypothesis | A guess to test | 21 |
 | Confirmed | The organization agreed to it | 22 |
 | Rejected | Considered and set aside | 4 |
-| No basis recorded | — | 31 |
+| No basis recorded | — | 33 |
 
 ### Hypothesis
 
@@ -128,17 +128,14 @@ This draft has 22 outcomes (20 within the organization's accountability), 10 int
 
 ### Outcomes within accountability with no indicator
 
-- Member nonprofits run strong, well-managed organizations (`oc-lt-capable-members`)
-- Members turn to each other for advice and joint work (`oc-im-peer-network`)
-- Members consult the shared grants calendar when planning (`oc-st-calendar-use`)
-- A standing channel exists between members and the county planning office (`oc-st-channel`)
+None.
 
 ### Indicators by data availability
 
 | Data availability | Indicators |
 |-------------------|------------|
 | Public | Residents who say local organizations help them be heard |
-| Internal existing | Attendee hours: Learning Exchange; Attendee hours: Shared Services; Attendee hours: Civic Voice; Attendee hours across all three program areas; Member organizations reached: Learning Exchange; Member organizations reached: Shared Services; Member organizations reached: Civic Voice; Member organizations reached across the whole network; Participant retention: Learning Exchange; Participant retention: Shared Services; Joint positions adopted by members; Pooled contracts and purchasing deals in place; Months the grants calendar was updated on schedule; Policy briefings and joint-position drafts published |
+| Internal existing | Attendee hours: Learning Exchange; Attendee hours: Shared Services; Attendee hours: Civic Voice; Attendee hours across all three program areas; Member organizations reached: Learning Exchange; Member organizations reached: Shared Services; Member organizations reached: Civic Voice; Member organizations reached across the whole network; Participant retention: Learning Exchange; Participant retention: Shared Services; Joint positions adopted by members; Pooled contracts and purchasing deals in place; Months the grants calendar was updated on schedule; Policy briefings and joint-position drafts published; Enrollments: Learning Exchange; Enrollments: Shared Services |
 | Internal new | Leadership practice maturity; Member collaboration maturity; Back-office share of operating budget; Grant applications submitted by members using the calendar; Members with three or more distinct funding sources; Cohort attendance rate; Stories of members helping each other |
 | Partner held | Level of members' voice with local government and funders; Public planning processes that invited members |
 | Unknown | Residents served by member organizations |
@@ -205,16 +202,12 @@ This draft has 22 outcomes (20 within the organization's accountability), 10 int
 44. Actor: Larger member nonprofits (`act-members-large`) — We inferred this from your public materials. Is it right, and what would you change? (act-members-large)
 45. Actor: Millbrook Town Council (`act-city-council`) — We are guessing here. Is it right, and what would you change? (act-city-council)
 46. Actor: Pooled-service vendors (`act-vendors`) — We inferred this from your public materials. Is it right, and what would you change? (act-vendors)
-47. How would you know that "Member nonprofits run strong, well-managed organizations" (oc-lt-capable-members) has happened?
-48. How would you know that "Members turn to each other for advice and joint work" (oc-im-peer-network) has happened?
-49. How would you know that "Members consult the shared grants calendar when planning" (oc-st-calendar-use) has happened?
-50. How would you know that "A standing channel exists between members and the county planning office" (oc-st-channel) has happened?
-51. Where could the data for "Residents served by member organizations" (ind-residents-served) come from, and who holds it?
-52. What have you seen that supports or contradicts "Member leaders can free enough time to attend cohort sessions and coaching." (asm-time-to-attend)?
-53. What have you seen that supports or contradicts "Leaders put coaching-based skills into practice back at their organizations." (asm-skills-applied)?
-54. What have you seen that supports or contradicts "Vendors offer meaningful discounts and service terms at the volume the members can pool." (asm-vendor-terms)?
-55. What have you seen that supports or contradicts "The county planning office and municipal councils stay open to a standing channel with the network." (asm-officials-receptive)?
-56. What have you seen that supports or contradicts "Once members adopt a joint position, they keep to it in public rather than splintering." (asm-positions-hold)?
-57. What have you seen that supports or contradicts "Stronger, more connected, better-funded members deliver more and better services to residents." (asm-members-deliver)?
-58. Decision needed: Should the network hire a part-time civic liaison for the county channel? (dec-liaison-staff)
-59. Decision needed: Should pooled services move from free trial to member fees in 2027? (dec-service-fees)
+47. Where could the data for "Residents served by member organizations" (ind-residents-served) come from, and who holds it?
+48. What have you seen that supports or contradicts "Member leaders can free enough time to attend cohort sessions and coaching." (asm-time-to-attend)?
+49. What have you seen that supports or contradicts "Leaders put coaching-based skills into practice back at their organizations." (asm-skills-applied)?
+50. What have you seen that supports or contradicts "Vendors offer meaningful discounts and service terms at the volume the members can pool." (asm-vendor-terms)?
+51. What have you seen that supports or contradicts "The county planning office and municipal councils stay open to a standing channel with the network." (asm-officials-receptive)?
+52. What have you seen that supports or contradicts "Once members adopt a joint position, they keep to it in public rather than splintering." (asm-positions-hold)?
+53. What have you seen that supports or contradicts "Stronger, more connected, better-funded members deliver more and better services to residents." (asm-members-deliver)?
+54. Decision needed: Should the network hire a part-time civic liaison for the county channel? (dec-liaison-staff)
+55. Decision needed: Should pooled services move from free trial to member fees in 2027? (dec-service-fees)
