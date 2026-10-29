@@ -86,6 +86,8 @@ Exit codes: 0 success; 1 the input is invalid or a change was rejected;
 		newFmtCmd(e),
 		newPatchCmd(e),
 		newDeckCmd(e),
+		newReportCmd(e),
+		newExportCmd(e),
 	)
 	root.AddCommand(newElementCmds(e)...)
 	return root

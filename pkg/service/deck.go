@@ -1,6 +1,10 @@
 package service
 
 import (
+	"fmt"
+	"slices"
+	"strings"
+
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
@@ -23,4 +27,52 @@ func WorkshopDeck(doc *toc.Document, theme string) (string, error) {
 		return "", err
 	}
 	return slides.Workshop(whole, pathways, slides.Options{Theme: theme}), nil
+}
+
+// DefinitionReport renders a definition report (see report.DefinitionKinds)
+// as Markdown. pathway restricts the report to one pathway; it is empty for
+// the whole theory. Definition reports need no observations.
+func DefinitionReport(doc *toc.Document, kind, pathway string) (string, error) {
+	if !slices.Contains(report.DefinitionKinds, kind) {
+		return "", fmt.Errorf("unknown definition report %q (want one of %s)", kind, strings.Join(report.DefinitionKinds, ", "))
+	}
+	g, err := BuildGraph(doc)
+	if err != nil {
+		return "", err
+	}
+	whole, err := report.BuildView(doc, g, nil, report.Options{Pathway: pathway})
+	if err != nil {
+		return "", err
+	}
+	var pathways []*report.View
+	if pathway == "" {
+		if pathways, err = report.PathwayViews(doc, g, nil); err != nil {
+			return "", err
+		}
+	}
+	switch kind {
+	case "pathway":
+		return report.PathwayDiagrams(whole, pathways), nil
+	case "logic-model":
+		return report.LogicModels(whole, pathways), nil
+	case "metrics":
+		return report.MetricDefinitions(whole), nil
+	case "glossary":
+		return report.Glossary(whole), nil
+	default:
+		return report.Definitions(whole, pathways), nil
+	}
+}
+
+// ExportCSV renders one CSV table (see report.CSVTables) from a document.
+func ExportCSV(doc *toc.Document, table string) (string, error) {
+	g, err := BuildGraph(doc)
+	if err != nil {
+		return "", err
+	}
+	v, err := report.BuildView(doc, g, nil, report.Options{})
+	if err != nil {
+		return "", err
+	}
+	return report.CSV(table, v)
 }
