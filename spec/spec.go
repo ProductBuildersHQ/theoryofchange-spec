@@ -17,11 +17,17 @@ import (
 //go:embed toc.md
 var template string
 
+//go:embed judge.md
+var judgeInstructions string
+
 //go:embed toc.rubric.yaml
 var coreYAML []byte
 
 //go:embed toc.development.rubric.yaml
 var developmentYAML []byte
+
+// JudgeInstructions returns the instructions a judge reads with the bundle.
+func JudgeInstructions() string { return judgeInstructions }
 
 // Rubric profiles.
 const (
