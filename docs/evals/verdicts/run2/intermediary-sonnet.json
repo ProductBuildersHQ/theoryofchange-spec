@@ -1,0 +1,135 @@
+{
+  "bundleHash": "73a82f98bd9963286ae7243b119d2a03b7e2f9376f3174bc63d7868cc4bcc976",
+  "metadata": {
+    "document": "ref.yaml",
+    "generatedAt": "2026-03-01T00:00:00Z",
+    "reviewerId": "sonnet"
+  },
+  "reviewType": "toc",
+  "judge": {
+    "judge_id": "sonnet",
+    "evaluated_at": "0001-01-01T00:00:00Z"
+  },
+  "pass": false,
+  "categories": [
+    {
+      "category": "process",
+      "score": "pass",
+      "reasoning": "Eight consultations (con-staff-workshop, con-member-interviews, con-funder-interview, con-assembly, con-measurement-workshop, con-problem-tree-review, con-resident-listening, con-county-staff) cover whole/change analysis/assumptions/focus/measurement/actors steps with named groups, counts and changedIds. Least-heard voices are included: con-resident-listening (residents of low-access areas, 14) and small members (con-member-interviews). Note funder consultation is only 2 people and the board review is a document review; minor."
+    },
+    {
+      "category": "logic_flow",
+      "score": "pass",
+      "reasoning": "Every link carries a rationale (ln-* links, TOC-LOG-001/002 GO). Preconditions grp-capable (all), grp-collab (at_least 2) and grp-voice state combination logic with sufficiency reasoning. Minor: ln-briefings-know names no assumption (below intermediate level, so not linted), and ln-capable-access/ln-collab-access/ln-sustain-access share one broad assumption asm-members-deliver."
+    },
+    {
+      "category": "root_causes",
+      "score": "pass",
+      "reasoning": "context.rootCauses and the causes tree (cause-no-standing-voice structural -\u003e cause-isolation underlying -\u003e cause-no-peer-exchange/cause-high-overhead immediate) are addressed by outcomes; cause-funding-volatility is set aside with a reason (outOfScope), counted as addressed. TOC-CAU-001 GO."
+    },
+    {
+      "category": "assumptions_risks",
+      "score": "pass",
+      "reasoning": "12 assumptions with type and criticality; both critical ones (asm-skills-applied, asm-members-deliver) and the high ones have tests (TOC-ASM-001/002/004 GO). Risks rsk-large-dominate, rsk-funder-shift, rsk-time-burden, rsk-vendor-lockin mirror assumptions with mitigations. Context and partner assumptions present (asm-officials-receptive, asm-vendor-terms, asm-funders-fit). Several medium assumptions lack tests but are not critical."
+    },
+    {
+      "category": "actors",
+      "score": "pass",
+      "reasoning": "All 11 interventions have an owner (TOC-INT-002 GO); pathways have owners; 11 actors with roles, stance, influence, interest including partners (act-county-office, act-regional-funder, act-library, act-large members) and acknowledged uncertain stance (act-city-council unknown). act-training-partner and act-residents lack provenance; minor."
+    },
+    {
+      "category": "evidence",
+      "score": "partial",
+      "reasoning": "Most key links and assumptions cite evidence (asm-* evidenceIds, ev-peer-learning, ev-pooled-purchasing) and provenance bases are honest, with many outcomes marked inferred/hypothesis and a contradicting study (ev-collab-study) acknowledged. Limits: asm-calendar-reliable and asm-leadership-turnover cite no evidence; asm-members-deliver (critical) rests on ev-county-services which only shows correlation of waits with small orgs, not that stronger members deliver more; evidence strengths are mostly moderate/weak; ev-funder-interview is restricted (not penalized). No explicit discussion of evidence gaps beyond per-element basis labels, so limits are shown but not explicitly targeted for evaluation."
+    },
+    {
+      "category": "targeting",
+      "score": "pass",
+      "reasoning": "Target groups tg-small-members and tg-low-access-residents are named; outcome oc-resident-access and causes affectedGroupIds tie to them; TOC-EQU-001 GO says outcomes for target groups are measured by those groups. Minor: only a few indicators carry disaggregation (e.g. ind-residents-served, ind-residents-voice)."
+    },
+    {
+      "category": "presentation",
+      "score": "pass",
+      "reasoning": "Narrative contains a one-page mermaid diagram plus per-pathway diagrams (Learning Exchange, Shared Services) that match the links and precondition groups; context.narrative gives plain-language account; glossary has 7 terms; audiences defined."
+    },
+    {
+      "category": "plausible",
+      "score": "partial",
+      "reasoning": "Most chains are believable (cohorts plus coaching supported by ev-peer-learning; pooled purchasing by ev-pooled-purchasing). Stretched: an 8-staff network running three pathways within 3 years (rsk-staff-capacity), joint positions among competing members (asm-positions-hold hypothesis, staff doubt in con-staff-workshop), and long-term collective voice with a county that cannot commit to every process (con-county-staff). Timing is lint-consistent (TOC-MEA-004/005 GO) but ambitious."
+    },
+    {
+      "category": "feasible",
+      "score": "pass",
+      "reasoning": "Ceiling of accountability set at long_term with rationale; resident-level impacts tracked not owned (TOC-ACC-001/002 GO, TOC-CLM-001 GO contribution claims). Interventions list resources (e.g. int-peer-cohorts: two staff, donated library space); priority scoring uses crit-feasibility; measurement budget fits (TOC-BUD-001/002 GO); staff capacity risk rsk-staff-capacity is acknowledged with staging mitigation."
+    },
+    {
+      "category": "testable",
+      "score": "pass",
+      "reasoning": "TOC-MEA-001 to 005 GO: every outcome within the ceiling is measured or has a proxy; every indicator has baseline, target, source, and frequency, units and directions; 27 indicators fit staff-time and question budgets (TOC-BUD-001/002). Critical assumptions have tests."
+    },
+    {
+      "category": "structural_integrity",
+      "score": "pass",
+      "reasoning": "Lint status GO under the standard profile with all tasks GO (TOC-ACC, ASM, BUD, CAU, CLM, EQU, INT, LOG, MEA, MET ...)."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "category": "evidence",
+      "severity": "medium",
+      "title": "Critical assumption rests on indirect evidence",
+      "description": "asm-members-deliver (critical) cites only ev-county-services, which shows waits vary by organization size but not that stronger members deliver more or better services. asm-calendar-reliable and asm-leadership-turnover cite no evidence.",
+      "recommendation": "Add direct evidence or mark the gap explicitly and target it in evaluation; cite evidence or state none exists for the unsupported assumptions."
+    },
+    {
+      "id": "F2",
+      "category": "plausible",
+      "severity": "medium",
+      "title": "Ambitious scope for an 8-staff network and contested joint positions",
+      "description": "Three pathways in three years (rsk-staff-capacity), with joint positions (asm-positions-hold, hypothesis) doubted by staff in con-staff-workshop and county staff unable to commit (con-county-staff).",
+      "recommendation": "Stage the Civic Voice pathway or give explicit timing and go/no-go checkpoints tied to asm-positions-hold and asm-officials-receptive tests."
+    },
+    {
+      "id": "F3",
+      "category": "logic_flow",
+      "severity": "low",
+      "title": "Link without assumption and shared broad assumption",
+      "description": "ln-briefings-know names no assumption; ln-capable-access, ln-collab-access and ln-sustain-access all lean on asm-members-deliver.",
+      "recommendation": "Add an assumption for ln-briefings-know and consider separate assumptions for the three impact links."
+    },
+    {
+      "id": "F4",
+      "category": "targeting",
+      "severity": "low",
+      "title": "Thin disaggregation",
+      "description": "Few indicators (e.g. ind-residents-served, ind-residents-voice) break results down by group.",
+      "recommendation": "Disaggregate more indicators by small versus large members and low-access areas."
+    }
+  ],
+  "passCriteria": {
+    "minCategoriesPassing": ""
+  },
+  "decision": {
+    "status": "conditional",
+    "passed": false,
+    "rationale": "All required categories pass except evidence and plausible, which are partial; the document is structurally clean with strong process and testability. Address the evidence gap for the critical assumption and the scope/timing stretch before approval.",
+    "findingCounts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 2,
+      "info": 0,
+      "total": 0
+    },
+    "categoryCounts": {
+      "pass": 0,
+      "partial": 0,
+      "fail": 0,
+      "total": 0
+    }
+  },
+  "overallDecision": "conditional",
+  "nextSteps": {},
+  "summary": ""
+}

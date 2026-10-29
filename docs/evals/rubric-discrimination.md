@@ -22,7 +22,9 @@ rubric (12 categories) through `theoryofchange judge`.
   verdict naming the bundle hash; `judge record` checked and stored it;
   `judge summary` combined them (majority; a tie goes to partial).
 
-Verdicts and summaries are in `docs/evals/verdicts/`.
+Verdicts and summaries are in `docs/evals/verdicts/`: `run1/` holds the first
+run of both theories, `run2/` the second run of the reference theory after it
+was improved (below).
 
 ## Results
 
@@ -51,6 +53,42 @@ Verdicts and summaries are in `docs/evals/verdicts/`.
   The rubric needs every required category to pass and allows three medium
   findings; the judges raised seven.
 
+## Second run: after improving the example
+
+The first run named concrete gaps in the reference theory, and they were fixed:
+residents and county staff were consulted (two new consultation records), the
+two high-stakes assumptions without evidence now cite it, the indicator for the
+low-access residents is broken down by that group, four indicators gained
+baselines and targets, the retention rate gained the weight it needed, and the
+assessment report now counts indicators that stand in for an outcome. The
+example lints with 0 errors and 0 warnings under the standard profile. The two
+judges then scored the new bundle.
+
+| Reference theory | Sonnet | Haiku | Combined (majority) |
+|------------------|--------|-------|---------------------|
+| Pass / partial / fail | 10 / 2 / 0 | 6 / 6 / 0 | 6 / 6 / 0 |
+| Decision | conditional | conditional | does not pass |
+
+- Every category that was partial for process, targeting, testable, and
+  structural integrity in run 1 improved: Sonnet now passes all four, Haiku
+  passes two. No category fails under either judge.
+- The remaining partials are different ones: Sonnet scores `evidence` and
+  `plausible` partial; Haiku scores `logic_flow`, `assumptions_risks`,
+  `targeting`, `plausible`, `feasible`, and `testable` partial, with new
+  findings (combination logic at two outcomes, two long-term outcomes measured
+  only by candidate indicators, an assumption test that cites a retired
+  indicator).
+- Exact agreement fell to 50%, from 83% in run 1. The stricter judge (Haiku)
+  raised new, mostly medium, findings each time; the gap between the two judges
+  is now larger than the gap between the example and a pass.
+- `plausible` is partial under both judges, for a reason that is true: an
+  eight-person network running three pathways, with resident-level change
+  expected within three years.
+
+Under the rule "every required category passes", the reference theory does
+not pass in either run. Under a rule of "no failed category and no high
+findings", it passes in both, and both judges call it conditional.
+
 ## What this means
 
 The rubric separates the two theories clearly and the judges agree closely
@@ -58,16 +96,17 @@ enough to trust it. The stated acceptance, that the reference example passes,
 is not met as written, and the cause is the example and the pass rule, not a
 disagreement between judges:
 
-- The example has real gaps that both judges named independently. Closing them
-  (a consultation with residents and with county staff, target-group
-  breakdowns on the indicators, clearing the lint warnings) is example work.
+- The example had real gaps that both judges named independently in run 1.
+  They have been closed. A second run shows the example is better, but not
+  that it can be made to pass: a judge asked to find what is missing finds
+  something each time.
 - The pass rule, "every required category passes", is strict for a worked
   example. A theory with no failed category and no high findings is judged
   conditional, which is a defensible reading of "sound enough to show".
 
 ## Limits
 
-Two judges, two theories, one run each. The judges are not independent of the
+Two judges, two theories, one run each for the weak theory and two for the reference. The judges are not independent of the
 people who wrote the rubric and fixtures. The weak theory is deliberately weak,
 so this shows the rubric is not blind, not that it grades subtle cases well.
 Verdict shape: one judge returned fields in a slightly different shape and its

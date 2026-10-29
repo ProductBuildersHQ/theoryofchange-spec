@@ -1,0 +1,215 @@
+{
+  "bundleHash": "73a82f98bd9963286ae7243b119d2a03b7e2f9376f3174bc63d7868cc4bcc976",
+  "metadata": {
+    "document": "ref.yaml",
+    "generatedAt": "2026-03-01T00:00:00Z",
+    "reviewerId": "haiku"
+  },
+  "reviewType": "toc",
+  "judge": {
+    "judge_id": "haiku",
+    "evaluated_at": "0001-01-01T00:00:00Z"
+  },
+  "pass": false,
+  "categories": [
+    {
+      "category": "process",
+      "score": "pass",
+      "reasoning": "Consultations are recorded for the main steps with named groups: whole (con-staff-workshop, staff), change_analysis (con-member-interviews, small and larger members), assumptions_risks (con-funder-interview), focus (con-assembly, member assembly of 41; con-resident-listening, residents of low-access areas and neighborhood volunteers), actors (con-county-staff), measurement (con-measurement-workshop, staff and member representatives). The least-heard group, residents of low-access areas (tg-low-access-residents), was interviewed (14 participants), so the pass criterion on least-heard voices is met by record, not assertion."
+    },
+    {
+      "category": "logic_flow",
+      "score": "partial",
+      "reasoning": "Most links carry a rationale and a lag (e.g. ln-cohorts-skills, ln-skills-practice, ln-pooled-overhead), and combination logic is stated for grp-capable (ALL), grp-collab (AT LEAST 2, with sufficiency text) and grp-voice (ALL). Gaps: oc-resident-access (ln-capable-access, ln-collab-access, ln-sustain-access) uses logic ALL over three contributions with no precondition group or sufficiency statement; oc-im-joint-positions uses logic ALL over ln-know-positions and ln-ties-positions with no sufficiency statement. The leap at ln-positions-collab ('agreeing on a position is itself a form of joint work') is a hypothesis with no evidence, and it feeds grp-collab, whose AT LEAST 2 rule can be met with oc-im-joint-positions (hypothesis) as one of two members."
+    },
+    {
+      "category": "root_causes",
+      "score": "pass",
+      "reasoning": "Problem is traced through a causal tree: cause-no-standing-voice (structural), cause-isolation (underlying), cause-no-peer-exchange and cause-high-overhead (immediate). Outcomes address them: oc-lt-collective-voice addressesCauses [cause-no-standing-voice, cause-isolation]; oc-im-officials-engage [cause-no-standing-voice]; oc-im-peer-network [cause-no-peer-exchange]; oc-im-lower-overhead [cause-high-overhead]. cause-funding-volatility is set aside with a reason (outOfScope). Lint TOC-CAU-001 GO. Minor: cause-isolation is logically addressed by oc-lt-collab and oc-im-lower-overhead but those outcomes do not list it in addressesCauses."
+    },
+    {
+      "category": "assumptions_risks",
+      "score": "partial",
+      "reasoning": "Assumptions carry type, criticality and, for the high and critical ones, a test: asm-skills-applied (critical, test present), asm-members-deliver (critical, test), asm-positions-hold (high, test), asm-vendor-terms (high, test), asm-officials-receptive (high, test), asm-time-to-attend (high, test). Partner and context assumptions appear (asm-officials-receptive, asm-vendor-terms, asm-funders-fit, asm-leadership-turnover). Risks are missing for critical or at-risk assumptions: no risk lists asm-members-deliver (critical) or asm-officials-receptive (high, status at_risk) in relatedAssumptionIds, so the at-risk county channel assumption has no mitigation. asm-savings-reinvested (medium, untested, no test) underpins necessary-condition link ln-overhead-capable, and asm-leadership-turnover (no test) underpins necessary-condition ln-practice-capable. Partial per the rubric: critical ones lack risks."
+    },
+    {
+      "category": "actors",
+      "score": "pass",
+      "reasoning": "Every intervention names an ownerActorId (e.g. int-peer-cohorts act-network, int-liaison-channel act-county-office, int-funder-roundtable act-regional-funder). Shared and partner outcomes name deliverers: oc-resident-access responsibility shared, deliveredBy [act-network, act-members-small, act-members-large]; oc-im-officials-engage responsibility partner, deliveredBy [act-county-office, act-city-council]. Key partners carry stance (act-county-office neutral, act-regional-funder supporter, act-library supporter, act-members-large neutral). Lint TOC-RSP-001 GO. Low note: the council (act-city-council) that is a named deliverer has stance unknown and provenance hypothesis."
+    },
+    {
+      "category": "evidence",
+      "score": "pass",
+      "reasoning": "Key links and assumptions cite followable sources with URLs: ev-peer-learning (ln-cohorts-skills, ln-skills-practice), ev-pooled-purchasing (ln-services-use, ln-pooled-overhead, asm-vendor-terms), ev-attendance-records (strong, asm-time-to-attend), ev-county-planning-notes (asm-officials-receptive). Limits are discussed: ev-collab-study is direction 'contradicts' and is cited for asm-peer-trust and rsk-large-dominate; ev-coalition-case is weak and cited for asm-positions-hold; oc-resident-voice is hypothesis with 'no direct evidence yet'; ind-residents-served carries caveats on self-reporting and double counting; the narrative Gaps and Questions sections list untested items. Basis labels are honest for the sampled elements (oc-lt-sustainable inferred, oc-lt-collective-voice hypothesis). The restricted ev-funder-interview (cited by ln-channel-officials, asm-funders-fit, int-funder-roundtable) is withheld and is not penalized. Low note: about 26 indicators and all five causes carry no provenance basis."
+    },
+    {
+      "category": "targeting",
+      "score": "partial",
+      "reasoning": "Target groups are named (tg-small-members, size 90; tg-low-access-residents) and outcomes say what changes for them (oc-im-peer-network targets small members with an equity score of 4; oc-resident-access targets low-access residents). Results are not consistently broken down by group: ind-reach-network disaggregates by member size, but ind-overhead-share (oc-im-lower-overhead, whose actorIds are small members) has no target group and no disaggregation; ind-residents-served targets tg-low-access-residents but disaggregates by neighborhood and age group, not by access. Partial."
+    },
+    {
+      "category": "presentation",
+      "score": "pass",
+      "reasoning": "A one-page pathway diagram (mermaid, 'The theory on one page') and per-pathway diagrams plus logic models exist, and the narrative gives plain-language definitions and an assessment. The narrative diagram agrees with the model: the same nodes, bases, and combination gates (AND, AT LEAST 2) appear, and the feedback edge ln-collab-recruit is drawn as 'reinforcing loop'. A glossary exists (term-output, term-outcome, term-impact, term-member, term-joint-position, term-pooled-services, term-attribution). Low note: the glossary does not define 'ceiling of accountability', 'precondition group', 'assumption' or 'proxy', which the model uses heavily."
+    },
+    {
+      "category": "plausible",
+      "score": "partial",
+      "reasoning": "Parts are believable: the three pathways each have a clear route from program activity to outcome, and the pooled-purchasing link has a cited case (ev-pooled-purchasing). Timing is stretched: the chain from cohorts to resident access runs through lags of P3M, P6M, P1Y and P1Y (ln-cohorts-skills, ln-skills-practice, ln-capable-access), about 2.75 years. Yet ind-residents-served targets 63,000 for 2026-12-31 (oc-resident-access), and ind-voice-level targets 'Heard' by 2026-12-31 after a channel set up in 2026 (oc-lt-collective-voice). Scale of the resident-level claim rests on inferred links (ln-capable-access) and the untested asm-members-deliver."
+    },
+    {
+      "category": "feasible",
+      "score": "partial",
+      "reasoning": "Capacity is examined: rsk-staff-capacity names about eight staff across three program areas with mitigation (stage launches, use partners); ceiling of accountability is declared (ceilingOfAccountability, long_term) and matches the network's control; measurement budget fits (measurementBudget 90 min/week, lint TOC-BUD-001 GO). Gaps: the civic liaison staffing is unresolved (dec-liaison-staff open, due 2026-12-15) yet int-liaison-channel relies on it; the county owner has stated limits (con-county-staff: 'cannot commit to inviting members into every planning process'); int-funder-roundtable is planned with no resource line. Partner-owned delivery in Civic Voice is plausible but its resourcing is not examined. Flag for the board: dec-liaison-staff and dec-service-fees are human decisions, not judged here."
+    },
+    {
+      "category": "testable",
+      "score": "partial",
+      "reasoning": "Most indicators have baseline, target, source and frequency (e.g. ind-hours-learning, ind-retention-learning, ind-collab-maturity). Two long-term outcomes inside the ceiling that the organization answers for are measured only by candidate indicators not in the selected set: oc-lt-sustainable by ind-funding-mix (selection candidate) and oc-lt-collective-voice by ind-voice-level (candidate, partner_held). ind-residents-served has dataAvailability 'unknown', though its baseline cites the 2025 member service-count report. asm-time-to-attend's test uses ind-attendance-rate, which is status retired. ind-story-peer-help has no unit. Lint TOC-MEA-001 and TOC-MEA-002 are GO and are treated as settled."
+    },
+    {
+      "category": "structural_integrity",
+      "score": "pass",
+      "reasoning": "Lint report status is GO at the top level and in every team (Accountability, Assumptions, Budget, Problem tree, Claims, Equity, Interventions, Causal logic, Measurement, Metrics, Provenance, Pathways, Responsibility, Structure), with no warnings or errors listed. The document carries the expected top-level sections and parses."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "category": "assumptions_risks",
+      "severity": "medium",
+      "title": "Critical and at-risk assumptions have no mirroring risk",
+      "description": "asm-members-deliver (critical) and asm-officials-receptive (high, status at_risk) do not appear in any risk's relatedAssumptionIds, so no mitigation is recorded for the county channel or for the resident-level link. asm-skills-applied is mirrored only loosely, by rsk-staff-capacity.",
+      "recommendation": "Add risks for asm-officials-receptive and asm-members-deliver with owners and mitigations, and link asm-skills-applied to a risk about practice follow-through."
+    },
+    {
+      "id": "F-02",
+      "category": "testable",
+      "severity": "medium",
+      "title": "Two long-term outcomes lack a selected indicator",
+      "description": "oc-lt-sustainable (ind-funding-mix, candidate) and oc-lt-collective-voice (ind-voice-level, candidate) are answered for by the organization but measured only by indicators outside the selected set.",
+      "recommendation": "Decide on selecting ind-funding-mix and ind-voice-level, or record why a proxy stands in for each outcome."
+    },
+    {
+      "id": "F-03",
+      "category": "logic_flow",
+      "severity": "medium",
+      "title": "Combination logic and sufficiency missing at oc-resident-access and oc-im-joint-positions",
+      "description": "oc-resident-access uses logic ALL over three contributing long-term outcomes with no precondition group or sufficiency statement. oc-im-joint-positions uses ALL over two enabling links with no sufficiency statement. The hypothesis link ln-positions-collab ('a form of joint work') carries grp-collab's AT LEAST 2 rule with a hypothesis member.",
+      "recommendation": "Add precondition groups with sufficiency text for oc-resident-access and oc-im-joint-positions, and state the evidence for ln-positions-collab or mark it as a key test."
+    },
+    {
+      "id": "F-04",
+      "category": "plausible",
+      "severity": "medium",
+      "title": "Early resident-level and voice targets are stretched against lags",
+      "description": "ind-residents-served targets 63,000 for 2026-12-31 and ind-voice-level targets 'Heard' by 2026-12-31, but the chain to resident access sums to about 2.75 years of lag (ln-cohorts-skills P3M, ln-skills-practice P6M, ln-capable-access P1Y, and so on).",
+      "recommendation": "Re-check the 2026 and 2027 targets for oc-resident-access and oc-lt-collective-voice against the lag sums, or explain the faster path."
+    },
+    {
+      "id": "F-05",
+      "category": "feasible",
+      "severity": "medium",
+      "title": "County liaison channel depends on unresolved staffing and partner limits",
+      "description": "int-liaison-channel relies on the liaison role, but dec-liaison-staff is open (due 2026-12-15) and the county staff say they cannot commit to inviting members into every process (con-county-staff). int-funder-roundtable is planned with no resource line. This is for the board to decide; it is flagged here, not judged.",
+      "recommendation": "Resolve dec-liaison-staff before the channel is counted as resourced, and record what the county can commit to."
+    },
+    {
+      "id": "F-06",
+      "category": "testable",
+      "severity": "medium",
+      "title": "Assumption test references a retired indicator",
+      "description": "asm-time-to-attend (high, needs testing) lists ind-attendance-rate as its indicator, but that indicator has selection status retired (replaced by retention). Its test cannot be run as the model stands.",
+      "recommendation": "Point asm-time-to-attend at ind-retention-learning or re-select the attendance indicator, and update the test text to match."
+    },
+    {
+      "id": "F-07",
+      "category": "evidence",
+      "severity": "low",
+      "title": "Data availability inconsistent for ind-residents-served",
+      "description": "ind-residents-served has dataAvailability 'unknown', but its baseline and its test (asm-members-deliver) both cite the 2025 member service-count report.",
+      "recommendation": "Confirm the report is accessible and set dataAvailability accordingly."
+    },
+    {
+      "id": "F-08",
+      "category": "targeting",
+      "severity": "low",
+      "title": "Small-member results not broken down for the main overhead indicator",
+      "description": "ind-overhead-share measures oc-im-lower-overhead, whose actors are small members, but it has no target group and no disaggregation. ind-residents-served does not disaggregate by low-access status.",
+      "recommendation": "Add targetGroupIds and disaggregation (member size, access) to ind-overhead-share and ind-residents-served."
+    },
+    {
+      "id": "F-09",
+      "category": "assumptions_risks",
+      "severity": "low",
+      "title": "Necessary-condition support rests on untested medium assumptions",
+      "description": "asm-savings-reinvested supports necessary-condition link ln-overhead-capable and asm-leadership-turnover supports ln-practice-capable; neither has a test. asm-peer-trust (supports ln-ties-network) also has no test.",
+      "recommendation": "Add a test and a watch indicator for each, or record why they need none."
+    },
+    {
+      "id": "F-10",
+      "category": "root_causes",
+      "severity": "low",
+      "title": "cause-isolation addressed in logic but not listed",
+      "description": "cause-isolation is logically addressed by oc-lt-collab and oc-im-lower-overhead, but addressesCauses lists it only on oc-lt-collective-voice.",
+      "recommendation": "List cause-isolation on oc-lt-collab and oc-im-lower-overhead where they address it."
+    },
+    {
+      "id": "F-11",
+      "category": "presentation",
+      "severity": "low",
+      "title": "Glossary omits core model terms",
+      "description": "The glossary defines output, outcome, impact, member organization, joint position, pooled services and attribution, but not ceiling of accountability, precondition group, assumption or proxy.",
+      "recommendation": "Add those terms to the glossary."
+    },
+    {
+      "id": "F-12",
+      "category": "evidence",
+      "severity": "low",
+      "title": "Provenance missing on many indicators and causes",
+      "description": "About 26 indicators and all five causes carry no provenance basis. The narrative assessment records 33 elements with no basis recorded.",
+      "recommendation": "Record a basis and source for each indicator and cause, or state that they are design choices."
+    },
+    {
+      "id": "F-13",
+      "category": "actors",
+      "severity": "low",
+      "title": "Named deliverer with unknown stance and hypothesis basis",
+      "description": "act-city-council is a deliverer of oc-im-officials-engage with stance unknown and provenance hypothesis.",
+      "recommendation": "Confirm the council's role and stance, or remove it from deliveredBy."
+    },
+    {
+      "id": "F-14",
+      "category": "structural_integrity",
+      "severity": "info",
+      "title": "Rejected certification elements remain in the live model",
+      "description": "oc-certified-members, ln-cert-capable, int-certification and pw-certification are retained with basis rejected. Lint is GO, so this is a clarity point only.",
+      "recommendation": "Consider moving rejected elements to the decisions or revisions log to keep the live model to active elements."
+    }
+  ],
+  "passCriteria": {
+    "minCategoriesPassing": ""
+  },
+  "decision": {
+    "status": "conditional",
+    "passed": false,
+    "rationale": "Structural integrity passes and no critical or high findings were found, but five required categories (logic_flow, assumptions_risks, plausible, feasible, testable) are partial, so the theory passes only after the medium findings are fixed. Six medium findings exceed the rubric's medium limit of 3, so the theory is not approvable as it stands.",
+    "findingCounts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 6,
+      "low": 7,
+      "info": 1,
+      "total": 0
+    },
+    "categoryCounts": {
+      "pass": 0,
+      "partial": 0,
+      "fail": 0,
+      "total": 0
+    }
+  },
+  "overallDecision": "conditional",
+  "nextSteps": {},
+  "summary": ""
+}
