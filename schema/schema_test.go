@@ -11,7 +11,7 @@ import (
 )
 
 func TestNamesAndGet(t *testing.T) {
-	want := []string{ActorRegistry, ObservationSet, StatusDiff, TheoryOfChange, Status}
+	want := []string{ActorRegistry, ReviewResponse, ObservationSet, StatusDiff, TheoryOfChange, Status}
 	slices.Sort(want)
 	if got := Names(); !slices.Equal(got, want) {
 		t.Fatalf("Names() = %v, want %v", got, want)
@@ -40,6 +40,7 @@ func TestFixturesValidate(t *testing.T) {
 		{Status, "status.json"},
 		{StatusDiff, "diff.json"},
 		{ActorRegistry, "registry.json"},
+		{ReviewResponse, "review.json"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.file, func(t *testing.T) {

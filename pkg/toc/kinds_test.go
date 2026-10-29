@@ -98,3 +98,10 @@ func TestStatusEnums(t *testing.T) {
 		t.Error("status enum validity mismatch")
 	}
 }
+
+func TestReviewResponseRoundTrip(t *testing.T) {
+	r := roundTrip[ReviewResponse](t, "review.json")
+	if r.Kind != KindReviewResponse || len(r.Rows) != 3 || r.Rows[0].Decision != DecisionAgree {
+		t.Fatalf("unexpected response %+v", r)
+	}
+}

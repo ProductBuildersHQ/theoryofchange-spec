@@ -38,6 +38,7 @@ func Definitions() []Definition {
 		{"theory-of-change-status", "Theory of Change Status", "A computed status snapshot of indicators, outcomes, pathways, links, and assumptions at a date.", &toc.Status{}},
 		{"status-diff", "Theory of Change Status Diff", "Changes between two status snapshots.", &toc.StatusDiff{}},
 		{"actor-registry", "Theory of Change Actor Registry", "A shared list of actors referenced by several theories.", &toc.ActorRegistry{}},
+		{"review-response", "Theory of Change Review Response", "What reviewers said about a Theory of Change, by element, independent of the channel it was collected through.", &toc.ReviewResponse{}},
 	}
 }
 
@@ -133,6 +134,9 @@ func EnumValues() map[reflect.Type][]string {
 	add(typeOf[toc.Basis](), strs(toc.AllBases()))
 	add(typeOf[toc.DataAvailability](), strs(toc.AllDataAvailabilities()))
 	add(typeOf[toc.ConsultationStep](), strs(toc.AllConsultationSteps()))
+	add(typeOf[toc.ReviewMethod](), strs(toc.AllReviewMethods()))
+	add(typeOf[toc.ReviewDecision](), strs(toc.AllReviewDecisions()))
+	add(typeOf[toc.ReviewOrigin](), strs(toc.AllReviewOrigins()))
 	add(typeOf[toc.ConsultationMethod](), strs(toc.AllConsultationMethods()))
 	add(typeOf[toc.Framework](), strs(toc.AllFrameworks()))
 	add(typeOf[toc.Relation](), strs(toc.AllRelations()))

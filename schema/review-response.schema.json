@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/review-response.schema.json",
+  "$ref": "#/$defs/ReviewResponse",
+  "$defs": {
+    "ReviewItem": {
+      "properties": {
+        "elementId": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "agree",
+            "change",
+            "remove",
+            "unsure"
+          ]
+        },
+        "suggestedChange": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "sheet",
+            "table",
+            "comment",
+            "suggestion"
+          ]
+        },
+        "quotedText": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "origin"
+      ]
+    },
+    "ReviewResponse": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ReviewResponse"
+          ]
+        },
+        "specVersion": {
+          "type": "string"
+        },
+        "tocId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "contentHash": {
+          "type": "string"
+        },
+        "reviewers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "document_review",
+            "sheet_review",
+            "workshop"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "rows": {
+          "items": {
+            "$ref": "#/$defs/ReviewItem"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "specVersion",
+        "tocId",
+        "contentHash",
+        "reviewers",
+        "method",
+        "date",
+        "rows"
+      ]
+    }
+  },
+  "title": "Theory of Change Review Response",
+  "description": "What reviewers said about a Theory of Change, by element, independent of the channel it was collected through."
+}

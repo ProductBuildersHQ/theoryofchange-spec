@@ -43,6 +43,8 @@ func SchemaName(k toc.Kind) (string, error) {
 		return schema.Status, nil
 	case toc.KindActorRegistry:
 		return schema.ActorRegistry, nil
+	case toc.KindReviewResponse:
+		return schema.ReviewResponse, nil
 	default:
 		return "", fmt.Errorf("%w: unknown kind %q", ErrInvalidDocument, string(k))
 	}
@@ -92,6 +94,15 @@ func ParseObservationSet(data []byte, f Format) (*toc.ObservationSet, error) {
 		return nil, err
 	}
 	return decode[toc.ObservationSet](j, schema.ObservationSet)
+}
+
+// ParseReviewResponse parses a review response in the given format.
+func ParseReviewResponse(data []byte, f Format) (*toc.ReviewResponse, error) {
+	j, err := ToJSON(data, f)
+	if err != nil {
+		return nil, err
+	}
+	return decode[toc.ReviewResponse](j, schema.ReviewResponse)
 }
 
 // ParseActorRegistry parses an actor registry in the given format.
@@ -204,6 +215,8 @@ func Reformat(data []byte, f Format) ([]byte, error) {
 		v, err = ParseStatus(data, f)
 	case toc.KindActorRegistry:
 		v, err = ParseActorRegistry(data, f)
+	case toc.KindReviewResponse:
+		v, err = ParseReviewResponse(data, f)
 	default:
 		return nil, fmt.Errorf("%w: unknown kind %q", ErrInvalidDocument, string(kind))
 	}

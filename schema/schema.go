@@ -33,6 +33,7 @@ const (
 	Status         = "theory-of-change-status"
 	StatusDiff     = "status-diff"
 	ActorRegistry  = "actor-registry"
+	ReviewResponse = "review-response"
 )
 
 // ErrUnknownSchema is returned for a name that is not embedded.

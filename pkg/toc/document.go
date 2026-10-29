@@ -24,6 +24,7 @@ const (
 	KindObservationSet Kind = "ObservationSet"
 	KindStatus         Kind = "TheoryOfChangeStatus"
 	KindActorRegistry  Kind = "ActorRegistry"
+	KindReviewResponse Kind = "ReviewResponse"
 )
 
 // Document is a Theory of Change.

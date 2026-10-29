@@ -1,0 +1,15 @@
+{
+  "kind": "ReviewResponse",
+  "specVersion": "0.1",
+  "tocId": "toc-example",
+  "version": "0.2.0",
+  "contentHash": "sha256:0000",
+  "reviewers": ["program staff"],
+  "method": "sheet_review",
+  "date": "2026-03-01",
+  "rows": [
+    {"elementId": "out-1", "decision": "agree", "origin": "sheet"},
+    {"quotedText": "Members share practices", "decision": "change", "suggestedChange": "title: Members share what works", "origin": "table"},
+    {"comment": "Where is the funder?", "origin": "comment"}
+  ]
+}
