@@ -107,6 +107,7 @@ var elementFlags = map[string][]elementFlag{
 		s("direction", "direction", "increase, decrease, or maintain"),
 		s("frequency", "frequency", "ISO 8601 duration, e.g. P1M"),
 		s("data-source", "dataSource", "where the data comes from"),
+		s("data-availability", "dataAvailability", "public, internal_existing, internal_new, partner_held, or unknown"),
 		s("method", "method", "how it is collected"),
 		s("owner", "ownerActorId", "owning actor ID"),
 		s("metric", "metricId", "shared metric this indicator instantiates"),
@@ -169,6 +170,15 @@ var elementFlags = map[string][]elementFlag{
 		ss("examples", "examples", "examples from this organization"),
 		ss("related", "relatedIds", "related element IDs"),
 	},
+	"consultation": {
+		sr("date", "date", "date held (YYYY-MM-DD)"),
+		sr("step", "step", "focus, change_analysis, assumptions_risks, actors, measurement, or whole"),
+		s("method", "method", "workshop, interview, survey, document_review, evidence_review, or meeting"),
+		ss("groups", "stakeholderGroups", "stakeholder groups or roles that took part (not individuals)"),
+		n("count", "count", "how many people took part"),
+		ss("findings", "findings", "what was learned"),
+		ss("changed", "changedIds", "IDs of elements changed as a result"),
+	},
 	"pathway": {
 		sr("title", "title", "pathway name, e.g. a program area"),
 		s("kind", "kind", "program, strategy, theme, geography, or segment"),
@@ -186,6 +196,24 @@ var elementFlags = map[string][]elementFlag{
 		s("status", "status", "open, decided, or deferred"),
 		ss("related", "relatedIds", "related element IDs"),
 	},
+}
+
+// provenanceKinds are the element kinds that carry a provenance block.
+var provenanceKinds = []string{
+	"outcome", "group", "link", "intervention", "assumption", "indicator",
+	"actor", "factor", "risk", "metric", "pathway",
+}
+
+func init() {
+	for _, kind := range provenanceKinds {
+		elementFlags[kind] = append(elementFlags[kind],
+			s("basis", "provenance.basis", "why it is in the theory: stated, inferred, hypothesis, confirmed, or rejected"),
+			ss("sources", "provenance.evidenceIds", "evidence IDs that support the basis"),
+			s("basis-note", "provenance.note", "note on the basis"),
+			s("decided-at", "provenance.decidedAt", "date a confirmed or rejected basis was decided (YYYY-MM-DD)"),
+			s("decided-by", "provenance.decidedBy", "group or role that decided it"),
+		)
+	}
 }
 
 func newElementCmds(e *env) []*cobra.Command {
@@ -356,7 +384,11 @@ be changed: remove the element and add a new one.`, k.Name),
 			if err != nil {
 				panic(fmt.Sprintf("cli: flag --unset: %v", err))
 			}
-			p, err := edit.SetFields(k, args[1], fields, unset)
+			doc, err := tocio.LoadDocument(args[0])
+			if err != nil {
+				return &ExitError{Code: ExitUsageErr, Err: err}
+			}
+			p, err := edit.SetFields(doc, k, args[1], fields, unset)
 			if err != nil {
 				return usageErr("%v", err)
 			}
@@ -425,6 +457,8 @@ func shortPrefix(kind string) string {
 		return "met"
 	case "term":
 		return "term"
+	case "consultation":
+		return "con"
 	default:
 		return "dec"
 	}

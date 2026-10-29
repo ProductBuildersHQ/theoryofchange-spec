@@ -120,24 +120,57 @@ func TestAddElementEqualsHandWrittenPatch(t *testing.T) {
 
 func TestSetFields(t *testing.T) {
 	doc := loadFull(t)
-	p, err := SetFields(outcomeKind(t), "oc-idp-support",
+	p, err := SetFields(doc, outcomeKind(t), "oc-idp-support",
 		map[string]any{"title": "Providers ship it", "description": "Added text", "logic.type": "any"},
 		[]string{"tags"})
 	if err != nil {
 		t.Fatal(err)
 	}
+	// logic does not exist on this outcome yet, so it is added whole.
 	if len(p) != 4 || p[0].Op != OpAdd || p[3].Op != OpRemove {
 		t.Fatalf("patch = %+v", p)
 	}
-	if _, err := Apply(doc, p, Options{}); !errors.Is(err, ErrPath) {
-		// logic does not exist on this outcome, so setting logic.type must fail loudly.
-		t.Fatalf("setting a nested field on a missing parent: error = %v", err)
+	if p[1].Path != "/outcomes/@oc-idp-support/logic" {
+		t.Fatalf("a missing parent should be created as a whole object, got %s", p[1].Path)
+	}
+	res := apply(t, doc, p...)
+	if !res.Applied {
+		t.Fatalf("not applied: %s %v", res.Reason, res.IssuesIntroduced)
+	}
+	if o, _ := res.Document.Outcome("oc-idp-support"); o.Logic == nil || o.Logic.Type != toc.LogicAny {
+		t.Fatalf("logic not created: %+v", o.Logic)
+	}
+}
+
+func TestSetFieldsCreatesProvenance(t *testing.T) {
+	doc := loadFull(t)
+	p, err := SetFields(doc, outcomeKind(t), "oc-reference-impl",
+		map[string]any{"provenance.basis": "stated", "provenance.evidenceIds": []any{"ev-survey"}}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(p) != 1 || p[0].Path != "/outcomes/@oc-reference-impl/provenance" {
+		t.Fatalf("both keys should become one provenance object: %+v", p)
+	}
+	res := apply(t, doc, p...)
+	if !res.Applied {
+		t.Fatalf("not applied: %s", res.Reason)
+	}
+	o, _ := res.Document.Outcome("oc-reference-impl")
+	if o.Provenance == nil || o.Provenance.Basis != toc.BasisStated || len(o.Provenance.EvidenceIDs) != 1 {
+		t.Fatalf("provenance = %+v", o.Provenance)
+	}
+
+	// With provenance present, only the changed leaf is set.
+	p, err = SetFields(res.Document, outcomeKind(t), "oc-reference-impl", map[string]any{"provenance.basis": "confirmed"}, nil)
+	if err != nil || len(p) != 1 || p[0].Path != "/outcomes/@oc-reference-impl/provenance/basis" {
+		t.Fatalf("existing parent should be descended into: %+v, %v", p, err)
 	}
 }
 
 func TestSetFieldsOnExistingNestedAndPlainFields(t *testing.T) {
 	doc := loadFull(t)
-	p, err := SetFields(outcomeKind(t), "oc-enterprise-require",
+	p, err := SetFields(doc, outcomeKind(t), "oc-enterprise-require",
 		map[string]any{"title": "Enterprises require it", "logic.k": 2},
 		[]string{"population"})
 	if err != nil {
@@ -156,20 +189,16 @@ func TestSetFieldsOnExistingNestedAndPlainFields(t *testing.T) {
 func TestSetFieldsErrors(t *testing.T) {
 	k := outcomeKind(t)
 	for name, call := range map[string]func() error{
-		"set id":     func() error { _, err := SetFields(k, "oc-x", map[string]any{"id": "y"}, nil); return err },
-		"unset id":   func() error { _, err := SetFields(k, "oc-x", nil, []string{"id"}); return err },
-		"no changes": func() error { _, err := SetFields(k, "oc-x", nil, nil); return err },
+		"set id":     func() error { _, err := SetFields(loadFull(t), k, "oc-x", map[string]any{"id": "y"}, nil); return err },
+		"unset id":   func() error { _, err := SetFields(loadFull(t), k, "oc-idp-support", nil, []string{"id"}); return err },
+		"no changes": func() error { _, err := SetFields(loadFull(t), k, "oc-idp-support", nil, nil); return err },
 	} {
 		if err := call(); !errors.Is(err, ErrPatch) {
 			t.Errorf("%s: error = %v", name, err)
 		}
 	}
-	// An unknown element fails when the patch is applied.
-	p, err := SetFields(k, "oc-ghost", map[string]any{"title": "t"}, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := Apply(loadFull(t), p, Options{}); !errors.Is(err, ErrUnknownID) {
+	// An unknown element is reported when the patch is built.
+	if _, err := SetFields(loadFull(t), k, "oc-ghost", map[string]any{"title": "t"}, nil); !errors.Is(err, ErrUnknownID) {
 		t.Fatalf("unknown element error = %v", err)
 	}
 }

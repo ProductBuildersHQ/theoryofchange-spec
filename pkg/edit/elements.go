@@ -35,6 +35,7 @@ var elementKinds = []ElementKind{
 	{"pathway", "pathways"},
 	{"metric", "metrics"},
 	{"term", "glossary"},
+	{"consultation", "consultations"},
 }
 
 // ElementKinds returns the editable element kinds in document order.
@@ -128,24 +129,31 @@ func AddElement(doc *toc.Document, k ElementKind, fields map[string]any) (Patch,
 }
 
 // SetFields returns a patch that sets and removes fields of an existing
-// element. Keys may be dotted ("logic.type") to reach nested objects that
-// already exist. An element's id cannot be changed.
-func SetFields(k ElementKind, id string, set map[string]any, unset []string) (Patch, error) {
-	var p Patch
-	keys := make([]string, 0, len(set))
-	for key := range set {
-		keys = append(keys, key)
+// element of doc. Keys may be dotted ("provenance.basis") to reach nested
+// objects, which are created when the element does not have them yet. An
+// element's id cannot be changed.
+func SetFields(doc *toc.Document, k ElementKind, id string, set map[string]any, unset []string) (Patch, error) {
+	if _, ok := set["id"]; ok {
+		return nil, fmt.Errorf("%w: an element's id cannot be changed; remove it and add a new one", ErrPatch)
 	}
-	sort.Strings(keys)
-	for _, key := range keys {
-		if key == "id" {
-			return nil, fmt.Errorf("%w: an element's id cannot be changed; remove it and add a new one", ErrPatch)
-		}
-		op, err := Add(fieldPointer(k, id, key), set[key])
-		if err != nil {
-			return nil, err
-		}
-		p = append(p, op)
+	tree, err := treeOf(doc)
+	if err != nil {
+		return nil, err
+	}
+	root, _ := tree.(map[string]any)
+	idx, found := indexOfID(root, k.Field, id)
+	if !found {
+		return nil, fmt.Errorf("%w: no %s with id %q", ErrUnknownID, k.Name, id)
+	}
+	element := root[k.Field].([]any)[idx].(map[string]any)
+
+	expanded, err := ExpandDotted(set)
+	if err != nil {
+		return nil, err
+	}
+	var p Patch
+	if err := setOps(&p, []string{k.Field, "@" + id}, element, expanded); err != nil {
+		return nil, err
 	}
 	for _, key := range unset {
 		if key == "id" {
@@ -223,6 +231,16 @@ var refSites = []refSite{
 	{"decisions", []string{"ownerActorId"}, dropValue, 0},
 	{"decisions", []string{"relatedIds"}, dropItem, 0},
 	{"revisions", []string{"triggerEvidenceIds"}, dropItem, 0},
+}
+
+func init() {
+	// Every element that carries provenance can cite evidence.
+	for _, array := range []string{
+		"outcomes", "preconditionGroups", "links", "interventions", "assumptions",
+		"indicators", "actors", "externalFactors", "risks", "metrics", "pathways",
+	} {
+		refSites = append(refSites, refSite{array, []string{"provenance", "evidenceIds"}, dropItem, 0})
+	}
 }
 
 // RemoveElement returns a patch that removes an element. Without cascade it
@@ -429,4 +447,32 @@ func (f found) removeItem() Op {
 func (f found) removeElement() ([]Op, string, error) {
 	id, _ := f.element["id"].(string)
 	return []Op{Remove(f.elementPointer())}, id, nil
+}
+
+// setOps appends operations that set each key of values on the object at
+// base, descending into nested objects that exist and adding whole nested
+// objects where they do not.
+func setOps(p *Patch, base []string, existing map[string]any, values map[string]any) error {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		path := append(slices.Clone(base), key)
+		if nested, ok := values[key].(map[string]any); ok {
+			if current, ok := existing[key].(map[string]any); ok {
+				if err := setOps(p, path, current, nested); err != nil {
+					return err
+				}
+				continue
+			}
+		}
+		op, err := Add(Pointer(path...), values[key])
+		if err != nil {
+			return err
+		}
+		*p = append(*p, op)
+	}
+	return nil
 }

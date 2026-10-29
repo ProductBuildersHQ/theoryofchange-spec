@@ -69,7 +69,11 @@
       "population": "Large enterprises",
       "actorIds": [
         "act-enterprises"
-      ]
+      ],
+      "provenance": {
+        "basis": "hypothesis",
+        "note": "Proposed for discussion with enterprise buyers."
+      }
     },
     {
       "id": "oc-idp-support",
@@ -83,7 +87,14 @@
       ],
       "tags": [
         "supply"
-      ]
+      ],
+      "provenance": {
+        "basis": "inferred",
+        "evidenceIds": [
+          "ev-survey"
+        ],
+        "note": "Inferred from provider roadmap statements."
+      }
     },
     {
       "id": "oc-platform-support",
@@ -98,7 +109,14 @@
       "title": "A stable, interoperable specification exists",
       "level": "short_term",
       "sphere": "control",
-      "changeType": "condition"
+      "changeType": "condition",
+      "provenance": {
+        "basis": "stated",
+        "evidenceIds": [
+          "ev-survey"
+        ],
+        "note": "The working group's charter says the specification must be stable before release."
+      }
     },
     {
       "id": "oc-reference-impl",
@@ -118,7 +136,12 @@
       "logic": {
         "type": "all"
       },
-      "sufficiency": "Enterprises need both sides of the market to support it."
+      "sufficiency": "Enterprises need both sides of the market to support it.",
+      "provenance": {
+        "basis": "confirmed",
+        "decidedAt": "2026-02-03",
+        "decidedBy": "Standards working group"
+      }
     }
   ],
   "links": [
@@ -138,7 +161,13 @@
         "int-interop"
       ],
       "polarity": "positive",
-      "lag": "P6M"
+      "lag": "P6M",
+      "provenance": {
+        "basis": "stated",
+        "evidenceIds": [
+          "ev-survey"
+        ]
+      }
     },
     {
       "id": "ln-impl-platform",
@@ -204,7 +233,12 @@
           "relation": "implements"
         }
       ],
-      "resources": "Two engineers and an event budget"
+      "resources": "Two engineers and an event budget",
+      "provenance": {
+        "basis": "confirmed",
+        "decidedAt": "2026-02-03",
+        "decidedBy": "Standards working group"
+      }
     },
     {
       "id": "int-reference",
@@ -241,7 +275,13 @@
         "ev-survey"
       ],
       "status": "untested",
-      "ownerActorId": "act-proponent"
+      "ownerActorId": "act-proponent",
+      "provenance": {
+        "basis": "inferred",
+        "evidenceIds": [
+          "ev-survey"
+        ]
+      }
     },
     {
       "id": "asm-no-fork",
@@ -312,7 +352,11 @@
       "claim": "contribution",
       "caveats": [
         "Counts general availability only"
-      ]
+      ],
+      "dataAvailability": "public",
+      "provenance": {
+        "basis": "hypothesis"
+      }
     },
     {
       "id": "ind-idp-roadmaps",
@@ -334,7 +378,8 @@
           "level": "committed",
           "date": "2026-09-30"
         }
-      ]
+      ],
+      "dataAvailability": "internal_existing"
     },
     {
       "id": "ind-reference-downloads",
@@ -342,7 +387,8 @@
       "name": "Reference implementation downloads",
       "measurementType": "quantitative",
       "direction": "maintain",
-      "tolerance": 50
+      "tolerance": 50,
+      "dataAvailability": "internal_new"
     },
     {
       "id": "ind-idp-count-na",
@@ -353,7 +399,8 @@
       "metricId": "met-providers",
       "pathwayIds": [
         "pw-supply"
-      ]
+      ],
+      "dataAvailability": "partner_held"
     },
     {
       "id": "ind-idp-count-eu",
@@ -364,7 +411,8 @@
       "metricId": "met-providers",
       "pathwayIds": [
         "pw-supply"
-      ]
+      ],
+      "dataAvailability": "unknown"
     },
     {
       "id": "ind-idp-total",
@@ -414,7 +462,13 @@
           "framework": "market_spec",
           "ref": "segment:identity-providers"
         }
-      ]
+      ],
+      "provenance": {
+        "basis": "stated",
+        "evidenceIds": [
+          "ev-survey"
+        ]
+      }
     },
     {
       "id": "act-enterprises",
@@ -452,7 +506,13 @@
         "oc-enterprise-require"
       ],
       "likelihood": "medium",
-      "trend": "up"
+      "trend": "up",
+      "provenance": {
+        "basis": "inferred",
+        "evidenceIds": [
+          "ev-survey"
+        ]
+      }
     }
   ],
   "risks": [
@@ -470,7 +530,10 @@
       "category": "market",
       "relatedAssumptionIds": [
         "asm-no-fork"
-      ]
+      ],
+      "provenance": {
+        "basis": "hypothesis"
+      }
     }
   ],
   "alignments": [
@@ -547,7 +610,12 @@
         "int-interop",
         "int-reference"
       ],
-      "childToc": "toc:open-agent-auth-supply"
+      "childToc": "toc:open-agent-auth-supply",
+      "provenance": {
+        "basis": "confirmed",
+        "decidedAt": "2026-02-03",
+        "decidedBy": "Standards working group"
+      }
     }
   ],
   "metrics": [
@@ -559,7 +627,12 @@
       "unit": "providers",
       "direction": "increase",
       "aggregation": "sum",
-      "layer": "common"
+      "layer": "common",
+      "provenance": {
+        "basis": "confirmed",
+        "decidedAt": "2026-02-03",
+        "decidedBy": "Standards working group"
+      }
     },
     {
       "id": "met-provider-share",
@@ -582,6 +655,25 @@
         "A vendor's public release notes list the feature without a preview label."
       ],
       "relatedIds": [
+        "oc-idp-support"
+      ]
+    }
+  ],
+  "consultations": [
+    {
+      "id": "con-kickoff",
+      "date": "2026-02-03",
+      "step": "whole",
+      "method": "workshop",
+      "stakeholderGroups": [
+        "Standards working group",
+        "Provider representatives"
+      ],
+      "count": 14,
+      "findings": [
+        "Providers asked for a conformance suite before committing."
+      ],
+      "changedIds": [
         "oc-idp-support"
       ]
     }

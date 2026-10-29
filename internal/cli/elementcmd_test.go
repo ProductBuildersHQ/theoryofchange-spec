@@ -133,6 +133,7 @@ func TestEveryKindCanBeAdded(t *testing.T) {
 		"risk":         {"--id", "rsk-x", "--description", "D", "--category", "market"},
 		"decision":     {"--id", "dec-x", "--question", "Q"},
 		"pathway":      {"--id", "pw-x", "--title", "T", "--outcomes", "oc-idp-support", "--kind", "program"},
+		"consultation": {"--id", "con-x", "--date", "2026-10-29", "--step", "whole", "--method", "workshop"},
 		"metric":       {"--id", "met-x", "--name", "N", "--definition", "D", "--formula", "count of things"},
 		"term":         {"--id", "term-x", "--term", "Outcome", "--definition", "A change that happens to someone."},
 	}
@@ -205,7 +206,6 @@ func TestElementSetFailures(t *testing.T) {
 		"unknown element": {[]string{"outcome", "set", path, "oc-ghost", "--title", "T"}, ExitUsageErr},
 		"invalid value":   {[]string{"outcome", "set", path, "oc-idp-support", "--level", "huge"}, ExitInvalid},
 		"wrong kind":      {[]string{"outcome", "set", path, "rsk-competing", "--title", "T"}, ExitUsageErr},
-		"missing parent":  {[]string{"outcome", "set", path, "oc-idp-support", "--set", "logic.type=any"}, ExitUsageErr},
 	} {
 		if r := run(t, "", tt.args...); r.code != tt.code {
 			t.Errorf("%s: exit code = %d, want %d\nstderr: %s", name, r.code, tt.code, r.err)
@@ -310,5 +310,19 @@ func TestFlagTableCoversEveryKind(t *testing.T) {
 	}
 	if shortPrefix("outcome") != "oc" || shortPrefix("decision") != "dec" {
 		t.Error("shortPrefix() mismatch")
+	}
+}
+
+func TestSetCreatesMissingParents(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "doc.json")
+	r := run(t, "", "outcome", "set", path, "oc-spec-stable", "--basis", "stated", "--sources", "ev-survey", "--basis-note", "Stated on the project page.", "--set", "logic.type=any")
+	wantCode(t, r, 0)
+	doc, err := tocio.LoadDocument(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	o, _ := doc.Outcome("oc-spec-stable")
+	if o.Provenance == nil || o.Provenance.Basis != "stated" || o.Provenance.Note != "Stated on the project page." || o.Logic == nil {
+		t.Fatalf("outcome = %+v", o)
 	}
 }
