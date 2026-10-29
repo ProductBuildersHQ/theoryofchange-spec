@@ -58,6 +58,11 @@ var elementFlags = map[string][]elementFlag{
 		s("change-type", "changeType", "knowledge, attitude, skill, behavior, practice, policy, norm, condition, investment, or adoption"),
 		s("population", "population", "who or what changes"),
 		ss("actors", "actorIds", "actor IDs who change or co-own the outcome"),
+		s("responsibility", "responsibility", "own (default), shared, partner, or unaddressed"),
+		ss("delivered-by", "deliveredBy", "actor IDs who deliver the outcome"),
+		ss("addresses", "addressesCauses", "cause IDs the outcome answers"),
+		ss("target-groups", "targetGroupIds", "target group IDs the outcome is for"),
+		ss("audiences", "audienceIds", "audience IDs who need to see the outcome reported"),
 	},
 	"group": {
 		sr("target", "target", "outcome the group combines preconditions for"),
@@ -116,6 +121,7 @@ var elementFlags = map[string][]elementFlag{
 		s("claim", "claim", "attribution or contribution (default contribution)"),
 		ss("caveats", "caveats", "caveats to show wherever it is reported"),
 		ss("audiences", "audienceIds", "audience IDs the indicator is reported to"),
+		ss("target-groups", "targetGroupIds", "target group IDs the indicator is broken down by"),
 		ss("themes", "themeIds", "story theme IDs a theme_count indicator counts"),
 		ss("rollup-from", "rollupFrom", "indicator IDs of the same metric that combine into this one"),
 		s("collection-mode", "collection.mode", "passive, form, survey, interview, manual, or derived"),
@@ -180,6 +186,19 @@ var elementFlags = map[string][]elementFlag{
 		sr("definition", "definition", "what it means here"),
 		ss("examples", "examples", "examples from this organization"),
 		ss("related", "relatedIds", "related element IDs"),
+	},
+	"cause": {
+		sr("statement", "statement", "the cause, as a condition"),
+		sr("level", "level", "immediate, underlying, or structural"),
+		s("parent", "parent", "the cause this one contributes to"),
+		ss("affected", "affectedGroupIds", "target group IDs affected"),
+		ss("evidence", "evidenceIds", "evidence IDs behind the cause"),
+		s("out-of-scope", "outOfScope.reason", "why the cause is left alone"),
+	},
+	"target-group": {
+		sr("name", "name", "group name"),
+		s("description", "description", "who is in it"),
+		ss("actors", "actorIds", "actor IDs in the group"),
 	},
 	"audience": {
 		sr("name", "name", "audience name"),
@@ -503,6 +522,10 @@ func shortPrefix(kind string) string {
 		return "term"
 	case "criterion":
 		return "crit"
+	case "cause":
+		return "cause"
+	case "target-group":
+		return "tg"
 	case "audience":
 		return "aud"
 	case "theme":

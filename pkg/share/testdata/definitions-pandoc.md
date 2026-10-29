@@ -3,7 +3,7 @@ title: "Open agent authorization standard adoption"
 version: "0.1"
 date: "2026-09-30"
 toc-id: "open-agent-auth"
-content-hash: "aa5ec2912e5f9c2c8ff2422d65c3f638f7548b50df4846de3807dcdb380de6bd"
+content-hash: "86ef980765e53727324494493402df4bfc8a325923c68566bab9e7c5f331abf3"
 ---
 
 ## Causal pathways
@@ -50,4 +50,4 @@ Getting identity providers and agent platforms to ship the standard.
 | General availability | A release available to all customers without special arrangement, as opposed to a preview. | A vendor's public release notes list the feature without a preview label. |
 
 
-*Theory of Change open-agent-auth · version 0.1 · hash aa5ec2912e5f · as of 2026-09-30*
+*Theory of Change open-agent-auth · version 0.1 · hash 86ef980765e5 · as of 2026-09-30*

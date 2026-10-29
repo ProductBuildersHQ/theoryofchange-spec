@@ -22,6 +22,8 @@ const (
 	ElementMetric         ElementKind = "metric"
 	ElementTerm           ElementKind = "term"
 	ElementCriterion      ElementKind = "criterion"
+	ElementCause          ElementKind = "cause"
+	ElementTargetGroup    ElementKind = "targetGroup"
 	ElementAudience       ElementKind = "audience"
 	ElementTheme          ElementKind = "theme"
 	ElementConsultation   ElementKind = "consultation"
@@ -64,6 +66,8 @@ func (d *Document) Elements() []ElementRef {
 	add(ElementPathway, "pathways", idsOf(d.Pathways, func(v Pathway) string { return v.ID }))
 	add(ElementMetric, "metrics", idsOf(d.Metrics, func(v Metric) string { return v.ID }))
 	add(ElementTerm, "glossary", idsOf(d.Glossary, func(v GlossaryTerm) string { return v.ID }))
+	add(ElementCause, "causes", idsOf(d.Causes, func(v Cause) string { return v.ID }))
+	add(ElementTargetGroup, "targetGroups", idsOf(d.TargetGroups, func(v TargetGroup) string { return v.ID }))
 	add(ElementAudience, "audiences", idsOf(d.Audiences, func(v Audience) string { return v.ID }))
 	add(ElementTheme, "themes", idsOf(d.Themes, func(v Theme) string { return v.ID }))
 	add(ElementCriterion, "selectionCriteria", idsOf(d.SelectionCriteria, func(v SelectionCriterion) string { return v.ID }))
@@ -197,8 +201,34 @@ func AllElementKinds() []ElementKind {
 	return []ElementKind{
 		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
 		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
-		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementAudience, ElementTheme, ElementCriterion, ElementConsultation,
+		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementCause, ElementTargetGroup, ElementAudience, ElementTheme, ElementCriterion, ElementConsultation,
 	}
+}
+
+// Cause returns the cause with the given ID.
+func (d *Document) Cause(id string) (*Cause, bool) {
+	return find(d.Causes, id, func(v Cause) string { return v.ID })
+}
+
+// TargetGroup returns the target group with the given ID.
+func (d *Document) TargetGroup(id string) (*TargetGroup, bool) {
+	return find(d.TargetGroups, id, func(v TargetGroup) string { return v.ID })
+}
+
+// EffectiveResponsibility returns the outcome's responsibility, defaulting
+// to own.
+func (o Outcome) EffectiveResponsibility() Responsibility {
+	if o.Responsibility == "" {
+		return ResponsibilityOwn
+	}
+	return o.Responsibility
+}
+
+// Accountable reports whether the outcome counts toward the perspective
+// actor's accountability: it is owned or shared.
+func (o Outcome) Accountable() bool {
+	r := o.EffectiveResponsibility()
+	return r == ResponsibilityOwn || r == ResponsibilityShared
 }
 
 // Audience returns the audience with the given ID.

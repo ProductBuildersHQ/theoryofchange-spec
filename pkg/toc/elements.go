@@ -23,6 +23,20 @@ type Outcome struct {
 	Population string `json:"population,omitempty"`
 	// ActorIDs are actors who change or co-own the outcome.
 	ActorIDs []string `json:"actorIds,omitempty"`
+	// Responsibility says how far the perspective actor answers for the
+	// outcome; omitted means own. Every outcome is monitored, but only own
+	// and shared outcomes count toward accountability.
+	Responsibility Responsibility `json:"responsibility,omitempty"`
+	// DeliveredBy are the actors who deliver the outcome.
+	DeliveredBy []string `json:"deliveredBy,omitempty"`
+	// AddressesCauses are the causes in the problem tree the outcome
+	// answers.
+	AddressesCauses []string `json:"addressesCauses,omitempty"`
+	// TargetGroupIDs are the priority populations the outcome is for.
+	TargetGroupIDs []string `json:"targetGroupIds,omitempty"`
+	// Priority records how the outcome scored against the prioritization
+	// criteria.
+	Priority *Priority `json:"priority,omitempty"`
 	// AudienceIDs are the audiences who need to see this outcome reported.
 	AudienceIDs []string `json:"audienceIds,omitempty"`
 	// ContributesTo lists outcomes in a parent theory this outcome
@@ -92,7 +106,10 @@ type Intervention struct {
 	// InitiativeRefs points at delivery initiatives (e.g. VisionStudio).
 	InitiativeRefs []ExternalRef `json:"initiativeRefs,omitempty"`
 	Resources      string        `json:"resources,omitempty"`
-	Provenance     *Provenance   `json:"provenance,omitempty"`
+	// Priority records how the intervention scored against the
+	// prioritization criteria.
+	Priority   *Priority   `json:"priority,omitempty"`
+	Provenance *Provenance `json:"provenance,omitempty"`
 }
 
 // IfThenBecause is the structured form of an assumption: if X, then Y,
@@ -176,6 +193,9 @@ type Indicator struct {
 	// public, already held internally, new to collect, held by a partner,
 	// or not yet known.
 	DataAvailability DataAvailability `json:"dataAvailability,omitempty"`
+	// TargetGroupIDs are the priority populations the indicator is broken
+	// down by.
+	TargetGroupIDs []string `json:"targetGroupIds,omitempty"`
 	// AudienceIDs are the audiences this indicator is reported to.
 	AudienceIDs []string `json:"audienceIds,omitempty"`
 	// ThemeIDs are the story themes a theme_count indicator counts.
@@ -281,6 +301,43 @@ type GlossaryTerm struct {
 	Definition string   `json:"definition" jsonschema:"required"`
 	Examples   []string `json:"examples,omitempty"`
 	RelatedIDs []string `json:"relatedIds,omitempty"`
+}
+
+// Priority records how an outcome or intervention scored against the
+// prioritization criteria, and why it was chosen or set aside.
+type Priority struct {
+	Scores    []CriterionScore `json:"scores,omitempty"`
+	Rationale string           `json:"rationale,omitempty"`
+}
+
+// Cause is a node of the problem tree. Outcomes name the causes they
+// address, so the solution can be checked against the problem at every level.
+type Cause struct {
+	ID        string     `json:"id" jsonschema:"required"`
+	Statement string     `json:"statement" jsonschema:"required"`
+	Level     CauseLevel `json:"level" jsonschema:"required"`
+	// Parent is the cause this one contributes to; omitted for a cause that
+	// leads straight to the problem.
+	Parent           string   `json:"parent,omitempty"`
+	AffectedGroupIDs []string `json:"affectedGroupIds,omitempty"`
+	EvidenceIDs      []string `json:"evidenceIds,omitempty"`
+	// OutOfScope records that the cause is real but not addressed here.
+	OutOfScope *OutOfScope `json:"outOfScope,omitempty"`
+}
+
+// OutOfScope says why a cause is left alone.
+type OutOfScope struct {
+	Reason string `json:"reason" jsonschema:"required"`
+}
+
+// TargetGroup is a priority population, such as under-resourced member
+// organizations or residents of low-access areas.
+type TargetGroup struct {
+	ID          string   `json:"id" jsonschema:"required"`
+	Name        string   `json:"name" jsonschema:"required"`
+	Description string   `json:"description,omitempty"`
+	Size        *float64 `json:"size,omitempty"`
+	ActorIDs    []string `json:"actorIds,omitempty"`
 }
 
 // Audience is a group who needs to see results, and what they need to see.

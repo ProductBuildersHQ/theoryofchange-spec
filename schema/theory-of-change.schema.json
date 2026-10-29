@@ -358,6 +358,49 @@
         "to"
       ]
     },
+    "Cause": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "immediate",
+            "underlying",
+            "structural"
+          ]
+        },
+        "parent": {
+          "type": "string"
+        },
+        "affectedGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outOfScope": {
+          "$ref": "#/$defs/OutOfScope"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "statement",
+        "level"
+      ]
+    },
     "Ceiling": {
       "properties": {
         "level": {
@@ -714,6 +757,18 @@
         "glossary": {
           "items": {
             "$ref": "#/$defs/GlossaryTerm"
+          },
+          "type": "array"
+        },
+        "causes": {
+          "items": {
+            "$ref": "#/$defs/Cause"
+          },
+          "type": "array"
+        },
+        "targetGroups": {
+          "items": {
+            "$ref": "#/$defs/TargetGroup"
           },
           "type": "array"
         },
@@ -1112,6 +1167,12 @@
             "unknown"
           ]
         },
+        "targetGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "audienceIds": {
           "items": {
             "type": "string"
@@ -1208,6 +1269,9 @@
         },
         "resources": {
           "type": "string"
+        },
+        "priority": {
+          "$ref": "#/$defs/Priority"
         },
         "provenance": {
           "$ref": "#/$defs/Provenance"
@@ -1373,6 +1437,18 @@
         "formula"
       ]
     },
+    "OutOfScope": {
+      "properties": {
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "reason"
+      ]
+    },
     "Outcome": {
       "properties": {
         "id": {
@@ -1431,6 +1507,36 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "responsibility": {
+          "type": "string",
+          "enum": [
+            "own",
+            "shared",
+            "partner",
+            "unaddressed"
+          ]
+        },
+        "deliveredBy": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "addressesCauses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "targetGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "priority": {
+          "$ref": "#/$defs/Priority"
         },
         "audienceIds": {
           "items": {
@@ -1606,6 +1712,21 @@
         "members",
         "logic"
       ]
+    },
+    "Priority": {
+      "properties": {
+        "scores": {
+          "items": {
+            "$ref": "#/$defs/CriterionScore"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "Provenance": {
       "properties": {
@@ -1882,6 +2003,34 @@
       "type": "object",
       "required": [
         "date"
+      ]
+    },
+    "TargetGroup": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "actorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
       ]
     },
     "Theme": {

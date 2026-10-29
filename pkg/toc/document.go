@@ -63,6 +63,10 @@ type Document struct {
 	Metrics  []Metric       `json:"metrics,omitempty"`
 	Glossary []GlossaryTerm `json:"glossary,omitempty"`
 
+	// Causes are the problem tree; TargetGroups the priority populations.
+	Causes       []Cause       `json:"causes,omitempty"`
+	TargetGroups []TargetGroup `json:"targetGroups,omitempty"`
+
 	// Audiences say who needs to see results; Themes are the story codebook.
 	Audiences []Audience `json:"audiences,omitempty"`
 	Themes    []Theme    `json:"themes,omitempty"`

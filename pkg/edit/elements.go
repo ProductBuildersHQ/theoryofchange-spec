@@ -35,6 +35,8 @@ var elementKinds = []ElementKind{
 	{"pathway", "pathways"},
 	{"metric", "metrics"},
 	{"term", "glossary"},
+	{"cause", "causes"},
+	{"target-group", "targetGroups"},
 	{"audience", "audiences"},
 	{"theme", "themes"},
 	{"criterion", "selectionCriteria"},
@@ -203,6 +205,14 @@ type refSite struct {
 var refSites = []refSite{
 	{"outcomes", []string{"actorIds"}, dropItem, 0},
 	{"outcomes", []string{"audienceIds"}, dropItem, 0},
+	{"outcomes", []string{"deliveredBy"}, dropItem, 0},
+	{"outcomes", []string{"addressesCauses"}, dropItem, 0},
+	{"outcomes", []string{"targetGroupIds"}, dropItem, 0},
+	{"indicators", []string{"targetGroupIds"}, dropItem, 0},
+	{"causes", []string{"parent"}, dropValue, 0},
+	{"causes", []string{"affectedGroupIds"}, dropItem, 0},
+	{"causes", []string{"evidenceIds"}, dropItem, 0},
+	{"targetGroups", []string{"actorIds"}, dropItem, 0},
 	{"indicators", []string{"audienceIds"}, dropItem, 0},
 	{"indicators", []string{"themeIds"}, dropItem, 1},
 	{"themes", []string{"outcomeIds"}, dropItem, 0},
@@ -386,25 +396,34 @@ func findReference(root map[string]any, id string) (found, bool) {
 	return found{}, false
 }
 
-// findScore finds a selection score that names the criterion id. Scores are
-// objects inside an indicator's selection, so they are scanned apart from the
-// scalar reference fields.
+// scoreSites are the places criterion scores live: an indicator's
+// selection, and the priority of an outcome or an intervention.
+var scoreSites = []refSite{
+	{array: "indicators", field: []string{"selection", "scores"}, action: dropItem},
+	{array: "outcomes", field: []string{"priority", "scores"}, action: dropItem},
+	{array: "interventions", field: []string{"priority", "scores"}, action: dropItem},
+}
+
+// findScore finds a score that names the criterion id. Scores are objects
+// inside their subject, so they are scanned apart from the scalar reference
+// fields.
 func findScore(root map[string]any, id string) (found, bool) {
-	site := refSite{array: "indicators", field: []string{"selection", "scores"}, action: dropItem}
-	items, _ := root[site.array].([]any)
-	for ei, raw := range items {
-		el, ok := raw.(map[string]any)
-		if !ok {
-			continue
-		}
-		holder, last, ok := walkTo(el, site.field)
-		if !ok {
-			continue
-		}
-		scores, _ := holder[last].([]any)
-		for i, sc := range scores {
-			if m, ok := sc.(map[string]any); ok && m["criterionId"] == id {
-				return found{site: site, element: el, index: ei, item: i, holder: holder, left: len(scores) - 1}, true
+	for _, site := range scoreSites {
+		items, _ := root[site.array].([]any)
+		for ei, raw := range items {
+			el, ok := raw.(map[string]any)
+			if !ok {
+				continue
+			}
+			holder, last, ok := walkTo(el, site.field)
+			if !ok {
+				continue
+			}
+			scores, _ := holder[last].([]any)
+			for i, sc := range scores {
+				if m, ok := sc.(map[string]any); ok && m["criterionId"] == id {
+					return found{site: site, element: el, index: ei, item: i, holder: holder, left: len(scores) - 1}, true
+				}
 			}
 		}
 	}

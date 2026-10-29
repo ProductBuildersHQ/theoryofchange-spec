@@ -136,6 +136,8 @@ func TestEveryKindCanBeAdded(t *testing.T) {
 		"pathway":      {"--id", "pw-x", "--title", "T", "--outcomes", "oc-idp-support", "--kind", "program"},
 		"consultation": {"--id", "con-x", "--date", "2026-10-29", "--step", "whole", "--method", "workshop"},
 		"metric":       {"--id", "met-x", "--name", "N", "--definition", "D", "--formula", "count of things"},
+		"cause":        {"--id", "cause-x", "--statement", "S", "--level", "immediate"},
+		"target-group": {"--id", "tg-x", "--name", "N"},
 		"audience":     {"--id", "aud-x", "--name", "Board"},
 		"theme":        {"--id", "thm-x", "--label", "L", "--definition", "D"},
 		"criterion":    {"--id", "crit-x", "--name", "Credibility", "--applies-to", "indicator", "--weight", "2"},

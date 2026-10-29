@@ -2,7 +2,7 @@
 title: "Open agent authorization standard adoption"
 version: "0.1"
 toc-id: "open-agent-auth"
-content-hash: "aa5ec2912e5f9c2c8ff2422d65c3f638f7548b50df4846de3807dcdb380de6bd"
+content-hash: "86ef980765e53727324494493402df4bfc8a325923c68566bab9e7c5f331abf3"
 ---
 
 # The problem
@@ -146,4 +146,4 @@ Work down this list. For each: agree, change, remove, or not sure. Record what t
 
 # Export details
 
-Theory of Change open-agent-auth · version 0.1 · hash aa5ec2912e5f
+Theory of Change open-agent-auth · version 0.1 · hash 86ef980765e5

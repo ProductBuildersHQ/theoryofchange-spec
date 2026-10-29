@@ -80,6 +80,7 @@ func Document(doc *toc.Document, opts ...Option) []Issue {
 	c.glossary()
 	c.selection()
 	c.audiencesAndThemes()
+	c.causesAndGroups()
 	c.provenance()
 	c.consultations()
 	return c.issues
@@ -278,6 +279,13 @@ func (c *checker) outcomes() {
 		}
 		c.actorRefs(p+"/actorIds", o.ID, o.ActorIDs)
 		c.refs(p+"/audienceIds", o.ID, o.AudienceIDs, toc.ElementAudience)
+		enum(c, p+"/responsibility", o.ID, o.Responsibility)
+		c.actorRefs(p+"/deliveredBy", o.ID, o.DeliveredBy)
+		c.refs(p+"/addressesCauses", o.ID, o.AddressesCauses, toc.ElementCause)
+		c.refs(p+"/targetGroupIds", o.ID, o.TargetGroupIDs, toc.ElementTargetGroup)
+		if o.Priority != nil {
+			c.scores(p+"/priority/scores", o.ID, o.Priority.Scores, toc.SubjectOutcome)
+		}
 		c.contributesTo(p+"/contributesTo", o)
 	}
 }
@@ -345,6 +353,9 @@ func (c *checker) interventions() {
 		}
 		c.refs(p+"/targets", in.ID, in.Targets, toc.ElementOutcome)
 		c.actor(p+"/ownerActorId", in.ID, in.OwnerID)
+		if in.Priority != nil {
+			c.scores(p+"/priority/scores", in.ID, in.Priority.Scores, toc.SubjectIntervention)
+		}
 		enum(c, p+"/type", in.ID, in.Type)
 		enum(c, p+"/status", in.ID, in.Status)
 		for j, cr := range in.Capabilities {
@@ -403,6 +414,7 @@ func (c *checker) indicators() {
 		c.indicatorMetric(p, ind)
 		c.collectionAndSelection(p, ind)
 		c.refs(p+"/audienceIds", ind.ID, ind.AudienceIDs, toc.ElementAudience)
+		c.refs(p+"/targetGroupIds", ind.ID, ind.TargetGroupIDs, toc.ElementTargetGroup)
 		c.refs(p+"/themeIds", ind.ID, ind.ThemeIDs, toc.ElementTheme)
 		switch {
 		case ind.MeasurementType == toc.MeasurementThemeCount && len(ind.ThemeIDs) == 0:
@@ -744,19 +756,26 @@ func (c *checker) collectionAndSelection(p string, ind toc.Indicator) {
 		return
 	}
 	enum(c, p+"/selection/status", ind.ID, sel.Status)
+	c.scores(p+"/selection/scores", ind.ID, sel.Scores, toc.SubjectIndicator)
+}
+
+// scores checks criterion scores on a subject of the given kind: each score
+// is 1 to 5, names a criterion that scores that kind of subject, and a
+// criterion is scored once.
+func (c *checker) scores(path, element string, scores []toc.CriterionScore, subject toc.SelectionSubject) {
 	seen := map[string]bool{}
-	for i, sc := range sel.Scores {
-		sp := p + "/selection/scores/" + strconv.Itoa(i)
+	for i, sc := range scores {
+		sp := path + "/" + strconv.Itoa(i)
 		if sc.Score < 1 || sc.Score > 5 {
-			c.errorf("VAL-SEL-002", sp+"/score", ind.ID, "score %d is outside 1 to 5", sc.Score)
+			c.errorf("VAL-SEL-002", sp+"/score", element, "score %d is outside 1 to 5", sc.Score)
 		}
 		if seen[sc.CriterionID] {
-			c.errorf("VAL-SEL-005", sp+"/criterionId", ind.ID, "criterion %q is scored more than once", sc.CriterionID)
+			c.errorf("VAL-SEL-005", sp+"/criterionId", element, "criterion %q is scored more than once", sc.CriterionID)
 		}
 		seen[sc.CriterionID] = true
-		c.ref(sp+"/criterionId", ind.ID, sc.CriterionID, toc.ElementCriterion)
-		if cr, ok := c.doc.Criterion(sc.CriterionID); ok && cr.AppliesTo != toc.SubjectIndicator {
-			c.errorf("VAL-SEL-004", sp+"/criterionId", ind.ID, "criterion %q scores %ss, not indicators", sc.CriterionID, cr.AppliesTo)
+		c.ref(sp+"/criterionId", element, sc.CriterionID, toc.ElementCriterion)
+		if cr, ok := c.doc.Criterion(sc.CriterionID); ok && cr.AppliesTo != subject {
+			c.errorf("VAL-SEL-004", sp+"/criterionId", element, "criterion %q scores %ss, not %ss", sc.CriterionID, cr.AppliesTo, subject)
 		}
 	}
 }
@@ -793,4 +812,53 @@ func (c *checker) audiencesAndThemes() {
 		}
 		c.refs(p+"/outcomeIds", t.ID, t.OutcomeIDs, toc.ElementOutcome)
 	}
+}
+
+// causesAndGroups checks the problem tree and the target groups.
+func (c *checker) causesAndGroups() {
+	for i, g := range c.doc.TargetGroups {
+		p := "/targetGroups/" + strconv.Itoa(i)
+		if strings.TrimSpace(g.Name) == "" {
+			c.errorf("VAL-TGT-001", p+"/name", g.ID, "target group has no name")
+		}
+		c.actorRefs(p+"/actorIds", g.ID, g.ActorIDs)
+	}
+	for i, cause := range c.doc.Causes {
+		p := "/causes/" + strconv.Itoa(i)
+		if strings.TrimSpace(cause.Statement) == "" {
+			c.errorf("VAL-CAU-001", p+"/statement", cause.ID, "cause has no statement")
+		}
+		if cause.Level == "" {
+			c.errorf("VAL-CAU-002", p+"/level", cause.ID, "cause has no level (immediate, underlying, or structural)")
+		}
+		enum(c, p+"/level", cause.ID, cause.Level)
+		c.refs(p+"/affectedGroupIds", cause.ID, cause.AffectedGroupIDs, toc.ElementTargetGroup)
+		c.refs(p+"/evidenceIds", cause.ID, cause.EvidenceIDs, toc.ElementEvidence)
+		if cause.OutOfScope != nil && strings.TrimSpace(cause.OutOfScope.Reason) == "" {
+			c.errorf("VAL-CAU-005", p+"/outOfScope/reason", cause.ID, "a cause set aside needs a reason")
+		}
+		c.ref(p+"/parent", cause.ID, cause.Parent, toc.ElementCause)
+		if cause.Parent == cause.ID && cause.ID != "" {
+			c.errorf("VAL-CAU-003", p+"/parent", cause.ID, "a cause cannot be its own parent")
+		} else if c.causeCycle(cause.ID) {
+			c.errorf("VAL-CAU-004", p+"/parent", cause.ID, "the parent chain of cause %q loops back on itself", cause.ID)
+		}
+	}
+}
+
+// causeCycle reports whether following parents from id returns to id.
+func (c *checker) causeCycle(id string) bool {
+	seen := map[string]bool{id: true}
+	cur, ok := c.doc.Cause(id)
+	for ok && cur.Parent != "" {
+		if cur.Parent == id {
+			return cur.Parent != cur.ID
+		}
+		if seen[cur.Parent] {
+			return false
+		}
+		seen[cur.Parent] = true
+		cur, ok = c.doc.Cause(cur.Parent)
+	}
+	return false
 }

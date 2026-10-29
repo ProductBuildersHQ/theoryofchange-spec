@@ -884,3 +884,42 @@ func AllConsents() []Consent { return []Consent{ConsentGranted, ConsentNotGrante
 
 // Valid reports whether v is a known Consent.
 func (v Consent) Valid() bool { return slices.Contains(AllConsents(), v) }
+
+// Responsibility says how far the perspective actor answers for an outcome.
+type Responsibility string
+
+const (
+	// ResponsibilityOwn outcomes are the organization's to deliver.
+	ResponsibilityOwn Responsibility = "own"
+	// ResponsibilityShared outcomes are delivered with others.
+	ResponsibilityShared Responsibility = "shared"
+	// ResponsibilityPartner outcomes are delivered by others and monitored.
+	ResponsibilityPartner Responsibility = "partner"
+	// ResponsibilityUnaddressed outcomes are needed but nobody delivers them.
+	ResponsibilityUnaddressed Responsibility = "unaddressed"
+)
+
+// AllResponsibilities returns all responsibilities.
+func AllResponsibilities() []Responsibility {
+	return []Responsibility{ResponsibilityOwn, ResponsibilityShared, ResponsibilityPartner, ResponsibilityUnaddressed}
+}
+
+// Valid reports whether v is a known Responsibility.
+func (v Responsibility) Valid() bool { return slices.Contains(AllResponsibilities(), v) }
+
+// CauseLevel is how deep a cause sits in the problem tree.
+type CauseLevel string
+
+const (
+	CauseImmediate  CauseLevel = "immediate"
+	CauseUnderlying CauseLevel = "underlying"
+	CauseStructural CauseLevel = "structural"
+)
+
+// AllCauseLevels returns all cause levels, nearest to the problem first.
+func AllCauseLevels() []CauseLevel {
+	return []CauseLevel{CauseImmediate, CauseUnderlying, CauseStructural}
+}
+
+// Valid reports whether v is a known CauseLevel.
+func (v CauseLevel) Valid() bool { return slices.Contains(AllCauseLevels(), v) }

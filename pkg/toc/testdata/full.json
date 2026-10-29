@@ -97,6 +97,31 @@
           "ev-survey"
         ],
         "note": "Inferred from provider roadmap statements."
+      },
+      "responsibility": "shared",
+      "deliveredBy": [
+        "act-proponent",
+        "act-idp"
+      ],
+      "addressesCauses": [
+        "cause-no-demand-signal"
+      ],
+      "targetGroupIds": [
+        "tg-small-providers"
+      ],
+      "priority": {
+        "scores": [
+          {
+            "criterionId": "crit-equity",
+            "score": 4,
+            "note": "Reaches smaller providers"
+          },
+          {
+            "criterionId": "crit-evidence",
+            "score": 3
+          }
+        ],
+        "rationale": "Highest leverage on adoption."
       }
     },
     {
@@ -105,7 +130,11 @@
       "level": "intermediate",
       "sphere": "influence",
       "category": "adapt",
-      "changeType": "adoption"
+      "changeType": "adoption",
+      "responsibility": "partner",
+      "deliveredBy": [
+        "act-idp"
+      ]
     },
     {
       "id": "oc-spec-stable",
@@ -241,6 +270,15 @@
         "basis": "confirmed",
         "decidedAt": "2026-02-03",
         "decidedBy": "Standards working group"
+      },
+      "priority": {
+        "scores": [
+          {
+            "criterionId": "crit-feasibility",
+            "score": 5
+          }
+        ],
+        "rationale": "Can start now with existing partners."
       }
     },
     {
@@ -385,6 +423,9 @@
       "audienceIds": [
         "aud-board",
         "aud-funders"
+      ],
+      "targetGroupIds": [
+        "tg-small-providers"
       ]
     },
     {
@@ -719,6 +760,45 @@
       ]
     }
   ],
+  "causes": [
+    {
+      "id": "cause-fragmented-auth",
+      "statement": "Agents authenticate in incompatible ways.",
+      "level": "structural",
+      "evidenceIds": [
+        "ev-survey"
+      ],
+      "outOfScope": {
+        "reason": "Needs regulation beyond this initiative."
+      }
+    },
+    {
+      "id": "cause-no-demand-signal",
+      "statement": "Providers see no customer demand for a common standard.",
+      "level": "underlying",
+      "parent": "cause-fragmented-auth",
+      "affectedGroupIds": [
+        "tg-small-providers"
+      ]
+    },
+    {
+      "id": "cause-no-reference",
+      "statement": "There is no reference implementation to copy.",
+      "level": "immediate",
+      "parent": "cause-no-demand-signal"
+    }
+  ],
+  "targetGroups": [
+    {
+      "id": "tg-small-providers",
+      "name": "Small identity providers",
+      "description": "Providers with fewer than fifty engineers.",
+      "size": 120,
+      "actorIds": [
+        "act-idp"
+      ]
+    }
+  ],
   "audiences": [
     {
       "id": "aud-board",
@@ -773,6 +853,27 @@
       "weight": 2,
       "appliesTo": "indicator",
       "inverted": true
+    },
+    {
+      "id": "crit-equity",
+      "name": "Equity",
+      "question": "Does it reach those least served?",
+      "weight": 2,
+      "appliesTo": "outcome"
+    },
+    {
+      "id": "crit-evidence",
+      "name": "Evidence of what works",
+      "question": "Is there evidence this path works?",
+      "weight": 1,
+      "appliesTo": "outcome"
+    },
+    {
+      "id": "crit-feasibility",
+      "name": "Feasibility",
+      "question": "Can we do it with what we have?",
+      "weight": 2,
+      "appliesTo": "intervention"
     }
   ],
   "measurementBudget": {

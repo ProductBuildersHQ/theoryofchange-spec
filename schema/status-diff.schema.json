@@ -25,6 +25,8 @@
             "pathway",
             "metric",
             "term",
+            "cause",
+            "targetGroup",
             "audience",
             "theme",
             "criterion",
