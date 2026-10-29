@@ -41,6 +41,23 @@ outcomes:
     population: Residents of Riverbend County who use nonprofit services
     actorIds:
       - act-residents
+    responsibility: shared
+    deliveredBy:
+      - act-network
+      - act-members-small
+      - act-members-large
+    targetGroupIds:
+      - tg-low-access-residents
+    priority:
+      scores:
+        - criterionId: crit-equity
+          score: 5
+        - criterionId: crit-advantage
+          score: 2
+          note: Members deliver services; the network enables them.
+      rationale: The reason the network exists, but only partly in its hands.
+    audienceIds:
+      - aud-funders
     provenance:
       basis: inferred
       evidenceIds:
@@ -72,6 +89,9 @@ outcomes:
     actorIds:
       - act-members-small
       - act-members-large
+    audienceIds:
+      - aud-board
+      - aud-funders
     provenance:
       basis: confirmed
       decidedAt: "2026-02-10"
@@ -120,6 +140,11 @@ outcomes:
       - act-county-office
       - act-regional-funder
       - act-city-council
+    addressesCauses:
+      - cause-no-standing-voice
+      - cause-isolation
+    audienceIds:
+      - aud-board
     provenance:
       basis: hypothesis
       note: Depends on officials accepting a coordinated channel.
@@ -148,6 +173,19 @@ outcomes:
     actorIds:
       - act-members-small
       - act-members-large
+    addressesCauses:
+      - cause-no-peer-exchange
+    targetGroupIds:
+      - tg-small-members
+    priority:
+      scores:
+        - criterionId: crit-equity
+          score: 4
+        - criterionId: crit-advantage
+          score: 5
+        - criterionId: crit-evidence
+          score: 4
+      rationale: Cheapest way to reach small members; strong evidence from other networks.
     provenance:
       basis: inferred
       evidenceIds:
@@ -161,6 +199,18 @@ outcomes:
     population: Members using pooled services
     actorIds:
       - act-members-small
+    addressesCauses:
+      - cause-high-overhead
+    priority:
+      scores:
+        - criterionId: crit-equity
+          score: 4
+        - criterionId: crit-advantage
+          score: 3
+        - criterionId: crit-evidence
+          score: 3
+    audienceIds:
+      - aud-members
     provenance:
       basis: stated
       evidenceIds:
@@ -206,6 +256,14 @@ outcomes:
       - act-county-office
       - act-city-council
       - act-regional-funder
+    responsibility: partner
+    deliveredBy:
+      - act-county-office
+      - act-city-council
+    addressesCauses:
+      - cause-no-standing-voice
+    audienceIds:
+      - aud-county
     provenance:
       basis: confirmed
       decidedAt: "2026-02-10"
@@ -761,6 +819,13 @@ interventions:
     ownerActorId: act-network
     status: in_progress
     resources: Two program staff and meeting space donated by the county library system
+    priority:
+      scores:
+        - criterionId: crit-feasibility
+          score: 5
+        - criterionId: crit-reach
+          score: 4
+      rationale: Eight staff can run it with volunteer hosts.
     provenance:
       basis: confirmed
       decidedAt: "2026-02-10"
@@ -807,6 +872,13 @@ interventions:
     ownerActorId: act-network
     status: in_progress
     resources: One shared-services coordinator and contracted bookkeepers
+    priority:
+      scores:
+        - criterionId: crit-feasibility
+          score: 3
+        - criterionId: crit-reach
+          score: 3
+      rationale: Needs a vendor partner before it can scale.
     provenance:
       basis: stated
       evidenceIds:
@@ -1162,6 +1234,21 @@ indicators:
       - pw-learning
     claim: attribution
     dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Attendance sheets
+      minutesPerPeriod: 20
+      period: P1M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 4
+        - criterionId: crit-cost
+          score: 1
+        - criterionId: crit-consistency
+          score: 5
+      rationale: Already on the sign-in sheets.
     provenance:
       basis: confirmed
       decidedAt: "2026-04-14"
@@ -1193,6 +1280,18 @@ indicators:
       - pw-shared
     claim: attribution
     dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Service log
+      minutesPerPeriod: 20
+      period: P1M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 4
+        - criterionId: crit-cost
+          score: 1
   - id: ind-hours-civic
     measures: int-joint-forums
     name: 'Attendee hours: Civic Voice'
@@ -1220,6 +1319,18 @@ indicators:
       - pw-civic
     claim: attribution
     dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Attendance sheets
+      minutesPerPeriod: 10
+      period: P1M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 3
+        - criterionId: crit-cost
+          score: 1
   - id: ind-hours-total
     measures: oc-st-peer-ties
     name: Attendee hours across all three program areas
@@ -1253,6 +1364,9 @@ indicators:
       - ind-hours-shared
       - ind-hours-civic
     dataAvailability: internal_existing
+    audienceIds:
+      - aud-board
+      - aud-funders
   - id: ind-reach-learning
     measures: oc-out-cohorts
     name: 'Member organizations reached: Learning Exchange'
@@ -1381,6 +1495,21 @@ indicators:
     caveats:
       - Not equal to the sum of the program-area counts, which double count members in more than one program.
     dataAvailability: internal_existing
+    collection:
+      mode: derived
+      system: Member database
+      minutesPerPeriod: 30
+      period: P3M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-audience-value
+          score: 5
+        - criterionId: crit-credibility
+          score: 4
+        - criterionId: crit-cost
+          score: 1
+      rationale: Funders always ask how many members were reached.
   - id: ind-retention-learning
     measures: oc-st-leader-skills
     name: 'Participant retention: Learning Exchange'
@@ -1408,6 +1537,22 @@ indicators:
       - pw-learning
     claim: attribution
     dataAvailability: internal_existing
+    collection:
+      mode: form
+      system: Cohort exit form
+      minutesPerPeriod: 45
+      period: P3M
+      questionsPerRespondent: 3
+      respondentsPerYear: 60
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 4
+        - criterionId: crit-cost
+          score: 2
+        - criterionId: crit-credibility
+          score: 3
   - id: ind-retention-shared
     measures: oc-st-pooled-use
     name: 'Participant retention: Shared Services'
@@ -1475,6 +1620,30 @@ indicators:
     caveats:
       - Rated by coaches and members, so it reflects self-assessment as well as observed practice.
     dataAvailability: internal_new
+    targetGroupIds:
+      - tg-small-members
+    audienceIds:
+      - aud-board
+      - aud-funders
+      - aud-members
+    collection:
+      mode: survey
+      system: Annual member survey
+      minutesPerPeriod: 180
+      period: P1Y
+      questionsPerRespondent: 8
+      respondentsPerYear: 150
+      sampleRate: 0.5
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 5
+        - criterionId: crit-audience-value
+          score: 5
+        - criterionId: crit-cost
+          score: 3
+      rationale: The clearest sign that leaders are changing how they manage.
     provenance:
       basis: hypothesis
       note: The rubric is still a draft.
@@ -1506,6 +1675,20 @@ indicators:
       - oc-im-peer-network
     claim: contribution
     dataAvailability: internal_new
+    collection:
+      mode: interview
+      system: Member interviews
+      minutesPerPeriod: 240
+      period: P1Y
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 4
+        - criterionId: crit-credibility
+          score: 4
+        - criterionId: crit-cost
+          score: 4
   - id: ind-voice-level
     measures: oc-lt-collective-voice
     name: Level of members' voice with local government and funders
@@ -1537,6 +1720,13 @@ indicators:
     caveats:
       - Depends on officials' own account, which may be generous or guarded.
     dataAvailability: partner_held
+    selection:
+      status: candidate
+      scores:
+        - criterionId: crit-decision-value
+          score: 3
+        - criterionId: crit-credibility
+          score: 2
   - id: ind-overhead-share
     measures: oc-im-lower-overhead
     name: Back-office share of operating budget
@@ -1566,6 +1756,22 @@ indicators:
     caveats:
       - Self-reported by members; other cost changes can also move the figure.
     dataAvailability: internal_new
+    collection:
+      mode: survey
+      system: Annual member survey
+      minutesPerPeriod: 120
+      period: P1Y
+      questionsPerRespondent: 6
+      respondentsPerYear: 150
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 4
+        - criterionId: crit-cost
+          score: 3
+        - criterionId: crit-credibility
+          score: 3
   - id: ind-grant-applications
     measures: oc-im-grant-pipeline
     name: Grant applications submitted by members using the calendar
@@ -1595,6 +1801,18 @@ indicators:
       - pw-shared
     claim: contribution
     dataAvailability: internal_new
+    collection:
+      mode: manual
+      system: Shared grants calendar
+      minutesPerPeriod: 15
+      period: P1M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-audience-value
+          score: 4
+        - criterionId: crit-cost
+          score: 2
   - id: ind-funding-mix
     measures: oc-lt-sustainable
     name: Members with three or more distinct funding sources
@@ -1621,6 +1839,21 @@ indicators:
     caveats:
       - Based on responding members only; response rates differ by member size.
     dataAvailability: internal_new
+    collection:
+      mode: manual
+      system: Member 990s
+      minutesPerPeriod: 480
+      period: P1Y
+    selection:
+      status: candidate
+      scores:
+        - criterionId: crit-decision-value
+          score: 3
+        - criterionId: crit-cost
+          score: 5
+        - criterionId: crit-consistency
+          score: 2
+      rationale: Useful but expensive; revisit if funders ask.
   - id: ind-joint-positions
     measures: oc-im-joint-positions
     name: Joint positions adopted by members
@@ -1645,6 +1878,18 @@ indicators:
     ownerActorId: act-network
     claim: attribution
     dataAvailability: internal_existing
+    collection:
+      mode: manual
+      system: Civic Voice minutes
+      minutesPerPeriod: 10
+      period: P3M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-decision-value
+          score: 3
+        - criterionId: crit-cost
+          score: 1
   - id: ind-officials-meetings
     measures: oc-im-officials-engage
     name: Public planning processes that invited members
@@ -1671,6 +1916,18 @@ indicators:
       - oc-st-channel
     claim: contribution
     dataAvailability: partner_held
+    collection:
+      mode: manual
+      system: Liaison log
+      minutesPerPeriod: 10
+      period: P1M
+    selection:
+      status: candidate
+      scores:
+        - criterionId: crit-decision-value
+          score: 2
+        - criterionId: crit-cost
+          score: 1
   - id: ind-residents-served
     measures: oc-resident-access
     name: Residents served by member organizations
@@ -1709,6 +1966,22 @@ indicators:
       - Reflects members' reported reach; Riverbend Nonprofit Network cannot attribute resident outcomes to its own work.
       - Residents who use several members are counted more than once.
     dataAvailability: unknown
+    collection:
+      mode: manual
+      system: Member reports
+      minutesPerPeriod: 120
+      period: P6M
+    selection:
+      status: selected
+      scores:
+        - criterionId: crit-audience-value
+          score: 5
+        - criterionId: crit-credibility
+          score: 2
+          note: Self-reported by members
+        - criterionId: crit-cost
+          score: 3
+      rationale: Funders expect a resident-level number even though it is only contributed to.
   - id: ind-residents-voice
     measures: oc-resident-voice
     name: Residents who say local organizations help them be heard
@@ -1766,6 +2039,47 @@ indicators:
     ownerActorId: act-network
     claim: attribution
     dataAvailability: internal_new
+    collection:
+      mode: passive
+      system: Attendance sheets
+    selection:
+      status: retired
+      scores:
+        - criterionId: crit-decision-value
+          score: 2
+        - criterionId: crit-consistency
+          score: 2
+      rationale: Replaced by retention, which says more about who stays.
+  - id: ind-story-peer-help
+    measures: oc-st-peer-ties
+    name: Stories of members helping each other
+    definition: Stories coded with the peer-help theme in the period.
+    measurementType: theme_count
+    frequency: P3M
+    ownerActorId: act-network
+    pathwayIds:
+      - pw-learning
+    caveats:
+      - Counts stories collected, not every instance of peer help.
+    dataAvailability: internal_new
+    audienceIds:
+      - aud-funders
+      - aud-members
+    themeIds:
+      - thm-peer-help
+    collection:
+      mode: interview
+      system: Story log
+      minutesPerPeriod: 30
+      period: P3M
+    selection:
+      status: candidate
+      scores:
+        - criterionId: crit-audience-value
+          score: 5
+        - criterionId: crit-cost
+          score: 2
+      rationale: Gives funders a human picture alongside the counts.
 actors:
   - id: act-network
     name: Riverbend Nonprofit Network
@@ -2418,6 +2732,166 @@ glossary:
     relatedIds:
       - ind-hours-total
       - ind-residents-served
+causes:
+  - id: cause-no-standing-voice
+    statement: Members have no standing channel to speak with one voice to local government and funders.
+    level: structural
+    affectedGroupIds:
+      - tg-small-members
+  - id: cause-isolation
+    statement: Each organization works alone, so effort and costs are duplicated.
+    level: underlying
+    parent: cause-no-standing-voice
+  - id: cause-no-peer-exchange
+    statement: Leaders get little management support or peer exchange.
+    level: immediate
+    parent: cause-isolation
+    affectedGroupIds:
+      - tg-small-members
+    evidenceIds:
+      - ev-member-survey
+  - id: cause-high-overhead
+    statement: Back-office work takes scarce staff time.
+    level: immediate
+    parent: cause-isolation
+    affectedGroupIds:
+      - tg-small-members
+  - id: cause-funding-volatility
+    statement: Grant funding is unpredictable and concentrated in a few funders.
+    level: underlying
+    outOfScope:
+      reason: Funder behavior is outside what the network can change; it only widens the pipeline.
+targetGroups:
+  - id: tg-small-members
+    name: Small member nonprofits
+    description: Members with budgets under 500,000 and no dedicated finance or development staff.
+    size: 90
+    actorIds:
+      - act-members-small
+  - id: tg-low-access-residents
+    name: Residents of low-access areas
+    description: People who live far from services or cannot easily travel to them.
+    actorIds:
+      - act-residents
+audiences:
+  - id: aud-board
+    name: Network board
+    needs: Whether each program area is on track and where it is stuck.
+    channels:
+      - board deck
+      - quarterly summary
+  - id: aud-members
+    name: Members
+    needs: What the network did with their dues, and what other members learned.
+    channels:
+      - newsletter
+      - member assembly
+  - id: aud-funders
+    name: Funders
+    needs: Evidence that members are stronger and that residents are better served.
+    channels:
+      - annual report
+      - grant report
+  - id: aud-county
+    name: County planning office
+    needs: What members jointly recommend.
+    channels:
+      - policy briefing
+themes:
+  - id: thm-peer-help
+    label: Members helping each other
+    definition: A member describes getting or giving practical help to another member because of the network.
+    includes:
+      - advice calls
+      - borrowed templates
+    excludes:
+      - help from outside the network
+    examples:
+      - I called another director about a hiring problem and she sent me her process.
+    outcomeIds:
+      - oc-st-peer-ties
+      - oc-im-peer-network
+  - id: thm-shared-savings
+    label: Savings from shared services
+    definition: A member describes time or money saved by using a pooled service.
+    includes:
+      - bookkeeping
+      - group purchasing
+    examples:
+      - Our books are closed a week earlier.
+    outcomeIds:
+      - oc-im-lower-overhead
+  - id: thm-heard-by-officials
+    label: Heard by officials
+    definition: A member or official describes members' joint view being considered in a decision.
+    outcomeIds:
+      - oc-im-officials-engage
+      - oc-lt-collective-voice
+  - id: thm-hard-to-attend
+    label: Hard to attend
+    definition: A member describes a barrier to taking part, such as time or travel.
+    excludes:
+      - cost of dues
+    outcomeIds:
+      - oc-st-leader-skills
+selectionCriteria:
+  - id: crit-decision-value
+    name: Decision value
+    question: Would the result change something the network decides?
+    weight: 3
+    appliesTo: indicator
+  - id: crit-audience-value
+    name: Audience value
+    question: Does an audience we report to ask for it?
+    weight: 2
+    appliesTo: indicator
+  - id: crit-cost
+    name: Cost to collect
+    question: How much staff time and member effort does it take?
+    weight: 2
+    appliesTo: indicator
+    inverted: true
+  - id: crit-consistency
+    name: Consistency
+    question: Can it be collected the same way every period?
+    weight: 1
+    appliesTo: indicator
+  - id: crit-credibility
+    name: Credibility
+    question: Would a funder or member trust it?
+    weight: 2
+    appliesTo: indicator
+  - id: crit-equity
+    name: Equity
+    question: Does it reach the members and residents least served?
+    weight: 2
+    appliesTo: outcome
+  - id: crit-advantage
+    name: Comparative advantage
+    question: Is the network better placed to do this than anyone else?
+    weight: 2
+    appliesTo: outcome
+  - id: crit-evidence
+    name: Evidence of what works
+    question: Is there evidence this path leads to the change?
+    weight: 1
+    appliesTo: outcome
+  - id: crit-feasibility
+    name: Feasibility
+    question: Can eight staff deliver it?
+    weight: 2
+    appliesTo: intervention
+  - id: crit-reach
+    name: Reach
+    question: How many members does it serve?
+    weight: 1
+    appliesTo: intervention
+measurementBudget:
+  staffMinutesPerWeek: 90
+  maxQuestionsPerRespondentPerYear: 24
+  targetSelectedMetrics:
+    min: 8
+    max: 12
 consultations:
   - id: con-staff-workshop
     date: "2026-02-05"
@@ -2470,3 +2944,28 @@ consultations:
     changedIds:
       - pw-certification
       - dec-certification
+  - id: con-measurement-workshop
+    date: "2026-04-14"
+    step: measurement
+    method: workshop
+    stakeholderGroups:
+      - Network staff
+      - Member representatives
+    count: 9
+    findings:
+      - Participants chose indicators that are already on sign-in sheets over new surveys.
+      - Participants asked for one resident-level number even though it is only contributed to.
+    changedIds:
+      - ind-hours-learning
+      - ind-residents-served
+      - ind-attendance-rate
+  - id: con-problem-tree-review
+    date: "2026-03-05"
+    step: change_analysis
+    method: document_review
+    stakeholderGroups:
+      - Network board
+    findings:
+      - The board agreed that funding volatility is real but outside the network's reach.
+    changedIds:
+      - cause-funding-volatility

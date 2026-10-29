@@ -122,6 +122,69 @@ assumptionAssessments:
     date: "2026-09-30"
     status: holding
     rationale: Both joint positions so far kept their signers through the quarter, though two larger members asked for changes to the second.
+stories:
+  - id: story-borrowed-process
+    date: "2026-08-12"
+    title: A director borrows another member's hiring process
+    summary: A new executive director of a small member called a peer from the same cohort about a hiring problem and adopted the peer's interview process within a week.
+    quote: I would have spent a month on that alone.
+    actorId: act-members-small
+    domain: peer exchange
+    themeIds:
+      - thm-peer-help
+    outcomeIds:
+      - oc-st-peer-ties
+    audienceIds:
+      - aud-funders
+      - aud-members
+    consent: granted
+    sensitivity: public
+    codedBy: Learning Exchange coordinator
+    significance: Shows the cohort format working for a first-time director.
+  - id: story-books-closed
+    date: "2026-09-02"
+    title: Books closed a week earlier
+    summary: A member using pooled bookkeeping now closes its monthly books a week earlier and says staff time moved to program work.
+    actorId: act-members-large
+    domain: shared services
+    themeIds:
+      - thm-shared-savings
+    outcomeIds:
+      - oc-im-lower-overhead
+    audienceIds:
+      - aud-board
+    consent: not_granted
+    sensitivity: internal
+    codedBy: model:example-coder
+    significance: The clearest time saving reported so far.
+  - id: story-travel-barrier
+    date: "2026-09-18"
+    title: A rural member cannot reach evening sessions
+    summary: A member in the north of the county says evening sessions are too far to travel to on weekdays.
+    actorId: act-members-small
+    domain: access
+    themeIds:
+      - thm-hard-to-attend
+    outcomeIds:
+      - oc-st-leader-skills
+    consent: unknown
+    sensitivity: internal
+    codedBy: Learning Exchange coordinator
+learningReviews:
+  - period: 2026-Q3
+    questions:
+      - Is the Learning Exchange behind plan because of attendance barriers or because of scheduling?
+      - Are shared-service savings visible to members, or only to the network?
+    findings:
+      - Reach is ahead of plan in Shared Services; hours in the Learning Exchange trail the interpolated target.
+      - Two stories point to travel as the main barrier for small members in the north.
+    decisions:
+      - Trial two daytime sessions in the north next quarter.
+    actions:
+      - Add a travel question to the cohort exit form.
+    relatedIds:
+      - ind-hours-learning
+      - asm-time-to-attend
 notes:
   - date: "2026-09-30"
     text: Reach is ahead of plan in Shared Services but hours in the Learning Exchange are behind the interpolated target for the year.

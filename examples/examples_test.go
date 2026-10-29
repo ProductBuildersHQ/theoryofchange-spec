@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
@@ -401,5 +402,83 @@ func TestMarketAdoptionExampleDemonstratesItsFeatures(t *testing.T) {
 	}
 	if issues := validate.Document(doc, validate.WithActorRegistry(reg)); len(issues) != 0 {
 		t.Errorf("with the registry supplied: %v", issues)
+	}
+}
+
+func TestIntermediaryExampleDesignsItsMeasurement(t *testing.T) {
+	doc := loadTheory(t, "intermediary")
+	rep, err := burden.Compute(doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	b := rep.Budget
+	if b == nil {
+		t.Fatal("the example declares no measurement budget")
+	}
+	if n := rep.Overall.Indicators; n < 8 || n > 12 {
+		t.Errorf("%d selected indicators; want 8 to 12", n)
+	}
+	if b.StaffMinutesPerWeek.Over || b.QuestionsPerYear.Over || !b.SelectedMetrics.Within {
+		t.Errorf("the selection is outside its own budget: %+v", b)
+	}
+	if len(rep.Uncosted) != 0 {
+		t.Errorf("selected indicators with no collection cost: %v", rep.Uncosted)
+	}
+	statuses := map[toc.SelectionStatus]int{}
+	for _, ind := range doc.Indicators {
+		if ind.Selection != nil {
+			statuses[ind.Selection.Status]++
+		}
+	}
+	for _, st := range toc.AllSelectionStatuses() {
+		if statuses[st] == 0 {
+			t.Errorf("no indicator is %s", st)
+		}
+	}
+	if len(doc.Audiences) == 0 || len(doc.Themes) == 0 || len(doc.Causes) < 4 || len(doc.TargetGroups) == 0 {
+		t.Error("audiences, themes, causes, and target groups should all be demonstrated")
+	}
+	levels := map[toc.CauseLevel]bool{}
+	scopedOut := false
+	for _, c := range doc.Causes {
+		levels[c.Level] = true
+		scopedOut = scopedOut || c.OutOfScope != nil
+	}
+	if len(levels) != 3 || !scopedOut {
+		t.Errorf("the problem tree should span all three levels and set one cause aside: %v", levels)
+	}
+	responsibilities := map[toc.Responsibility]bool{}
+	for _, o := range doc.Outcomes {
+		responsibilities[o.EffectiveResponsibility()] = true
+	}
+	if !responsibilities[toc.ResponsibilityPartner] || !responsibilities[toc.ResponsibilityShared] {
+		t.Errorf("partner-delivered and shared outcomes should both appear: %v", responsibilities)
+	}
+	theme := false
+	for _, ind := range doc.Indicators {
+		theme = theme || ind.MeasurementType == toc.MeasurementThemeCount
+	}
+	if !theme {
+		t.Error("no theme_count indicator")
+	}
+	measurement := false
+	for _, c := range doc.Consultations {
+		measurement = measurement || c.Step == toc.StepMeasurement
+	}
+	if !measurement {
+		t.Error("no consultation on the measurement framework")
+	}
+
+	set, err := tocio.LoadObservations(filepath.Join("intermediary", "observations-2026-q3.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	consents := map[toc.Consent]bool{}
+	for _, st := range set[0].Stories {
+		consents[st.Consent] = true
+	}
+	if len(set[0].Stories) < 3 || len(consents) != 3 || len(set[0].Reviews) == 0 {
+		t.Errorf("stories=%d consents=%v reviews=%d; want three stories covering every consent value and a learning review",
+			len(set[0].Stories), consents, len(set[0].Reviews))
 	}
 }

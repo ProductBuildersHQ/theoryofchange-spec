@@ -2,7 +2,7 @@
 
 ## Summary
 
-This draft has 22 outcomes (20 within the organization's accountability), 10 interventions, 12 assumptions, and 21 indicators, organized into 3 pathway(s). Of its 117 elements, 20 are stated by cited sources, 48 are our inference or hypothesis, 22 are confirmed by the organization, and 27 have no basis recorded. The inferred and hypothesis elements are the first to check with the organization.
+This draft has 22 outcomes (20 within the organization's accountability), 10 interventions, 12 assumptions, and 22 indicators, organized into 3 pathway(s). Of its 118 elements, 20 are stated by cited sources, 48 are our inference or hypothesis, 22 are confirmed by the organization, and 28 have no basis recorded. The inferred and hypothesis elements are the first to check with the organization.
 
 ## Where each element comes from
 
@@ -13,7 +13,7 @@ This draft has 22 outcomes (20 within the organization's accountability), 10 int
 | Hypothesis | A guess to test | 21 |
 | Confirmed | The organization agreed to it | 22 |
 | Rejected | Considered and set aside | 4 |
-| No basis recorded | — | 27 |
+| No basis recorded | — | 28 |
 
 ### Hypothesis
 
@@ -142,7 +142,7 @@ This draft has 22 outcomes (20 within the organization's accountability), 10 int
 |-------------------|------------|
 | Public | Residents who say local organizations help them be heard |
 | Internal existing | Attendee hours: Learning Exchange; Attendee hours: Shared Services; Attendee hours: Civic Voice; Attendee hours across all three program areas; Member organizations reached: Learning Exchange; Member organizations reached: Shared Services; Member organizations reached: Civic Voice; Member organizations reached across the whole network; Participant retention: Learning Exchange; Participant retention: Shared Services; Joint positions adopted by members |
-| Internal new | Leadership practice maturity; Member collaboration maturity; Back-office share of operating budget; Grant applications submitted by members using the calendar; Members with three or more distinct funding sources; Cohort attendance rate |
+| Internal new | Leadership practice maturity; Member collaboration maturity; Back-office share of operating budget; Grant applications submitted by members using the calendar; Members with three or more distinct funding sources; Cohort attendance rate; Stories of members helping each other |
 | Partner held | Level of members' voice with local government and funders; Public planning processes that invited members |
 | Unknown | Residents served by member organizations |
 

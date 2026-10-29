@@ -28,6 +28,15 @@ Files:
 10. Glossary of Riverbend-specific terms.
 11. Evidence and provenance using all five bases, including rejected elements.
 12. Risks, external factors, decisions, consultations, revisions, alignments.
+13. Measurement design: weighted selection criteria, 11 selected indicators
+    (plus candidates and a retired one) with collection cost, and a budget they
+    fit inside.
+14. Change analysis: a problem tree across three levels with one cause set
+    aside, target groups, shared and partner-delivered outcomes, and priority
+    scores.
+15. Audiences, a story codebook, a theme-count indicator, and an observation
+    set with stories (granted, not granted, and unknown consent) and a learning
+    review.
 
 ## Check it
 
