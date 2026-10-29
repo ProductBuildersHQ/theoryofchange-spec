@@ -78,6 +78,7 @@ func Document(doc *toc.Document, opts ...Option) []Issue {
 	c.pathways()
 	c.metrics()
 	c.glossary()
+	c.selection()
 	c.provenance()
 	c.consultations()
 	return c.issues
@@ -398,6 +399,7 @@ func (c *checker) indicators() {
 		c.refs(p+"/proxyFor", ind.ID, ind.ProxyFor, toc.ElementOutcome)
 		c.externalRefs(p+"/externalRefs", ind.ID, ind.ExternalRefs)
 		c.indicatorMetric(p, ind)
+		c.collectionAndSelection(p, ind)
 		if pop := ind.Population; pop != nil {
 			c.actorRefs(p+"/population/actorIds", ind.ID, pop.ActorIDs)
 		}
@@ -710,6 +712,57 @@ func (c *checker) consultations() {
 				c.add("VAL-REF-003", SeverityWarning, p+"/changedIds/"+strconv.Itoa(j), k.ID,
 					"changed element %q no longer exists", id)
 			}
+		}
+	}
+}
+
+// collectionAndSelection checks an indicator's collection cost and its
+// metric-selection record.
+func (c *checker) collectionAndSelection(p string, ind toc.Indicator) {
+	if col := ind.Collection; col != nil {
+		enum(c, p+"/collection/mode", ind.ID, col.Mode)
+		c.duration(p+"/collection/period", ind.ID, col.Period)
+		if col.MinutesPerPeriod > 0 && col.Period == "" {
+			c.errorf("VAL-SEL-003", p+"/collection/period", ind.ID, "minutesPerPeriod needs period, which says how often the time is spent")
+		}
+		if col.QuestionsPerRespondent > 0 && col.Period == "" {
+			c.errorf("VAL-SEL-003", p+"/collection/period", ind.ID, "questionsPerRespondent needs period, which says how often respondents are asked")
+		}
+	}
+	sel := ind.Selection
+	if sel == nil {
+		return
+	}
+	enum(c, p+"/selection/status", ind.ID, sel.Status)
+	seen := map[string]bool{}
+	for i, sc := range sel.Scores {
+		sp := p + "/selection/scores/" + strconv.Itoa(i)
+		if sc.Score < 1 || sc.Score > 5 {
+			c.errorf("VAL-SEL-002", sp+"/score", ind.ID, "score %d is outside 1 to 5", sc.Score)
+		}
+		if seen[sc.CriterionID] {
+			c.errorf("VAL-SEL-005", sp+"/criterionId", ind.ID, "criterion %q is scored more than once", sc.CriterionID)
+		}
+		seen[sc.CriterionID] = true
+		c.ref(sp+"/criterionId", ind.ID, sc.CriterionID, toc.ElementCriterion)
+		if cr, ok := c.doc.Criterion(sc.CriterionID); ok && cr.AppliesTo != toc.SubjectIndicator {
+			c.errorf("VAL-SEL-004", sp+"/criterionId", ind.ID, "criterion %q scores %ss, not indicators", sc.CriterionID, cr.AppliesTo)
+		}
+	}
+}
+
+// selection checks the selection criteria and the measurement budget.
+func (c *checker) selection() {
+	for i, cr := range c.doc.SelectionCriteria {
+		p := "/selectionCriteria/" + strconv.Itoa(i)
+		if strings.TrimSpace(cr.Name) == "" {
+			c.errorf("VAL-SEL-001", p+"/name", cr.ID, "selection criterion has no name")
+		}
+		enum(c, p+"/appliesTo", cr.ID, cr.AppliesTo)
+	}
+	if b := c.doc.Budget; b != nil && b.TargetSelectedMetrics != nil {
+		if r := b.TargetSelectedMetrics; r.Max > 0 && r.Min > r.Max {
+			c.errorf("VAL-SEL-006", "/measurementBudget/targetSelectedMetrics", "", "the minimum %d is above the maximum %d", r.Min, r.Max)
 		}
 	}
 }

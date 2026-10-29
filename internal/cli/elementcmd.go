@@ -116,6 +116,14 @@ var elementFlags = map[string][]elementFlag{
 		s("claim", "claim", "attribution or contribution (default contribution)"),
 		ss("caveats", "caveats", "caveats to show wherever it is reported"),
 		ss("rollup-from", "rollupFrom", "indicator IDs of the same metric that combine into this one"),
+		s("collection-mode", "collection.mode", "passive, form, survey, interview, manual, or derived"),
+		s("collection-system", "collection.system", "where the data lives or is entered"),
+		n("collection-minutes", "collection.minutesPerPeriod", "staff minutes per collection"),
+		s("collection-period", "collection.period", "how often it is collected, ISO 8601 duration"),
+		n("questions", "collection.questionsPerRespondent", "questions per respondent per collection"),
+		n("respondents", "collection.respondentsPerYear", "respondents per year"),
+		s("selection-status", "selection.status", "candidate, selected, or retired"),
+		s("selection-rationale", "selection.rationale", "why it was selected or retired"),
 	},
 	"actor": {
 		sr("name", "name", "display name"),
@@ -170,6 +178,13 @@ var elementFlags = map[string][]elementFlag{
 		sr("definition", "definition", "what it means here"),
 		ss("examples", "examples", "examples from this organization"),
 		ss("related", "relatedIds", "related element IDs"),
+	},
+	"criterion": {
+		sr("name", "name", "criterion name"),
+		sr("applies-to", "appliesTo", "indicator, outcome, or intervention"),
+		s("question", "question", "the question asked of each candidate"),
+		n("weight", "weight", "how much it counts in the weighted score"),
+		b("inverted", "inverted", "a low score is better, as for cost"),
 	},
 	"consultation": {
 		sr("date", "date", "date held (YYYY-MM-DD)"),
@@ -471,6 +486,8 @@ func shortPrefix(kind string) string {
 		return "met"
 	case "term":
 		return "term"
+	case "criterion":
+		return "crit"
 	case "consultation":
 		return "con"
 	default:

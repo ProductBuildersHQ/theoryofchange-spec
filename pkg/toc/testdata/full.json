@@ -354,6 +354,28 @@
         "Counts general availability only"
       ],
       "dataAvailability": "public",
+      "collection": {
+        "mode": "derived",
+        "system": "Provider roadmap tracker",
+        "minutesPerPeriod": 30,
+        "period": "P1M",
+        "sampleRate": 1
+      },
+      "selection": {
+        "status": "selected",
+        "scores": [
+          {
+            "criterionId": "crit-decision-value",
+            "score": 5,
+            "note": "Drives the adoption decision"
+          },
+          {
+            "criterionId": "crit-cost",
+            "score": 2
+          }
+        ],
+        "rationale": "Cheap to compute and directly tied to the outcome."
+      },
       "provenance": {
         "basis": "hypothesis"
       }
@@ -379,7 +401,25 @@
           "date": "2026-09-30"
         }
       ],
-      "dataAvailability": "internal_existing"
+      "dataAvailability": "internal_existing",
+      "collection": {
+        "mode": "survey",
+        "system": "Annual provider survey",
+        "minutesPerPeriod": 120,
+        "period": "P1Y",
+        "questionsPerRespondent": 6,
+        "respondentsPerYear": 40,
+        "sampleRate": 0.5
+      },
+      "selection": {
+        "status": "candidate",
+        "scores": [
+          {
+            "criterionId": "crit-decision-value",
+            "score": 3
+          }
+        ]
+      }
     },
     {
       "id": "ind-reference-downloads",
@@ -659,6 +699,31 @@
       ]
     }
   ],
+  "selectionCriteria": [
+    {
+      "id": "crit-decision-value",
+      "name": "Decision value",
+      "question": "Would the result change a decision we make?",
+      "weight": 3,
+      "appliesTo": "indicator"
+    },
+    {
+      "id": "crit-cost",
+      "name": "Cost to collect",
+      "question": "How much staff time and respondent effort does it take?",
+      "weight": 2,
+      "appliesTo": "indicator",
+      "inverted": true
+    }
+  ],
+  "measurementBudget": {
+    "staffMinutesPerWeek": 60,
+    "maxQuestionsPerRespondentPerYear": 12,
+    "targetSelectedMetrics": {
+      "min": 1,
+      "max": 8
+    }
+  },
   "consultations": [
     {
       "id": "con-kickoff",

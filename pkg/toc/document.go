@@ -63,6 +63,11 @@ type Document struct {
 	Metrics  []Metric       `json:"metrics,omitempty"`
 	Glossary []GlossaryTerm `json:"glossary,omitempty"`
 
+	// SelectionCriteria score candidate indicators; Budget is what the
+	// organization can sustain measuring.
+	SelectionCriteria []SelectionCriterion `json:"selectionCriteria,omitempty"`
+	Budget            *MeasurementBudget   `json:"measurementBudget,omitempty"`
+
 	// Consultations record validation of the theory with stakeholders.
 	Consultations []Consultation `json:"consultations,omitempty"`
 }

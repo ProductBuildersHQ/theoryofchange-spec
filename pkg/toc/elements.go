@@ -174,7 +174,71 @@ type Indicator struct {
 	// public, already held internally, new to collect, held by a partner,
 	// or not yet known.
 	DataAvailability DataAvailability `json:"dataAvailability,omitempty"`
-	Provenance       *Provenance      `json:"provenance,omitempty"`
+	// Collection says how the data is gathered and what that costs.
+	Collection *Collection `json:"collection,omitempty"`
+	// Selection records whether the indicator is a candidate, selected, or
+	// retired, and how it scored against the selection criteria.
+	Selection  *Selection  `json:"selection,omitempty"`
+	Provenance *Provenance `json:"provenance,omitempty"`
+}
+
+// Collection is how an indicator's data is gathered and what that costs.
+type Collection struct {
+	Mode CollectionMode `json:"mode" jsonschema:"required"`
+	// System is where the data lives or is entered.
+	System string `json:"system,omitempty"`
+	// MinutesPerPeriod is the staff time one collection takes; Period is the
+	// ISO 8601 duration it repeats over, e.g. "P1M".
+	MinutesPerPeriod float64 `json:"minutesPerPeriod,omitempty" jsonschema:"minimum=0"`
+	Period           string  `json:"period,omitempty"`
+	// QuestionsPerRespondent is how many questions one respondent answers in
+	// one collection.
+	QuestionsPerRespondent int `json:"questionsPerRespondent,omitempty" jsonschema:"minimum=0"`
+	RespondentsPerYear     int `json:"respondentsPerYear,omitempty" jsonschema:"minimum=0"`
+	// SampleRate is the share of respondents asked, from above 0 to 1;
+	// omitted means everyone.
+	SampleRate float64 `json:"sampleRate,omitempty" jsonschema:"minimum=0,maximum=1"`
+}
+
+// Selection records where an indicator stands in metric selection.
+type Selection struct {
+	Status    SelectionStatus  `json:"status" jsonschema:"required"`
+	Scores    []CriterionScore `json:"scores,omitempty"`
+	Rationale string           `json:"rationale,omitempty"`
+}
+
+// CriterionScore is one score of a subject against a selection criterion.
+type CriterionScore struct {
+	CriterionID string `json:"criterionId" jsonschema:"required"`
+	Score       int    `json:"score" jsonschema:"required,minimum=1,maximum=5"`
+	Note        string `json:"note,omitempty"`
+}
+
+// SelectionCriterion is a question asked of every candidate, such as "does
+// this help a decision?". Scores run 1 (poor) to 5 (strong); the weight sets
+// how much the criterion counts in the weighted score.
+type SelectionCriterion struct {
+	ID        string           `json:"id" jsonschema:"required"`
+	Name      string           `json:"name" jsonschema:"required"`
+	Question  string           `json:"question,omitempty"`
+	Weight    float64          `json:"weight,omitempty" jsonschema:"minimum=0"`
+	AppliesTo SelectionSubject `json:"appliesTo" jsonschema:"required"`
+	// Inverted marks a criterion where a low score is better, such as cost
+	// to collect.
+	Inverted bool `json:"inverted,omitempty"`
+}
+
+// MeasurementBudget is what the organization declares it can sustain.
+type MeasurementBudget struct {
+	StaffMinutesPerWeek              float64 `json:"staffMinutesPerWeek,omitempty" jsonschema:"minimum=0"`
+	MaxQuestionsPerRespondentPerYear int     `json:"maxQuestionsPerRespondentPerYear,omitempty" jsonschema:"minimum=0"`
+	TargetSelectedMetrics            *Range  `json:"targetSelectedMetrics,omitempty"`
+}
+
+// Range is an inclusive count range.
+type Range struct {
+	Min int `json:"min,omitempty" jsonschema:"minimum=0"`
+	Max int `json:"max,omitempty" jsonschema:"minimum=0"`
 }
 
 // EffectiveClaim returns the indicator's claim, defaulting to contribution.

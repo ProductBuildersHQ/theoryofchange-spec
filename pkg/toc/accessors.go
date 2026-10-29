@@ -21,6 +21,7 @@ const (
 	ElementPathway        ElementKind = "pathway"
 	ElementMetric         ElementKind = "metric"
 	ElementTerm           ElementKind = "term"
+	ElementCriterion      ElementKind = "criterion"
 	ElementConsultation   ElementKind = "consultation"
 )
 
@@ -61,6 +62,7 @@ func (d *Document) Elements() []ElementRef {
 	add(ElementPathway, "pathways", idsOf(d.Pathways, func(v Pathway) string { return v.ID }))
 	add(ElementMetric, "metrics", idsOf(d.Metrics, func(v Metric) string { return v.ID }))
 	add(ElementTerm, "glossary", idsOf(d.Glossary, func(v GlossaryTerm) string { return v.ID }))
+	add(ElementCriterion, "selectionCriteria", idsOf(d.SelectionCriteria, func(v SelectionCriterion) string { return v.ID }))
 	add(ElementConsultation, "consultations", idsOf(d.Consultations, func(v Consultation) string { return v.ID }))
 	return out
 }
@@ -191,8 +193,13 @@ func AllElementKinds() []ElementKind {
 	return []ElementKind{
 		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
 		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
-		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementConsultation,
+		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementCriterion, ElementConsultation,
 	}
+}
+
+// Criterion returns the selection criterion with the given ID.
+func (d *Document) Criterion(id string) (*SelectionCriterion, bool) {
+	return find(d.SelectionCriteria, id, func(v SelectionCriterion) string { return v.ID })
 }
 
 // Metric returns the metric with the given ID.

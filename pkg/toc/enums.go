@@ -811,3 +811,59 @@ func AllDecisionStatuses() []DecisionStatus {
 
 // Valid reports whether v is a known DecisionStatus.
 func (v DecisionStatus) Valid() bool { return slices.Contains(AllDecisionStatuses(), v) }
+
+// CollectionMode is how an indicator's data is gathered.
+type CollectionMode string
+
+const (
+	// ModePassive data arrives as a by-product of work already done.
+	ModePassive   CollectionMode = "passive"
+	ModeForm      CollectionMode = "form"
+	ModeSurvey    CollectionMode = "survey"
+	ModeInterview CollectionMode = "interview"
+	ModeManual    CollectionMode = "manual"
+	// ModeDerived values are computed from other indicators.
+	ModeDerived CollectionMode = "derived"
+)
+
+// AllCollectionModes returns all collection modes.
+func AllCollectionModes() []CollectionMode {
+	return []CollectionMode{ModePassive, ModeForm, ModeSurvey, ModeInterview, ModeManual, ModeDerived}
+}
+
+// Valid reports whether v is a known CollectionMode.
+func (v CollectionMode) Valid() bool { return slices.Contains(AllCollectionModes(), v) }
+
+// SelectionStatus is where an indicator stands in metric selection.
+type SelectionStatus string
+
+const (
+	SelectionCandidate SelectionStatus = "candidate"
+	SelectionSelected  SelectionStatus = "selected"
+	SelectionRetired   SelectionStatus = "retired"
+)
+
+// AllSelectionStatuses returns all selection statuses.
+func AllSelectionStatuses() []SelectionStatus {
+	return []SelectionStatus{SelectionCandidate, SelectionSelected, SelectionRetired}
+}
+
+// Valid reports whether v is a known SelectionStatus.
+func (v SelectionStatus) Valid() bool { return slices.Contains(AllSelectionStatuses(), v) }
+
+// SelectionSubject is what a selection criterion scores.
+type SelectionSubject string
+
+const (
+	SubjectIndicator    SelectionSubject = "indicator"
+	SubjectOutcome      SelectionSubject = "outcome"
+	SubjectIntervention SelectionSubject = "intervention"
+)
+
+// AllSelectionSubjects returns all selection subjects.
+func AllSelectionSubjects() []SelectionSubject {
+	return []SelectionSubject{SubjectIndicator, SubjectOutcome, SubjectIntervention}
+}
+
+// Valid reports whether v is a known SelectionSubject.
+func (v SelectionSubject) Valid() bool { return slices.Contains(AllSelectionSubjects(), v) }

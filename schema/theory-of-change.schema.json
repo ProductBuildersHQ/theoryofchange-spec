@@ -358,6 +358,49 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "Collection": {
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "passive",
+            "form",
+            "survey",
+            "interview",
+            "manual",
+            "derived"
+          ]
+        },
+        "system": {
+          "type": "string"
+        },
+        "minutesPerPeriod": {
+          "type": "number",
+          "minimum": 0
+        },
+        "period": {
+          "type": "string"
+        },
+        "questionsPerRespondent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "respondentsPerYear": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sampleRate": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "mode"
+      ]
+    },
     "Consultation": {
       "properties": {
         "id": {
@@ -450,6 +493,27 @@
       "type": "object",
       "required": [
         "problemStatement"
+      ]
+    },
+    "CriterionScore": {
+      "properties": {
+        "criterionId": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer",
+          "maximum": 5,
+          "minimum": 1
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "criterionId",
+        "score"
       ]
     },
     "Decision": {
@@ -627,6 +691,15 @@
             "$ref": "#/$defs/GlossaryTerm"
           },
           "type": "array"
+        },
+        "selectionCriteria": {
+          "items": {
+            "$ref": "#/$defs/SelectionCriterion"
+          },
+          "type": "array"
+        },
+        "measurementBudget": {
+          "$ref": "#/$defs/MeasurementBudget"
         },
         "consultations": {
           "items": {
@@ -1001,6 +1074,12 @@
             "unknown"
           ]
         },
+        "collection": {
+          "$ref": "#/$defs/Collection"
+        },
+        "selection": {
+          "$ref": "#/$defs/Selection"
+        },
         "provenance": {
           "$ref": "#/$defs/Provenance"
         }
@@ -1111,6 +1190,23 @@
       "required": [
         "type"
       ]
+    },
+    "MeasurementBudget": {
+      "properties": {
+        "staffMinutesPerWeek": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxQuestionsPerRespondentPerYear": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "targetSelectedMetrics": {
+          "$ref": "#/$defs/Range"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "Metadata": {
       "properties": {
@@ -1523,6 +1619,20 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "Range": {
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "Revision": {
       "properties": {
         "version": {
@@ -1628,6 +1738,67 @@
       },
       "additionalProperties": false,
       "type": "object"
+    },
+    "Selection": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "candidate",
+            "selected",
+            "retired"
+          ]
+        },
+        "scores": {
+          "items": {
+            "$ref": "#/$defs/CriterionScore"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "status"
+      ]
+    },
+    "SelectionCriterion": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "appliesTo": {
+          "type": "string",
+          "enum": [
+            "indicator",
+            "outcome",
+            "intervention"
+          ]
+        },
+        "inverted": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "appliesTo"
+      ]
     },
     "Target": {
       "properties": {

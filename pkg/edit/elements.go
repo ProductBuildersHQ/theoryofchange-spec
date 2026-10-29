@@ -35,6 +35,7 @@ var elementKinds = []ElementKind{
 	{"pathway", "pathways"},
 	{"metric", "metrics"},
 	{"term", "glossary"},
+	{"criterion", "selectionCriteria"},
 	{"consultation", "consultations"},
 }
 
@@ -348,6 +349,9 @@ func findReference(root map[string]any, id string) (found, bool) {
 			}
 		}
 	}
+	if f, ok := findScore(root, id); ok {
+		return f, true
+	}
 	for _, site := range refSites {
 		items, _ := root[site.array].([]any)
 		for ei, raw := range items {
@@ -370,6 +374,31 @@ func findReference(root map[string]any, id string) (found, bool) {
 						return found{site: site, element: el, index: ei, item: i, holder: holder, left: len(v) - 1}, true
 					}
 				}
+			}
+		}
+	}
+	return found{}, false
+}
+
+// findScore finds a selection score that names the criterion id. Scores are
+// objects inside an indicator's selection, so they are scanned apart from the
+// scalar reference fields.
+func findScore(root map[string]any, id string) (found, bool) {
+	site := refSite{array: "indicators", field: []string{"selection", "scores"}, action: dropItem}
+	items, _ := root[site.array].([]any)
+	for ei, raw := range items {
+		el, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		holder, last, ok := walkTo(el, site.field)
+		if !ok {
+			continue
+		}
+		scores, _ := holder[last].([]any)
+		for i, sc := range scores {
+			if m, ok := sc.(map[string]any); ok && m["criterionId"] == id {
+				return found{site: site, element: el, index: ei, item: i, holder: holder, left: len(scores) - 1}, true
 			}
 		}
 	}
