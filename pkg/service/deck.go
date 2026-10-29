@@ -59,6 +59,8 @@ func DefinitionReport(doc *toc.Document, kind, pathway string) (string, error) {
 		return report.MetricDefinitions(whole), nil
 	case "glossary":
 		return report.Glossary(whole), nil
+	case "assessment":
+		return report.Assessment(whole, doc), nil
 	default:
 		return report.Definitions(whole, pathways), nil
 	}
