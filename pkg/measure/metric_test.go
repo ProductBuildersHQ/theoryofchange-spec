@@ -15,6 +15,7 @@ func rollupDoc(agg toc.Aggregation) *toc.Document {
 		{ID: "met", Name: "M", Definition: "D", Formula: "F", Aggregation: agg, WeightMetricID: weightIf(agg)},
 		{ID: "met-w", Name: "W", Definition: "D", Formula: "F", Aggregation: toc.AggregationSum},
 	}
+	d.Pathways = []toc.Pathway{{ID: "pw-1", Title: "1"}, {ID: "pw-2", Title: "2"}, {ID: "pw-3", Title: "3"}}
 	d.Indicators = []toc.Indicator{
 		{ID: "total", Measures: "oc", Name: "t", MetricID: "met", RollupFrom: []string{"a", "b", "c"}},
 		{ID: "a", Measures: "oc", Name: "a", MetricID: "met", PathwayIDs: []string{"pw-1"}},

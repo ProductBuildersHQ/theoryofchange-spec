@@ -1,0 +1,790 @@
+{
+  "kind": "TheoryOfChangeStatus",
+  "specVersion": "0.1",
+  "tocId": "riverbend-network",
+  "asOf": "2026-09-30",
+  "options": {
+    "tolerance": 0.1,
+    "rollup": "worst",
+    "confidenceWeights": {
+      "evidence": 0.4,
+      "assumptions": 0.4,
+      "rationale": 0.2
+    }
+  },
+  "indicators": [
+    {
+      "indicatorId": "ind-hours-learning",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.20454545454545456,
+      "expected": 0.27172827172827174,
+      "latest": {
+        "indicatorId": "ind-hours-learning",
+        "date": "2026-09-30",
+        "value": 3650,
+        "source": "Attendance sheets",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-hours-shared",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.16,
+      "expected": 0.22417582417582416,
+      "latest": {
+        "indicatorId": "ind-hours-shared",
+        "date": "2026-09-30",
+        "value": 760,
+        "source": "Attendance sheets",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-hours-civic",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.16,
+      "expected": 0.2490842490842491,
+      "latest": {
+        "indicatorId": "ind-hours-civic",
+        "date": "2026-09-30",
+        "value": 470,
+        "source": "Attendance sheets",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-hours-total",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.1848101265822785,
+      "expected": 0.2553901794408123,
+      "latest": {
+        "indicatorId": "ind-hours-total",
+        "date": "2026-09-30",
+        "value": 4880,
+        "source": "Roll-up of program-area values",
+        "note": "Equals 3650 + 760 + 470.",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-reach-learning",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.21875,
+      "expected": 0.2802197802197802,
+      "latest": {
+        "indicatorId": "ind-reach-learning",
+        "date": "2026-09-30",
+        "value": 55,
+        "source": "Attendance sheets matched to the member list",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-reach-shared",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.18421052631578946,
+      "expected": 0.25563909774436094,
+      "latest": {
+        "indicatorId": "ind-reach-shared",
+        "date": "2026-09-30",
+        "value": 29,
+        "source": "Shared service desk records",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-reach-civic",
+      "state": "at_risk",
+      "health": "yellow",
+      "progress": 0.175,
+      "expected": 0.2802197802197802,
+      "latest": {
+        "indicatorId": "ind-reach-civic",
+        "date": "2026-09-30",
+        "value": 47,
+        "source": "Attendance sheets and briefing list",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-reach-network",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.3333333333333333,
+      "expected": 0.2682445759368836,
+      "latest": {
+        "indicatorId": "ind-reach-network",
+        "date": "2026-09-30",
+        "value": 84,
+        "source": "All sources, deduplicated",
+        "note": "Less than the 131 that the program-area counts add up to, because 47 members take part in more than one program area.",
+        "quality": "verified",
+        "disaggregation": {
+          "member size": "all"
+        }
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-retention-learning",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.2,
+      "expected": 0.29890109890109895,
+      "latest": {
+        "indicatorId": "ind-retention-learning",
+        "date": "2026-09-30",
+        "value": 80,
+        "source": "Cohort rosters",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-retention-shared",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.2857142857142857,
+      "expected": 0.3202511773940345,
+      "latest": {
+        "indicatorId": "ind-retention-shared",
+        "date": "2026-09-30",
+        "value": 87,
+        "source": "Shared service desk records",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-practice-maturity",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0,
+      "expected": 0,
+      "latest": {
+        "indicatorId": "ind-practice-maturity",
+        "date": "2026-09-30",
+        "level": "Emerging",
+        "source": "Coach and member rubric ratings",
+        "note": "The first cohort has not yet reached its twelve-month rating.",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-collab-maturity",
+      "state": "at_risk",
+      "health": "yellow",
+      "progress": 0,
+      "expected": 0.18655692729766804,
+      "latest": {
+        "indicatorId": "ind-collab-maturity",
+        "date": "2026-09-30",
+        "level": "Parallel",
+        "source": "Member interviews",
+        "quality": "estimated"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-voice-level",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.3333333333333333,
+      "expected": 0.2490842490842491,
+      "latest": {
+        "indicatorId": "ind-voice-level",
+        "date": "2026-09-30",
+        "level": "Heard",
+        "source": "Staff assessment checked with the county office",
+        "note": "The county office confirmed it now copies the network on planning notices.",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-overhead-share",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.1555555555555554,
+      "expected": 0.2490842490842491,
+      "latest": {
+        "indicatorId": "ind-overhead-share",
+        "date": "2026-09-30",
+        "value": 20.8,
+        "source": "Mid-year member cost survey",
+        "quality": "reported",
+        "disaggregation": {
+          "member size": "small"
+        }
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-grant-applications",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.1375,
+      "expected": 0.18681318681318682,
+      "latest": {
+        "indicatorId": "ind-grant-applications",
+        "date": "2026-09-30",
+        "value": 131,
+        "source": "Quarterly member check-in",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-funding-mix",
+      "state": "not_started"
+    },
+    {
+      "indicatorId": "ind-joint-positions",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.2,
+      "expected": 0.29890109890109895,
+      "latest": {
+        "indicatorId": "ind-joint-positions",
+        "date": "2026-09-30",
+        "value": 2,
+        "source": "Forum minutes",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-officials-meetings",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.16666666666666666,
+      "expected": 0.2490842490842491,
+      "latest": {
+        "indicatorId": "ind-officials-meetings",
+        "date": "2026-09-30",
+        "value": 3,
+        "source": "County planning calendar",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-residents-served",
+      "state": "on_track",
+      "health": "green",
+      "progress": 0.1111111111111111,
+      "expected": 0.16605616605616605,
+      "latest": {
+        "indicatorId": "ind-residents-served",
+        "date": "2026-09-30",
+        "value": 62000,
+        "source": "Mid-year member service-count report",
+        "note": "Partial-year estimate from 61 responding members.",
+        "quality": "estimated"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-residents-voice",
+      "state": "not_started"
+    },
+    {
+      "indicatorId": "ind-attendance-rate",
+      "state": "at_risk",
+      "health": "yellow",
+      "progress": 0.2222222222222222,
+      "expected": 0.3321123321123321,
+      "latest": {
+        "indicatorId": "ind-attendance-rate",
+        "date": "2026-09-30",
+        "value": 73,
+        "source": "Cohort rosters",
+        "quality": "verified"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-story-peer-help",
+      "state": "off_track",
+      "health": "red",
+      "progress": 0.08333333333333333,
+      "expected": 0.4981684981684982,
+      "latest": {
+        "indicatorId": "ind-story-peer-help",
+        "date": "2026-09-30",
+        "value": 1,
+        "source": "story theme count",
+        "quality": "reported"
+      },
+      "observationCount": 1
+    },
+    {
+      "indicatorId": "ind-service-deals",
+      "state": "not_started"
+    },
+    {
+      "indicatorId": "ind-calendar-current",
+      "state": "not_started"
+    },
+    {
+      "indicatorId": "ind-briefings",
+      "state": "not_started"
+    },
+    {
+      "indicatorId": "ind-enroll-learning",
+      "state": "not_started"
+    },
+    {
+      "indicatorId": "ind-enroll-shared",
+      "state": "not_started"
+    }
+  ],
+  "outcomes": [
+    {
+      "outcomeId": "oc-resident-access",
+      "state": "on_track",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 1,
+      "indicatorIds": [
+        "ind-residents-served"
+      ],
+      "assumptionBroken": [
+        "asm-funders-fit"
+      ]
+    },
+    {
+      "outcomeId": "oc-resident-voice",
+      "state": "not_started",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 1,
+      "indicatorIds": [
+        "ind-residents-voice"
+      ],
+      "assumptionBroken": [
+        "asm-officials-receptive"
+      ]
+    },
+    {
+      "outcomeId": "oc-lt-capable-members",
+      "state": "on_track",
+      "pathwayState": "not_started",
+      "confidence": 0.68,
+      "indicatorIds": [
+        "ind-practice-maturity"
+      ]
+    },
+    {
+      "outcomeId": "oc-lt-collab",
+      "state": "at_risk",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.52,
+      "indicatorIds": [
+        "ind-collab-maturity"
+      ]
+    },
+    {
+      "outcomeId": "oc-lt-sustainable",
+      "state": "unmeasured",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.4,
+      "assumptionBroken": [
+        "asm-funders-fit"
+      ]
+    },
+    {
+      "outcomeId": "oc-lt-collective-voice",
+      "state": "unmeasured",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.3,
+      "assumptionBroken": [
+        "asm-officials-receptive"
+      ]
+    },
+    {
+      "outcomeId": "oc-im-leaders-practice",
+      "state": "on_track",
+      "pathwayState": "on_track",
+      "health": "green",
+      "confidence": 0.272,
+      "indicatorIds": [
+        "ind-practice-maturity"
+      ]
+    },
+    {
+      "outcomeId": "oc-im-peer-network",
+      "state": "at_risk",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.208,
+      "indicatorIds": [
+        "ind-collab-maturity"
+      ]
+    },
+    {
+      "outcomeId": "oc-im-lower-overhead",
+      "state": "on_track",
+      "pathwayState": "not_started",
+      "confidence": 0.272,
+      "indicatorIds": [
+        "ind-overhead-share"
+      ]
+    },
+    {
+      "outcomeId": "oc-im-grant-pipeline",
+      "state": "on_track",
+      "pathwayState": "not_started",
+      "confidence": 0.12,
+      "indicatorIds": [
+        "ind-grant-applications"
+      ]
+    },
+    {
+      "outcomeId": "oc-im-joint-positions",
+      "state": "on_track",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.2704,
+      "indicatorIds": [
+        "ind-joint-positions"
+      ]
+    },
+    {
+      "outcomeId": "oc-im-officials-engage",
+      "state": "unmeasured",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.09,
+      "assumptionBroken": [
+        "asm-officials-receptive"
+      ]
+    },
+    {
+      "outcomeId": "oc-st-leader-skills",
+      "state": "on_track",
+      "pathwayState": "on_track",
+      "health": "green",
+      "confidence": 0.18496,
+      "indicatorIds": [
+        "ind-retention-learning"
+      ]
+    },
+    {
+      "outcomeId": "oc-st-peer-ties",
+      "state": "on_track",
+      "pathwayState": "on_track",
+      "health": "green",
+      "confidence": 0.10816,
+      "indicatorIds": [
+        "ind-hours-total",
+        "ind-reach-network"
+      ]
+    },
+    {
+      "outcomeId": "oc-st-pooled-use",
+      "state": "on_track",
+      "pathwayState": "not_started",
+      "confidence": 0.2176,
+      "indicatorIds": [
+        "ind-reach-shared",
+        "ind-retention-shared"
+      ]
+    },
+    {
+      "outcomeId": "oc-st-calendar-use",
+      "state": "on_track",
+      "pathwayState": "not_started",
+      "confidence": 0.0624,
+      "indicatorIds": [
+        "ind-grant-applications"
+      ]
+    },
+    {
+      "outcomeId": "oc-st-policy-know",
+      "state": "at_risk",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.140608,
+      "indicatorIds": [
+        "ind-reach-civic"
+      ]
+    },
+    {
+      "outcomeId": "oc-st-channel",
+      "state": "unmeasured",
+      "pathwayState": "unmeasured",
+      "confidence": 0.027
+    },
+    {
+      "outcomeId": "oc-out-cohorts",
+      "state": "on_track",
+      "pathwayState": "on_track",
+      "health": "green",
+      "confidence": 0.147968,
+      "indicatorIds": [
+        "ind-reach-learning"
+      ]
+    },
+    {
+      "outcomeId": "oc-out-services",
+      "state": "not_started",
+      "pathwayState": "not_started",
+      "confidence": 0.113152,
+      "indicatorIds": [
+        "ind-service-deals"
+      ]
+    },
+    {
+      "outcomeId": "oc-out-calendar",
+      "state": "not_started",
+      "pathwayState": "not_started",
+      "confidence": 0.032448,
+      "indicatorIds": [
+        "ind-calendar-current"
+      ]
+    },
+    {
+      "outcomeId": "oc-out-briefings",
+      "state": "not_started",
+      "pathwayState": "not_started",
+      "confidence": 0.056243,
+      "indicatorIds": [
+        "ind-briefings"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "linkId": "ln-cohorts-skills",
+      "state": "ok",
+      "confidence": 0.8
+    },
+    {
+      "linkId": "ln-cohorts-ties",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-skills-practice",
+      "state": "ok",
+      "confidence": 0.68
+    },
+    {
+      "linkId": "ln-ties-network",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-practice-capable",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-network-collab",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-services-use",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-calendar-use",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-pooled-overhead",
+      "state": "ok",
+      "confidence": 0.8
+    },
+    {
+      "linkId": "ln-calendar-pipeline",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-overhead-capable",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-overhead-collab",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-overhead-sustain",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-pipeline-sustain",
+      "state": "at_risk",
+      "confidence": 0.3
+    },
+    {
+      "linkId": "ln-briefings-know",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-know-positions",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-ties-positions",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-positions-collab",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-positions-voice",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-officials-voice",
+      "state": "at_risk",
+      "confidence": 0.3
+    },
+    {
+      "linkId": "ln-channel-officials",
+      "state": "at_risk",
+      "confidence": 0.3
+    },
+    {
+      "linkId": "ln-capable-access",
+      "state": "ok",
+      "confidence": 0.68
+    },
+    {
+      "linkId": "ln-collab-access",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-sustain-access",
+      "state": "ok",
+      "confidence": 0.4
+    },
+    {
+      "linkId": "ln-voice-resvoice",
+      "state": "at_risk",
+      "confidence": 0.3
+    },
+    {
+      "linkId": "ln-collab-resvoice",
+      "state": "ok",
+      "confidence": 0.52
+    },
+    {
+      "linkId": "ln-collab-recruit",
+      "state": "ok",
+      "confidence": 0.52
+    }
+  ],
+  "assumptions": [
+    {
+      "assumptionId": "asm-time-to-attend",
+      "status": "holding",
+      "source": "assessment",
+      "assessedAt": "2026-09-30"
+    },
+    {
+      "assumptionId": "asm-skills-applied",
+      "status": "untested",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-peer-trust",
+      "status": "untested",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-vendor-terms",
+      "status": "holding",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-calendar-reliable",
+      "status": "holding",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-savings-reinvested",
+      "status": "untested",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-funders-fit",
+      "status": "at_risk",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-officials-receptive",
+      "status": "at_risk",
+      "source": "assessment",
+      "assessedAt": "2026-09-30"
+    },
+    {
+      "assumptionId": "asm-positions-hold",
+      "status": "holding",
+      "source": "assessment",
+      "assessedAt": "2026-09-30"
+    },
+    {
+      "assumptionId": "asm-members-deliver",
+      "status": "untested",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-peers-recruit",
+      "status": "holding",
+      "source": "document"
+    },
+    {
+      "assumptionId": "asm-leadership-turnover",
+      "status": "untested",
+      "source": "document"
+    }
+  ],
+  "overall": [
+    {
+      "outcomeId": "oc-resident-access",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.147968
+    },
+    {
+      "outcomeId": "oc-resident-voice",
+      "pathwayState": "at_risk",
+      "health": "yellow",
+      "confidence": 0.086528
+    }
+  ]
+}
