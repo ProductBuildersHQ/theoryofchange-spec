@@ -1,0 +1,2937 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An AI-native, spec-driven way to capture, measure, and report on a Theory of Change">
+      
+      
+      
+        <link rel="canonical" href="https://productbuildershq.com/theoryofchange-spec/research/theory-of-change/">
+      
+      
+        <link rel="prev" href="../../concepts/">
+      
+      
+        <link rel="next" href="../../design/example-feedback/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Research Brief - Theory of Change Spec</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://productbuildershq.com/css/productbuildershq-mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#theory-of-change-research-brief" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+<!-- ProductBuildersHQ Unified Navigation -->
+<div id="pbhq-navbar-container"></div>
+
+
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Theory of Change Spec" class="md-header__button md-logo" aria-label="Theory of Change Spec" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Theory of Change Spec
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Research Brief
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ProductBuildersHQ/theoryofchange-spec" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ProductBuildersHQ/theoryofchange-spec
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Theory of Change Spec" class="md-nav__button md-logo" aria-label="Theory of Change Spec" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Theory of Change Spec
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ProductBuildersHQ/theoryofchange-spec" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ProductBuildersHQ/theoryofchange-spec
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/authoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authoring a Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/measurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measuring Progress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/reports-and-decks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reports and Decks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/review-round-trip/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Review Round Trip
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/quality-and-judging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quality and Judging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/mcp-and-skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Server and Agent Skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts to Go Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research Brief
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research Brief
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-definition-origins-and-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Definition, origins and purpose
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Definition, origins and purpose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#origins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Origins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-core-concepts-and-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Core concepts and vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-process-for-constructing-a-toc-and-what-each-step-produces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Process for constructing a ToC, and what each step produces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Process for constructing a ToC, and what each step produces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#actknowledge-six-stage-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ActKnowledge six-stage method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#undg-four-steps-validated-against-evidence-at-each-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNDG four steps (validated against evidence at each step)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orscasey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ORS/Casey
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implications-for-a-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implications for a tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-measurement-and-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Measurement and evaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Measurement and evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indicators-and-the-measurement-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indicators and the measurement framework
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeline-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeline consistency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attribution-versus-contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attribution versus contribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-strength" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence strength
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assumption-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assumption testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complementary-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complementary methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-management-and-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive management and revision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-common-artifacts-and-deliverables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Common artifacts and deliverables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-toc-compared-with-logic-model-logframe-and-results-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ToC compared with logic model, logframe and results chain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. ToC compared with logic model, logframe and results chain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#critiques-that-matter-for-modelling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critiques that matter for modelling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-applicability-to-business-market-and-technology-ecosystem-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Applicability to business, market and technology-ecosystem change
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Applicability to business, market and technology-ecosystem change">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implications-for-a-market-or-ecosystem-toc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implications for a market or ecosystem ToC
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-recommended-conceptual-entity-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Recommended conceptual entity model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Recommended conceptual entity model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-entities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Entities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-graph-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Graph semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-measurement-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Measurement semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-core-and-extension-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Core and extension summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-primary-source-review-undg-undaf-companion-guidance-2017" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Primary-source review: UNDG UNDAF Companion Guidance (2017)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Primary-source review: UNDG UNDAF Companion Guidance (2017)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-principles-and-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Principles and structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-step-1-focus-p-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Step 1 — Focus (p. 6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-step-2-change-analysis-pp-68" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Step 2 — Change analysis (pp. 6–8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-step-3-assumptions-and-risks-pp-89" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Step 3 — Assumptions and risks (pp. 8–9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-step-4-partners-and-key-actors-p-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Step 4 — Partners and key actors (p. 9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-quality-assurance-checklist-p-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 Quality assurance checklist (p. 11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-from-toc-to-programme-document-p-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 From ToC to programme document (p. 12)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-implications-for-the-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.8 Implications for the data model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-citations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Citations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/example-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Feedback from the Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evals/rubric-discrimination/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Judge Rubric Evaluation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration/usm-ufm-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    USM and UFM Integration Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specifications
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Specifications
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PRD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PLAN/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/initiatives/INIT-THEORYOFCHANGESPEC-001/ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Releases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.1.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-definition-origins-and-purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Definition, origins and purpose
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Definition, origins and purpose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#origins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Origins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-core-concepts-and-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Core concepts and vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-process-for-constructing-a-toc-and-what-each-step-produces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Process for constructing a ToC, and what each step produces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Process for constructing a ToC, and what each step produces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#actknowledge-six-stage-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ActKnowledge six-stage method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#undg-four-steps-validated-against-evidence-at-each-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UNDG four steps (validated against evidence at each step)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orscasey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ORS/Casey
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implications-for-a-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implications for a tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-measurement-and-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Measurement and evaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Measurement and evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indicators-and-the-measurement-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indicators and the measurement framework
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeline-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeline consistency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attribution-versus-contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attribution versus contribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-strength" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence strength
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assumption-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assumption testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complementary-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complementary methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-management-and-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive management and revision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-common-artifacts-and-deliverables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Common artifacts and deliverables
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-toc-compared-with-logic-model-logframe-and-results-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ToC compared with logic model, logframe and results chain
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. ToC compared with logic model, logframe and results chain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#critiques-that-matter-for-modelling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critiques that matter for modelling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-applicability-to-business-market-and-technology-ecosystem-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Applicability to business, market and technology-ecosystem change
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Applicability to business, market and technology-ecosystem change">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implications-for-a-market-or-ecosystem-toc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implications for a market or ecosystem ToC
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-recommended-conceptual-entity-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Recommended conceptual entity model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Recommended conceptual entity model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-entities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Entities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-graph-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Graph semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-measurement-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Measurement semantics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-core-and-extension-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Core and extension summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-primary-source-review-undg-undaf-companion-guidance-2017" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Primary-source review: UNDG UNDAF Companion Guidance (2017)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Primary-source review: UNDG UNDAF Companion Guidance (2017)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-principles-and-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Principles and structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-step-1-focus-p-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Step 1 — Focus (p. 6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-step-2-change-analysis-pp-68" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Step 2 — Change analysis (pp. 6–8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-step-3-assumptions-and-risks-pp-89" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Step 3 — Assumptions and risks (pp. 8–9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-step-4-partners-and-key-actors-p-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Step 4 — Partners and key actors (p. 9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-quality-assurance-checklist-p-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 Quality assurance checklist (p. 11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97-from-toc-to-programme-document-p-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 From ToC to programme document (p. 12)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98-implications-for-the-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.8 Implications for the data model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-citations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Citations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="theory-of-change-research-brief">Theory of Change: Research Brief<a class="headerlink" href="#theory-of-change-research-brief" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Purpose: background research to inform a Go-struct-first data model and JSON Schema for representing, measuring and reporting on Theories of Change (ToC).</p>
+<p>Source access: the full texts of the ActKnowledge <em>ToC Basics</em> primer, the ActKnowledge <em>Technical Papers</em>, the ORS/Annie E. Casey guide (a mirrored PDF; the aecf.org page is behind a bot wall), the UNDG UNDAF companion guidance and Vogel's DFID review were all read. Other material was read through secondary sources, as noted in the citations.</p>
+</blockquote>
+<h2 id="1-definition-origins-and-purpose">1. Definition, origins and purpose<a class="headerlink" href="#1-definition-origins-and-purpose" title="Permanent link">&para;</a></h2>
+<h3 id="definition">Definition<a class="headerlink" href="#definition" title="Permanent link">&para;</a></h3>
+<p>The canonical sources broadly agree on the definition. They differ in emphasis:</p>
+<ul>
+<li><strong>ActKnowledge (Taplin &amp; Clark, 2012):</strong> "a rigorous yet participatory process whereby groups and stakeholders in a planning process articulate their long-term goals and identify the conditions they believe have to unfold for those goals to be met. These conditions are modeled as desired outcomes, arranged graphically in a causal framework."</li>
+<li><strong>UNDG (2017):</strong> "a method that explains how a given intervention, or set of interventions, are expected to lead to a specific development change, drawing on a causal analysis based on available evidence."</li>
+<li><strong>Vogel / DFID (2012):</strong> "an outcomes-based approach which applies critical thinking to the design, implementation and evaluation of initiatives and programmes intended to support change in their contexts". Vogel treats a ToC as both a <em>process</em> and a <em>product</em>.</li>
+<li><strong>Rick Davies (quoted in Vogel):</strong> "The description of a sequence of events that is expected to lead to a particular desired outcome."</li>
+</ul>
+<h3 id="origins">Origins<a class="headerlink" href="#origins" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Program-theory evaluation, 1970s–80s.</strong> Chen, Rossi, Patton, Fitz-Gibbon and Weiss developed theory-driven evaluation. The Logical Framework (USAID, 1969) belongs to the same family.</li>
+<li><strong>Carol Weiss, 1995.</strong> In <em>Nothing as Practical as Good Theory</em>, published in the Aspen Roundtable volume <em>New Approaches to Evaluating Comprehensive Community Initiatives</em> (Connell, Kubisch, Schorr &amp; Weiss, eds.), Weiss argued that complex initiatives are hard to evaluate because their assumptions are left implicit. She popularised the term "theory of change" and urged that the expected sequence of outcomes be mapped so evaluation could track it.</li>
+<li><strong>Aspen Institute Roundtable on Community Change.</strong> Kubisch (1997) set the three quality criteria: plausible, doable/feasible and testable. Andrea Anderson's <em>The Community Builder's Approach to Theory of Change</em> (2005) became the practical field guide.</li>
+<li><strong>ActKnowledge and the Center for Theory of Change.</strong> Hélène Clark and Dana Taplin formalised the method: backwards mapping, preconditions, rationales, the accountability ceiling, and indicator components. They released the TOCO software (theoryofchange.org, from 2002) and founded the Center for Theory of Change (2013).</li>
+<li><strong>Spread through international development in the 2010s.</strong> Uptake was driven by Comic Relief (James, 2011), DFID (Vogel, 2012), the Asia Foundation (Stein &amp; Valters, 2012), UNICEF (Rogers, 2014) and UNDG (2017). ToC is now standard among foundations (Casey, Kellogg, Rockefeller, Ford), multilaterals and research funders.</li>
+</ul>
+<h3 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h3>
+<p>Sources consistently name five purposes:</p>
+<ul>
+<li><strong>Planning and design:</strong> reach agreement on what has to change, in what order.</li>
+<li><strong>Filling the "missing middle":</strong> explain how activities connect to long-term goals.</li>
+<li><strong>Evaluability:</strong> a basis for indicators and for testing assumptions.</li>
+<li><strong>Communication and alignment:</strong> across partners, funders and staff.</li>
+<li><strong>Learning and adaptive management:</strong> "a living framework," revised as evidence arrives.</li>
+</ul>
+<p>ORS describes the ToC as a "companion to action" and lists its uses as planning, accountability, resource allocation, communication and direction of action.</p>
+<h2 id="2-core-concepts-and-vocabulary">2. Core concepts and vocabulary<a class="headerlink" href="#2-core-concepts-and-vocabulary" title="Permanent link">&para;</a></h2>
+<p>The definitions below follow the canonical sources. Where the sources differ, the difference is noted.</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Definition (source)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problem statement</strong></td>
+<td>The core issue the group is addressing, bounded by <em>where</em> and <em>for whom</em>. The long-term outcome is its "positive opposite" (ActKnowledge).</td>
+</tr>
+<tr>
+<td><strong>Ultimate goal / Impact</strong></td>
+<td>A vision "beyond, or grander, than they can achieve through the initiative." It sits <em>above</em> the accountability ceiling (ActKnowledge). In RBM/OECD usage, "impact" means higher-level, long-term effects, positive or negative, intended or unintended.</td>
+</tr>
+<tr>
+<td><strong>Long-term outcome (LTO) / Long-term goal</strong></td>
+<td>"The goal you want to reach which is the purpose of your program." Every other outcome is a precondition to it (ActKnowledge).</td>
+</tr>
+<tr>
+<td><strong>Outcome</strong></td>
+<td>"A state, or condition, that must exist for your initiative to work and does not currently exist." It may be a change in people, organizations or places, and is phrased as a positive condition, not an activity (ActKnowledge).</td>
+</tr>
+<tr>
+<td><strong>Short-term / intermediate / long-term outcomes</strong></td>
+<td>Positions along the pathway. ORS attaches time horizons (e.g. 1–3 years and more than 3 years). UNDG uses levels of causality: immediate, underlying, structural/root.</td>
+</tr>
+<tr>
+<td><strong>Precondition</strong></td>
+<td>Any outcome other than the LTO: "conditions that must exist in order for the next outcome in the pathway to be achieved." Preconditions should be <em>necessary</em> and <em>collectively sufficient</em> (Technical Papers).</td>
+</tr>
+<tr>
+<td><strong>Pathway of change / Outcomes framework</strong></td>
+<td>"The sequence outcomes must occur in order to reach your long-term goal." It is drawn as chains from early outcomes (bottom) to the LTO (top). Most initiatives have several pathways. The full map is the "outcomes framework."</td>
+</tr>
+<tr>
+<td><strong>Cluster</strong></td>
+<td>A group of preconditions that together act as a <em>joint</em> precondition, with internal links left undrawn (ActKnowledge). In effect this is an AND-group.</td>
+</tr>
+<tr>
+<td><strong>Causal link (connector/arrow)</strong></td>
+<td>A claim that outcome A, possibly together with others, enables outcome B. UNDG notes that links can run horizontally as well as vertically.</td>
+</tr>
+<tr>
+<td><strong>Rationale / Justification</strong></td>
+<td>"Statements about why we expect one set of outcomes to lead to another". They explain each causal link and are often grounded in research or experience.</td>
+</tr>
+<tr>
+<td><strong>Assumption</strong></td>
+<td>ActKnowledge: "conditions or resources… needed for the success of your program, and which you believe already exist and will not be problematic to maintain." This contrasts with preconditions, which must be <em>brought about</em>. UNDG: "things taken for granted," stated as <em>if X, then Y, because Z</em>.</td>
+</tr>
+<tr>
+<td><strong>Assumption types</strong></td>
+<td>UNDG: causality, implementation, external factors, partnerships. theoryofchange.org: links between outcome levels, completeness of preconditions, justification of intervention-to-outcome links, and context. ORS: philosophies, principles or values, ways of working together, and community context. Mayne's COM-B model: assumptions on reach, capacity change, behaviour change, direct benefits and wellbeing.</td>
+</tr>
+<tr>
+<td><strong>Intervention</strong></td>
+<td>"The things your program or group of stakeholders will undertake to bring about outcomes." <strong>Strategy</strong> = "a coordinated sequence of interventions." <strong>Activity</strong> = the specific actions within an intervention. ActKnowledge places interventions <em>on the connector</em> between precondition and outcome. One intervention may serve many outcomes.</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td>In RBM and logframes, the direct products or services delivered by activities (within management control). ActKnowledge folds outputs into interventions ("activities and outputs of any sort").</td>
+</tr>
+<tr>
+<td><strong>Indicator</strong></td>
+<td>"Measurable evidence of meeting a goal". It may be quantitative or qualitative. Each indicator has four components: <strong>population</strong> (who or what changes), <strong>target</strong> (how many), <strong>threshold</strong> (how much change is "good enough") and <strong>timeline</strong> (by when). Formula: "How many of who or what will reach what level by when?"</td>
+</tr>
+<tr>
+<td><strong>Baseline</strong></td>
+<td>"A measure of population for any indicators at the outset of the initiative, used for comparison" (ActKnowledge glossary).</td>
+</tr>
+<tr>
+<td><strong>Ceiling of accountability</strong></td>
+<td>A dashed line drawn above the LTO. Outcomes below it are ones the group holds itself accountable for. Goals above it are shown for vision and communication but not claimed.</td>
+</tr>
+<tr>
+<td><strong>Narrative</strong></td>
+<td>A one-to-two-page summary that explains the pathways and highlights key assumptions, rationales and interventions.</td>
+</tr>
+<tr>
+<td><strong>Risk</strong></td>
+<td>Factors that could stop change from happening as assumed. UNDG: "assumptions and risks are often inversely related". UNDG risk types: environmental/political, opportunities, design, partnerships.</td>
+</tr>
+<tr>
+<td><strong>External factors / context</strong></td>
+<td>Conditions outside the initiative's work that help or hinder change (Vogel: "social, political and environmental conditions… other actors able to influence change").</td>
+</tr>
+<tr>
+<td><strong>Stakeholders / actors / partners</strong></td>
+<td>UNDG step 4: the actors "likely to have a direct role in determining the success or failure," the partners and who does what. The solution tree may show changes delivered <em>by others</em> that are still monitored.</td>
+</tr>
+<tr>
+<td><strong>Boundary partners</strong></td>
+<td>From Outcome Mapping (IDRC): the actors a program works with directly and hopes to influence but <em>does not control</em>. Change is expressed as <em>outcome challenges</em> and graded <em>progress markers</em> ("expect / like / love to see").</td>
+</tr>
+<tr>
+<td><strong>Spheres of control / influence / interest</strong></td>
+<td>RBM and Outcome Mapping framing. Control covers inputs, activities and outputs. Influence covers behaviour change among direct partners. Interest covers state or wellbeing change. This maps closely onto the accountability ceiling.</td>
+</tr>
+<tr>
+<td><strong>Problem tree / solution tree</strong></td>
+<td>UNDG: immediate, underlying and structural root causes are mapped into a problem tree and then converted into a solution tree. The solution tree is the skeleton of the ToC and need not mirror the problem tree exactly.</td>
+</tr>
+<tr>
+<td><strong>Outcome categories (ORS/Casey)</strong></td>
+<td><strong>Impact</strong>: changes in the conditions of people (knowledge, attitudes, skills, behaviour, health, financial status) and population-level conditions. <strong>Influence</strong>: changes in "policies, regulations, systems, practice or public opinion," including visibility of an issue, norms, partnerships, public will, service practice and business practice. <strong>Leverage</strong>: changes in investment by other funders. Underneath these sit <strong>core capacities</strong>: governance, data use, partnerships and similar.</td>
+</tr>
+<tr>
+<td><strong>"So that" chains (ORS)</strong></td>
+<td>Forward reasoning: <em>Strategy → so that → outcome → so that → outcome…</em>, with each step tagged by category. This complements backwards mapping.</td>
+</tr>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Narrow or broad (how many pathways) crossed with shallow or deep (how many precondition levels), giving four types (Technical Papers / Clark 2004).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-process-for-constructing-a-toc-and-what-each-step-produces">3. Process for constructing a ToC, and what each step produces<a class="headerlink" href="#3-process-for-constructing-a-toc-and-what-each-step-produces" title="Permanent link">&para;</a></h2>
+<h3 id="actknowledge-six-stage-method">ActKnowledge six-stage method<a class="headerlink" href="#actknowledge-six-stage-method" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Artifact produced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Elicit and bound the problem statement</td>
+<td>Problem statement (where, for whom)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Identify the long-term goal or LTO; optionally an ultimate goal above the ceiling</td>
+<td>LTO definition (agreed terms, e.g. what "safe" means); accountability ceiling</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Backwards mapping: "What preconditions must exist?" Repeat down to the earliest changes; test whether each set is necessary and sufficient</td>
+<td>Outcomes framework: a graph of outcomes and causal links, pathways, clusters</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Surface assumptions; write rationales for the links</td>
+<td>Assumption list; rationale per link</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Identify interventions; place them on connectors; map existing programs; flag gaps</td>
+<td>Intervention-to-link mapping; gap list</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Develop indicators (population, target, threshold, timeline) for every outcome, or at least every intervention-targeted outcome</td>
+<td>Indicator set / measurement framework</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Quality review (plausible, feasible, testable) and narrative</td>
+<td>QA record; 1–2 page narrative</td>
+</tr>
+</tbody>
+</table>
+<h3 id="undg-four-steps-validated-against-evidence-at-each-step">UNDG four steps (validated against evidence at each step)<a class="headerlink" href="#undg-four-steps-validated-against-evidence-at-each-step" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Focus:</strong> high-level change, prioritised by equity, comparative advantage and feasibility.</li>
+<li><strong>Change analysis:</strong> problem tree to solution tree; immediate, underlying and structural causes; what partners already contribute.</li>
+<li><strong>Assumptions and risks:</strong> for each assumption, ask three questions. Does it fully explain the change? Is it plausible given the evidence? Does it need testing?</li>
+<li><strong>Partners and actors:</strong> who does what; elements vital to success but outside the program, which are still monitored.</li>
+</ol>
+<p>The UNDG guidance also includes a quality checklist. It requires that M&amp;E provisions name the assumptions that need testing and that evaluation assess "the validity of the theory of change."</p>
+<h3 id="orscasey">ORS/Casey<a class="headerlink" href="#orscasey" title="Permanent link">&para;</a></h3>
+<p>ORS produces two products, an <strong>outcome map</strong> and a <strong>list of assumptions</strong>. It adds "so that" chains, categorisation of outcomes as impact, influence or leverage, prioritisation (develop detailed ToCs for strategies expected to show change in 1–3 years), and non-linear representations (web, starburst, organism).</p>
+<h3 id="implications-for-a-tool">Implications for a tool<a class="headerlink" href="#implications-for-a-tool" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The workflow is staged.</li>
+<li>Partial ToCs are legitimate states (e.g. outcomes without interventions yet).</li>
+<li>Indicators are sometimes defined <em>during</em> mapping to settle what an ambiguous outcome means.</li>
+</ul>
+<h2 id="4-measurement-and-evaluation">4. Measurement and evaluation<a class="headerlink" href="#4-measurement-and-evaluation" title="Permanent link">&para;</a></h2>
+<h3 id="indicators-and-the-measurement-framework">Indicators and the measurement framework<a class="headerlink" href="#indicators-and-the-measurement-framework" title="Permanent link">&para;</a></h3>
+<p>Each outcome should have at least one indicator. In practice, a prioritised subset is put into operation, based on data availability, persuasiveness and whether the indicator can stand in for other outcomes. Standard RBM and M&amp;E plan fields per indicator:</p>
+<ul>
+<li>definition and unit</li>
+<li>direction of desired change</li>
+<li>baseline (value, date, source)</li>
+<li>target(s) and threshold</li>
+<li>milestones (interim targets)</li>
+<li>means or source of verification</li>
+<li>collection method</li>
+<li>frequency</li>
+<li>responsible party</li>
+<li>disaggregation (sex, geography, segment)</li>
+</ul>
+<p><strong>SMART</strong> (Specific, Measurable, Achievable/Attributable, Relevant, Time-bound) is the usual indicator quality test. Outcome Mapping's progress markers are a <em>graduated</em> alternative for behavioural change: "expect / like / love to see." They are read as a set, not one at a time.</p>
+<h3 id="timeline-consistency">Timeline consistency<a class="headerlink" href="#timeline-consistency" title="Permanent link">&para;</a></h3>
+<p>ActKnowledge notes that an outcome's timeline depends on the outcomes above and below it. A downstream target cannot be earlier than its upstream precondition. This is a constraint a validator can check.</p>
+<h3 id="attribution-versus-contribution">Attribution versus contribution<a class="headerlink" href="#attribution-versus-contribution" title="Permanent link">&para;</a></h3>
+<p>In complex settings, population-level change can rarely be attributed to a single actor. ToC-based evaluation therefore uses <em>contribution</em> claims.</p>
+<p><strong>Contribution Analysis (Mayne 2001, 2008, 2012)</strong> has six iterative steps:</p>
+<ol>
+<li>Set out the cause-effect (attribution or contribution) question.</li>
+<li>Develop the ToC and the risks to it.</li>
+<li>Gather existing evidence on the ToC.</li>
+<li>Assemble and assess the contribution story and the challenges to it.</li>
+<li>Seek additional evidence.</li>
+<li>Revise and strengthen the contribution story, looping back to step 4.</li>
+</ol>
+<p>A contribution claim is credible when four conditions hold: the ToC is plausible, it was implemented as intended, the expected chain of results occurred and the assumptions held (a verified ToC), and other influencing factors were assessed and accounted for. Mayne's later <em>robust ToC</em> / COM-B work structures each link as <strong>reach → capacity change (capability, opportunity, motivation) → behaviour change → direct benefits → wellbeing</strong>, with a separate assumption set for each link and explicit external influences.</p>
+<h3 id="evidence-strength">Evidence strength<a class="headerlink" href="#evidence-strength" title="Permanent link">&para;</a></h3>
+<p>Process tracing, often combined with Contribution Analysis (Befani &amp; Mayne, 2014), grades evidence for a causal link using four tests:</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Necessary?</th>
+<th>Sufficient?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Straw-in-the-wind</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Hoop</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Smoking gun</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Doubly decisive</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Bayesian updating approaches (Befani &amp; Stedman-Bryce) turn these into confidence levels. A simpler ordinal scale (strong / moderate / weak / none / contradicting) is common in practice. Evidence sources include research literature, prior evaluation, monitoring data, expert judgement and stakeholder testimony.</p>
+<h3 id="assumption-testing">Assumption testing<a class="headerlink" href="#assumption-testing" title="Permanent link">&para;</a></h3>
+<p>UNDG's three questions mark each assumption as plausible or not and as needing testing or not. During implementation, assumptions should be monitored, sometimes with their own indicators, and assigned a status: holding, weakening, or failed.</p>
+<h3 id="complementary-methods">Complementary methods<a class="headerlink" href="#complementary-methods" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Outcome Harvesting</strong> (Wilson-Grau &amp; Britt, 2012) works backwards from observed change. It collects outcome statements (<em>what changed, for whom, when, where</em>), notes the <em>significance</em> of each and the <em>contribution</em> of the intervention, substantiates them with independent informants, and compares them to the ToC to find unanticipated pathways. It has six steps: design, gather data and draft outcome descriptions, engage informants, substantiate, analyse and interpret, and support use.</li>
+<li><strong>Most Significant Change</strong> (Davies &amp; Dart, 2005) collects stories of change within <em>domains of change</em>, then selects the most significant through structured stakeholder panels that record their reasons for choosing. It is qualitative and participatory, and useful for spotting unexpected outcomes and value shifts.</li>
+<li><strong>OECD-DAC criteria</strong> (revised 2019): relevance, coherence, effectiveness, efficiency, impact, sustainability. Evaluations of a ToC-based program typically report against these.</li>
+</ul>
+<h3 id="adaptive-management-and-revision">Adaptive management and revision<a class="headerlink" href="#adaptive-management-and-revision" title="Permanent link">&para;</a></h3>
+<p>All sources stress that a ToC is a living model. Monitoring data feeds back into the theory: pathways are revised, assumptions retested, interventions dropped. Patrizi warned against treating the ToC as a fixed plan, and Vogel recommended performance management that "tolerates uncertainty." Every revision should therefore be versioned, with the reason for change, the evidence that triggered it, and a diff.</p>
+<h2 id="5-common-artifacts-and-deliverables">5. Common artifacts and deliverables<a class="headerlink" href="#5-common-artifacts-and-deliverables" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Pathway diagram / outcomes framework map:</strong> boxes and arrows, with the ceiling line, intervention symbols on connectors, and clusters. There are usually two versions: a detailed working map and a simplified communication map.</li>
+<li><strong>Narrative:</strong> 1–2 pages.</li>
+<li><strong>Assumptions table:</strong> assumption, type, linked element, evidence, plausibility, whether testing is needed, status, linked risk.</li>
+<li><strong>Risk register:</strong> risk, category, likelihood, impact, mitigation, linked assumption.</li>
+<li><strong>Indicator / measurement framework (results framework, M&amp;E plan):</strong> one row per indicator, with baseline, targets, milestones, source, frequency and owner.</li>
+<li><strong>Logframe</strong> (often derived from the ToC for donors): a 4×4 matrix. Rows are goal, purpose/outcome, outputs and activities. Columns are narrative summary, objectively verifiable indicators, means of verification and assumptions.</li>
+<li><strong>Actor / partner map:</strong> roles, boundary partners, division of labour.</li>
+<li><strong>Problem tree and solution tree.</strong></li>
+<li><strong>Progress reports and dashboards:</strong> indicator actual against target, outcome status rolled up by pathway, assumption health, and contribution narrative. These go to leadership, funders or a public audience. ISEAL and DCED require public or audited reporting.</li>
+<li><strong>Evaluation reports:</strong> a contribution story, validity of the ToC, and recommended revisions.</li>
+</ol>
+<h2 id="6-toc-compared-with-logic-model-logframe-and-results-chain">6. ToC compared with logic model, logframe and results chain<a class="headerlink" href="#6-toc-compared-with-logic-model-logframe-and-results-chain" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Theory of Change</strong></th>
+<th><strong>Logic model</strong></th>
+<th><strong>Logframe (LFA)</strong></th>
+<th><strong>Results chain</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core form</td>
+<td>Causal <em>network</em> of outcomes, with rationales, assumptions and interventions</td>
+<td>Linear columns: inputs → activities → outputs → outcomes → impact (Kellogg, 2004)</td>
+<td>4×4 matrix with an assumptions column (USAID, 1969)</td>
+<td>Linear chain of the same five levels (RBM, DCED)</td>
+</tr>
+<tr>
+<td>Direction of reasoning</td>
+<td>Backwards from the goal</td>
+<td>Forwards ("if… then")</td>
+<td>Top-down hierarchy</td>
+<td>Forwards</td>
+</tr>
+<tr>
+<td>Explains <em>why</em> links hold</td>
+<td>Yes (rationales, evidence)</td>
+<td>Rarely</td>
+<td>Only through the assumptions column</td>
+<td>Rarely</td>
+</tr>
+<tr>
+<td>Multiple pathways, non-linearity</td>
+<td>Yes</td>
+<td>Limited</td>
+<td>No</td>
+<td>Limited (DCED allows branches)</td>
+</tr>
+<tr>
+<td>Context and other actors</td>
+<td>Explicit</td>
+<td>Usually absent</td>
+<td>External assumptions only</td>
+<td>Sometimes</td>
+</tr>
+<tr>
+<td>Main use</td>
+<td>Strategy, learning, evaluation design</td>
+<td>Program description and communication</td>
+<td>Contracting, accountability, monitoring</td>
+<td>Results measurement, attribution</td>
+</tr>
+</tbody>
+</table>
+<p>A recurring point in the sources: "a logic model without reference to the context [is] more of a log-frame than a theory of change" (Vogel). Logic models and logframes can be <em>generated from</em> a ToC by flattening it, but not the reverse. For a data model, this means the ToC graph should be the primary structure, with logframe and logic-model views produced by projection.</p>
+<h3 id="critiques-that-matter-for-modelling">Critiques that matter for modelling<a class="headerlink" href="#critiques-that-matter-for-modelling" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Rick Davies (2018), "Representing Theories of Change":</strong> most ToC diagrams are technically poor. They give too much attention to the arrows and too little to the events (nodes), leave AND/OR relationships ambiguous, cannot be evaluated, and ignore feedback. Davies argues for network representations and software. He also distinguishes <em>temporal</em> ToCs (sequenced) from <em>atemporal</em> ones (configurational).</li>
+<li><strong>Linearity critiques (complexity scholars):</strong> real change involves feedback loops and emergence. A ToC models belief, not reality.</li>
+<li><strong>"ToC-washing":</strong> logframes or strategic plans relabelled as ToCs. Terms such as output, outcome and impact are used inconsistently.</li>
+</ul>
+<p>The design response is explicit node semantics, explicit gate logic, optional cycles and evaluability validation.</p>
+<h2 id="7-applicability-to-business-market-and-technology-ecosystem-change">7. Applicability to business, market and technology-ecosystem change<a class="headerlink" href="#7-applicability-to-business-market-and-technology-ecosystem-change" title="Permanent link">&para;</a></h2>
+<p>The literature on ToC outside the nonprofit and development sector is thinner but directly relevant:</p>
+<ul>
+<li><strong>Market Systems Development (MSD / M4P).</strong> Practical Action's PMSD toolkit defines a ToC as linking "project activities, market actor behaviour changes, market system changes and impacts on target groups." The <strong>Adopt–Adapt–Expand–Respond (AAER)</strong> framework (Springfield Centre; Nippard, Hitchins &amp; Elliott, 2014) models systemic change among <em>competing market actors</em>:<ul>
+<li><strong>Adopt:</strong> pilot partners take up a practice and benefit from it.</li>
+<li><strong>Adapt:</strong> they invest independently and continue without support.</li>
+<li><strong>Expand:</strong> competitors copy or crowd in.</li>
+<li><strong>Respond:</strong> non-competing supporting actors (regulators, service providers) adjust.</li>
+</ul>
+</li>
+</ul>
+<p>This maps almost exactly onto driving adoption of a technical standard. A Uganda case found adoption stalled because of weak competition, which forced a ToC revision: an assumption about market structure had failed.
+- <strong>DCED Standard for Results Measurement</strong> (private-sector development). It covers results chains, indicators for each key change, <em>attribution</em> estimation, systemic-change measurement, cost tracking and audit. It is structured as control points with must and recommended levels, a useful precedent for conformance levels in a spec.
+- <strong>Voluntary sustainability standards (ISEAL Code, 2024; formerly Impacts Code v2.0).</strong> Standards bodies must define intended impacts, publish a ToC, keep it current through defined procedures, and run M&amp;E with feedback loops and public reporting. Rainforest Alliance publishes its ToC as outcomes, strategies (causal pathways) and indicators. This is the clearest real-world case of a ToC for driving adoption of a standard across a market.
+- <strong>Collective Impact</strong> (Kania &amp; Kramer, SSIR 2011). Here several organisations, including competitors, share a common agenda, <em>shared measurement</em>, mutually reinforcing activities, continuous communication and a backbone organisation. The data model needs multi-actor ownership of outcomes and shared indicators.
+- <strong>Industry transition research.</strong> Studies describe green-practice transitions moving through initiation, then adoption via voluntary standards, then legitimation through framing, then commercialisation by new entrants. Contribution comes from several stakeholders, not a single leader.
+- <strong>Corporate strategy analogues.</strong> These are not labelled ToC but share its structure:
+    - Kaplan &amp; Norton <em>strategy maps</em> (cause-effect links across balanced-scorecard perspectives)
+    - Rumelt's diagnosis, guiding policy and coherent actions
+    - "working backwards" product planning
+    - OKRs (outcome-level objectives with key-result indicators)
+    - Rogers' diffusion of innovations (adoption-curve segments as populations for indicators)
+- <strong>Philanthropy and impact investing.</strong> Brest (2010) and Jackson (2013) apply ToC to investment portfolios, where <em>additionality</em> is the counterpart of contribution.</p>
+<h3 id="implications-for-a-market-or-ecosystem-toc">Implications for a market or ecosystem ToC<a class="headerlink" href="#implications-for-a-market-or-ecosystem-toc" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Actors can be <strong>competitors</strong>, with incentive-based assumptions such as "first-movers gain advantage."</li>
+<li>Outcomes are commonly <strong>behaviour or practice changes by organisations</strong>, the Influence category, rather than changes in individual wellbeing.</li>
+<li>Indicators are often <strong>adoption counts or shares</strong> within a defined population (the market segment).</li>
+<li><strong>Network effects</strong> and <strong>tipping points</strong> introduce reinforcing feedback loops and threshold (k-of-n) logic.</li>
+<li>Accountability sits at "influence." Market-wide impact is above the ceiling.</li>
+</ul>
+<h2 id="8-recommended-conceptual-entity-model">8. Recommended conceptual entity model<a class="headerlink" href="#8-recommended-conceptual-entity-model" title="Permanent link">&para;</a></h2>
+<h3 id="81-entities">8.1 Entities<a class="headerlink" href="#81-entities" title="Permanent link">&para;</a></h3>
+<p>Entities are marked <strong>[C]</strong> for core and <strong>[E]</strong> for optional or extension. Cardinalities are given in parentheses.</p>
+<p><strong>TheoryOfChange [C]</strong> is the root document.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>name</code>, <code>version</code>, <code>status</code> (draft / active / under_review / archived), <code>scope</code> {breadth, depth}, <code>timeHorizon</code>, <code>problemStatement</code>, <code>narrative</code>, <code>owners[]</code>, <code>createdAt</code>, <code>updatedAt</code>.</li>
+<li>Contains (1:N): outcomes, links, preconditionGroups, interventions, assumptions, indicators, evidence, risks, actors, externalFactors, revisions.</li>
+<li><code>accountabilityCeiling</code>: the ID(s) of the highest accountable outcome(s), or a level marker.</li>
+</ul>
+<p><strong>Outcome [C]</strong> is a node.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>statement</code> (a positive condition, not an activity), <code>description</code>, <code>level</code> (enum: <code>impact</code> / <code>long_term</code> / <code>intermediate</code> / <code>short_term</code>), <code>category</code> [E] (<code>impact</code> / <code>influence</code> / <code>leverage</code> / <code>capacity</code>; or COM-B <code>reach</code> / <code>capability</code> / <code>opportunity</code> / <code>motivation</code> / <code>behavior</code> / <code>direct_benefit</code> / <code>wellbeing</code>), <code>changeType</code> [E] (knowledge / attitude / skill / behavior / practice / policy / norm / condition / investment / adoption).</li>
+<li><code>accountability</code> (enum: <code>accountable</code> / <code>contributory</code> / <code>above_ceiling</code>).</li>
+<li><code>sphere</code> [E] (<code>control</code> / <code>influence</code> / <code>interest</code>).</li>
+<li><code>population</code> (who or what changes), <code>timeframe</code>, <code>pathwayIds[]</code>, <code>clusterId?</code>, <code>priority</code>, <code>ownerActorIds[]</code> (N:M, which supports shared or collective outcomes).</li>
+<li><code>status</code> is derived (see 8.3).</li>
+</ul>
+<p><strong>CausalLink [C]</strong> is a directed edge from a source node to a target node.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>from</code> (an Outcome, or an Intervention for the activity-to-outcome links in logic-model style), <code>to</code> (an Outcome or a PreconditionGroup).</li>
+<li><code>rationale</code> (text), <code>assumptionIds[]</code> (N:M), <code>evidenceIds[]</code> (N:M), <code>confidence</code> / <code>evidenceStrength</code> (enum: <code>strong</code> / <code>moderate</code> / <code>weak</code> / <code>none</code> / <code>contested</code>).</li>
+<li><code>polarity</code> [E] (<code>positive</code> / <code>negative</code>), <code>lag</code> [E] (duration), <code>isFeedback</code> [E] (bool), <code>loopType</code> [E] (<code>reinforcing</code> / <code>balancing</code>).</li>
+<li><code>interventionIds[]</code>: ActKnowledge places interventions <em>on connectors</em>.</li>
+</ul>
+<p><strong>PreconditionGroup [C]</strong> carries the AND/OR semantics; ActKnowledge calls this a "cluster."</p>
+<ul>
+<li>Fields: <code>id</code>, <code>targetOutcomeId</code>, <code>memberOutcomeIds[]</code> (≥ 2), <code>logic</code> (enum: <code>all</code> [AND, the default necessary-and-sufficient set] / <code>any</code> [OR, alternative pathways] / <code>threshold</code> with <code>minCount</code> [k-of-n] / <code>weighted</code> [E]).</li>
+<li><code>sufficiencyAssessment</code> (text or enum).</li>
+<li>Groups may nest (a member may be another group), which allows expressions such as (A AND B) OR C.</li>
+</ul>
+<p><strong>Pathway [E]</strong> is a named subset of nodes and edges (e.g. "law-enforcement pathway"), for views and reporting rollups.</p>
+<p><strong>Intervention [C]</strong> covers strategies, programs and initiatives.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>name</code>, <code>type</code> (enum: <code>strategy</code> / <code>intervention</code> / <code>activity</code>, hierarchical through <code>parentId</code>), <code>description</code>, <code>targets</code> (links or outcomes it is meant to produce, 1:N), <code>ownerActorIds[]</code>, <code>status</code> (planned / active / paused / completed / discontinued), <code>startDate</code>, <code>endDate</code>, <code>resources</code> / <code>budget</code> [E], <code>outputs[]</code> [E] (deliverables with output indicators).</li>
+<li><code>category</code> [E]: ORS impact / influence / leverage approach, or MSD AAER stage targeted.</li>
+</ul>
+<p><strong>Assumption [C]</strong></p>
+<ul>
+<li>Fields: <code>id</code>, <code>statement</code> (preferably <em>if X then Y because Z</em>), <code>type</code> (enum: <code>causal</code> / <code>contextual</code> / <code>implementation</code> / <code>partnership</code> / <code>completeness</code> / <code>values</code>), <code>appliesTo</code> (polymorphic refs to links, outcomes, interventions or the whole ToC; N:M).</li>
+<li><code>plausibility</code> (high / medium / low), <code>criticality</code> (high / medium / low), <code>needsTesting</code> (bool), <code>testMethod</code>, <code>status</code> (enum: <code>untested</code> / <code>holding</code> / <code>weakening</code> / <code>failed</code> / <code>revised</code>), <code>evidenceIds[]</code>, <code>indicatorIds[]</code> (assumption-monitoring indicators), <code>relatedRiskIds[]</code>.</li>
+</ul>
+<p><strong>Risk [E, recommended]</strong></p>
+<ul>
+<li>Fields: <code>id</code>, <code>description</code>, <code>category</code> (political_environmental / design / partnership / market / technical / operational / opportunity), <code>likelihood</code>, <code>impact</code>, <code>mitigation</code>, <code>ownerActorId</code>, <code>relatedAssumptionIds[]</code>, <code>status</code>.</li>
+</ul>
+<p><strong>ExternalFactor [E]</strong>: contextual conditions or other actors' work that affect outcomes.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>description</code>, <code>effect</code> (enabling / hindering), <code>affects[]</code> (refs), <code>monitored</code> (bool).</li>
+</ul>
+<p><strong>Actor [C-lite]</strong> covers stakeholders, partners and competitors.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>name</code>, <code>type</code> (organization / group / individual / segment), <code>roles[]</code> (enum: <code>owner</code> / <code>implementer</code> / <code>partner</code> / <code>funder</code> / <code>boundary_partner</code> / <code>beneficiary</code> / <code>target_adopter</code> / <code>competitor</code> / <code>regulator</code> / <code>influencer</code> / <code>backbone</code>), <code>relationship</code> (control / influence / interest).</li>
+<li>Referenced by outcomes (who changes), interventions (who acts) and indicators (population).</li>
+</ul>
+<p><strong>Indicator [C]</strong></p>
+<ul>
+<li>Fields: <code>id</code>, <code>name</code>, <code>measures</code> (an Outcome, Intervention/output or Assumption; N:1 per indicator), <code>definition</code>, <code>type</code> (quantitative / qualitative / binary / milestone / progress_marker), <code>unit</code>, <code>direction</code> (increase / decrease / maintain / achieve).</li>
+<li>The four ActKnowledge components:<ul>
+<li><code>population</code> {description, actorIds or segment, size}</li>
+<li><code>target</code> {count or proportion of the population}</li>
+<li><code>threshold</code> {level of change considered sufficient}</li>
+<li><code>timeline</code> {due date}</li>
+</ul>
+</li>
+<li><code>baseline</code> {value, date, sourceId, notes}, <code>targets[]</code> {value, dueDate, threshold, label}, <code>milestones[]</code> (interim targets).</li>
+<li><code>dataSource</code>, <code>collectionMethod</code>, <code>frequency</code> (enum or ISO-8601 duration), <code>responsibleActorId</code>, <code>disaggregations[]</code>.</li>
+<li><code>smartCheck</code> [E], <code>proxyFor[]</code> [E] (outcome IDs this indicator stands in for), <code>progressMarkerLevel</code> [E] (expect / like / love).</li>
+</ul>
+<p><strong>Measurement (Observation) [C]</strong>: time-series data points.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>indicatorId</code>, <code>value</code> (number / string / bool), <code>periodStart</code>, <code>periodEnd</code> (or <code>observedAt</code>), <code>disaggregation</code> {key: value}, <code>sourceId</code>, <code>dataQuality</code> (verified / reported / estimated), <code>notes</code>, <code>recordedBy</code>.</li>
+</ul>
+<p><strong>Evidence [E, recommended]</strong></p>
+<ul>
+<li>Fields: <code>id</code>, <code>type</code> (research / evaluation / monitoring_data / expert_judgment / stakeholder_testimony / case_study / outcome_harvest / msc_story), <code>citation</code> / <code>url</code>, <code>summary</code>, <code>strength</code> (strong / moderate / weak), <code>processTracingTest</code> [E] (straw_in_the_wind / hoop / smoking_gun / doubly_decisive), <code>supports</code> / <code>contradicts</code> (refs), <code>date</code>.</li>
+</ul>
+<p><strong>ContributionClaim [E]</strong>: Contribution Analysis output.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>outcomeId</code>, <code>interventionIds[]</code>, <code>claim</code>, <code>rivalExplanations[]</code> (external factors), <code>evidenceIds[]</code>, <code>confidence</code>, <code>conditions</code> {plausible, implementedAsIntended, chainObserved, otherFactorsAccounted} (bools), <code>assessedAt</code>.</li>
+</ul>
+<p><strong>ObservedOutcome [E]</strong>: Outcome Harvesting and MSC records of <em>actual</em>, possibly unanticipated, change.</p>
+<ul>
+<li>Fields: <code>id</code>, <code>description</code>, <code>actorId</code>, <code>when</code>, <code>where</code>, <code>significance</code>, <code>contribution</code>, <code>substantiated</code> (bool), <code>mappedOutcomeId?</code> (null means unanticipated, which suggests a revision to the ToC).</li>
+</ul>
+<p><strong>Review / Revision [C for versioning]</strong></p>
+<ul>
+<li>Fields: <code>id</code>, <code>version</code>, <code>date</code>, <code>type</code> (quality_review / periodic_review / evaluation / adaptive_change), <code>qualityCriteria</code> {plausible, feasible, testable: pass / partial / fail + notes}, <code>changes[]</code> (added / removed / modified element refs), <code>rationale</code>, <code>triggerEvidenceIds[]</code>, <code>decisions[]</code>.</li>
+</ul>
+<p><strong>Report / Snapshot [E]</strong>: generated, not stored as source data.</p>
+<ul>
+<li>Fields: <code>asOf</code>, <code>audience</code> (leadership / funder / public / partners), status rollups, indicator actual against target, assumption health, risks, contribution narrative. Logframe and logic-model <em>views</em> are projections from the graph.</li>
+</ul>
+<p><strong>ProblemTree [E]</strong>: <code>Cause</code> nodes {<code>id</code>, <code>statement</code>, <code>level</code> (immediate / underlying / structural), <code>parentId</code>}, plus a mapping from causes to the solution outcomes that address them.</p>
+<h3 id="82-graph-semantics">8.2 Graph semantics<a class="headerlink" href="#82-graph-semantics" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Nodes</strong> are typed: outcome (with level), intervention, assumption, external factor, risk. Only outcomes and interventions take part in the causal backbone. Assumptions, risks and external factors attach to links or nodes as annotations.</li>
+<li><strong>Edges</strong> are directed <code>CausalLink</code>s meaning "contributes to / is a precondition of." The default reading of all incoming edges to a node is <strong>AND</strong>: preconditions are jointly necessary. Any other logic must be stated explicitly through a <code>PreconditionGroup</code> (OR, k-of-n, nested), which addresses Davies's ambiguity critique. A validator should warn when a node has more than one incoming edge with no stated logic, if the spec chooses to require explicitness.</li>
+<li><strong>Acyclicity:</strong> the backbone, excluding links marked <code>isFeedback: true</code>, should be a DAG. Feedback links (<code>reinforcing</code> / <code>balancing</code>) are allowed but must be declared. This supports network effects and adoption tipping points.</li>
+<li><strong>Root and leaves:</strong> exactly one (or a declared small set of) LTOs at the accountability ceiling. Optional <code>impact</code> nodes sit above the ceiling. Every outcome should have a path to an LTO; orphans are a validation warning.</li>
+<li><strong>Level monotonicity:</strong> edges should go from lower or equal levels to higher levels (short-term to intermediate to long-term to impact). Same-level horizontal links are allowed, as UNDG notes.</li>
+<li><strong>Interventions</strong> attach either to a link (ActKnowledge style, "what it takes for A to produce B") or directly to an outcome. Both should be supported, with a mode flag.</li>
+<li><strong>Timeline consistency:</strong> an outcome's indicator due date should be no earlier than the due dates of its preconditions. This is checkable.</li>
+<li><strong>Ceiling semantics:</strong> an outcome above the ceiling must not be <code>accountable</code>. Contribution claims apply above the ceiling and attribution or achievement claims below it.</li>
+</ul>
+<h3 id="83-measurement-semantics">8.3 Measurement semantics<a class="headerlink" href="#83-measurement-semantics" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Indicator status</strong> is computed from the latest measurement against the applicable milestone or target: <code>no_data</code> / <code>not_started</code> / <code>on_track</code> / <code>at_risk</code> / <code>off_track</code> / <code>achieved</code> / <code>missed</code>. Direction-aware comparison and threshold logic handle increase, decrease and maintain.</li>
+<li><strong>Outcome status</strong> is derived, never set directly. It rolls up from the outcome's indicators using a stated aggregation (all / any / weighted / primary-indicator). Optionally it is gated by precondition-group logic: an outcome cannot be "achieved" while required preconditions are off-track, unless there is an explicit override with a reason. This mirrors the convention that a roadmap phase status is derived from its items.</li>
+<li><strong>Pathway and ToC health</strong> roll up outcome statuses, assumption statuses (count of failed or weakening critical assumptions) and risks.</li>
+<li><strong>Revision triggers:</strong> a failed assumption, a missed milestone on a critical link, or an unanticipated <code>ObservedOutcome</code> should create a review prompt. This is the adaptive-management loop.</li>
+<li><strong>Provenance:</strong> every measurement and evidence item cites a source. Reports state the as-of date and the data quality.</li>
+</ul>
+<h3 id="84-core-and-extension-summary">8.4 Core and extension summary<a class="headerlink" href="#84-core-and-extension-summary" title="Permanent link">&para;</a></h3>
+<p><strong>Core (minimum viable ToC, matching Vogel's consensus elements and the ActKnowledge components):</strong></p>
+<ul>
+<li>TheoryOfChange (problem statement, narrative, ceiling)</li>
+<li>Outcome</li>
+<li>CausalLink (with rationale)</li>
+<li>PreconditionGroup (AND/OR)</li>
+<li>Intervention</li>
+<li>Assumption</li>
+<li>Indicator (population / target / threshold / timeline, baseline, targets)</li>
+<li>Measurement</li>
+<li>Actor (minimal)</li>
+<li>Revision</li>
+</ul>
+<p><strong>Extension modules:</strong></p>
+<ul>
+<li>Risk and ExternalFactor</li>
+<li>Evidence and process-tracing grades</li>
+<li>ContributionClaim</li>
+<li>ObservedOutcome (Outcome Harvesting / MSC)</li>
+<li>ProblemTree</li>
+<li>Pathway views</li>
+<li>Outcome category taxonomies (ORS impact/influence/leverage, COM-B, MSD AAER, ISEAL)</li>
+<li>Feedback loops</li>
+<li>Outputs and budgets</li>
+<li>Logframe and logic-model projections</li>
+<li>Reports and dashboards</li>
+</ul>
+<p>Taxonomies should be pluggable as extensible enumerations so that development, corporate and market-adoption ToCs can share one core.</p>
+<h2 id="9-primary-source-review-undg-undaf-companion-guidance-2017">9. Primary-source review: UNDG UNDAF Companion Guidance (2017)<a class="headerlink" href="#9-primary-source-review-undg-undaf-companion-guidance-2017" title="Permanent link">&para;</a></h2>
+<p>A full read of the 15-page UNDG guidance. It confirms the summaries above: the four steps, the three assumption questions, the assumption and risk types, and the cause levels. It also adds the details below, which matter for the data model. Page numbers refer to the PDF.</p>
+<h3 id="91-principles-and-structure">9.1 Principles and structure<a class="headerlink" href="#91-principles-and-structure" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Three principles (p. 5).</strong> A ToC is:<ul>
+<li>developed consultatively;</li>
+<li>grounded in, tested with, and revised on evidence at all stages;</li>
+<li>a support for continuous learning from design to closure.</li>
+</ul>
+</li>
+<li><strong>Validation at every step (p. 5).</strong> Each of the four steps (focus, change analysis, assumptions and risks, partners and actors) is validated against evidence and through stakeholder consultation. This is drawn as a loop around the steps, not as a final gate.</li>
+<li><strong>Nested theories (pp. 4, 13).</strong> An overarching ToC is supported by:<ul>
+<li>outcome-level ToCs that explain the outputs in each results group's work plan;</li>
+<li>optionally, agency-specific ToCs.</li>
+</ul>
+</li>
+</ul>
+<p>All are linked to the overarching ToC and kept as annexes that are re-validated during monitoring.</p>
+<h3 id="92-step-1-focus-p-6">9.2 Step 1 — Focus (p. 6)<a class="headerlink" href="#92-step-1-focus-p-6" title="Permanent link">&para;</a></h3>
+<p>High-level changes are selected against explicit criteria:</p>
+<ul>
+<li><strong>Equity:</strong> leaving no one behind, and gender equality.</li>
+<li><strong>Comparative advantage:</strong> the mandate and ability to build lasting capacity; where the organization can have the greatest impact.</li>
+<li><strong>Feasibility.</strong></li>
+</ul>
+<h3 id="93-step-2-change-analysis-pp-68">9.3 Step 2 — Change analysis (pp. 6–8)<a class="headerlink" href="#93-step-2-change-analysis-pp-68" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Problem tree.</strong> Start from a problem tree with immediate, underlying, and structural/root causes. Branches are organized into pathways that link cause levels and show how they interlink.</li>
+<li><strong>Solution tree.</strong> Convert the problem tree into a solution tree with an expected solution <em>for each level of causality</em>. The solution tree need not mirror the problem tree, but every cause must be addressed. Capacity-development needs appear at the underlying level.</li>
+<li><strong>Criteria for solutions.</strong> Proposed solutions are checked against equity, comparative advantage, feasibility (resources, partnerships, political, cultural, or operational risks), and <strong>what works</strong>: evidence of the scale of change achieved by similar solutions, and of where they failed.</li>
+<li><strong>Partner-delivered parts are still monitored.</strong> The solution tree includes changes that <em>other partners</em> deliver. The organization prioritizes a subset (Figure 3 colours the prioritized boxes differently), but "will still monitor progress of the entire solution tree … because failure to achieve results in an area where other partners work will most likely hinder the achievement of the ultimate objective."</li>
+<li><strong>Horizontal links.</strong> Cause–effect links may run horizontally as well as vertically.</li>
+<li><strong>Equity review before Step 3.</strong> The ToC must:<ul>
+<li>target the most vulnerable;</li>
+<li>address inequality and its root causes, not only immediate ones;</li>
+<li>explicitly target women and girls;</li>
+<li>aim at sustainable change through institutions.</li>
+</ul>
+</li>
+</ul>
+<h3 id="94-step-3-assumptions-and-risks-pp-89">9.4 Step 3 — Assumptions and risks (pp. 8–9)<a class="headerlink" href="#94-step-3-assumptions-and-risks-pp-89" title="Permanent link">&para;</a></h3>
+<p><strong>Assumptions.</strong> These are written as <em>if X, then Y, because Z</em> and assessed against evidence. There are four types:</p>
+<ul>
+<li><strong>Causality:</strong> the mechanism by which one result leads to another.</li>
+<li><strong>Implementation:</strong> design and targeting of the interventions.</li>
+<li><strong>External factors:</strong> influences from outside the area of work.</li>
+<li><strong>Partnerships:</strong> conflicts among partners' interests; the ability to take on new partners.</li>
+</ul>
+<p>Each assumption gets three questions:</p>
+<ol>
+<li>Does it fully explain the change? If not, refine it or add assumptions.</li>
+<li>Is it plausible, given the evidence and stakeholders' experience?</li>
+<li>Does it need testing, through evaluation or close monitoring?</li>
+</ol>
+<p><strong>Risks.</strong> Exploring assumptions first helps surface risks, because the two are "often inversely related". There are four categories:</p>
+<ul>
+<li><strong>Environmental and political:</strong> elections, staff turnover in government, disasters, policy changes, commodity prices.</li>
+<li><strong>Opportunities:</strong> whether the organization can take advantage of future opportunities.</li>
+<li><strong>Design:</strong> targeting difficulties, missing data or access, rigidity.</li>
+<li><strong>Partnerships.</strong></li>
+</ul>
+<p>Only the most important risks need isolating. When they materialize, assumptions are revised and the ToC adapted.</p>
+<h3 id="95-step-4-partners-and-key-actors-p-9">9.5 Step 4 — Partners and key actors (p. 9)<a class="headerlink" href="#95-step-4-partners-and-key-actors-p-9" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Division of labour.</strong> For each result: who does what, where two or more entities must collaborate, and how to avoid overlap.</li>
+<li><strong>Elements outside the organization's reach.</strong> Some elements are vital to success but outside what the organization can address directly. They may not appear in the results framework, but they are recognized as factors and may be pursued through advocacy or other engagement strategies.</li>
+</ul>
+<h3 id="96-quality-assurance-checklist-p-11">9.6 Quality assurance checklist (p. 11)<a class="headerlink" href="#96-quality-assurance-checklist-p-11" title="Permanent link">&para;</a></h3>
+<p>The PDF lists the first two items twice, so there are 15 entries but 13 distinct items. Grouped for modelling:</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Checklist items</th>
+<th>Generic?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Process</td>
+<td>Collaborative, participatory process with multiple stakeholder perspectives, including marginalized voices</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Logic</td>
+<td>Plausible, clear, logical flow "without any leaps of faith or gaps in logic"; root and underlying causes tackled, not just immediate ones</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Assumptions and risks</td>
+<td>Clearly states the assumptions and risks most relevant to whether change will happen</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Actors</td>
+<td>Identifies who does what, and the key partners whose effort is required</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td>Refers to evidence from credible sources; identifies limitations in the evidence base to inform evaluation priorities</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Equity and targeting</td>
+<td>Benefits the most vulnerable; targets women and girls; names specific changes for targeted groups "rather than relying on assumptions about how particular groups benefit"</td>
+<td>Partly. Targeted groups and disaggregation are generic; gender targeting is UN-specific</td>
+</tr>
+<tr>
+<td>Sustainability and resilience</td>
+<td>Strengthens institutions; resilience to shocks (climate, epidemics, hazards, conflict); poverty–environment links; structural causes of violence</td>
+<td>UN / development-specific</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>A diagram embedded in the narrative of programme documents</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="97-from-toc-to-programme-document-p-12">9.7 From ToC to programme document (p. 12)<a class="headerlink" href="#97-from-toc-to-programme-document-p-12" title="Permanent link">&para;</a></h3>
+<p>The guidance maps ToC elements onto sections of the programme document:</p>
+<ul>
+<li><strong>Narrative summary:</strong> causal factors, how affected groups differ, and evidence.</li>
+<li><strong>Risks and assumptions:</strong> why these priorities were chosen; comparative advantage; risks with mitigation.</li>
+<li><strong>Initiatives outside the results matrix:</strong> partner-delivered parts of the solution tree.</li>
+<li><strong>Implementation arrangements:</strong> who does what.</li>
+<li><strong>M&amp;E provisions:</strong> assumptions needing testing; regular monitoring and updating of the ToC; evaluation of the ToC's validity.</li>
+<li><strong>Communication of results.</strong></li>
+<li><strong>Results matrix:</strong> outcomes tied to the high-level changes; indicators that measure the changes for targeted groups.</li>
+</ul>
+<h3 id="98-implications-for-the-data-model">9.8 Implications for the data model<a class="headerlink" href="#98-implications-for-the-data-model" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Promote the <strong>problem tree</strong> (causes with levels, plus outcome-to-cause links) from extension to core-lite.</li>
+<li>Add an outcome's <strong>responsibility</strong> (<code>own</code>, <code>shared</code>, <code>partner</code>, <code>unaddressed</code>) and its delivering actors. Monitoring covers all of these, while accountability covers only <code>own</code> and <code>shared</code>.</li>
+<li>Generalize <strong>prioritization criteria</strong> to apply to outcomes and interventions (focus and solution selection), not only metrics.</li>
+<li>Add the <code>partnership</code> assumption type. Add <code>plausibility</code>, <code>needsTesting</code>, and an optional structured <em>if / then / because</em> statement.</li>
+<li>Give risks a <strong>category</strong> and <strong>related assumptions</strong>.</li>
+<li>Record <strong>consultations / validations</strong> for each step: method, stakeholder groups, findings.</li>
+<li>Declare <strong>target groups</strong>, and check that indicators disaggregate by them.</li>
+<li>Make the QA checklist a <strong>rubric profile</strong>: generic items in the core rubric, development-sector items in an optional profile.</li>
+<li>Add a <strong>narrative / programme-document report</strong> following §9.7, and a <strong>division-of-labour report</strong> following §9.5.</li>
+</ul>
+<h2 id="10-citations">10. Citations<a class="headerlink" href="#10-citations" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Wikipedia, "Theory of change." https://en.wikipedia.org/wiki/Theory_of_change</li>
+<li>Center for Theory of Change, "What is Theory of Change?" https://www.theoryofchange.org/what-is-theory-of-change/</li>
+<li>Center for Theory of Change, "How does Theory of Change work?" https://www.theoryofchange.org/what-is-theory-of-change/how-does-theory-of-change-work/</li>
+<li>Center for Theory of Change, Glossary. https://www.theoryofchange.org/what-is-theory-of-change/how-does-theory-of-change-work/glossary/</li>
+<li>Center for Theory of Change, ToC Background and Origins. https://www.theoryofchange.org/what-is-theory-of-change/toc-background/toc-origins/</li>
+<li>Taplin, D. &amp; Clark, H. (2012). <em>Theory of Change Basics: A Primer on Theory of Change</em>. ActKnowledge. https://www.theoryofchange.org/wp-content/uploads/toco_library/pdf/ToCBasics.pdf</li>
+<li>Taplin, D., Clark, H., Collins, E. &amp; Colby, D. (2013). <em>Theory of Change Technical Papers</em>. ActKnowledge. http://www.actknowledge.org/resources/documents/ToC-Tech-Papers.pdf</li>
+<li>Organizational Research Services (Reisman, J. &amp; Gienapp, A.) (2004). <em>Theory of Change: A Practical Tool for Action, Results and Learning</em>. Annie E. Casey Foundation. https://www.aecf.org/resources/theory-of-change (mirror: https://www.issuelab-dev.org/resources/1348/1348.pdf)</li>
+<li>UNDG (2017). <em>UNDAF Companion Guidance: Theory of Change</em>. https://unsdg.un.org/sites/default/files/UNDG-UNDAF-Companion-Pieces-7-Theory-of-Change.pdf</li>
+<li>Vogel, I. (2012). <em>Review of the use of 'Theory of Change' in International Development</em>. DFID. https://assets.publishing.service.gov.uk/media/57a08a5ded915d3cfd00071a/DFID_ToC_Review_VogelV7.pdf</li>
+<li>Weiss, C. (1995). "Nothing as Practical as Good Theory." In Connell, Kubisch, Schorr &amp; Weiss (eds.), <em>New Approaches to Evaluating Comprehensive Community Initiatives</em>. Aspen Institute.</li>
+<li>Anderson, A. (2005). <em>The Community Builder's Approach to Theory of Change</em>. Aspen Institute Roundtable on Community Change.</li>
+<li>Stein, D. &amp; Valters, C. (2012). <em>Understanding Theory of Change in International Development</em>. JSRP / The Asia Foundation.</li>
+<li>Rogers, P. (2014). <em>Theory of Change</em>. Methodological Briefs: Impact Evaluation No. 2. UNICEF Office of Research.</li>
+<li>Mayne, J. (2017). "Theory of change analysis: Building robust theories of change." <em>Canadian Journal of Program Evaluation</em>. https://doi.org/10.3138/cjpe.31122</li>
+<li>Mayne, J. (2016). <em>The COM-B Theory of Change Model</em> (working paper). https://www.slideshare.net/johnmayne/the-comb-toc-model2</li>
+<li>Contribution Analysis overview (Mayne 2001/2008/2012), BetterEvaluation. https://betterevaluation.org/node/2708 ; What Works summary: https://whatworks.org.nz/?p=563</li>
+<li>Davies, R. (2018). "Representing theories of change: technical challenges with evaluation consequences." <em>Journal of Development Effectiveness</em> 10(4). https://econpapers.repec.org/RePEc:taf:jdevef:v:10:y:2018:i:4:p:438-461 ; https://mande.co.uk/?p=7233</li>
+<li>Davies, R. &amp; Dart, J. (2005). <em>The 'Most Significant Change' (MSC) Technique: A Guide to Its Use</em>. https://mande.co.uk/</li>
+<li>Wilson-Grau, R. &amp; Britt, H. (2012). <em>Outcome Harvesting</em>. Ford Foundation. https://outcomeharvesting.net/</li>
+<li>Earl, S., Carden, F. &amp; Smutylo, T. (2001). <em>Outcome Mapping</em>. IDRC. https://en.wikipedia.org/wiki/Outcome_mapping ; INTRAC guide: https://intrac.org/wpcms/wp-content/uploads/2024/11/Outcome-Mapping.pdf</li>
+<li>Befani, B. &amp; Mayne, J. (2014). "Process Tracing and Contribution Analysis: A Combined Approach to Generative Causal Inference." <em>IDS Bulletin</em> 45(6).</li>
+<li>OECD-DAC (2019). <em>Better Criteria for Better Evaluation</em>. https://www.oecd.org/dac/evaluation/daccriteriaforevaluatingdevelopmentassistance.htm</li>
+<li>UNDG (2011). <em>Results-Based Management Handbook</em>. https://unsdg.un.org/resources/results-based-management-handbook</li>
+<li>W.K. Kellogg Foundation (2004). <em>Logic Model Development Guide</em>.</li>
+<li>Brest, P. (2010). "The Power of Theories of Change." <em>Stanford Social Innovation Review</em>. http://www.ssireview.org/articles/entry/the_power_of_theories_of_change</li>
+<li>Kania, J. &amp; Kramer, M. (2011). "Collective Impact." <em>Stanford Social Innovation Review</em>. https://ssir.org/articles/entry/collective_impact</li>
+<li>Practical Action, PMSD Toolkit: Theory of Change. https://practicalaction.org/learning/pmsd-toolkit/tools/theory-of-change</li>
+<li>Nippard, D., Hitchins, R. &amp; Elliott, D. (2014). <em>Adopt-Adapt-Expand-Respond: A Framework for Managing and Measuring Systemic Change Processes</em>. Springfield Centre. https://beamexchange.org/</li>
+<li>BEAM Exchange (2019). <em>Measuring Systemic Change in Market Systems Development: A Stock Taking</em>. https://beamexchange.org/uploads/filer_public/e6/74/e6748359-8f01-49ad-9e8c-42c502fcba09/measuring_systemic_change_in_msd_a_stock_taking-report.pdf</li>
+<li>DCED Standard for Results Measurement (Implementation Guidelines). https://www.enterprise-development.org/wp-content/uploads/2_Implementation_Guidelines_Defining_Indicators.pdf ; https://www.enterprise-development.org/wp-content/uploads/3b_Implementation_Guidelines_Attribution.pdf</li>
+<li>ISEAL Codes of Good Practice. https://www.isealalliance.org/get-involved/resources/iseal-codes-good-practice</li>
+<li>Rainforest Alliance, Theory of Change. https://knowledge.rainforest-alliance.org/docs/theory-of-change</li>
+<li>Belcher, B. &amp; Claus, R. (2020). "Theory of change." td-net Toolbox. https://naturwissenschaften.ch/co-producing-knowledge-explained/methods/td-net_toolbox/theory_of_change</li>
+<li>Jackson, E. (2013). "Interrogating the theory of change: evaluating impact investing where it matters most." <em>Journal of Sustainable Finance &amp; Investment</em>. https://doi.org/10.1080/20430795.2013.776257</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ProductBuildersHQ/theoryofchange-spec" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://productbuildershq.com/js/site-nav.min.js"></script>
+      
+        <script src="https://productbuildershq.com/js/pbhq-nav.js"></script>
+      
+    
+  </body>
+</html>
