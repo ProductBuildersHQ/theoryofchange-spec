@@ -1,0 +1,121 @@
+{
+  "irVersion": "1.0",
+  "project": "theoryofchange-spec",
+  "repository": "https://github.com/ProductBuildersHQ/theoryofchange-spec",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "maintainers": ["grokify"],
+  "releases": [
+    {
+      "version": "v0.1.0",
+      "date": "2026-10-30",
+      "highlights": [
+        {
+          "description": "A Go-first Theory of Change model with generated JSON Schemas, a validated edit engine, and the `theoryofchange` CLI"
+        },
+        {
+          "description": "Quality checks: structural validation, 48 lint rules, and a rubric for LLM-as-a-Judge review"
+        },
+        {
+          "description": "Measurement of indicators, outcomes, and pathways from observations, with assumption propagation and confidence"
+        },
+        {
+          "description": "Reports, four slide decks, and Word, PowerPoint, and CSV export, plus a review round trip"
+        },
+        {
+          "description": "An MCP server with ten tools and five agent skills"
+        }
+      ],
+      "added": [
+        {
+          "description": "Model: outcomes at five levels, precondition groups (`all`, `any`, `at_least`), causal links with polarity and feedback, interventions, assumptions, indicators, actors, evidence, and pathways"
+        },
+        {
+          "description": "Provenance for every element (`stated`, `inferred`, `hypothesis`, `confirmed`, `rejected`) and a ceiling of accountability"
+        },
+        {
+          "description": "Change analysis: responsibility for each outcome, a problem tree, target groups, audiences, and a story codebook"
+        },
+        {
+          "description": "Measurement design: a shared metric library, a glossary, selection criteria, a collection plan, and a budget"
+        },
+        {
+          "description": "Seven JSON Schemas generated from the Go types and embedded: `theory-of-change`, `observation-set`, `theory-of-change-status`, `status-diff`, `actor-registry`, `review-response`, and `csv-mapping`"
+        },
+        {
+          "description": "Canonical YAML and JSON with a stable content hash; `fmt`, `init`, and `schema` commands"
+        },
+        {
+          "description": "`<element> add|set|rm` for twenty element kinds and `patch` for RFC 6902 JSON Patches with `@id` pointers, applied atomically and rejected when they add errors"
+        },
+        {
+          "description": "`diff` compares two versions by element ID and drafts a revision record"
+        },
+        {
+          "description": "`validate` checks the schema and structure, observation sets, children against a parent, and competing futures that share an actor registry"
+        },
+        {
+          "description": "`lint` with 48 rules and `draft`, `standard`, and `full` profiles, reporting as a structured-evaluation summary"
+        },
+        {
+          "description": "`graph` queries upstream and downstream, paths, cycles, orphans, dead ends, and levels, with Graphviz output"
+        },
+        {
+          "description": "`judge show|record|summary` with a core rubric of 12 categories, a development addendum, and four aggregation modes"
+        },
+        {
+          "description": "`import observations` loads a spreadsheet through a column mapping and reports every unmatched row"
+        },
+        {
+          "description": "`status` computes indicator, outcome, pathway, link, and assumption status as of a date, with rollups, assumption caps, rule-based confidence, and a comparison to an earlier snapshot"
+        },
+        {
+          "description": "Eleven definition reports: pathway, logic model, logic-model diagram, outcome map, logframe, metrics, metric selection, collection plan, glossary, assessment, and definitions"
+        },
+        {
+          "description": "Twelve status reports, including executive, results, assumptions, story, learning review, portfolio, narrative, and custom templates"
+        },
+        {
+          "description": "Consent and sensitivity gating for stories and quotes; restricted evidence is never rendered"
+        },
+        {
+          "description": "Four Marp decks: workshop, executive, learning review, and audience story"
+        },
+        {
+          "description": "`export` to CSV, Word, PowerPoint, and OKR and outcome-journey JSON for the PRISM tools, each stamped with the theory's version and hash"
+        },
+        {
+          "description": "Review round trip: `export review-packet` and `export review-sheet`, `import review`, and `approve`"
+        },
+        {
+          "description": "`mcp` serves ten tools over standard input and output, with file paths confined to a root directory"
+        },
+        {
+          "description": "Five agent skills: draft from sources, author, status refresh, learning review, and audience story"
+        },
+        {
+          "description": "Three fictional examples: a membership network, a market-adoption theory, and three competing futures"
+        }
+      ],
+      "tests": [
+        {
+          "description": "Golden files for every report, deck, and table; every example checked for validity, canonical form, and fictional URLs"
+        },
+        {
+          "description": "Seeded-defect tests for every lint rule, a patch engine suite covering every operation and failure, and a run of each agent skill's steps against the examples"
+        },
+        {
+          "description": "Time budgets enforced on a large theory, and the tests compile for Windows with line endings pinned by `.gitattributes`"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "User guides, a CLI reference, and release notes published as a MkDocs site"
+        },
+        {
+          "description": "Research brief, concepts-to-types map, product and technical specifications, and the integration contract draft for USM and UFM"
+        }
+      ]
+    }
+  ]
+}

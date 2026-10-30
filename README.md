@@ -22,9 +22,95 @@ An AI-native, spec-driven way to capture, measure, and report on a
 a Go-first data model with generated JSON Schema, plus an SDK, the
 `theoryofchange` CLI, and an MCP server.
 
-> **Status:** pre-release. The model, the CLI, the MCP server, measurement,
-> reports, decks, and the review round trip are implemented and tested. The
-> first release is pending (see the roadmap).
+> **Status:** the first release, v0.1.0, is prepared; see the
+> [release notes](docs/releases/v0.1.0.md).
+
+## What is a Theory of Change?
+
+A Theory of Change explains **how and why a program expects to bring about a
+change**. It starts from the long-term goal and works backwards: what
+conditions must exist for the goal to be reached, what must exist before each of
+those, and so on down to what the program does today. Each step is an
+**outcome**; each arrow between outcomes is a **causal link** with a reason for
+believing it holds; and each belief that has to be true for a link to work is an
+**assumption** that can be tested.
+
+```mermaid
+flowchart BT
+    A[Staff write strong applications] -->|skilled staff apply more often| C[Members win more funding]
+    B[Members share a funder list] -->|shared leads widen the pool| C
+    C -->|funded work reaches more residents| D[Residents are better served]
+    classDef ceiling stroke-dasharray: 4 3
+    class D ceiling
+```
+
+An illustration only. The dashed outcome sits above the organization's **ceiling
+of accountability**: the program tracks it and contributes to it, but does not
+claim it.
+
+### Why it matters
+
+The method is used by foundations, development agencies, and funders, and the
+sources agree on five reasons:
+
+- **Planning.** Agree on what has to change, and in what order, before spending
+  money on activities.
+- **Closing the "missing middle".** Show how day-to-day activities connect to a
+  long-term goal, instead of asserting that they do.
+- **Evaluability.** Indicators and tests come from the theory, so you know what to
+  measure and what would count as being wrong.
+- **Communication.** Funders, partners, staff, and the people the program serves
+  can see the same reasoning and argue with it.
+- **Learning.** The theory is a living framework. When evidence arrives, you revise
+  the theory instead of defending it.
+
+### Pathways of change, outcome maps, and logic models
+
+These are different **views of one theory**. Each answers a different question for
+a different reader:
+
+| View | Answers | What it looks like |
+|------|---------|--------------------|
+| **Pathway of change** | In what order must outcomes happen to reach the goal? | The chains of outcomes, from the earliest at the bottom to the long-term goal at the top. A program usually has several; together they are the *outcomes framework* |
+| **Outcome map** | What changes, who is responsible for each change, and how is it measured? | The outcomes grouped by level, each with its sphere, whether the organization owns it or only monitors it, who delivers it, the cause it addresses, and the indicators that measure it |
+| **Logic model** | What goes in, what is done, and what comes out? | Stages from inputs, activities, and outputs through short-term, intermediate, and long-term outcomes to impact, one model per pathway |
+| **Logframe** | What do we promise, and how will we verify it? | A matrix of narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring |
+
+A logic model or logframe is a *flattened* picture: it shows the sequence but
+rarely why each step holds, and it cannot hold several pathways, feedback loops, or
+the actors who are not you. You can generate a logic model from a Theory of
+Change; you cannot recover the theory from a logic model. So this project keeps the
+**theory as the source of truth** and produces every other view from it:
+
+```bash
+theoryofchange report pathway theory.yaml           # the pathways of change, as diagrams
+theoryofchange report outcome-map theory.yaml       # the outcome map
+theoryofchange report logic-model theory.yaml       # a logic model for each pathway
+theoryofchange report logframe theory.yaml          # the logframe matrix
+theoryofchange report definitions theory.yaml       # all of them, plus metrics and glossary
+```
+
+Change the theory once and every view changes with it, so the numbers and labels
+never drift apart. (The outcome map here is the outcomes framework from the
+ActKnowledge method; it is not IDRC's *Outcome Mapping*, which tracks progress
+markers for the partners a program influences.)
+
+## What this project gives you
+
+| Benefit | How |
+|---------|-----|
+| **A theory you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
+| **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
+| **Quality you can check** | A schema, structural validation, 48 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat |
+| **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |
+| **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash |
+| **Review that comes back** | Send a packet or sheet to reviewers, import their answers as proposed changes you inspect, then record approval |
+| **Honest handling of people's data** | Stories and quotes appear only with consent, and restricted evidence is never rendered anywhere |
+| **Ready for AI agents** | An MCP server with ten tools and five skills lets an agent draft, edit, measure, and report, under the same rules as a person |
+
+It is meant for program and strategy teams, evaluators, funders, and anyone who has
+to explain *why* what they do should lead to what they hope for, and then show
+whether it did.
 
 ## Quick start
 
@@ -36,7 +122,6 @@ theoryofchange validate theory.yaml
 theoryofchange lint theory.yaml
 theoryofchange report definitions theory.yaml --out definitions.md   # pathway, logic model, metrics, glossary
 theoryofchange status theory.yaml -O observations.yaml                # how far it has come
-theoryofchange report exec theory.yaml -O observations.yaml -o exec.md
 theoryofchange mcp --root .                                          # serve the tools to an AI agent
 ```
 
@@ -44,51 +129,28 @@ Fictional, complete examples are in [`examples/`](examples/): a membership
 network, a market-adoption theory, and three competing futures that share
 one actor registry.
 
-## Commands
-
-| Command | What it does |
-|---------|--------------|
-| `init`, `fmt`, `schema` | Start a theory, write it in canonical form, print the schemas |
-| `<element> add\|set\|rm`, `patch` | Edit through one validated patch engine |
-| `validate`, `lint`, `graph` | Check, judge the quality of, and query a theory |
-| `status`, `diff` | Measure progress from observations; compare two versions |
-| `import observations` | Load a spreadsheet through a column mapping, reporting every row it cannot place |
-| `report`, `deck`, `export` | Reports, slide decks, CSV tables, DOCX and PPTX, OKRs and outcome journeys |
-| `export review-packet`, `import review`, `approve` | Send a theory for review, bring the answers back as proposals, record approval |
-| `judge show\|record\|summary` | Prepare a theory for an LLM-as-a-Judge and combine the verdicts |
-| `mcp` | Serve the tools to an AI agent over MCP |
-
-`-o` / `--out` is the file a command writes; `-O` / `--observations` names
-observation files. Exit codes: 0 success, 1 invalid or not passing, 2 usage or
-I/O error, 3 an optional external tool (marp, mmdc, pandoc) is missing.
-
-## What it covers
-
-- **Model.** Long-term goals, outcomes and precondition groups (AND / OR /
-  k-of-n), causal links with rationales, interventions, assumptions,
-  indicators, actors, evidence, pathways, and a shared metric library.
-  Every element records whether it was stated by a source, inferred, or
-  confirmed in review.
-- **Schema.** JSON Schemas generated from the Go types and embedded for
-  editors, agents, and validation.
-- **Editing.** One validated patch engine behind the CLI, SDK, and MCP tools.
-- **Quality.** Causal-graph analysis, deterministic lint rules, and a
-  structured-evaluation rubric for LLM-as-a-Judge review.
-- **Measurement.** Indicator, outcome, and pathway status with assumption
-  propagation and rule-based confidence.
-- **Artifacts.** Leadership reports, logic models, results frameworks,
-  assumption registers, and slide decks, plus review packets for sharing and
-  a review-response import.
-
 ## Documentation
 
-- [Research brief](docs/research/theory-of-change.md) — concepts, process,
-  measurement, artifacts, and the recommended entity model
-- [Concepts](docs/concepts.md) · [Integration contract for USM and UFM](docs/integration/usm-ufm-contract.md)
-- [PRD](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PRD.md) ·
-  [TRD](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD.md) ·
-  [Plan](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PLAN.md) ·
-  [Roadmap](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/ROADMAP.md)
+The user guides are in [`docs/guides/`](docs/guides/index.md) and are published
+as a documentation site (`mkdocs serve` runs it locally):
+
+| To | Read |
+|----|------|
+| Install and try it | [Getting started](docs/guides/getting-started.md) |
+| Write or change a theory | [Authoring a theory](docs/guides/authoring.md) |
+| Measure progress | [Measuring progress](docs/guides/measurement.md) |
+| Produce reports and decks | [Reports and decks](docs/guides/reports-and-decks.md) |
+| Send a theory out for review | [Review round trip](docs/guides/review-round-trip.md) |
+| Check quality and run a judge | [Quality and judging](docs/guides/quality-and-judging.md) |
+| Connect an AI agent | [MCP server and agent skills](docs/guides/mcp-and-skills.md) |
+| Look up a command | [CLI reference](docs/guides/cli.md) |
+
+Background: the [research brief](docs/research/theory-of-change.md), the
+[concepts-to-types map](docs/concepts.md), and the specifications
+([PRD](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PRD.md),
+[TRD](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD.md),
+[Plan](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PLAN.md),
+[Roadmap](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/ROADMAP.md)).
 
 ## Part of the PRISM ecosystem
 
