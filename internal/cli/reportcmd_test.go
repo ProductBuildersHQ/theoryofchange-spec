@@ -294,3 +294,73 @@ func TestProjectionReports(t *testing.T) {
 		t.Error("the definitions pack should include the projections")
 	}
 }
+
+func TestStatusReportKinds(t *testing.T) {
+	want := map[string]string{
+		"exec": "executive summary", "results": ": results", "assumptions": ": assumptions", "interventions": ": interventions",
+		"evidence-gaps": "evidence gaps", "full": "## Pathway", "portfolio": ": portfolio", "narrative": "programme narrative", "actors": "who does what",
+	}
+	for kind, text := range want {
+		r := run(t, "", "report", kind, exTheory, "-o", exObs)
+		wantCode(t, r, ExitOK)
+		if !strings.Contains(r.stdout, text) {
+			t.Errorf("%s: missing %q in %.200s", kind, text, r.stdout)
+		}
+		if !strings.Contains(r.stdout, "content-hash: ") || !strings.Contains(r.stdout, `date: "2026-09-30"`) {
+			t.Errorf("%s: the stamp should carry the status date:\n%.300s", kind, r.stdout)
+		}
+	}
+	r := run(t, "", "report", "story", exTheory, "-o", exObs, "--audience", "aud-funders")
+	wantCode(t, r, ExitOK)
+	if !strings.Contains(r.stdout, "story for Funders") || strings.Contains(r.stdout, "QUOTE-") {
+		t.Errorf("story = %.300s", r.stdout)
+	}
+	r = run(t, "", "report", "learning-review", exTheory, "-o", exObs, "--period", "2026-Q3")
+	wantCode(t, r, ExitOK)
+	if !strings.Contains(r.stdout, "learning review 2026-Q3") || !strings.Contains(r.stdout, "Trial two daytime sessions") {
+		t.Errorf("learning review = %.300s", r.stdout)
+	}
+}
+
+func TestNarrativeAndActorsNeedNoObservations(t *testing.T) {
+	for _, kind := range []string{"narrative", "actors"} {
+		r := run(t, "", "report", kind, exTheory)
+		wantCode(t, r, ExitOK)
+		if strings.Contains(r.stdout, "Status as of") {
+			t.Errorf("%s claims a status date with no observations", kind)
+		}
+	}
+}
+
+func TestCustomReport(t *testing.T) {
+	dir := t.TempDir()
+	tmpl := dir + "/board.tmpl"
+	if err := os.WriteFile(tmpl, []byte("# {{.Document.Title}}\n{{range .Outcomes}}{{if .Status}}- {{.Title}}: {{label .Status.PathwayState}}\n{{end}}{{end}}"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	r := run(t, "", "report", "custom", exTheory, "--template", tmpl, "-o", exObs, "--no-stamp")
+	wantCode(t, r, ExitOK)
+	if !strings.HasPrefix(r.stdout, "# Riverbend") || !strings.Contains(r.stdout, "- Residents get timely") {
+		t.Errorf("custom = %.200s", r.stdout)
+	}
+	bad := dir + "/bad.tmpl"
+	if err := os.WriteFile(bad, []byte(`{{readFile "/etc/passwd"}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	wantCode(t, run(t, "", "report", "custom", exTheory, "--template", bad), ExitUsageErr)
+}
+
+func TestStatusReportErrors(t *testing.T) {
+	for name, args := range map[string][]string{
+		"no date":           {"report", "exec", exTheory},
+		"story no audience": {"report", "story", exTheory, "-o", exObs},
+		"bad audience":      {"report", "story", exTheory, "-o", exObs, "--audience", "aud-ghost"},
+		"custom no file":    {"report", "custom", exTheory},
+		"missing template":  {"report", "custom", exTheory, "--template", exTheory + ".none"},
+		"unknown kind":      {"report", "mystery", exTheory},
+	} {
+		if r := run(t, "", args...); r.code != ExitUsageErr {
+			t.Errorf("%s: exit %d, want %d (%s)", name, r.code, ExitUsageErr, r.err)
+		}
+	}
+}
