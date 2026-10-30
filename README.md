@@ -22,8 +22,45 @@ An AI-native, spec-driven way to capture, measure, and report on a
 a Go-first data model with generated JSON Schema, plus an SDK, the
 `theoryofchange` CLI, and an MCP server.
 
-> **Status:** early development. The specification is complete; the
-> implementation is proceeding phase by phase (see the roadmap below).
+> **Status:** pre-release. The model, the CLI, the MCP server, measurement,
+> reports, decks, and the review round trip are implemented and tested. The
+> first release is pending (see the roadmap).
+
+## Quick start
+
+```bash
+go install github.com/ProductBuildersHQ/theoryofchange-spec/cmd/theoryofchange@latest
+
+theoryofchange init --id my-program --name "My program" --out theory.yaml
+theoryofchange validate theory.yaml
+theoryofchange lint theory.yaml
+theoryofchange report definitions theory.yaml --out definitions.md   # pathway, logic model, metrics, glossary
+theoryofchange status theory.yaml -O observations.yaml                # how far it has come
+theoryofchange report exec theory.yaml -O observations.yaml -o exec.md
+theoryofchange mcp --root .                                          # serve the tools to an AI agent
+```
+
+Fictional, complete examples are in [`examples/`](examples/): a membership
+network, a market-adoption theory, and three competing futures that share
+one actor registry.
+
+## Commands
+
+| Command | What it does |
+|---------|--------------|
+| `init`, `fmt`, `schema` | Start a theory, write it in canonical form, print the schemas |
+| `<element> add\|set\|rm`, `patch` | Edit through one validated patch engine |
+| `validate`, `lint`, `graph` | Check, judge the quality of, and query a theory |
+| `status`, `diff` | Measure progress from observations; compare two versions |
+| `import observations` | Load a spreadsheet through a column mapping, reporting every row it cannot place |
+| `report`, `deck`, `export` | Reports, slide decks, CSV tables, DOCX and PPTX, OKRs and outcome journeys |
+| `export review-packet`, `import review`, `approve` | Send a theory for review, bring the answers back as proposals, record approval |
+| `judge show\|record\|summary` | Prepare a theory for an LLM-as-a-Judge and combine the verdicts |
+| `mcp` | Serve the tools to an AI agent over MCP |
+
+`-o` / `--out` is the file a command writes; `-O` / `--observations` names
+observation files. Exit codes: 0 success, 1 invalid or not passing, 2 usage or
+I/O error, 3 an optional external tool (marp, mmdc, pandoc) is missing.
 
 ## What it covers
 
@@ -47,6 +84,7 @@ a Go-first data model with generated JSON Schema, plus an SDK, the
 
 - [Research brief](docs/research/theory-of-change.md) — concepts, process,
   measurement, artifacts, and the recommended entity model
+- [Concepts](docs/concepts.md) · [Integration contract for USM and UFM](docs/integration/usm-ufm-contract.md)
 - [PRD](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PRD.md) ·
   [TRD](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD.md) ·
   [Plan](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PLAN.md) ·
