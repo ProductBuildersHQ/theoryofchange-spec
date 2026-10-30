@@ -242,6 +242,7 @@ export stamp ("# toc:<id> version:<v> hash:<h>"); --no-stamp leaves it off.`,
 	}
 	csv.Flags().StringP("out", "o", "", "write to this file instead of standard output")
 	asOfFlags(csv)
-	export.AddCommand(csv, newExportDocCmd("docx"), newExportDocCmd("pptx"), newReviewPacketCmd(e), newReviewSheetCmd(e))
+	export.AddCommand(csv, newExportDocCmd("docx"), newExportDocCmd("pptx"), newReviewPacketCmd(e), newReviewSheetCmd(e),
+		newPrismExportCmd(e, "okr"), newPrismExportCmd(e, "journey"))
 	return export
 }
