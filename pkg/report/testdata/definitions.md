@@ -122,6 +122,56 @@ Getting identity providers and agent platforms to ship the standard.
 | Long-term outcomes | Enterprises require the standard in procurement _(hypothesis)_ |
 | Impact | Agent access across the market is scoped and auditable |
 
+## Outcome map: Supply side: providers and platforms
+
+_This is a view of the causal model. It flattens the links between outcomes; the pathway diagram shows them._
+
+### Impact
+
+| Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
+|---------|--------|----------|--------|----------------|--------------|-----------|-------------|
+| Agent access across the market is scoped and auditable (`oc-safer-agents`) | Interest | respond | — | Own · above the ceiling, monitored only | — | — | ind-adoption-stories |
+
+### Long-term outcome
+
+| Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
+|---------|--------|----------|--------|----------------|--------------|-----------|-------------|
+| Enterprises require the standard in procurement (`oc-enterprise-require`) _(hypothesis)_ | Influence | expand | Policy | Own | — | — | — |
+
+### Intermediate outcome
+
+| Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
+|---------|--------|----------|--------|----------------|--------------|-----------|-------------|
+| Major identity providers support the standard (`oc-idp-support`) _(inferred)_ | Influence | adopt | Adoption | Shared | Standards working group, Identity providers | cause-no-demand-signal | ind-idp-count, ind-idp-count-na, ind-idp-count-eu, ind-idp-total |
+| Agent platforms support the standard (`oc-platform-support`) | Influence | adapt | Adoption | Partner · monitored only | Identity providers | — | — |
+
+### Short-term outcome
+
+| Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
+|---------|--------|----------|--------|----------------|--------------|-----------|-------------|
+| A stable, interoperable specification exists (`oc-spec-stable`) | Control | — | Condition | Own | — | — | — |
+
+### Output
+
+| Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
+|---------|--------|----------|--------|----------------|--------------|-----------|-------------|
+| Open reference implementations are available (`oc-reference-impl`) | Control | — | — | Own | — | — | — |
+
+## Logframe: Supply side: providers and platforms
+
+_This is a view of the causal model. It flattens the links between outcomes; the pathway diagram shows them._
+
+| Level | Narrative | Indicators and targets | Means of verification | Assumptions |
+|-------|-----------|------------------------|-----------------------|-------------|
+| Goal | Agent access across the market is scoped and auditable (`oc-safer-agents`) | Stories of provider adoption (`ind-adoption-stories`) | not stated | — |
+| Purpose | Enterprises require the standard in procurement (`oc-enterprise-require`) _(hypothesis)_ | — | — | — |
+| Purpose | Major identity providers support the standard (`oc-idp-support`) _(inferred)_ | Identity providers with generally available support (`ind-idp-count`): 2 providers (by 2026-12-31) — First movers; 5 providers (by 2027-12-31) (Covers half the market by seats); Providers with GA support (North America) (`ind-idp-count-na`); Providers with GA support (Europe) (`ind-idp-count-eu`); Providers with GA support (total) (`ind-idp-total`) | Provider release notes; Desk review; P3M; not stated; not stated; not stated | Identity providers see commercial advantage in supporting agent delegation. (`asm-idp-incentive`) |
+| Purpose | Agent platforms support the standard (`oc-platform-support`) | — | — | — |
+| Outputs | A stable, interoperable specification exists (`oc-spec-stable`) | — | — | — |
+| Outputs | Open reference implementations are available (`oc-reference-impl`) | — | — | — |
+| Activities | Run interoperability events (`int-interop`) | — | — | — |
+| Activities | Publish reference implementations (`int-reference`) | Reference implementation downloads (`ind-reference-downloads`) | not stated | — |
+
 ## Metric definitions
 
 | Metric | Definition | Formula | Unit | Direction | Combines across pathways | Layer | Used by |

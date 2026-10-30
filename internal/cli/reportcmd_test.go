@@ -272,3 +272,25 @@ func TestSelectionAndCollectionReportsAndTables(t *testing.T) {
 		t.Errorf("budget comparison missing:\n%s", r.stdout)
 	}
 }
+
+func TestProjectionReports(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "theory.json")
+	for kind, want := range map[string]string{
+		"outcome-map": "## Outcome map:", "logframe": "## Logframe:",
+	} {
+		r := run(t, "", "report", kind, path)
+		wantCode(t, r, ExitOK)
+		if !strings.Contains(r.stdout, want) {
+			t.Errorf("%s: %.200s", kind, r.stdout)
+		}
+	}
+	r := run(t, "", "report", "logic-model", path, "--diagram")
+	wantCode(t, r, ExitOK)
+	if !strings.Contains(r.stdout, "flowchart LR") {
+		t.Errorf("diagram = %.200s", r.stdout)
+	}
+	wantCode(t, run(t, "", "report", "glossary", path, "--diagram"), ExitUsageErr)
+	if r := run(t, "", "report", "definitions", path); !strings.Contains(r.stdout, "## Outcome map:") || !strings.Contains(r.stdout, "## Logframe:") {
+		t.Error("the definitions pack should include the projections")
+	}
+}
