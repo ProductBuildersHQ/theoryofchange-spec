@@ -126,7 +126,7 @@ func Exec(in StatusInput) string {
 			}
 		}
 		if n > 0 {
-			fmt.Fprintf(&b, "| %s | %d | %s |\n", LevelLabel(lv), n, stateCountText(counts))
+			fmt.Fprintf(&b, "| %s | %d | %s |\n", LevelLabel(lv), n, StateCountText(counts))
 		}
 	}
 	b.WriteString("\n")
@@ -140,7 +140,8 @@ func Exec(in StatusInput) string {
 	return b.String()
 }
 
-func stateCountText(c map[string]int) string {
+// StateCountText describes counts of states, worst first: "2 at risk · 1 on track".
+func StateCountText(c map[string]int) string {
 	states := make([]string, 0, len(c))
 	for s := range c {
 		states = append(states, s)
@@ -153,10 +154,20 @@ func stateCountText(c map[string]int) string {
 	return strings.Join(parts, " · ")
 }
 
-// attention lists the outcomes whose pathway is at risk or off track, worst
-// first, each with the indicators that drive it and the preconditions that
-// hold it back.
-func attention(in StatusInput, limit int) string {
+// AttentionItem is an outcome whose pathway is at risk or off track, with
+// the reasons.
+type AttentionItem struct {
+	ID      string
+	Title   string
+	State   string
+	Because string
+}
+
+// Attention returns the outcomes whose pathway is at risk or off track,
+// worst first and then by ID, each with the indicators that drive it, the
+// preconditions that hold it back, and the broken assumptions that cap it.
+// It returns every such outcome; callers cut the list.
+func Attention(in StatusInput) []AttentionItem {
 	type row struct {
 		o     OutcomeView
 		state string
@@ -169,9 +180,6 @@ func attention(in StatusInput, limit int) string {
 		if s := o.Status.PathwayState; s == string(toc.StateOffTrack) || s == string(toc.StateAtRisk) {
 			rows = append(rows, row{o, s})
 		}
-	}
-	if len(rows) == 0 {
-		return "Nothing is at risk or off track.\n\n"
 	}
 	slices.SortStableFunc(rows, func(a, b row) int {
 		if d := stateRank(a.state) - stateRank(b.state); d != 0 {
@@ -190,13 +198,8 @@ func attention(in StatusInput, limit int) string {
 	for _, o := range in.Status.Outcomes {
 		snapshot[o.OutcomeID] = o
 	}
-	var b strings.Builder
-	b.WriteString("| Outcome | Status | Because |\n|---------|--------|---------|\n")
-	for i, r := range rows {
-		if i == limit {
-			fmt.Fprintf(&b, "\n%d more at risk or off track are listed in the results report.\n", len(rows)-limit)
-			break
-		}
+	out := make([]AttentionItem, 0, len(rows))
+	for _, r := range rows {
 		var why []string
 		for _, id := range snapshot[r.o.ID].IndicatorIDs {
 			if s, ok := byInd[id]; ok && (s.State == toc.StateOffTrack || s.State == toc.StateAtRisk) {
@@ -211,15 +214,33 @@ func attention(in StatusInput, limit int) string {
 		for _, a := range snapshot[r.o.ID].AssumptionBroken {
 			why = append(why, fmt.Sprintf("assumption `%s` is broken or at risk, which caps what its pathway can be", a))
 		}
-		fmt.Fprintf(&b, "| %s (`%s`) | %s | %s |\n", MDCell(r.o.Title), r.o.ID, statusLabel(r.state), orDash(MDCell(strings.Join(why, "; "))))
+		out = append(out, AttentionItem{ID: r.o.ID, Title: r.o.Title, State: r.state, Because: strings.Join(why, "; ")})
+	}
+	return out
+}
+
+// attention renders the first limit items of Attention as a table.
+func attention(in StatusInput, limit int) string {
+	items := Attention(in)
+	if len(items) == 0 {
+		return "Nothing is at risk or off track.\n\n"
+	}
+	var b strings.Builder
+	b.WriteString("| Outcome | Status | Because |\n|---------|--------|---------|\n")
+	for i, it := range items {
+		if i == limit {
+			fmt.Fprintf(&b, "\n%d more at risk or off track are listed in the results report.\n", len(items)-limit)
+			break
+		}
+		fmt.Fprintf(&b, "| %s (`%s`) | %s | %s |\n", MDCell(it.Title), it.ID, statusLabel(it.State), orDash(MDCell(it.Because)))
 	}
 	b.WriteString("\n")
 	return b.String()
 }
 
-// brokenAssumptions lists high-stakes assumptions that are invalidated, at
-// risk, or still untested.
-func brokenAssumptions(in StatusInput) string {
+// HighStakesAssumptions returns the high and critical assumptions that are
+// invalidated, at risk, or untested, the broken first.
+func HighStakesAssumptions(in StatusInput) []AssumptionView {
 	var rows []AssumptionView
 	for _, a := range in.View.Assumptions {
 		high := a.Criticality == string(toc.CriticalityHigh) || a.Criticality == string(toc.CriticalityCritical)
@@ -231,6 +252,13 @@ func brokenAssumptions(in StatusInput) string {
 	slices.SortStableFunc(rows, func(a, b AssumptionView) int {
 		return assumptionRank(a.Status) - assumptionRank(b.Status)
 	})
+	return rows
+}
+
+// brokenAssumptions lists high-stakes assumptions that are invalidated, at
+// risk, or still untested.
+func brokenAssumptions(in StatusInput) string {
+	rows := HighStakesAssumptions(in)
 	var b strings.Builder
 	b.WriteString("## Broken or untested critical assumptions\n\n")
 	if len(rows) == 0 {
@@ -293,9 +321,9 @@ func dash(s string) string {
 	return s
 }
 
-// decisions lists the decisions still open, then a prompt for each broken
-// assumption.
-func decisions(in StatusInput) string {
+// DecisionPrompts returns the decisions still open, then a prompt for each
+// broken assumption.
+func DecisionPrompts(in StatusInput) []string {
 	var lines []string
 	for _, d := range in.Doc.Decisions {
 		if d.Status == "" || d.Status == toc.DecisionOpen {
@@ -311,6 +339,11 @@ func decisions(in StatusInput) string {
 			lines = append(lines, fmt.Sprintf("What should change now that the assumption \"%s\" (`%s`) is %s?", mdText(a.Statement), a.ID, strings.ToLower(Label(a.Status))))
 		}
 	}
+	return lines
+}
+
+func decisions(in StatusInput) string {
+	lines := DecisionPrompts(in)
 	var b strings.Builder
 	b.WriteString("## Decisions requested\n\n")
 	if len(lines) == 0 {

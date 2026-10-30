@@ -70,7 +70,7 @@ func pathwayStanding(p PathwayView, outcomes map[string]OutcomeView) (state, spr
 	if n > 0 {
 		confidence = fmt.Sprintf("%.2f", sum/float64(n))
 	}
-	return state, stateCountText(counts), confidence
+	return state, StateCountText(counts), confidence
 }
 
 func costText(g burden.Group) string {

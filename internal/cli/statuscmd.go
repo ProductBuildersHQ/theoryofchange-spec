@@ -1,13 +1,16 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/spf13/cobra"
 
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tabular"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
@@ -37,34 +40,35 @@ Exit code 1 means the theory or the observations are invalid.`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error { return runStatus(e, cmd, args[0]) },
 	}
-	f := cmd.Flags()
-	f.StringSliceP("observations", "o", nil, "observation set files (repeatable)")
-	f.String("as-of", "", "the date to describe (YYYY-MM-DD); default: the latest date in the observations")
-	f.String("prev", "", "an earlier status snapshot (JSON) to compare with")
-	f.String("out", "", "write the snapshot as JSON to this file")
-	f.Float64("tolerance", measure.DefaultTolerance, "how far behind expected progress still counts as on track")
-	f.String("rollup", string(toc.RollupWorst), "how indicators combine into an outcome: worst or mean")
+	statusFlags(cmd)
+	cmd.Flags().String("as-of", "", "the date to describe (YYYY-MM-DD); default: the latest date in the observations")
+	cmd.Flags().String("out", "", "write the snapshot as JSON to this file")
 	return cmd
 }
 
-func runStatus(e *env, cmd *cobra.Command, path string) error {
-	format, err := outputFormat(cmd)
-	if err != nil {
-		return err
-	}
+// statusFlags adds the flags that choose what a status is computed from.
+func statusFlags(cmd *cobra.Command) {
+	f := cmd.Flags()
+	f.StringSliceP("observations", "o", nil, "observation set files (repeatable)")
+	f.String("prev", "", "an earlier status snapshot (JSON) to compare with")
+	f.Float64("tolerance", measure.DefaultTolerance, "how far behind expected progress still counts as on track")
+	f.String("rollup", string(toc.RollupWorst), "how indicators combine into an outcome: worst or mean")
+}
+
+// loadStatus evaluates the theory at path against the observation files and
+// date given by the flags. It reports observation problems on e.errOut and
+// returns exit code 1 for them. The date is --as-of, else the latest date in
+// the observations.
+func loadStatus(e *env, cmd *cobra.Command, path string) (report.StatusInput, []*toc.ObservationSet, error) {
 	opts := toc.DefaultStatusOptions()
 	opts.Tolerance, _ = cmd.Flags().GetFloat64("tolerance")
 	opts.Rollup = toc.RollupMethod(flagString(cmd, "rollup"))
 	if !opts.Rollup.Valid() || opts.Tolerance <= 0 || opts.Tolerance >= 1 {
-		return usageErr("--rollup must be worst or mean, and --tolerance between 0 and 1")
+		return report.StatusInput{}, nil, usageErr("--rollup must be worst or mean, and --tolerance between 0 and 1")
 	}
 	doc, err := loadForRender(path)
 	if err != nil {
-		return err
-	}
-	g, err := service.BuildGraph(doc)
-	if err != nil {
-		return renderError(path, err)
+		return report.StatusInput{}, nil, err
 	}
 	obsPaths, err := cmd.Flags().GetStringSlice("observations")
 	if err != nil {
@@ -73,7 +77,7 @@ func runStatus(e *env, cmd *cobra.Command, path string) error {
 	var sets []*toc.ObservationSet
 	if len(obsPaths) > 0 {
 		if sets, err = tocio.LoadObservations(obsPaths...); err != nil {
-			return &ExitError{Code: ExitUsageErr, Err: err}
+			return report.StatusInput{}, nil, &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		if issues := validate.Observations(doc, sets...); validate.HasErrors(issues) {
 			for _, i := range issues {
@@ -81,24 +85,39 @@ func runStatus(e *env, cmd *cobra.Command, path string) error {
 					fmt.Fprintf(e.errOut, "observations: %s %s: %s\n", i.Code, i.Path, i.Message)
 				}
 			}
-			return invalid()
+			return report.StatusInput{}, nil, invalid()
 		}
 	}
 	asOf, err := statusDate(cmd, sets)
 	if err != nil {
-		return err
+		return report.StatusInput{}, nil, err
 	}
-	st, err := measure.Evaluate(doc, g, sets, asOf, opts)
-	if err != nil {
-		return &ExitError{Code: ExitUsageErr, Err: err}
-	}
-
-	var diff *toc.StatusDiff
+	var prev *toc.Status
 	if prevPath := flagString(cmd, "prev"); prevPath != "" {
-		if diff, err = diffAgainst(prevPath, st); err != nil {
-			return err
+		if prev, err = loadSnapshot(prevPath); err != nil {
+			return report.StatusInput{}, nil, err
 		}
 	}
+	in, err := service.StatusInputFor(doc, sets, asOf, opts, prev)
+	if err != nil {
+		if errors.Is(err, graph.ErrInvalidDocument) {
+			return report.StatusInput{}, nil, renderError(path, err)
+		}
+		return report.StatusInput{}, nil, &ExitError{Code: ExitUsageErr, Err: err}
+	}
+	return in, sets, nil
+}
+
+func runStatus(e *env, cmd *cobra.Command, path string) error {
+	format, err := outputFormat(cmd)
+	if err != nil {
+		return err
+	}
+	in, _, err := loadStatus(e, cmd, path)
+	if err != nil {
+		return err
+	}
+	st, diff := in.Status, in.Diff
 	if out := flagString(cmd, "out"); out != "" {
 		if err := writeJSONFile(out, st); err != nil {
 			return err
@@ -132,7 +151,7 @@ func statusDate(cmd *cobra.Command, sets []*toc.ObservationSet) (time.Time, erro
 	return time.Time{}, usageErr("give --as-of: there are no observations to take a date from")
 }
 
-func diffAgainst(prevPath string, cur *toc.Status) (*toc.StatusDiff, error) {
+func loadSnapshot(prevPath string) (*toc.Status, error) {
 	data, err := os.ReadFile(prevPath)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("read previous snapshot: %w", err)}
@@ -141,10 +160,7 @@ func diffAgainst(prevPath string, cur *toc.Status) (*toc.StatusDiff, error) {
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", prevPath, err)}
 	}
-	if prev.TocID != cur.TocID {
-		return nil, usageErr("%s is a snapshot of %q, not %q", prevPath, prev.TocID, cur.TocID)
-	}
-	return measure.Diff(prev, cur), nil
+	return prev, nil
 }
 
 func printStatus(e *env, path string, st *toc.Status, diff *toc.StatusDiff) {

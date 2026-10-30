@@ -12,7 +12,11 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/share"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
 )
 
@@ -24,7 +28,7 @@ func newDeckCmd(e *env) *cobra.Command {
 		Use:   "deck",
 		Short: "Generate slide decks",
 	}
-	deck.AddCommand(newWorkshopDeckCmd(e))
+	deck.AddCommand(newWorkshopDeckCmd(e), newExecDeckCmd(e), newLearningReviewDeckCmd(e), newStoryDeckCmd(e))
 	return deck
 }
 
@@ -63,22 +67,12 @@ can still be written without --export.`,
 			if err != nil {
 				return renderError(args[0], err)
 			}
-			if out := flagString(cmd, "output"); out != "" {
-				if err := tocio.WriteFile(out, []byte(md)); err != nil {
-					return &ExitError{Code: ExitUsageErr, Err: err}
-				}
-			} else if flagString(cmd, "export") == "" {
-				fmt.Fprint(e.out, md)
-			}
-			if target := flagString(cmd, "export"); target != "" {
-				return exportDeck(cmd.Context(), md, target)
-			}
-			return nil
+			return deliverDeck(e, cmd, md)
 		},
 	}
 	asOfFlags(cmd)
 	cmd.Flags().String("theme", "default", "Marp theme name")
-	cmd.Flags().StringP("output", "o", "", "write the Markdown to this file instead of standard output")
+	cmd.Flags().String("output", "", "write the Markdown to this file instead of standard output")
 	cmd.Flags().String("export", "", "render the deck to this .pdf, .pptx, or .html file with marp and mmdc")
 	return cmd
 }
@@ -162,4 +156,147 @@ func runTool(ctx context.Context, tool string, args ...string) error {
 		return fmt.Errorf("%s failed: %w: %s", filepath.Base(tool), err, strings.TrimSpace(stderr.String()))
 	}
 	return nil
+}
+
+// deckOutputFlags adds the flags every deck shares.
+func deckOutputFlags(cmd *cobra.Command) {
+	asOfFlags(cmd)
+	cmd.Flags().String("theme", "default", "Marp theme name")
+	cmd.Flags().String("output", "", "write the Markdown to this file instead of standard output")
+	cmd.Flags().String("export", "", "render the deck to this .pdf, .pptx, or .html file with marp and mmdc")
+}
+
+// deliverDeck writes the Markdown to --output or standard output and, with
+// --export, renders it with the external tools.
+func deliverDeck(e *env, cmd *cobra.Command, md string) error {
+	if out := flagString(cmd, "output"); out != "" {
+		if err := tocio.WriteFile(out, []byte(md)); err != nil {
+			return &ExitError{Code: ExitUsageErr, Err: err}
+		}
+	} else if flagString(cmd, "export") == "" {
+		fmt.Fprint(e.out, md)
+	}
+	if target := flagString(cmd, "export"); target != "" {
+		return exportDeck(cmd.Context(), md, target)
+	}
+	return nil
+}
+
+// statusDeckOptions builds the slide options, including the stamp line.
+func statusDeckOptions(cmd *cobra.Command, in report.StatusInput) (slides.Options, error) {
+	o := slides.Options{Theme: flagString(cmd, "theme")}
+	if !flagBool(cmd, "no-stamp") {
+		st, err := share.NewStamp(in.Doc, in.Status.AsOf)
+		if err != nil {
+			return o, &ExitError{Code: ExitUsageErr, Err: err}
+		}
+		o.Stamp = st.Line()
+	}
+	return o, nil
+}
+
+func newExecDeckCmd(e *env) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "exec <toc-file> -o <observations>...",
+		Short: "Generate the executive deck",
+		Long: `Generate the executive deck from a status snapshot: where the theory stands,
+status by level, the pathway coloured by status, where attention is needed,
+assumptions to watch, what changed, decisions needed, and how to read the
+numbers. The date is --as-of, or the latest date in the observations.
+
+Markdown goes to standard output or --output. With --export <file>, marp and
+mmdc render a PDF, PPTX, or HTML file; if a tool is missing the exit code is 3.`,
+		Example: `  theoryofchange deck exec theory.yaml -o obs-q3.yaml --prev status-q2.json --export exec.pdf`,
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			in, _, err := loadStatus(e, cmd, args[0])
+			if err != nil {
+				return err
+			}
+			o, err := statusDeckOptions(cmd, in)
+			if err != nil {
+				return err
+			}
+			return deliverDeck(e, cmd, slides.Exec(in, o))
+		},
+	}
+	statusFlags(cmd)
+	deckOutputFlags(cmd)
+	return cmd
+}
+
+func newLearningReviewDeckCmd(e *env) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "learning-review <toc-file> -o <observations>...",
+		Short: "Generate the learning-review deck",
+		Long: `Generate the deck for a learning review: what changed, the surprises, assumptions
+that moved, what the stories are about, how far to trust the data, questions
+for discussion, and any decisions already recorded for the period.
+
+--period names the period whose recorded review is merged (for example
+2026-Q3). --prev-observations names the earlier period's observation files, so
+new themes can be marked. Only stories with granted consent are shown.`,
+		Example: `  theoryofchange deck learning-review theory.yaml -o obs-q3.yaml --prev status-q2.json --period 2026-Q3`,
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			in, sets, err := loadStatus(e, cmd, args[0])
+			if err != nil {
+				return err
+			}
+			var prevSets []*toc.ObservationSet
+			if paths, err := cmd.Flags().GetStringSlice("prev-observations"); err != nil {
+				panic(fmt.Sprintf("cli: --prev-observations is not a string slice flag: %v", err))
+			} else if len(paths) > 0 {
+				if prevSets, err = tocio.LoadObservations(paths...); err != nil {
+					return &ExitError{Code: ExitUsageErr, Err: err}
+				}
+			}
+			o, err := statusDeckOptions(cmd, in)
+			if err != nil {
+				return err
+			}
+			li := report.LearningInput{StatusInput: in, Sets: sets, PrevSets: prevSets, Period: flagString(cmd, "period")}
+			return deliverDeck(e, cmd, slides.LearningReview(li, o))
+		},
+	}
+	statusFlags(cmd)
+	deckOutputFlags(cmd)
+	cmd.Flags().String("period", "", "the period label, to merge its recorded review")
+	cmd.Flags().StringSlice("prev-observations", nil, "the earlier period's observation files (repeatable)")
+	return cmd
+}
+
+func newStoryDeckCmd(e *env) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "story <toc-file> -o <observations>... --audience <id>",
+		Short: "Generate a deck for one audience",
+		Long: `Generate a short deck for one audience: what they need, three to five headline
+numbers with their caveats, one or two stories they may be told, and a closing
+ask to fill in. A story appears only with granted consent, and its quote only
+where the story may be quoted.`,
+		Example: `  theoryofchange deck story theory.yaml -o obs-q3.yaml --audience aud-funders --export funders.pdf`,
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			in, sets, err := loadStatus(e, cmd, args[0])
+			if err != nil {
+				return err
+			}
+			o, err := statusDeckOptions(cmd, in)
+			if err != nil {
+				return err
+			}
+			md, err := slides.Story(in, sets, flagString(cmd, "audience"), o)
+			if err != nil {
+				return usageErr("%v", err)
+			}
+			return deliverDeck(e, cmd, md)
+		},
+	}
+	statusFlags(cmd)
+	deckOutputFlags(cmd)
+	cmd.Flags().String("audience", "", "the audience ID (required)")
+	if err := cmd.MarkFlagRequired("audience"); err != nil {
+		panic(fmt.Sprintf("cli: mark --audience required: %v", err))
+	}
+	return cmd
 }
