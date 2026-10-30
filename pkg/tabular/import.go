@@ -118,7 +118,7 @@ type columns struct {
 }
 
 func resolveColumns(header []string, c toc.CSVColumns) (columns, error) {
-	find := func(name string, required bool, what string) (int, error) {
+	find := func(name, what string) (int, error) {
 		if name == "" {
 			return -1, nil
 		}
@@ -140,7 +140,7 @@ func resolveColumns(header []string, c toc.CSVColumns) (columns, error) {
 		{&out.level, c.Level, "level"}, {&out.pathway, c.Pathway, "pathway"}, {&out.quality, c.Quality, "quality"},
 		{&out.source, c.Source, "source"}, {&out.note, c.Note, "note"},
 	} {
-		if *f.dst, err = find(f.name, false, f.what); err != nil {
+		if *f.dst, err = find(f.name, f.what); err != nil {
 			return out, err
 		}
 	}
