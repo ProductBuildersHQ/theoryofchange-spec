@@ -1,0 +1,77 @@
+{
+  "newVersion": "0.2",
+  "document": [
+    {
+      "path": "ceilingOfAccountability.rationale",
+      "from": "Market-wide security outcomes depend on many actors.",
+      "to": "Moved after review."
+    },
+    {
+      "path": "context.problemStatement",
+      "from": "AI agents act on behalf of users with credentials designed for humans, so access is over-broad and unauditable.",
+      "to": "AI agents act on behalf of users with credentials designed for humans, so access is over-broad and unauditable. It is getting worse."
+    },
+    {
+      "path": "metadata.version",
+      "to": "0.2"
+    }
+  ],
+  "changes": [
+    {
+      "elementId": "oc-idp-support",
+      "kind": "outcome",
+      "title": "Major identity providers ship support",
+      "op": "changed",
+      "fields": [
+        {
+          "path": "provenance.basis",
+          "from": "inferred",
+          "to": "confirmed"
+        },
+        {
+          "path": "provenance.evidenceIds",
+          "from": "[\"ev-survey\"]"
+        },
+        {
+          "path": "provenance.note",
+          "from": "Inferred from provider roadmap statements."
+        },
+        {
+          "path": "title",
+          "from": "Major identity providers support the standard",
+          "to": "Major identity providers ship support"
+        }
+      ]
+    },
+    {
+      "elementId": "oc-new",
+      "kind": "outcome",
+      "title": "A new outcome",
+      "op": "added"
+    },
+    {
+      "elementId": "ln-spec-idp",
+      "kind": "link",
+      "title": "ln-spec-idp",
+      "op": "changed",
+      "rejected": true,
+      "fields": [
+        {
+          "path": "provenance.basis",
+          "from": "stated",
+          "to": "rejected"
+        },
+        {
+          "path": "provenance.evidenceIds",
+          "from": "[\"ev-survey\"]"
+        }
+      ]
+    },
+    {
+      "elementId": "ind-adoption-stories",
+      "kind": "indicator",
+      "title": "Stories of provider adoption",
+      "op": "removed"
+    }
+  ]
+}
