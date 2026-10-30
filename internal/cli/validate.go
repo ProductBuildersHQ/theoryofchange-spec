@@ -8,6 +8,7 @@ import (
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
 )
 
 func newValidateCmd(e *env) *cobra.Command {
@@ -22,11 +23,17 @@ A Theory of Change is checked against its schema and for structural problems
 Pass --toc to also check observation sets against the theory they measure.
 Pass --parent to also check that the given theories are children of a parent
 theory and that their contributesTo references resolve there.
+Pass --registry to resolve actors that live in a shared actor registry.
+Pass --futures to check that the given theories, which describe competing
+futures of one market, share one registry, name their futures and
+perspectives, do not both speak for the same actor in the same future, and
+refer to each other's elements correctly.
 
 Exit code 1 means at least one file has errors.`,
 		Example: `  theoryofchange validate theory.yaml
   theoryofchange validate observations-2026-q4.yaml --toc theory.yaml
   theoryofchange validate program-a.yaml program-b.yaml --parent organization.yaml
+  theoryofchange validate future-a.yaml future-b.yaml future-c.yaml --registry actors.yaml --futures
   theoryofchange validate --format json theory.json`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -41,13 +48,28 @@ Exit code 1 means at least one file has errors.`,
 					return usageErr("--toc: %v", err)
 				}
 			}
+			var opts []validate.Option
+			if p := flagString(cmd, "registry"); p != "" {
+				reg, err := service.LoadActorRegistry(p)
+				if err != nil {
+					return usageErr("--registry: %v", err)
+				}
+				opts = append(opts, validate.WithActorRegistry(reg))
+			}
 			reports := make([]service.Report, 0, len(args))
 			for _, path := range args {
-				r, err := service.ValidateFile(path, against)
+				r, err := service.ValidateFile(path, against, opts...)
 				if err != nil {
 					return &ExitError{Code: ExitUsageErr, Err: err}
 				}
 				reports = append(reports, r)
+			}
+			if flagBool(cmd, "futures") {
+				fr, err := service.ValidateFutures(args...)
+				if err != nil {
+					return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("--futures: %w", err)}
+				}
+				reports = append(reports, fr)
 			}
 			if p := flagString(cmd, "parent"); p != "" {
 				fr, err := service.ValidateFamily(p, args...)
@@ -61,6 +83,8 @@ Exit code 1 means at least one file has errors.`,
 		},
 	}
 	cmd.Flags().String("toc", "", "Theory of Change file to check observation sets against")
+	cmd.Flags().String("registry", "", "shared actor registry that actor references resolve against")
+	cmd.Flags().Bool("futures", false, "also check the given theories against each other as competing futures of one market")
 	cmd.Flags().String("parent", "", "parent Theory of Change; also checks that the given files are its child theories")
 	return cmd
 }

@@ -1,0 +1,75 @@
+kind: TheoryOfChange
+specVersion: "0.1"
+id: future-open-wins
+metadata:
+  name: Open standard wins
+  description: One of three fictional competing futures for the same market. Everything here is invented.
+  status: draft
+  tags:
+    - competing-futures
+    - fictional
+perspective:
+  actorId: act-open-group
+  role: proponent
+  futureRef: ufm:open-standard-wins
+context:
+  problemStatement: Delegated authority is recorded in incompatible ways, so nobody can show who authorized what an agent did.
+  targetPopulation: Identity providers, agent platforms, and enterprise buyers in the agent-delegation market
+  market:
+    framework: market_spec
+    ref: market:agent-delegation
+    url: https://example.org/markets/agent-delegation
+    relation: same_as
+  timeHorizon:
+    start: "2026-01-01"
+    end: "2029-12-31"
+ceilingOfAccountability:
+  level: long_term
+  rationale: The group can specify and demonstrate, but market-wide adoption depends on many independent organizations.
+outcomes:
+  - id: oc-traceable
+    title: Agent actions are traceable to a human grant across the market
+    level: impact
+    sphere: interest
+    actorIds:
+      - act-buyers
+    responsibility: shared
+    deliveredBy:
+      - act-open-group
+      - act-idps
+  - id: oc-buyers-name-standard
+    title: Enterprise buyers name the open standard in procurement
+    level: long_term
+    sphere: influence
+    actorIds:
+      - act-buyers
+  - id: oc-pilots-cheap
+    title: Pilots show the open standard is cheap to integrate
+    level: short_term
+    sphere: influence
+    actorIds:
+      - act-idps
+      - act-platforms
+links:
+  - id: ln-pilots-buyers
+    from: oc-pilots-cheap
+    to: oc-buyers-name-standard
+    rationale: Buyers name what they have seen work at low cost.
+  - id: ln-buyers-traceable
+    from: oc-buyers-name-standard
+    to: oc-traceable
+    rationale: A procurement requirement makes providers ship the format.
+interventions:
+  - id: int-reference-code
+    title: Publish open reference implementations
+    targets:
+      - oc-pilots-cheap
+    ownerActorId: act-open-group
+indicators:
+  - id: ind-open-pilots
+    measures: oc-pilots-cheap
+    name: Published pilots of the open standard
+    measurementType: quantitative
+    unit: pilots
+    direction: increase
+actorRegistry: agent-delegation-actors

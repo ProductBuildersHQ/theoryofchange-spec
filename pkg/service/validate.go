@@ -27,12 +27,12 @@ func (r Report) Valid() bool { return !validate.HasErrors(r.Issues) }
 // Change is checked against its schema and structurally; other kinds are
 // checked against their schema. When against is given, an observation set
 // is also checked against that theory.
-func ValidateBytes(source string, data []byte, f tocio.Format, against *toc.Document) Report {
+func ValidateBytes(source string, data []byte, f tocio.Format, against *toc.Document, opts ...validate.Option) Report {
 	r := Report{Source: source, Format: f, Issues: []validate.Issue{}}
 	if kind, err := tocio.DetectKind(data, f); err == nil {
 		r.Kind = kind
 	}
-	_, issues := validate.Source(data, f)
+	_, issues := validate.Source(data, f, opts...)
 	r.Issues = append(r.Issues, issues...)
 	if r.Kind == toc.KindObservationSet && against != nil && !validate.HasErrors(issues) {
 		set, err := tocio.ParseObservationSet(data, f)
@@ -47,12 +47,12 @@ func ValidateBytes(source string, data []byte, f tocio.Format, against *toc.Docu
 
 // ValidateFile reads and validates a file. The format comes from the
 // extension.
-func ValidateFile(path string, against *toc.Document) (Report, error) {
+func ValidateFile(path string, against *toc.Document, opts ...validate.Option) (Report, error) {
 	data, f, err := readInput(path)
 	if err != nil {
 		return Report{}, err
 	}
-	return ValidateBytes(path, data, f, against), nil
+	return ValidateBytes(path, data, f, against, opts...), nil
 }
 
 // ValidateFamily checks that child theories resolve against their parent:
@@ -76,6 +76,30 @@ func ValidateFamily(parentPath string, childPaths ...string) (Report, error) {
 		Kind:   toc.KindTheoryOfChange,
 		Issues: append([]validate.Issue{}, validate.Family(parent, children...)...),
 	}, nil
+}
+
+// ValidateFutures checks theories that describe competing futures of one
+// market against one another (see validate.Futures). Each must also be valid
+// alone; use ValidateFile with the shared actor registry for that.
+func ValidateFutures(paths ...string) (Report, error) {
+	docs := make([]*toc.Document, 0, len(paths))
+	for _, p := range paths {
+		d, err := tocio.LoadDocument(p)
+		if err != nil {
+			return Report{}, err
+		}
+		docs = append(docs, d)
+	}
+	return Report{Source: "competing futures", Kind: toc.KindTheoryOfChange, Issues: append([]validate.Issue{}, validate.Futures(docs...)...)}, nil
+}
+
+// LoadActorRegistry reads an actor registry file.
+func LoadActorRegistry(path string) (*toc.ActorRegistry, error) {
+	data, f, err := readInput(path)
+	if err != nil {
+		return nil, err
+	}
+	return tocio.ParseActorRegistry(data, f)
 }
 
 func readInput(path string) ([]byte, tocio.Format, error) {

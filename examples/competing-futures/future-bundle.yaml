@@ -1,0 +1,90 @@
+kind: TheoryOfChange
+specVersion: "0.1"
+id: future-bundle-wins
+metadata:
+  name: Bundled scheme wins
+  description: One of three fictional competing futures for the same market. Everything here is invented.
+  status: draft
+  tags:
+    - competing-futures
+    - fictional
+perspective:
+  actorId: act-bundle-vendor
+  role: proponent
+  futureRef: ufm:bundled-scheme-wins
+context:
+  problemStatement: Customers want delegation that works out of the box, and a single platform can deliver it faster than a committee.
+  targetPopulation: Identity providers, agent platforms, and enterprise buyers in the agent-delegation market
+  market:
+    framework: market_spec
+    ref: market:agent-delegation
+    url: https://example.org/markets/agent-delegation
+    relation: same_as
+  timeHorizon:
+    start: "2026-01-01"
+    end: "2029-12-31"
+ceilingOfAccountability:
+  level: long_term
+  rationale: The vendor controls its own platform, but whether customers standardize on it is their choice.
+outcomes:
+  - id: oc-records-in-platform
+    title: Delegation records live in one platform that buyers trust
+    level: impact
+    sphere: interest
+    actorIds:
+      - act-buyers
+  - id: oc-buyers-standardize
+    title: Enterprise buyers standardize on the bundled scheme
+    level: long_term
+    sphere: influence
+    actorIds:
+      - act-buyers
+  - id: oc-default-on
+    title: Agent platforms switch the bundled scheme on by default
+    level: intermediate
+    sphere: influence
+    actorIds:
+      - act-platforms
+  - id: oc-ships-bundle
+    title: The vendor ships delegation with its agent platform
+    level: short_term
+    sphere: control
+links:
+  - id: ln-ship-default
+    from: oc-ships-bundle
+    to: oc-default-on
+    rationale: Customers use what is already installed.
+  - id: ln-default-standardize
+    from: oc-default-on
+    to: oc-buyers-standardize
+    rationale: A default becomes the standard in practice.
+  - id: ln-standardize-records
+    from: oc-buyers-standardize
+    to: oc-records-in-platform
+    rationale: Standardizing means the records live in one place.
+interventions:
+  - id: int-bundle
+    title: Bundle delegation into the agent platform
+    targets:
+      - oc-ships-bundle
+    ownerActorId: act-bundle-vendor
+indicators:
+  - id: ind-default-on
+    measures: oc-default-on
+    name: Agent platforms with the bundled scheme on by default
+    measurementType: quantitative
+    unit: platforms
+    direction: increase
+  - id: ind-rival-pilots
+    measures: oc-default-on
+    name: Pilots of the open standard, watched as a competitor signal
+    measurementType: quantitative
+    unit: pilots
+    direction: decrease
+actorRegistry: agent-delegation-actors
+alignments:
+  - elementId: ind-rival-pilots
+    target:
+      framework: custom
+      ref: toc:future-open-wins#ind-open-pilots
+      relation: measures

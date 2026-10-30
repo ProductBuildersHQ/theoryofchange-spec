@@ -1,0 +1,74 @@
+kind: TheoryOfChange
+specVersion: "0.1"
+id: future-extension-wins
+metadata:
+  name: Extension of the older framework wins
+  description: One of three fictional competing futures for the same market. Everything here is invented.
+  status: draft
+  tags:
+    - competing-futures
+    - fictional
+perspective:
+  actorId: act-extension-group
+  role: proponent
+  futureRef: ufm:extension-wins
+context:
+  problemStatement: Buyers already run the older authorization framework, and extending it avoids a second system.
+  targetPopulation: Identity providers, agent platforms, and enterprise buyers in the agent-delegation market
+  market:
+    framework: market_spec
+    ref: market:agent-delegation
+    url: https://example.org/markets/agent-delegation
+    relation: same_as
+  timeHorizon:
+    start: "2026-01-01"
+    end: "2029-12-31"
+ceilingOfAccountability:
+  level: long_term
+  rationale: The group controls the extension, but whether providers ship it is up to them.
+outcomes:
+  - id: oc-extended-framework
+    title: Delegation records follow the extended older framework
+    level: impact
+    sphere: interest
+    actorIds:
+      - act-buyers
+  - id: oc-idps-ship-extension
+    title: Identity providers ship the extension in their next release
+    level: intermediate
+    sphere: influence
+    actorIds:
+      - act-idps
+  - id: oc-extension-final
+    title: The extension is finalized by the working group
+    level: short_term
+    sphere: control
+links:
+  - id: ln-final-ship
+    from: oc-extension-final
+    to: oc-idps-ship-extension
+    rationale: Providers ship what is finished and stable.
+  - id: ln-ship-records
+    from: oc-idps-ship-extension
+    to: oc-extended-framework
+    rationale: Buyers already run the older framework, so shipped support reaches them directly.
+interventions:
+  - id: int-finalize
+    title: Finalize the extension specification
+    targets:
+      - oc-extension-final
+    ownerActorId: act-extension-group
+indicators:
+  - id: ind-idps-extension
+    measures: oc-idps-ship-extension
+    name: Identity providers shipping the extension
+    measurementType: quantitative
+    unit: providers
+    direction: increase
+actorRegistry: agent-delegation-actors
+alignments:
+  - elementId: oc-idps-ship-extension
+    target:
+      framework: custom
+      ref: toc:future-open-wins#oc-pilots-cheap
+      relation: supports

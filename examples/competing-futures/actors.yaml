@@ -1,0 +1,57 @@
+kind: ActorRegistry
+specVersion: "0.1"
+id: agent-delegation-actors
+name: Agent delegation market actors (fictional)
+actors:
+  - id: act-open-group
+    name: Open Delegation Working Group
+    type: group
+    roles:
+      - champion
+      - implementer
+    stance: champion
+    influence: medium
+    interest: high
+  - id: act-bundle-vendor
+    name: Single-vendor delegation platform
+    type: organization
+    roles:
+      - champion
+      - competitor
+    stance: champion
+    influence: high
+    interest: high
+  - id: act-extension-group
+    name: Extension working group of an older authorization framework
+    type: group
+    roles:
+      - champion
+      - competitor
+    stance: champion
+    influence: medium
+    interest: medium
+  - id: act-idps
+    name: Identity providers
+    type: organization
+    roles:
+      - adopter
+    stance: neutral
+    influence: high
+    interest: medium
+  - id: act-platforms
+    name: Agent platforms
+    type: organization
+    roles:
+      - adopter
+      - gatekeeper
+    stance: neutral
+    influence: high
+    interest: high
+  - id: act-buyers
+    name: Enterprise buyers
+    type: customer_segment
+    roles:
+      - adopter
+    stance: unknown
+    influence: high
+    interest: medium
