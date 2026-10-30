@@ -432,3 +432,36 @@ func TestValidateAgainstParent(t *testing.T) {
 	}
 	wantCode(t, run(t, "", "validate", child, "--parent", filepath.Join(dir, "none.json")), 2)
 }
+
+const futuresDir = "../../examples/competing-futures/"
+
+func TestValidateWithARegistryAndAsFutures(t *testing.T) {
+	files := []string{futuresDir + "future-open.yaml", futuresDir + "future-bundle.yaml", futuresDir + "future-extension.yaml"}
+	registry := futuresDir + "actors.yaml"
+
+	// Without the registry each theory warns that it cannot resolve its actors.
+	r := run(t, "", append([]string{"validate"}, files...)...)
+	wantCode(t, r, ExitOK)
+	if !strings.Contains(r.stdout, "VAL-REF-004") {
+		t.Errorf("expected unresolved-actor warnings:\n%s", r.stdout)
+	}
+	// With it, the theories are clean, and so are they as a set of futures.
+	r = run(t, "", append(append([]string{"validate"}, files...), "--registry", registry, "--futures")...)
+	wantCode(t, r, ExitOK)
+	if strings.Contains(r.stdout, "warning") || !strings.Contains(r.stdout, "competing futures: ok") {
+		t.Errorf("stdout = %s", r.stdout)
+	}
+	// Two theories speaking for the same actor in the same future are reported.
+	dir := t.TempDir()
+	dup := filepath.Join(dir, "dup.yaml")
+	body := strings.Replace(mustRead(t, files[0]), "id: future-open-wins", "id: future-dup", 1)
+	if err := os.WriteFile(dup, []byte(body), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	r = run(t, "", "validate", files[0], dup, "--registry", registry, "--futures")
+	wantCode(t, r, ExitInvalid)
+	if !strings.Contains(r.stdout, "VAL-FUT-004") {
+		t.Errorf("stdout = %s", r.stdout)
+	}
+	wantCode(t, run(t, "", "validate", files[0], "--registry", futuresDir+"nope.yaml"), ExitUsageErr)
+}
