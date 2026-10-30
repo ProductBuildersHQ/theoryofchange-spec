@@ -2,7 +2,7 @@
 
 ## Summary
 
-This draft has 22 outcomes (20 within the organization's accountability), 10 interventions, 12 assumptions, and 27 indicators, organized into 3 pathway(s). Of its 123 elements, 20 are stated by cited sources, 48 are our inference or hypothesis, 22 are confirmed by the organization, and 33 have no basis recorded. The inferred and hypothesis elements are the first to check with the organization.
+This draft has 22 outcomes (19 within the organization's accountability), 10 interventions, 12 assumptions, and 27 indicators, organized into 3 pathway(s). Of its 123 elements, 20 are stated by cited sources, 48 are our inference or hypothesis, 22 are confirmed by the organization, and 33 have no basis recorded. The inferred and hypothesis elements are the first to check with the organization.
 
 ## Where each element comes from
 
