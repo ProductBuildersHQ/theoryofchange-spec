@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/csv-mapping.schema.json",
+  "$ref": "#/$defs/CSVMapping",
+  "$defs": {
+    "CSVColumns": {
+      "properties": {
+        "indicator": {
+          "type": "string"
+        },
+        "indicatorFixed": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string"
+        },
+        "pathway": {
+          "type": "string"
+        },
+        "quality": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "date"
+      ]
+    },
+    "CSVMapping": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "tocId": {
+          "type": "string"
+        },
+        "columns": {
+          "$ref": "#/$defs/CSVColumns"
+        },
+        "indicatorAliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "metricAliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "dateFormat": {
+          "type": "string"
+        },
+        "period": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "tocId",
+        "columns"
+      ]
+    }
+  },
+  "title": "Theory of Change CSV Mapping",
+  "description": "How the columns of a spreadsheet map onto indicator observations."
+}

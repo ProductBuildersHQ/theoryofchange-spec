@@ -11,7 +11,7 @@ import (
 )
 
 func TestNamesAndGet(t *testing.T) {
-	want := []string{ActorRegistry, ReviewResponse, ObservationSet, StatusDiff, TheoryOfChange, Status}
+	want := []string{ActorRegistry, CSVMapping, ReviewResponse, ObservationSet, StatusDiff, TheoryOfChange, Status}
 	slices.Sort(want)
 	if got := Names(); !slices.Equal(got, want) {
 		t.Fatalf("Names() = %v, want %v", got, want)

@@ -105,6 +105,15 @@ func ParseReviewResponse(data []byte, f Format) (*toc.ReviewResponse, error) {
 	return decode[toc.ReviewResponse](j, schema.ReviewResponse)
 }
 
+// ParseCSVMapping parses a CSV column mapping in the given format.
+func ParseCSVMapping(data []byte, f Format) (*toc.CSVMapping, error) {
+	j, err := ToJSON(data, f)
+	if err != nil {
+		return nil, err
+	}
+	return decode[toc.CSVMapping](j, schema.CSVMapping)
+}
+
 // ParseActorRegistry parses an actor registry in the given format.
 func ParseActorRegistry(data []byte, f Format) (*toc.ActorRegistry, error) {
 	j, err := ToJSON(data, f)

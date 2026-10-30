@@ -226,7 +226,7 @@ func TestSchema(t *testing.T) {
 	}
 	r = run(t, "", "schema", "--format", "json")
 	var names []string
-	if err := json.Unmarshal([]byte(r.stdout), &names); err != nil || len(names) != 6 {
+	if err := json.Unmarshal([]byte(r.stdout), &names); err != nil || len(names) != 7 {
 		t.Fatalf("names JSON = %q (%v)", r.stdout, err)
 	}
 	r = run(t, "", "schema", "theory-of-change")

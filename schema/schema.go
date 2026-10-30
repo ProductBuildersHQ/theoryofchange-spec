@@ -34,6 +34,7 @@ const (
 	StatusDiff     = "status-diff"
 	ActorRegistry  = "actor-registry"
 	ReviewResponse = "review-response"
+	CSVMapping     = "csv-mapping"
 )
 
 // ErrUnknownSchema is returned for a name that is not embedded.

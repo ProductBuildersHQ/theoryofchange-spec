@@ -38,6 +38,7 @@ func Definitions() []Definition {
 		{"theory-of-change-status", "Theory of Change Status", "A computed status snapshot of indicators, outcomes, pathways, links, and assumptions at a date.", &toc.Status{}},
 		{"status-diff", "Theory of Change Status Diff", "Changes between two status snapshots.", &toc.StatusDiff{}},
 		{"actor-registry", "Theory of Change Actor Registry", "A shared list of actors referenced by several theories.", &toc.ActorRegistry{}},
+		{"csv-mapping", "Theory of Change CSV Mapping", "How the columns of a spreadsheet map onto indicator observations.", &toc.CSVMapping{}},
 		{"review-response", "Theory of Change Review Response", "What reviewers said about a Theory of Change, by element, independent of the channel it was collected through.", &toc.ReviewResponse{}},
 	}
 }
