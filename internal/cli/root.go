@@ -93,6 +93,7 @@ Exit codes: 0 success; 1 the input is invalid or a change was rejected;
 		newJudgeCmd(e),
 		newLintCmd(e),
 		newStatusCmd(e),
+		newDiffCmd(e),
 	)
 	root.AddCommand(newElementCmds(e)...)
 	return root
