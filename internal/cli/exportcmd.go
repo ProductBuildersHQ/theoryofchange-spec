@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -67,6 +68,9 @@ func exportDoc(cmd *cobra.Command, format, kind, path string) error {
 			return usageErr("export pptx supports only the %q kind, not %q", workshopKind, kind)
 		}
 		return usageErr("%q is a deck: use export pptx %s", kind, kind)
+	}
+	if format == "docx" && !slices.Contains(report.DefinitionKinds, kind) {
+		return usageErr("unknown kind %q: want one of %s", kind, strings.Join(report.DefinitionKinds, ", "))
 	}
 	doc, err := loadForRender(path)
 	if err != nil {
