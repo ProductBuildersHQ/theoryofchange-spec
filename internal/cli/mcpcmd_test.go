@@ -6,24 +6,29 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 )
 
+// runAsCLIEnv makes the test binary behave as the theoryofchange command, for
+// tests that need a real process with its own standard input and output.
+const runAsCLIEnv = "THEORYOFCHANGE_RUN_AS_CLI"
+
+func TestMain(m *testing.M) {
+	if os.Getenv(runAsCLIEnv) == "1" {
+		os.Exit(Execute(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
+	}
+	os.Exit(m.Run())
+}
+
 // The server speaks MCP over the real process's standard input and output.
 func TestMCPServesOverStdio(t *testing.T) {
-	if testing.Short() {
-		t.Skip("builds the binary")
-	}
-	bin := filepath.Join(t.TempDir(), "theoryofchange")
-	build := exec.Command("go", "build", "-o", bin, "../../cmd/theoryofchange")
-	if out, err := build.CombinedOutput(); err != nil {
-		t.Fatalf("build: %v\n%s", err, out)
-	}
 	root := t.TempDir()
-	cmd := exec.Command(bin, "mcp", "--root", root)
+	// The test binary runs as the command (see TestMain), so nothing is built
+	// and no platform-specific executable name is needed.
+	cmd := exec.Command(os.Args[0], "mcp", "--root", root) //nolint:gosec // re-runs this test binary, not input
+	cmd.Env = append(os.Environ(), runAsCLIEnv+"=1")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		t.Fatal(err)
@@ -73,7 +78,6 @@ func TestMCPServesOverStdio(t *testing.T) {
 	if !strings.Contains(string(mustMarshal(t, list)), "toc_patch") {
 		t.Errorf("tools/list: %v", list)
 	}
-	_ = os.Remove(bin)
 }
 
 func mustMarshal(t *testing.T, v any) []byte {

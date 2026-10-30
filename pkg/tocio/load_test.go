@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	oscfs "github.com/grokify/oscompat/fs"
 )
 
 const fixtures = "../toc/testdata/"
@@ -349,7 +350,8 @@ func TestWriteFileIsAtomicAndKeepsMode(t *testing.T) {
 	if err := WriteFile(path, []byte("one")); err != nil {
 		t.Fatal(err)
 	}
-	if info, err := os.Stat(path); err != nil || info.Mode().Perm() != 0o644 {
+	modes := oscfs.PermissionsEnforced() // Windows has no Unix permission bits
+	if info, err := os.Stat(path); err != nil || (modes && info.Mode().Perm() != 0o644) {
 		t.Fatalf("new file mode = %v (%v)", info.Mode().Perm(), err)
 	}
 	if err := os.Chmod(path, 0o600); err != nil {
@@ -362,7 +364,7 @@ func TestWriteFileIsAtomicAndKeepsMode(t *testing.T) {
 	if err != nil || string(got) != "two" {
 		t.Fatalf("content = %q (%v)", got, err)
 	}
-	if info, _ := os.Stat(path); info.Mode().Perm() != 0o600 {
+	if info, _ := os.Stat(path); modes && info.Mode().Perm() != 0o600 {
 		t.Fatalf("existing mode not preserved: %v", info.Mode().Perm())
 	}
 	entries, err := os.ReadDir(dir)
