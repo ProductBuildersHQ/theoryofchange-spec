@@ -1,0 +1,8 @@
+# Text files are checked out with LF on every platform. The canonical form of
+# a ToC file is byte-exact LF, and golden files are compared byte for byte, so
+# a Windows checkout must not convert them to CRLF.
+* text=auto eol=lf
+
+# CSV is CRLF by definition (RFC 4180) and the goldens are compared byte for
+# byte, so it is never converted in either direction.
+*.csv -text
