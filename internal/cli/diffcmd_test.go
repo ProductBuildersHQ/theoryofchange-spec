@@ -21,7 +21,7 @@ func twoVersions(t *testing.T) (oldPath, newPath string) {
 		t.Fatal(err)
 	}
 	newPath = filepath.Join(filepath.Dir(oldPath), "v2.json")
-	if err := os.WriteFile(newPath, data, 0o600); err != nil {
+	if err := os.WriteFile(newPath, data, 0o600); err != nil { //nolint:gosec // a file in the test's temporary directory
 		t.Fatal(err)
 	}
 	wantCode(t, run(t, "", "outcome", "set", newPath, "oc-spec-stable", "--title", "A stable specification exists"), ExitOK)
