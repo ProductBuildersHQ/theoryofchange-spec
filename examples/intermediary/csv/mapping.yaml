@@ -1,0 +1,16 @@
+# How the network's monthly spreadsheet maps onto observations.
+tocId: riverbend-network
+period: 2026-Q4
+dateFormat: 02/01/2006
+columns:
+  indicator: Measure
+  date: Month end
+  value: Value
+  pathway: Program
+  quality: Quality
+  source: Source
+indicatorAliases:
+  Participant retention (Learning Exchange): ind-retention-learning
+  Leadership practice maturity: ind-practice-maturity
+metricAliases:
+  Attendee hours: met-attendee-hours

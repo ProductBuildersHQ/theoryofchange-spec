@@ -18,7 +18,7 @@ func newImportCmd(e *env) *cobra.Command {
 		Use:   "import",
 		Short: "Bring outside input into a review",
 	}
-	cmd.AddCommand(newImportReviewCmd(e))
+	cmd.AddCommand(newImportReviewCmd(e), newImportObservationsCmd(e))
 	return cmd
 }
 

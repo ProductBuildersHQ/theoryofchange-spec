@@ -178,3 +178,31 @@ func ThemeCount(doc *toc.Document, ind toc.Indicator, sets []*toc.ObservationSet
 	}
 	return len(seen)
 }
+
+// LatestDate returns the latest date that appears in the observation sets:
+// an observation, an assessment, a story, or a note. It is the natural as-of
+// date when none is given, and reports false when the sets hold no date.
+func LatestDate(sets []*toc.ObservationSet) (time.Time, bool) {
+	var latest time.Time
+	found := false
+	consider := func(s string) {
+		if at, ok := parseDate(s); ok && (!found || at.After(latest)) {
+			latest, found = at, true
+		}
+	}
+	for _, set := range sets {
+		for _, o := range set.Observations {
+			consider(o.Date)
+		}
+		for _, a := range set.Assessments {
+			consider(a.Date)
+		}
+		for _, s := range set.Stories {
+			consider(s.Date)
+		}
+		for _, n := range set.Notes {
+			consider(n.Date)
+		}
+	}
+	return latest, found
+}
