@@ -254,6 +254,7 @@ func (b *builder) outcomes() []OutcomeView {
 		for _, id := range o.DeliveredBy {
 			ov.DeliveredBy = append(ov.DeliveredBy, b.name(id))
 		}
+		ov.AddressesCauses = slices.Clone(o.AddressesCauses)
 		if s, ok := b.outStatus[o.ID]; ok {
 			ov.Status = &StatusView{State: string(s.State), PathwayState: string(s.PathwayState), Health: s.Health, Confidence: s.Confidence}
 		}

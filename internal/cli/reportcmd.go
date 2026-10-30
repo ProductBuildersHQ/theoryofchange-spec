@@ -94,12 +94,20 @@ Kinds: ` + strings.Join(report.DefinitionKinds, ", ") + `.
   theoryofchange report glossary theory.yaml`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			kind := args[0]
+			if flagBool(cmd, "diagram") {
+				if kind != "logic-model" {
+					return usageErr("--diagram applies to the logic-model report")
+				}
+				kind = "logic-model-diagram"
+			}
 			return render(e, cmd, args[1], false, func(doc *toc.Document) (string, error) {
-				return service.DefinitionReport(doc, args[0], flagString(cmd, "pathway"))
+				return service.DefinitionReport(doc, kind, flagString(cmd, "pathway"))
 			})
 		},
 	}
 	cmd.Flags().String("pathway", "", "restrict the report to one pathway ID")
+	cmd.Flags().Bool("diagram", false, "draw the logic-model report as a left-to-right diagram")
 	cmd.Flags().String("out", "", "write to this file instead of standard output")
 	asOfFlags(cmd)
 	return cmd

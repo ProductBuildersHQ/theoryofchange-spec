@@ -57,6 +57,12 @@ func DefinitionReport(doc *toc.Document, kind, pathway string) (string, error) {
 		return report.PathwayDiagrams(whole, pathways), nil
 	case "logic-model":
 		return report.LogicModels(whole, pathways), nil
+	case "logic-model-diagram":
+		return report.LogicModelDiagrams(whole, pathways), nil
+	case "outcome-map":
+		return report.OutcomeMaps(whole, pathways), nil
+	case "logframe":
+		return report.Logframes(whole, pathways), nil
 	case "metrics":
 		return report.MetricDefinitions(whole), nil
 	case "glossary":

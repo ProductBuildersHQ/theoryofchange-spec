@@ -134,6 +134,8 @@ type OutcomeView struct {
 	Accountable bool `json:"accountable"`
 	// DeliveredBy names the actors who deliver the outcome.
 	DeliveredBy []string `json:"deliveredBy,omitempty"`
+	// AddressesCauses lists the IDs of the causes the outcome answers.
+	AddressesCauses []string `json:"addressesCauses,omitempty"`
 	// Logic says how incoming preconditions combine: "all", "any", or
 	// "at least k".
 	Logic         string      `json:"logic"`
