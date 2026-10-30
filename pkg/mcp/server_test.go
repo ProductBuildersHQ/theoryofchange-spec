@@ -3,6 +3,7 @@ package mcp
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -335,8 +336,8 @@ func TestRootResolve(t *testing.T) {
 	}
 	// "/etc/passwd", "\\x" and "C:x" are rooted or name a drive on every platform.
 	for _, p := range []string{"", "..", "a/../../b", "/etc/passwd", `\x`, "C:x.yaml", "../x"} {
-		if _, err := r.Resolve(p); err == nil {
-			t.Errorf("Resolve(%q) was accepted", p)
+		if _, err := r.Resolve(p); !errors.Is(err, ErrOutsideRoot) {
+			t.Errorf("Resolve(%q) = %v, want ErrOutsideRoot", p, err)
 		}
 	}
 	if _, err := NewRoot(filepath.Join(dir, "missing")); err == nil {

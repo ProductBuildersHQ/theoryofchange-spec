@@ -8,17 +8,14 @@
 package mcp
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
 
 	oscfs "github.com/grokify/oscompat/fs"
 )
 
-// ErrOutsideRoot is returned for a path that leaves the server's root.
-var ErrOutsideRoot = errors.New("path is outside the server root")
+// ErrOutsideRoot is returned for a path that leaves the server's root. It is
+// the oscompat error, so errors.Is works with either name.
+var ErrOutsideRoot = oscfs.ErrOutsideRoot
 
 // Root confines file access to one directory.
 type Root struct {
@@ -28,17 +25,9 @@ type Root struct {
 // NewRoot returns a root for dir, which must exist. Symbolic links in dir
 // itself are resolved, so the confinement test compares real paths.
 func NewRoot(dir string) (*Root, error) {
-	abs, err := filepath.Abs(dir)
+	real, err := oscfs.RealDir(dir)
 	if err != nil {
-		return nil, fmt.Errorf("mcp: root %q: %w", dir, err)
-	}
-	real, err := filepath.EvalSymlinks(abs)
-	if err != nil {
-		return nil, fmt.Errorf("mcp: root %q: %w", dir, err)
-	}
-	info, err := os.Stat(real)
-	if err != nil || !info.IsDir() {
-		return nil, fmt.Errorf("mcp: root %q is not a directory", dir)
+		return nil, fmt.Errorf("mcp: root: %w", err)
 	}
 	return &Root{dir: real}, nil
 }
@@ -47,61 +36,14 @@ func NewRoot(dir string) (*Root, error) {
 func (r *Root) Dir() string { return r.dir }
 
 // Resolve turns a path from a tool call into a real path inside the root.
-// A relative path is taken from the root. A path with a ".." element is
-// refused outright, as is any path that, once symbolic links are followed,
-// lies outside the root. The file need not exist, but its directory must,
-// so a tool can create a file in place.
+// A relative path is taken from the root. A path with a ".." element, a rooted
+// or drive path outside the root, and a path that leads outside once symbolic
+// links are followed are all refused, with the same answer on every platform.
+// The file need not exist, so a tool can create a file in place.
 func (r *Root) Resolve(path string) (string, error) {
-	if path == "" {
-		return "", errors.New("mcp: empty path")
-	}
-	if strings.ContainsRune(path, 0) {
-		return "", fmt.Errorf("%w: %q", ErrOutsideRoot, path)
-	}
-	for _, part := range strings.FieldsFunc(path, func(c rune) bool { return c == '/' || c == filepath.Separator }) {
-		if part == ".." {
-			return "", fmt.Errorf("%w: %q has a \"..\" element", ErrOutsideRoot, path)
-		}
-	}
-	// A path that is rooted or names a drive but is not absolute here ("/etc/passwd"
-	// or "C:x" on Windows) would be read as relative to the root. Refuse it so
-	// every platform gives the same answer.
-	if oscfs.IsAbsAny(path) && !filepath.IsAbs(path) {
-		return "", fmt.Errorf("%w: %q is not a path inside the root", ErrOutsideRoot, path)
-	}
-	full := path
-	if !filepath.IsAbs(full) {
-		full = filepath.Join(r.dir, full)
-	}
-	full = filepath.Clean(full)
-
-	// Follow links for the longest part that exists, then re-attach the rest.
-	existing, rest := full, ""
-	for {
-		real, err := filepath.EvalSymlinks(existing)
-		if err == nil {
-			resolved := filepath.Join(real, rest)
-			if !r.contains(resolved) {
-				return "", fmt.Errorf("%w: %q", ErrOutsideRoot, path)
-			}
-			return resolved, nil
-		}
-		if !errors.Is(err, os.ErrNotExist) {
-			return "", fmt.Errorf("mcp: resolve %q: %w", path, err)
-		}
-		parent := filepath.Dir(existing)
-		if parent == existing {
-			return "", fmt.Errorf("%w: %q", ErrOutsideRoot, path)
-		}
-		rest = filepath.Join(filepath.Base(existing), rest)
-		existing = parent
-	}
-}
-
-func (r *Root) contains(path string) bool {
-	rel, err := filepath.Rel(r.dir, path)
+	resolved, err := oscfs.ResolveInRoot(r.dir, path)
 	if err != nil {
-		return false
+		return "", fmt.Errorf("mcp: %w", err)
 	}
-	return rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)))
+	return resolved, nil
 }
