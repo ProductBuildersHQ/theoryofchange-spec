@@ -42,7 +42,7 @@ func taggedElements(v *View) []tagged {
 		out = append(out, tagged{toc.ElementPathway, x.ID, x.Title, x.Basis, true})
 	}
 	for _, x := range v.Outcomes {
-		out = append(out, tagged{toc.ElementOutcome, x.ID, x.Title, x.Basis, x.Owned})
+		out = append(out, tagged{toc.ElementOutcome, x.ID, x.Title, x.Basis, x.Accountable})
 	}
 	for _, x := range v.Links {
 		out = append(out, tagged{toc.ElementLink, x.ID, name(x.From) + " → " + name(x.To), x.Basis, true})
@@ -142,7 +142,7 @@ func Assessment(v *View, doc *toc.Document) string {
 func assessmentSummary(v *View, els []tagged) string {
 	owned := 0
 	for _, o := range v.Outcomes {
-		if o.Owned {
+		if o.Accountable {
 			owned++
 		}
 	}
@@ -190,7 +190,7 @@ func outcomesWithoutIndicators(v *View, doc *toc.Document) []string {
 	var out []string
 	proxied := measuredByProxy(doc)
 	for _, o := range v.Outcomes {
-		if o.Owned && len(o.Indicators) == 0 && !proxied[o.ID] {
+		if o.Accountable && len(o.Indicators) == 0 && !proxied[o.ID] {
 			out = append(out, fmt.Sprintf("%s (`%s`)", mdText(o.Title), o.ID))
 		}
 	}
@@ -278,7 +278,7 @@ func questions(v *View, els []tagged, doc *toc.Document) []string {
 	}
 	proxied := measuredByProxy(doc)
 	for _, o := range v.Outcomes {
-		if o.Owned && len(o.Indicators) == 0 && !proxied[o.ID] {
+		if o.Accountable && len(o.Indicators) == 0 && !proxied[o.ID] {
 			qs = append(qs, fmt.Sprintf("How would you know that \"%s\" (%s) has happened?", mdText(o.Title), o.ID))
 		}
 	}

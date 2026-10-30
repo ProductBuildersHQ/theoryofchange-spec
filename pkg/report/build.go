@@ -239,15 +239,20 @@ func (b *builder) outcomes() []OutcomeView {
 		ov := OutcomeView{
 			ID: o.ID, Title: o.Title, Description: o.Description, Level: o.Level, Sphere: o.Sphere,
 			Category: o.Category, ChangeType: o.ChangeType, Population: o.Population,
-			Owned:         b.g.BelowCeiling(o.ID),
-			Logic:         logicText(o.EffectiveLogic()),
-			Preconditions: strs(b.g.Preconditions(o.ID)),
-			Pathways:      b.pathwaysOf(o.ID),
-			Indicators:    b.activeIndicatorIDs(o.ID),
-			Basis:         basisOf(o.Provenance),
+			Owned:          b.g.BelowCeiling(o.ID),
+			Responsibility: string(o.EffectiveResponsibility()),
+			Accountable:    b.g.BelowCeiling(o.ID) && o.Accountable(),
+			Logic:          logicText(o.EffectiveLogic()),
+			Preconditions:  strs(b.g.Preconditions(o.ID)),
+			Pathways:       b.pathwaysOf(o.ID),
+			Indicators:     b.activeIndicatorIDs(o.ID),
+			Basis:          basisOf(o.Provenance),
 		}
 		for _, id := range o.ActorIDs {
 			ov.Actors = append(ov.Actors, b.name(id))
+		}
+		for _, id := range o.DeliveredBy {
+			ov.DeliveredBy = append(ov.DeliveredBy, b.name(id))
 		}
 		if s, ok := b.outStatus[o.ID]; ok {
 			ov.Status = &StatusView{State: string(s.State), PathwayState: string(s.PathwayState), Health: s.Health, Confidence: s.Confidence}

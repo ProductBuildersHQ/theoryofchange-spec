@@ -125,6 +125,15 @@ type OutcomeView struct {
 	// Owned reports whether the outcome is within the ceiling of
 	// accountability.
 	Owned bool `json:"owned"`
+	// Responsibility says how far the perspective actor answers for the
+	// outcome: own, shared, partner, or unaddressed.
+	Responsibility string `json:"responsibility"`
+	// Accountable is true for an outcome the perspective actor answers
+	// for: it is within the ceiling and owned or shared. Every other
+	// outcome is monitored only.
+	Accountable bool `json:"accountable"`
+	// DeliveredBy names the actors who deliver the outcome.
+	DeliveredBy []string `json:"deliveredBy,omitempty"`
 	// Logic says how incoming preconditions combine: "all", "any", or
 	// "at least k".
 	Logic         string      `json:"logic"`

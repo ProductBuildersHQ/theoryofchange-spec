@@ -326,7 +326,9 @@ func decisions(in StatusInput) string {
 
 // Results renders the results framework: each outcome with its indicators,
 // baseline, targets, latest value, and status, and the numbers behind the
-// status.
+// status. Outcomes the organization answers for come first; those it only
+// monitors, because partners deliver them or they lie above its ceiling of
+// accountability, follow in a section of their own.
 func Results(in StatusInput) string {
 	var b strings.Builder
 	b.WriteString(header(in, "results"))
@@ -335,33 +337,50 @@ func Results(in StatusInput) string {
 	for _, i := range in.View.Indicators {
 		indicators[i.ID] = i
 	}
-	for _, lv := range toc.AllLevels() {
-		var section strings.Builder
-		for _, o := range in.View.Outcomes {
-			if o.Level != lv {
-				continue
+	section := func(heading string, keep func(OutcomeView) bool) {
+		var body strings.Builder
+		for _, lv := range toc.AllLevels() {
+			var level strings.Builder
+			for _, o := range in.View.Outcomes {
+				if o.Level == lv && keep(o) {
+					level.WriteString(outcomeResults(in, o, indicators, byInd))
+				}
 			}
-			fmt.Fprintf(&section, "### %s%s\n\n", mdText(o.Title), BasisMark(o.Basis))
-			state := "—"
-			if o.Status != nil {
-				state = statusLabel(o.Status.PathwayState)
+			if level.Len() > 0 {
+				fmt.Fprintf(&body, "### %s\n\n%s", LevelLabel(lv), level.String())
 			}
-			fmt.Fprintf(&section, "Pathway status: %s. Own indicators: %s.\n\n", state, orDash(strings.Join(o.Indicators, ", ")))
-			if len(o.Indicators) == 0 {
-				continue
-			}
-			section.WriteString("| Indicator | Baseline | Targets | Latest | Status | Because |\n|-----------|----------|---------|--------|--------|---------|\n")
-			for _, id := range o.Indicators {
-				iv, s := indicators[id], byInd[id]
-				fmt.Fprintf(&section, "| %s | %s | %s | %s | %s | %s |\n", MDCell(iv.Name)+BasisMark(iv.Basis), orDash(MDCell(iv.Baseline)),
-					orDash(MDCell(strings.Join(iv.Targets, "; "))), orDash(MDCell(iv.Latest)), statusLabel(string(s.State)), MDCell(cites(s, in.Status.AsOf)))
-			}
-			section.WriteString("\n")
 		}
-		if section.Len() > 0 {
-			fmt.Fprintf(&b, "## %s\n\n%s", LevelLabel(lv), section.String())
+		if body.Len() > 0 {
+			fmt.Fprintf(&b, "## %s\n\n%s", heading, body.String())
 		}
 	}
+	section("Outcomes the organization answers for", func(o OutcomeView) bool { return o.Accountable })
+	section("Monitored only", func(o OutcomeView) bool { return !o.Accountable })
+	return b.String()
+}
+
+func outcomeResults(in StatusInput, o OutcomeView, indicators map[string]IndicatorView, byInd map[string]toc.IndicatorStatus) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "#### %s%s\n\n", mdText(o.Title), BasisMark(o.Basis))
+	state := "—"
+	if o.Status != nil {
+		state = statusLabel(o.Status.PathwayState)
+	}
+	fmt.Fprintf(&b, "Pathway status: %s. Own indicators: %s.", state, orDash(strings.Join(o.Indicators, ", ")))
+	if !o.Accountable && o.Responsibility != string(toc.ResponsibilityOwn) {
+		fmt.Fprintf(&b, " Responsibility: %s.", strings.ToLower(o.Responsibility))
+	}
+	b.WriteString("\n\n")
+	if len(o.Indicators) == 0 {
+		return b.String()
+	}
+	b.WriteString("| Indicator | Baseline | Targets | Latest | Status | Because |\n|-----------|----------|---------|--------|--------|---------|\n")
+	for _, id := range o.Indicators {
+		iv, s := indicators[id], byInd[id]
+		fmt.Fprintf(&b, "| %s | %s | %s | %s | %s | %s |\n", MDCell(iv.Name)+BasisMark(iv.Basis), orDash(MDCell(iv.Baseline)),
+			orDash(MDCell(strings.Join(iv.Targets, "; "))), orDash(MDCell(iv.Latest)), statusLabel(string(s.State)), MDCell(cites(s, in.Status.AsOf)))
+	}
+	b.WriteString("\n")
 	return b.String()
 }
 
