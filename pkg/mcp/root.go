@@ -13,6 +13,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	oscfs "github.com/grokify/oscompat/fs"
 )
 
 // ErrOutsideRoot is returned for a path that leaves the server's root.
@@ -60,6 +62,12 @@ func (r *Root) Resolve(path string) (string, error) {
 		if part == ".." {
 			return "", fmt.Errorf("%w: %q has a \"..\" element", ErrOutsideRoot, path)
 		}
+	}
+	// A path that is rooted or names a drive but is not absolute here ("/etc/passwd"
+	// or "C:x" on Windows) would be read as relative to the root. Refuse it so
+	// every platform gives the same answer.
+	if oscfs.IsAbsAny(path) && !filepath.IsAbs(path) {
+		return "", fmt.Errorf("%w: %q is not a path inside the root", ErrOutsideRoot, path)
 	}
 	full := path
 	if !filepath.IsAbs(full) {

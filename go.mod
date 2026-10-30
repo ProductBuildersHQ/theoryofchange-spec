@@ -3,6 +3,7 @@ module github.com/ProductBuildersHQ/theoryofchange-spec
 go 1.26.5
 
 require (
+	github.com/grokify/oscompat v0.9.0
 	github.com/grokify/prism-core v0.5.0
 	github.com/grokify/prism-roadmap v0.21.0
 	github.com/grokify/structured-goals v0.2.0

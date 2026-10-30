@@ -333,7 +333,8 @@ func TestRootResolve(t *testing.T) {
 			t.Errorf("Resolve(%q) = %q, %v", p, got, err)
 		}
 	}
-	for _, p := range []string{"", "..", "a/../../b", "/etc/passwd", "../x"} {
+	// "/etc/passwd", "\\x" and "C:x" are rooted or name a drive on every platform.
+	for _, p := range []string{"", "..", "a/../../b", "/etc/passwd", `\x`, "C:x.yaml", "../x"} {
 		if _, err := r.Resolve(p); err == nil {
 			t.Errorf("Resolve(%q) was accepted", p)
 		}
