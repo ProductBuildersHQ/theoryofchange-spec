@@ -62,7 +62,7 @@ look at something: a flagged row or an out-of-date response.`,
 	f.StringSlice("reviewer", nil, "reviewer group or role, for --from-csv (repeatable)")
 	f.String("date", "", "date of the review (YYYY-MM-DD), for --from-csv")
 	f.String("step", "", "consultation step to record (default whole)")
-	f.String("out", "", "write the proposed patch to this file")
+	f.StringP("out", "o", "", "write the proposed patch to this file")
 	f.String("consultation-out", "", "write the consultation record to this file")
 	return cmd
 }

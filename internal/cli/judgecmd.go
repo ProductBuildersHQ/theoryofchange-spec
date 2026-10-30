@@ -69,7 +69,7 @@ func newJudgeShowCmd(e *env) *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().String("out", "", "write the bundle to this file instead of standard output")
+	cmd.Flags().StringP("out", "o", "", "write the bundle to this file instead of standard output")
 	return cmd
 }
 

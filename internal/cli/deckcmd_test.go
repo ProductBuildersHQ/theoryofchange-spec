@@ -21,7 +21,7 @@ func TestDeckWorkshopPrintsMarp(t *testing.T) {
 func TestDeckWorkshopWritesOutputFile(t *testing.T) {
 	path := fixtureCopy(t, "full.json", "theory.json")
 	out := path + ".md"
-	r := run(t, "", "deck", "workshop", path, "--output", out, "--theme", "gaia")
+	r := run(t, "", "deck", "workshop", path, "--out", out, "--theme", "gaia")
 	if r.code != ExitOK || r.stdout != "" {
 		t.Fatalf("code = %d, stdout = %q, stderr = %s", r.code, r.stdout, r.err)
 	}
@@ -60,16 +60,16 @@ func TestDeckWorkshopMissingFile(t *testing.T) {
 func TestStatusDecks(t *testing.T) {
 	dir := t.TempDir()
 	prev := dir + "/prev.json"
-	wantCode(t, run(t, "", "status", exTheory, "-o", exObs, "--as-of", "2026-06-30", "--out", prev), ExitOK)
+	wantCode(t, run(t, "", "status", exTheory, "-O", exObs, "--as-of", "2026-06-30", "--out", prev), ExitOK)
 
 	for name, args := range map[string]struct {
 		args []string
 		want []string
 	}{
-		"exec": {[]string{"deck", "exec", exTheory, "-o", exObs, "--prev", prev}, []string{"marp: true", "# Where we stand", "# What changed since 2026-06-30", "version 0.2"}},
-		"learning-review": {[]string{"deck", "learning-review", exTheory, "-o", exObs, "--prev", prev, "--period", "2026-Q3"},
+		"exec": {[]string{"deck", "exec", exTheory, "-O", exObs, "--prev", prev}, []string{"marp: true", "# Where we stand", "# What changed since 2026-06-30", "version 0.2"}},
+		"learning-review": {[]string{"deck", "learning-review", exTheory, "-O", exObs, "--prev", prev, "--period", "2026-Q3"},
 			[]string{"# Behind plan", "# What we decided", "Trial two daytime sessions"}},
-		"story": {[]string{"deck", "story", exTheory, "-o", exObs, "--audience", "aud-funders"}, []string{"# What you told us you need", "# The numbers", "# What we ask of you"}},
+		"story": {[]string{"deck", "story", exTheory, "-O", exObs, "--audience", "aud-funders"}, []string{"# What you told us you need", "# The numbers", "# What we ask of you"}},
 	} {
 		r := run(t, "", args.args...)
 		wantCode(t, r, ExitOK)
@@ -84,7 +84,7 @@ func TestStatusDecks(t *testing.T) {
 	}
 
 	// --no-stamp drops the stamp line.
-	if r := run(t, "", "deck", "exec", exTheory, "-o", exObs, "--no-stamp"); strings.Contains(r.stdout, "version 0.2") {
+	if r := run(t, "", "deck", "exec", exTheory, "-O", exObs, "--no-stamp"); strings.Contains(r.stdout, "version 0.2") {
 		t.Error("--no-stamp left the stamp on")
 	}
 }
@@ -92,7 +92,7 @@ func TestStatusDecks(t *testing.T) {
 func TestStatusDecksExportNeedsATool(t *testing.T) {
 	t.Setenv("PATH", t.TempDir())
 	for _, kind := range []string{"exec", "learning-review"} {
-		r := run(t, "", "deck", kind, exTheory, "-o", exObs, "--export", t.TempDir()+"/d.pdf")
+		r := run(t, "", "deck", kind, exTheory, "-O", exObs, "--export", t.TempDir()+"/d.pdf")
 		if r.code != ExitToolMissing || !strings.Contains(r.err, "marp") {
 			t.Errorf("%s: code %d, stderr %s", kind, r.code, r.err)
 		}
@@ -101,10 +101,10 @@ func TestStatusDecksExportNeedsATool(t *testing.T) {
 
 func TestStatusDeckErrors(t *testing.T) {
 	for name, args := range map[string][]string{
-		"story needs an audience": {"deck", "story", exTheory, "-o", exObs},
-		"unknown audience":        {"deck", "story", exTheory, "-o", exObs, "--audience", "aud-ghost"},
+		"story needs an audience": {"deck", "story", exTheory, "-O", exObs},
+		"unknown audience":        {"deck", "story", exTheory, "-O", exObs, "--audience", "aud-ghost"},
 		"no date":                 {"deck", "exec", exTheory},
-		"bad export extension":    {"deck", "exec", exTheory, "-o", exObs, "--export", "x.docx"},
+		"bad export extension":    {"deck", "exec", exTheory, "-O", exObs, "--export", "x.docx"},
 	} {
 		if r := run(t, "", args...); r.code != ExitUsageErr {
 			t.Errorf("%s: exit %d, want %d (%s)", name, r.code, ExitUsageErr, r.err)
@@ -119,7 +119,7 @@ func TestStoryDeckExportsToHTMLWhenMarpIsInstalled(t *testing.T) {
 		t.Skip("marp is not installed")
 	}
 	out := t.TempDir() + "/story.html"
-	r := run(t, "", "deck", "story", exTheory, "-o", exObs, "--audience", "aud-funders", "--export", out)
+	r := run(t, "", "deck", "story", exTheory, "-O", exObs, "--audience", "aud-funders", "--export", out)
 	wantCode(t, r, ExitOK)
 	data, err := os.ReadFile(out)
 	if err != nil || !strings.Contains(string(data), "What you told us you need") {

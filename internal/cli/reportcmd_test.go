@@ -301,7 +301,7 @@ func TestStatusReportKinds(t *testing.T) {
 		"evidence-gaps": "evidence gaps", "full": "## Pathway", "portfolio": ": portfolio", "narrative": "programme narrative", "actors": "who does what",
 	}
 	for kind, text := range want {
-		r := run(t, "", "report", kind, exTheory, "-o", exObs)
+		r := run(t, "", "report", kind, exTheory, "-O", exObs)
 		wantCode(t, r, ExitOK)
 		if !strings.Contains(r.stdout, text) {
 			t.Errorf("%s: missing %q in %.200s", kind, text, r.stdout)
@@ -310,12 +310,12 @@ func TestStatusReportKinds(t *testing.T) {
 			t.Errorf("%s: the stamp should carry the status date:\n%.300s", kind, r.stdout)
 		}
 	}
-	r := run(t, "", "report", "story", exTheory, "-o", exObs, "--audience", "aud-funders")
+	r := run(t, "", "report", "story", exTheory, "-O", exObs, "--audience", "aud-funders")
 	wantCode(t, r, ExitOK)
 	if !strings.Contains(r.stdout, "story for Funders") || strings.Contains(r.stdout, "QUOTE-") {
 		t.Errorf("story = %.300s", r.stdout)
 	}
-	r = run(t, "", "report", "learning-review", exTheory, "-o", exObs, "--period", "2026-Q3")
+	r = run(t, "", "report", "learning-review", exTheory, "-O", exObs, "--period", "2026-Q3")
 	wantCode(t, r, ExitOK)
 	if !strings.Contains(r.stdout, "learning review 2026-Q3") || !strings.Contains(r.stdout, "Trial two daytime sessions") {
 		t.Errorf("learning review = %.300s", r.stdout)
@@ -338,7 +338,7 @@ func TestCustomReport(t *testing.T) {
 	if err := os.WriteFile(tmpl, []byte("# {{.Document.Title}}\n{{range .Outcomes}}{{if .Status}}- {{.Title}}: {{label .Status.PathwayState}}\n{{end}}{{end}}"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	r := run(t, "", "report", "custom", exTheory, "--template", tmpl, "-o", exObs, "--no-stamp")
+	r := run(t, "", "report", "custom", exTheory, "--template", tmpl, "-O", exObs, "--no-stamp")
 	wantCode(t, r, ExitOK)
 	if !strings.HasPrefix(r.stdout, "# Riverbend") || !strings.Contains(r.stdout, "- Residents get timely") {
 		t.Errorf("custom = %.200s", r.stdout)
@@ -353,8 +353,8 @@ func TestCustomReport(t *testing.T) {
 func TestStatusReportErrors(t *testing.T) {
 	for name, args := range map[string][]string{
 		"no date":           {"report", "exec", exTheory},
-		"story no audience": {"report", "story", exTheory, "-o", exObs},
-		"bad audience":      {"report", "story", exTheory, "-o", exObs, "--audience", "aud-ghost"},
+		"story no audience": {"report", "story", exTheory, "-O", exObs},
+		"bad audience":      {"report", "story", exTheory, "-O", exObs, "--audience", "aud-ghost"},
 		"custom no file":    {"report", "custom", exTheory},
 		"missing template":  {"report", "custom", exTheory, "--template", exTheory + ".none"},
 		"unknown kind":      {"report", "mystery", exTheory},

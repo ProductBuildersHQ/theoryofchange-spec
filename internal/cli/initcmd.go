@@ -69,7 +69,7 @@ Available templates: ` + strings.Join(service.Templates(), ", ") + `.`,
 	cmd.Flags().String("id", "", "document id (a lowercase kebab-case slug)")
 	cmd.Flags().String("name", "", "document title")
 	cmd.Flags().String("problem", "", "problem statement")
-	cmd.Flags().String("out", "", "write to this file instead of stdout")
+	cmd.Flags().StringP("out", "o", "", "write to this file instead of stdout")
 	cmd.Flags().Bool("force", false, "overwrite --out if it exists")
 	return cmd
 }

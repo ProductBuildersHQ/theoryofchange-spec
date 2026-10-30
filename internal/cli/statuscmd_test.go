@@ -19,19 +19,19 @@ const (
 )
 
 func TestStatusSummaryAndJSON(t *testing.T) {
-	r := run(t, "", "status", exTheory, "-o", exObs)
+	r := run(t, "", "status", exTheory, "-O", exObs)
 	wantCode(t, r, ExitOK)
 	for _, want := range []string{"as of 2026-09-30", "indicators (", "impact oc-resident-access:", "confidence"} {
 		if !strings.Contains(r.stdout, want) {
 			t.Errorf("summary is missing %q:\n%s", want, r.stdout)
 		}
 	}
-	j := run(t, "", "status", exTheory, "-o", exObs, "--format", "json", "--as-of", "2026-09-30")
+	j := run(t, "", "status", exTheory, "-O", exObs, "--format", "json", "--as-of", "2026-09-30")
 	wantCode(t, j, ExitOK)
 	if _, err := tocio.ParseStatus([]byte(j.stdout), tocio.FormatJSON); err != nil {
 		t.Fatalf("the JSON is not a status snapshot: %v", err)
 	}
-	if again := run(t, "", "status", exTheory, "-o", exObs, "--format", "json", "--as-of", "2026-09-30"); again.stdout != j.stdout {
+	if again := run(t, "", "status", exTheory, "-O", exObs, "--format", "json", "--as-of", "2026-09-30"); again.stdout != j.stdout {
 		t.Error("two runs differ")
 	}
 }
@@ -39,16 +39,16 @@ func TestStatusSummaryAndJSON(t *testing.T) {
 func TestStatusAgainstAPreviousSnapshot(t *testing.T) {
 	dir := t.TempDir()
 	prev := filepath.Join(dir, "prev.json")
-	wantCode(t, run(t, "", "status", exTheory, "-o", exObs, "--as-of", "2026-06-30", "--out", prev), ExitOK)
+	wantCode(t, run(t, "", "status", exTheory, "-O", exObs, "--as-of", "2026-06-30", "--out", prev), ExitOK)
 	if _, err := os.Stat(prev); err != nil {
 		t.Fatalf("--out wrote nothing: %v", err)
 	}
-	r := run(t, "", "status", exTheory, "-o", exObs, "--as-of", "2026-09-30", "--prev", prev)
+	r := run(t, "", "status", exTheory, "-O", exObs, "--as-of", "2026-09-30", "--prev", prev)
 	wantCode(t, r, ExitOK)
 	if !strings.Contains(r.stdout, "changes since 2026-06-30:") {
 		t.Errorf("stdout = %s", r.stdout)
 	}
-	j := run(t, "", "status", exTheory, "-o", exObs, "--as-of", "2026-09-30", "--prev", prev, "--format", "json")
+	j := run(t, "", "status", exTheory, "-O", exObs, "--as-of", "2026-09-30", "--prev", prev, "--format", "json")
 	var both struct {
 		Status toc.Status
 		Diff   toc.StatusDiff
@@ -64,9 +64,9 @@ func TestStatusErrors(t *testing.T) {
 		"bad date":           {"status", exTheory, "--as-of", "soon"},
 		"bad rollup":         {"status", exTheory, "--as-of", "2026-09-30", "--rollup", "median"},
 		"bad tolerance":      {"status", exTheory, "--as-of", "2026-09-30", "--tolerance", "2"},
-		"missing obs file":   {"status", exTheory, "-o", exObs + ".none"},
-		"missing prev":       {"status", exTheory, "-o", exObs, "--prev", exObs + ".none"},
-		"prev is not status": {"status", exTheory, "-o", exObs, "--prev", exTheory},
+		"missing obs file":   {"status", exTheory, "-O", exObs + ".none"},
+		"missing prev":       {"status", exTheory, "-O", exObs, "--prev", exObs + ".none"},
+		"prev is not status": {"status", exTheory, "-O", exObs, "--prev", exTheory},
 	} {
 		if r := run(t, "", args...); r.code != ExitUsageErr {
 			t.Errorf("%s: exit %d, want %d (%s)", name, r.code, ExitUsageErr, r.err)
@@ -81,7 +81,7 @@ func TestStatusRejectsInvalidObservations(t *testing.T) {
 	if err := os.WriteFile(bad, []byte(body), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	r := run(t, "", "status", exTheory, "-o", bad)
+	r := run(t, "", "status", exTheory, "-O", bad)
 	wantCode(t, r, ExitInvalid)
 	if !strings.Contains(r.err, "ind-ghost") {
 		t.Errorf("stderr = %q", r.err)
@@ -97,7 +97,7 @@ func TestImportObservationsThenStatus(t *testing.T) {
 		t.Errorf("stderr = %q", r.err)
 	}
 	wantCode(t, run(t, "", "validate", out, "--toc", exTheory), ExitOK)
-	wantCode(t, run(t, "", "status", exTheory, "-o", exObs, "-o", out), ExitOK)
+	wantCode(t, run(t, "", "status", exTheory, "-O", exObs, "-O", out), ExitOK)
 }
 
 func TestImportObservationsReportsUnmatchedRows(t *testing.T) {

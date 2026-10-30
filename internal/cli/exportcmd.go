@@ -45,7 +45,7 @@ Kinds: %s.`, short, strings.ToUpper(format), kinds),
 			return exportDoc(cmd, format, args[0], args[1])
 		},
 	}
-	cmd.Flags().String("out", "", "the "+format+" file to write (required)")
+	cmd.Flags().StringP("out", "o", "", "the "+format+" file to write (required)")
 	if err := cmd.MarkFlagRequired("out"); err != nil {
 		panic(fmt.Sprintf("cli: mark --out required: %v", err))
 	}
@@ -203,7 +203,7 @@ named by ID and title only: excerpts and URLs are never included.`,
 		},
 	}
 	cmd.Flags().String("format", "md", "md or docx")
-	cmd.Flags().String("out", "", "write to this file instead of standard output")
+	cmd.Flags().StringP("out", "o", "", "write to this file instead of standard output")
 	cmd.Flags().String("reference-doc", "", "a Pandoc reference document that styles the docx")
 	asOfFlags(cmd)
 	return cmd
@@ -245,7 +245,7 @@ export stamp; --no-stamp leaves it off.`,
 			return writeText(e, cmd, sheet)
 		},
 	}
-	cmd.Flags().String("out", "", "write to this file instead of standard output")
+	cmd.Flags().StringP("out", "o", "", "write to this file instead of standard output")
 	asOfFlags(cmd)
 	return cmd
 }

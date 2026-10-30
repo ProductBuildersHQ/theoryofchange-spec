@@ -214,16 +214,18 @@ no persistence, no statistical inference).
 
 ### 6.1 CLI (`cmd/theoryofchange`)
 
+**Flag conventions.** `-o` / `--out` is the file a command writes, as in pandoc, marp, and mmdc; standard output is the default. `-O` / `--observations` names observation set files and may repeat. `--as-of` is the date an artifact describes. Exit codes are as in the table.
+
 | Command | Description | Exit codes |
 |---------|-------------|------------|
 | `theoryofchange validate <file>...` | Schema + structural validation (kind auto-detected). `--toc <doc>` checks observation sets against a theory; `--parent <doc>` checks that the given theories are children of a parent and that their `contributesTo` references resolve | 0 valid; 1 invalid; 2 usage / I/O error |
 | `theoryofchange lint <toc> [--format table\|json] [--disable RULE] [--fail-on error\|warning]` | Deterministic quality rules; JSON is a `SummaryReport` | 0 GO; 1 NO-GO; 2 error |
 | `theoryofchange graph <toc> [--format mermaid\|json\|dot] [--from ID] [--paths]` | Graph export and queries | 0; 2 |
-| `theoryofchange status <toc> -o <obs.yaml>... [--as-of DATE] [--prev status.json]` | Compute status snapshot (JSON) and optional diff | 0; 2 |
-| `theoryofchange report <kind> <toc> [-o <obs>...] [--as-of] [--pathway ID] [--audience ID] [--template file] [--out file]` | `kind` (status): `exec`, `results`, `assumptions`, `interventions`, `evidence-gaps`, `story`, `learning-review`, `portfolio`, `narrative`, `actors`, `full`, `custom`; `kind` (definition, no observations needed): `pathway`, `logic-model`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `definitions` (all definition reports) | 0; 2 |
+| `theoryofchange status <toc> -O <obs.yaml>... [--as-of DATE] [--prev status.json]` | Compute status snapshot (JSON) and optional diff | 0; 2 |
+| `theoryofchange report <kind> <toc> [-O <obs>...] [--as-of] [--pathway ID] [--audience ID] [--template file] [--out file]` | `kind` (status): `exec`, `results`, `assumptions`, `interventions`, `evidence-gaps`, `story`, `learning-review`, `portfolio`, `narrative`, `actors`, `full`, `custom`; `kind` (definition, no observations needed): `pathway`, `logic-model`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `definitions` (all definition reports) | 0; 2 |
 | `theoryofchange import observations --csv <file> --map <mapping.yaml> --toc <toc> [--out obs.yaml]` | CSV → ObservationSet; unmatched rows to stderr and `--unmatched file` | 0 all rows imported; 1 some rows unmatched; 2 error |
-| `theoryofchange export csv <table> <toc> [-o obs...]` | `table`: `indicators`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `results`, `themes` | 0; 2 |
-| `theoryofchange export okr\|journey <toc> [-o obs...]` | PRISM exports | 0; 2 |
+| `theoryofchange export csv <table> <toc> [-O obs...]` | `table`: `indicators`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `results`, `themes` | 0; 2 |
+| `theoryofchange export okr\|journey <toc> [-O obs...]` | PRISM exports | 0; 2 |
 | `theoryofchange schema [name]` | List or print embedded schemas | 0; 2 |
 | `theoryofchange init [--template program\|market]` | Write a starter document | 0; 2 |
 | `theoryofchange mcp` | Start MCP server on stdio | 0 on clean shutdown |
@@ -231,14 +233,14 @@ no persistence, no statistical inference).
 | `theoryofchange <kind> add\|set\|rm …` (`kind` ∈ outcome, group, link, intervention, assumption, indicator, metric, pathway, actor, evidence, cause, term) | Element commands compiled to patches; `rm --cascade`; all accept `--dry-run` | 0; 1 rejected; 2 |
 | `theoryofchange fmt <file>... [--check] [--sort]` | Canonical serialization; `--check` exits 1 if a file would change | 0; 1; 2 |
 | `theoryofchange diff <old> <new> [--format md\|json] [--revision]` | Semantic theory diff; optional draft `Revision` | 0; 2 |
-| `theoryofchange deck <workshop\|exec\|learning-review\|story> <toc> [-o obs...] [--audience] [--export pdf\|pptx\|html] [--out file]` | Marp deck; export via external `marp` and `mmdc` when installed | 0; 2 (3 when export tool missing) |
-| `theoryofchange judge show <toc> [--profile core\|development] [-o obs...]` | Emit judge bundle (§6.14) | 0; 2 |
+| `theoryofchange deck <workshop\|exec\|learning-review\|story> <toc> [-O obs...] [--audience] [--export pdf\|pptx\|html] [--out file]` | Marp deck; export via external `marp` and `mmdc` when installed | 0; 2 (3 when export tool missing) |
+| `theoryofchange judge show <toc> [--profile core\|development] [-O obs...]` | Emit judge bundle (§6.14) | 0; 2 |
 | `theoryofchange judge record <toc> <verdict.json> [--judge NAME]` | Validate and store a verdict | 0; 1 invalid; 2 |
 | `theoryofchange judge summary <toc>` | Aggregate stored verdicts with agreement | 0; 2 |
 | `theoryofchange evidence add <toc> --url --title [--excerpt] [--accessed DATE] [--type] [--sensitivity]` | Element command for sources (compiles to a patch) | 0; 1; 2 |
 | `theoryofchange export review-packet <toc> [--format md\|docx] [--reference-doc file]` | ID-tagged review document (§6.15) | 0; 2 (3 when `pandoc` missing for docx) |
 | `theoryofchange export review-sheet <toc> [--out file.csv]` | Review rows as CSV | 0; 2 |
-| `theoryofchange export docx\|pptx <kind> <toc> [-o obs...] [--reference-doc file]` | Any report (docx) or deck (pptx) through the `pandoc` profile | 0; 2; 3 |
+| `theoryofchange export docx\|pptx <kind> <toc> [-O obs...] [--reference-doc file]` | Any report (docx) or deck (pptx) through the `pandoc` profile | 0; 2; 3 |
 | `theoryofchange import review <toc> <review.json>|--from-csv <sheet.csv> [--out proposed.patch.json] [--consultation-out c.json]` | Proposed patch + consultation; never writes the document | 0 all rows mapped; 1 rows need human decision or stale hash; 2 error |
 | `theoryofchange approve <toc> --version LABEL --approver NAME[:ROLE]... [--note] [--force --reason]` | Sets `approved`, records approvers and revision | 0; 1 refused; 2 |
 

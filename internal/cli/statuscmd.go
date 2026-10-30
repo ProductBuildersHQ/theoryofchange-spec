@@ -20,7 +20,7 @@ import (
 
 func newStatusCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "status <toc-file> -o <observations>...",
+		Use:   "status <toc-file> -O <observations>...",
 		Short: "Compute how far a theory has come, as of a date",
 		Long: `Compute a status snapshot: for each indicator its progress against what the
 targets call for by the date; for each outcome its own state and its pathway
@@ -35,21 +35,21 @@ JSON. --out writes the snapshot as JSON to a file whatever the format. With
 --prev, the changes since an earlier snapshot are listed too.
 
 Exit code 1 means the theory or the observations are invalid.`,
-		Example: `  theoryofchange status theory.yaml -o obs-q3.yaml --as-of 2026-09-30 --out status-q3.json
-  theoryofchange status theory.yaml -o obs-q3.yaml -o obs-q4.yaml --prev status-q3.json`,
+		Example: `  theoryofchange status theory.yaml -O obs-q3.yaml --as-of 2026-09-30 --out status-q3.json
+  theoryofchange status theory.yaml -O obs-q3.yaml -O obs-q4.yaml --prev status-q3.json`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error { return runStatus(e, cmd, args[0]) },
 	}
 	statusFlags(cmd)
 	cmd.Flags().String("as-of", "", "the date to describe (YYYY-MM-DD); default: the latest date in the observations")
-	cmd.Flags().String("out", "", "write the snapshot as JSON to this file")
+	cmd.Flags().StringP("out", "o", "", "write the snapshot as JSON to this file")
 	return cmd
 }
 
 // statusFlags adds the flags that choose what a status is computed from.
 func statusFlags(cmd *cobra.Command) {
 	f := cmd.Flags()
-	f.StringSliceP("observations", "o", nil, "observation set files (repeatable)")
+	f.StringSliceP("observations", "O", nil, "observation set files (repeatable)")
 	f.String("prev", "", "an earlier status snapshot (JSON) to compare with")
 	f.Float64("tolerance", measure.DefaultTolerance, "how far behind expected progress still counts as on track")
 	f.String("rollup", string(toc.RollupWorst), "how indicators combine into an outcome: worst or mean")
@@ -242,7 +242,7 @@ were unmatched (the rest are still written); 2 means an error.`,
 	f.String("csv", "", "the spreadsheet to read (required)")
 	f.String("map", "", "the column mapping file (required)")
 	f.String("toc", "", "the theory the sheet measures (required)")
-	f.String("out", "", "write the observation set here (default: standard output, YAML)")
+	f.StringP("out", "o", "", "write the observation set here (default: standard output, YAML)")
 	f.String("unmatched", "", "write the unmatched rows to this CSV file")
 	for _, name := range []string{"csv", "map", "toc"} {
 		if err := cmd.MarkFlagRequired(name); err != nil {
