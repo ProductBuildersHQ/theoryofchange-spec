@@ -9,7 +9,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
@@ -83,12 +82,6 @@ func render(e *env, cmd *cobra.Command, path string, csv bool, fn func(*toc.Docu
 	return nil
 }
 
-// statusReportKinds are the report kinds made from a status snapshot.
-var statusReportKinds = []string{"exec", "results", "assumptions", "interventions", "evidence-gaps", "full", "story", "learning-review", "portfolio", "narrative", "actors", "custom"}
-
-// optionalStatus are the kinds that work with or without observations.
-var optionalStatus = []string{"narrative", "actors", "custom"}
-
 func newReportCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "report <kind> <toc-file>",
@@ -112,7 +105,7 @@ actors, and custom also work with no observations.`,
   theoryofchange report custom theory.yaml --template board.tmpl`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if slices.Contains(statusReportKinds, args[0]) {
+			if service.IsStatusReport(args[0]) {
 				return runStatusReport(e, cmd, args[0], args[1])
 			}
 			kind := args[0]
@@ -142,7 +135,7 @@ actors, and custom also work with no observations.`,
 
 // runStatusReport renders a report made from a status snapshot.
 func runStatusReport(e *env, cmd *cobra.Command, kind, path string) error {
-	withStatus := !slices.Contains(optionalStatus, kind) || flagString(cmd, "as-of") != "" || len(observationPaths(cmd)) > 0
+	withStatus := !slices.Contains(service.OptionalStatusKinds, kind) || flagString(cmd, "as-of") != "" || len(observationPaths(cmd)) > 0
 	var (
 		in   report.StatusInput
 		sets []*toc.ObservationSet
@@ -157,15 +150,9 @@ func runStatusReport(e *env, cmd *cobra.Command, kind, path string) error {
 		if err != nil {
 			return err
 		}
-		g, err := service.BuildGraph(doc)
-		if err != nil {
+		if in, err = service.ViewWithoutStatus(doc); err != nil {
 			return renderError(path, err)
 		}
-		v, err := report.BuildView(doc, g, nil, report.Options{})
-		if err != nil {
-			return renderError(path, err)
-		}
-		in = report.StatusInput{View: v, Doc: doc}
 	}
 	text, err := statusReportText(cmd, kind, in, sets, withStatus)
 	if err != nil {
@@ -201,56 +188,22 @@ func observationPaths(cmd *cobra.Command) []string {
 }
 
 func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, sets []*toc.ObservationSet, withStatus bool) (string, error) {
-	var status *toc.Status
-	if withStatus {
-		status = in.Status
+	p := service.ReportParams{Audience: flagString(cmd, "audience"), Period: flagString(cmd, "period")}
+	if kind == "story" && p.Audience == "" {
+		return "", usageErr("the story report needs --audience")
 	}
-	switch kind {
-	case "exec":
-		return report.Exec(in), nil
-	case "results":
-		return report.Results(in), nil
-	case "assumptions":
-		return report.Assumptions(in), nil
-	case "interventions":
-		return report.Interventions(in), nil
-	case "evidence-gaps":
-		return report.EvidenceGaps(in), nil
-	case "full":
-		return report.Full(in, report.Mermaid(in.View, report.MermaidOptions{})), nil
-	case "story":
-		aud := flagString(cmd, "audience")
-		if aud == "" {
-			return "", usageErr("the story report needs --audience")
-		}
-		out, err := report.Story(in, sets, aud)
-		if err != nil {
-			return "", usageErr("%v", err)
-		}
-		return out, nil
-	case "learning-review":
+	if kind == "learning-review" {
 		prev, err := cmd.Flags().GetStringSlice("prev-observations")
 		if err != nil {
 			panic(fmt.Sprintf("cli: --prev-observations is not a string slice flag: %v", err))
 		}
-		var prevSets []*toc.ObservationSet
 		if len(prev) > 0 {
-			if prevSets, err = tocio.LoadObservations(prev...); err != nil {
+			if p.PrevSets, err = tocio.LoadObservations(prev...); err != nil {
 				return "", &ExitError{Code: ExitUsageErr, Err: err}
 			}
 		}
-		return report.LearningReview(report.LearningInput{StatusInput: in, Sets: sets, PrevSets: prevSets, Period: flagString(cmd, "period")}), nil
-	case "portfolio":
-		cost, err := burden.Compute(in.Doc)
-		if err != nil {
-			return "", &ExitError{Code: ExitInvalid, Err: err}
-		}
-		return report.Portfolio(in, cost), nil
-	case "narrative":
-		return report.Narrative(in.View, in.Doc, status), nil
-	case "actors":
-		return report.Actors(in.View, in.Doc, status), nil
-	case "custom":
+	}
+	if kind == "custom" {
 		file := flagString(cmd, "template")
 		if file == "" {
 			return "", usageErr("the custom report needs --template")
@@ -259,13 +212,13 @@ func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, se
 		if err != nil {
 			return "", &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("read template: %w", err)}
 		}
-		out, err := report.RenderTemplate(string(data), in.View)
-		if err != nil {
-			return "", &ExitError{Code: ExitUsageErr, Err: err}
-		}
-		return out, nil
+		p.Template = string(data)
 	}
-	return "", usageErr("unknown report kind %q", kind)
+	out, err := service.StatusReport(kind, in, sets, p, withStatus)
+	if err != nil {
+		return "", &ExitError{Code: ExitUsageErr, Err: err}
+	}
+	return out, nil
 }
 
 func newExportCmd(e *env) *cobra.Command {
