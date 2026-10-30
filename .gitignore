@@ -37,3 +37,6 @@ dist/
 
 # Generated review artifacts
 /out/
+
+# Built documentation site
+/site/
