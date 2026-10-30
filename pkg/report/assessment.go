@@ -126,13 +126,13 @@ func Assessment(v *View, doc *toc.Document) string {
 
 	b.WriteString("## Gaps\n\n")
 	b.WriteString("### Outcomes within accountability with no indicator\n\n")
-	b.WriteString(bullets(outcomesWithoutIndicators(v, doc), "None."))
+	b.WriteString(bullets(outcomesWithoutIndicators(v, doc)))
 	b.WriteString("### Indicators by data availability\n\n")
 	b.WriteString(dataAvailabilityTable(v))
 	b.WriteString("### Assumptions needing testing\n\n")
-	b.WriteString(bullets(assumptionsNeedingTesting(v), "None."))
+	b.WriteString(bullets(assumptionsNeedingTesting(v)))
 	b.WriteString("### Open decisions\n\n")
-	b.WriteString(bullets(openDecisions(doc), "None."))
+	b.WriteString(bullets(openDecisions(doc)))
 
 	b.WriteString("## Questions for the organization\n\n")
 	b.WriteString(numbered(questions(v, els, doc), "No questions were generated."))
@@ -300,7 +300,8 @@ func questions(v *View, els []tagged, doc *toc.Document) []string {
 	return slices.Clip(qs)
 }
 
-func bullets(items []string, none string) string {
+func bullets(items []string) string {
+	const none = "None."
 	if len(items) == 0 {
 		return none + "\n\n"
 	}
