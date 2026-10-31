@@ -912,6 +912,8 @@ interventions:
     type: advocacy
     targets:
       - oc-regulator-guidance
+    outputs:
+      - Briefings given and written consultation responses
     ownerActorId: act-wg
     status: planned
     capabilities:
@@ -964,6 +966,8 @@ interventions:
     type: standardization
     targets:
       - oc-competitor-bridge
+    outputs:
+      - A map of competing approaches and who backs them
     ownerActorId: act-wg
     status: planned
     capabilities:

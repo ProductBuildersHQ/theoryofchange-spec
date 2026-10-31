@@ -24,6 +24,8 @@ context:
   timeHorizon:
     start: "2026-01-01"
     end: "2028-12-31"
+  mission: Strengthen the nonprofits of Riverbend County so that residents get timely, good-quality services.
+  vision: A county where every resident can count on a strong local nonprofit when they need one.
   narrative: Riverbend Nonprofit Network is a membership network with about 8 staff. It works through three program areas, each a pathway in this theory. Learning Exchange builds leadership and peer ties, Shared Services lowers overhead and widens the grant pipeline, and Civic Voice helps members take joint positions and be heard by local government and funders. The three pathways converge on shared long-term outcomes about member collaboration, then on resident-level impact. Layer 1 is change in member nonprofits, which the network influences and measures directly. Layer 2 is change for residents, which the network tracks and contributes to but does not own.
 ceilingOfAccountability:
   level: long_term
@@ -1501,6 +1503,10 @@ indicators:
     caveats:
       - Not equal to the sum of the program-area counts, which double count members in more than one program.
     dataAvailability: internal_existing
+    audienceIds:
+      - aud-board
+      - aud-funders
+      - aud-members
     collection:
       mode: derived
       system: Member database
@@ -1762,6 +1768,9 @@ indicators:
     caveats:
       - Self-reported by members; other cost changes can also move the figure.
     dataAvailability: internal_new
+    audienceIds:
+      - aud-board
+      - aud-funders
     collection:
       mode: survey
       system: Annual member survey
@@ -1884,6 +1893,9 @@ indicators:
     ownerActorId: act-network
     claim: attribution
     dataAvailability: internal_existing
+    audienceIds:
+      - aud-board
+      - aud-county
     collection:
       mode: manual
       system: Civic Voice minutes
@@ -1974,6 +1986,9 @@ indicators:
     dataAvailability: unknown
     targetGroupIds:
       - tg-low-access-residents
+    audienceIds:
+      - aud-board
+      - aud-funders
     collection:
       mode: manual
       system: Member reports
@@ -2707,6 +2722,10 @@ pathways:
       - int-peer-cohorts
       - int-leader-coaching
       - int-training-series
+    focus:
+      northStarId: ind-practice-maturity
+      guardrailIds:
+        - ind-retention-learning
     provenance:
       basis: confirmed
       decidedAt: "2026-02-10"
@@ -2727,6 +2746,10 @@ pathways:
       - int-pooled-backoffice
       - int-group-purchasing
       - int-grants-calendar
+    focus:
+      northStarId: ind-overhead-share
+      guardrailIds:
+        - ind-retention-shared
     provenance:
       basis: confirmed
       decidedAt: "2026-02-10"
@@ -2747,6 +2770,10 @@ pathways:
       - int-joint-forums
       - int-liaison-channel
       - int-funder-roundtable
+    focus:
+      northStarId: ind-joint-positions
+      guardrailIds:
+        - ind-reach-civic
     provenance:
       basis: confirmed
       decidedAt: "2026-03-05"
@@ -2938,18 +2965,44 @@ audiences:
     channels:
       - board deck
       - quarterly summary
+    headline:
+      - indicatorId: ind-practice-maturity
+        label: Leadership practice across members
+        note: The learning program's North Star.
+      - indicatorId: ind-overhead-share
+        label: Back-office share of members' budgets
+        note: The shared services program's North Star.
+      - indicatorId: ind-joint-positions
+        label: Joint positions adopted
+        note: The civic voice program's North Star.
+      - indicatorId: ind-reach-network
   - id: aud-members
     name: Members
     needs: What the network did with their dues, and what other members learned.
     channels:
       - newsletter
       - member assembly
+    headline:
+      - indicatorId: ind-story-peer-help
+        label: Times members helped each other
+      - indicatorId: ind-practice-maturity
+        label: How well members lead, together
+      - indicatorId: ind-reach-network
+        label: Members taking part
   - id: aud-funders
     name: Funders
     needs: Evidence that members are stronger and that residents are better served.
     channels:
       - annual report
       - grant report
+    headline:
+      - indicatorId: ind-residents-served
+        label: Residents served by members
+        note: Reported as a contribution; members serve them, the network does not.
+      - indicatorId: ind-reach-network
+        label: Member organizations the network reached
+      - indicatorId: ind-overhead-share
+      - indicatorId: ind-practice-maturity
   - id: aud-county
     name: County planning office
     needs: What members jointly recommend.
