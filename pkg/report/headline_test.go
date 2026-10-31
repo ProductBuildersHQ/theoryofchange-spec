@@ -105,3 +105,44 @@ func TestStoryReportUsesTheHeadlineList(t *testing.T) {
 		t.Errorf("an indicator outside the headline list was still told:\n%s", out)
 	}
 }
+
+func TestHeadlineReport(t *testing.T) {
+	in := exampleInput(t)
+	out, err := Headline(in, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	golden(t, "headline.md", out)
+
+	one, err := Headline(in, "aud-funders")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(one, "Who is told what") || !strings.Contains(one, "## Funders") {
+		t.Errorf("one audience should be a single section:\n%s", one)
+	}
+	if _, err := Headline(in, "aud-ghost"); err == nil {
+		t.Error("an unknown audience was accepted")
+	}
+}
+
+func TestHeadlineReportFollowsTheList(t *testing.T) {
+	in := exampleInput(t)
+	for i := range in.Doc.Audiences {
+		if in.Doc.Audiences[i].ID == "aud-funders" {
+			in.Doc.Audiences[i].Headline = []toc.HeadlineMetric{{IndicatorID: in.Doc.Indicators[0].ID, Label: "LEAD NUMBER", Note: "FUNDERS FUND THIS"}}
+		}
+	}
+	out, err := Headline(in, "aud-funders")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"| LEAD NUMBER |", "FUNDERS FUND THIS"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q:\n%s", want, out)
+		}
+	}
+	if strings.Contains(out, "No headline list is chosen") {
+		t.Errorf("a chosen list was reported as not chosen:\n%s", out)
+	}
+}
