@@ -80,6 +80,7 @@ nav:
       - Model Feedback from the Examples: design/example-feedback.md
       - Judge Rubric Evaluation: evals/rubric-discrimination.md
       - USM and UFM Integration Contract: integration/usm-ufm-contract.md
+      - Credits: credits.md
   - Specifications:
       - PRD: specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PRD.md
       - TRD: specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD.md
