@@ -547,6 +547,7 @@ type PathwayKind string
 
 const (
 	PathwayProgram   PathwayKind = "program"
+	PathwayProduct   PathwayKind = "product"
 	PathwayStrategy  PathwayKind = "strategy"
 	PathwayTheme     PathwayKind = "theme"
 	PathwayGeography PathwayKind = "geography"
@@ -555,7 +556,7 @@ const (
 
 // AllPathwayKinds returns all pathway kinds.
 func AllPathwayKinds() []PathwayKind {
-	return []PathwayKind{PathwayProgram, PathwayStrategy, PathwayTheme, PathwayGeography, PathwaySegment}
+	return []PathwayKind{PathwayProgram, PathwayProduct, PathwayStrategy, PathwayTheme, PathwayGeography, PathwaySegment}
 }
 
 // Valid reports whether v is a known PathwayKind.

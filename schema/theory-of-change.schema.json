@@ -242,6 +242,12 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "headline": {
+          "items": {
+            "$ref": "#/$defs/HeadlineMetric"
+          },
+          "type": "array"
         }
       },
       "additionalProperties": false,
@@ -552,6 +558,12 @@
         },
         "timeHorizon": {
           "$ref": "#/$defs/TimeHorizon"
+        },
+        "mission": {
+          "type": "string"
+        },
+        "vision": {
+          "type": "string"
         },
         "narrative": {
           "type": "string"
@@ -993,6 +1005,27 @@
         "ref"
       ]
     },
+    "Focus": {
+      "properties": {
+        "northStarId": {
+          "type": "string"
+        },
+        "oneMetricId": {
+          "type": "string"
+        },
+        "guardrailIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "GlossaryTerm": {
       "properties": {
         "id": {
@@ -1023,6 +1056,24 @@
         "id",
         "term",
         "definition"
+      ]
+    },
+    "HeadlineMetric": {
+      "properties": {
+        "indicatorId": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "indicatorId"
       ]
     },
     "IfThenBecause": {
@@ -1580,6 +1631,7 @@
           "type": "string",
           "enum": [
             "program",
+            "product",
             "strategy",
             "theme",
             "geography",
@@ -1607,6 +1659,9 @@
         "childToc": {
           "type": "string",
           "pattern": "^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "focus": {
+          "$ref": "#/$defs/Focus"
         },
         "provenance": {
           "$ref": "#/$defs/Provenance"

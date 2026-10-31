@@ -37,7 +37,9 @@
       "start": "2026-01-01",
       "end": "2028-12-31"
     },
-    "narrative": "If major identity providers implement the standard, agent platforms adopt it, and enterprises require it."
+    "narrative": "If major identity providers implement the standard, agent platforms adopt it, and enterprises require it.",
+    "mission": "Make provider interoperability routine for the enterprises that depend on it.",
+    "vision": "Enterprises sign in once and every provider they use honors it."
   },
   "ceilingOfAccountability": {
     "level": "long_term",
@@ -716,6 +718,14 @@
         "basis": "confirmed",
         "decidedAt": "2026-02-03",
         "decidedBy": "Standards working group"
+      },
+      "focus": {
+        "northStarId": "ind-idp-count",
+        "oneMetricId": "ind-idp-roadmaps",
+        "guardrailIds": [
+          "ind-reference-downloads"
+        ],
+        "rationale": "Count what providers ship, watch that the reference does not stall."
       }
     }
   ],
@@ -807,6 +817,16 @@
       "channels": [
         "board deck",
         "quarterly summary"
+      ],
+      "headline": [
+        {
+          "indicatorId": "ind-idp-count",
+          "label": "Providers that ship",
+          "note": "The first number the board asks for"
+        },
+        {
+          "indicatorId": "ind-idp-roadmaps"
+        }
       ]
     },
     {
