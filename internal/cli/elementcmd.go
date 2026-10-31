@@ -124,6 +124,8 @@ var elementFlags = map[string][]elementFlag{
 		ss("target-groups", "targetGroupIds", "target group IDs the indicator is broken down by"),
 		ss("themes", "themeIds", "story theme IDs a theme_count indicator counts"),
 		ss("rollup-from", "rollupFrom", "indicator IDs of the same metric that combine into this one"),
+		s("composed-op", "composedOf.op", "ratio, product, sum, or difference: how the value is worked out from other indicators"),
+		ss("composed-of", "composedOf.indicatorIds", "indicator IDs it is worked out from; a ratio or difference takes two, in order"),
 		s("collection-mode", "collection.mode", "passive, form, survey, interview, manual, or derived"),
 		s("collection-system", "collection.system", "where the data lives or is entered"),
 		n("collection-minutes", "collection.minutesPerPeriod", "staff minutes per collection"),
