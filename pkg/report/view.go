@@ -234,6 +234,9 @@ type IndicatorView struct {
 	Basis            BasisView   `json:"basis"`
 	Status           *StatusView `json:"status,omitempty"`
 	Latest           string      `json:"latest,omitempty"`
+	// LatestNote is the note on the latest observation, such as how a rounded
+	// figure was worded at its source.
+	LatestNote string `json:"latestNote,omitempty"`
 }
 
 // MetricView is a shared metric with the indicators that instantiate it.
