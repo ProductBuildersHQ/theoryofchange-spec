@@ -142,3 +142,26 @@ func TestDecksAreDeterministic(t *testing.T) {
 		t.Error("two renders differ")
 	}
 }
+
+// A chosen headline list is told whole, in its order and wording; without one
+// the deck tells the first few indicators reported to the audience.
+func TestStoryDeckUsesTheHeadlineList(t *testing.T) {
+	in, sets := statusInput(t)
+	var aud *toc.Audience
+	for i := range in.Doc.Audiences {
+		if in.Doc.Audiences[i].ID == "aud-funders" {
+			aud = &in.Doc.Audiences[i]
+		}
+	}
+	if aud == nil || len(in.Doc.Indicators) == 0 {
+		t.Fatal("example has no aud-funders or no indicators")
+	}
+	aud.Headline = []toc.HeadlineMetric{{IndicatorID: in.Doc.Indicators[len(in.Doc.Indicators)-1].ID, Label: "DECK HEADLINE LABEL"}}
+	md, err := Story(in, sets, "aud-funders", Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(md, "DECK HEADLINE LABEL") {
+		t.Errorf("the headline label is not in the deck:\n%s", md)
+	}
+}
