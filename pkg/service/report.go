@@ -12,7 +12,7 @@ import (
 // StatusReportKinds are the report kinds made from a status snapshot.
 var StatusReportKinds = []string{
 	"exec", "results", "assumptions", "interventions", "evidence-gaps", "full",
-	"story", "learning-review", "portfolio", "narrative", "actors", "custom",
+	"story", "headline", "learning-review", "portfolio", "narrative", "actors", "custom",
 }
 
 // OptionalStatusKinds are the status report kinds that also work with no
@@ -24,7 +24,7 @@ func IsStatusReport(kind string) bool { return slices.Contains(StatusReportKinds
 
 // ReportParams are the extra inputs some status reports take.
 type ReportParams struct {
-	// Audience is required by the story report.
+	// Audience is required by the story report, and narrows the headline report.
 	Audience string
 	// Period names the review merged by the learning-review report.
 	Period string
@@ -61,6 +61,8 @@ func StatusReport(kind string, in report.StatusInput, sets []*toc.ObservationSet
 			return "", fmt.Errorf("the story report needs an audience")
 		}
 		return report.Story(in, sets, p.Audience)
+	case "headline":
+		return report.Headline(in, p.Audience)
 	case "learning-review":
 		return report.LearningReview(report.LearningInput{StatusInput: in, Sets: sets, PrevSets: p.PrevSets, Period: p.Period}), nil
 	case "portfolio":

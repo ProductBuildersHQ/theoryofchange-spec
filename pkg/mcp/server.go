@@ -213,10 +213,10 @@ func (s *Server) statusTool(_ context.Context, _ *sdk.CallToolRequest, in status
 type reportIn struct {
 	Source
 	Observations
-	Kind     string `json:"kind" jsonschema:"a definition report (pathway, logic-model, outcome-map, logframe, metrics, glossary, assessment, definitions, ...) or a status report (exec, results, assumptions, interventions, evidence-gaps, full, story, learning-review, portfolio, narrative, actors, custom)"`
+	Kind     string `json:"kind" jsonschema:"a definition report (pathway, logic-model, outcome-map, logframe, metrics, glossary, assessment, definitions, ...) or a status report (exec, results, assumptions, interventions, evidence-gaps, full, story, headline, learning-review, portfolio, narrative, actors, custom)"`
 	AsOf     string `json:"asOf,omitempty" jsonschema:"the status date, YYYY-MM-DD"`
 	Pathway  string `json:"pathway,omitempty" jsonschema:"restrict a definition report to one pathway"`
-	Audience string `json:"audience,omitempty" jsonschema:"the audience id, for the story report"`
+	Audience string `json:"audience,omitempty" jsonschema:"the audience id, for the story report; narrows the headline report"`
 	Period   string `json:"period,omitempty" jsonschema:"the period label, for the learning-review report"`
 	Template string `json:"template,omitempty" jsonschema:"the text/template source, for the custom report"`
 }
