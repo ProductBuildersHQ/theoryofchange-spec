@@ -94,8 +94,9 @@ func indicatorIDs(doc *toc.Document, statuses map[string]toc.IndicatorStatus, ou
 
 // derivedObservations returns the observations of all sets plus the values
 // that follow from them: the count of tagged stories for each theme-count
-// indicator, and the combined value for each roll-up indicator that has none
-// of its own. Derived values are dated asOf, since they describe that date.
+// indicator, the combined value for each roll-up indicator that has none of its
+// own, and the value worked out for each composed indicator that has none.
+// Derived values are dated asOf, since they describe that date.
 func derivedObservations(doc *toc.Document, sets []*toc.ObservationSet, asOf time.Time) []toc.Observation {
 	var obs []toc.Observation
 	for _, set := range sets {
@@ -121,6 +122,16 @@ func derivedObservations(doc *toc.Document, sets []*toc.ObservationSet, asOf tim
 		added := false
 		for _, ind := range doc.Indicators {
 			if done[ind.ID] || ind.Provenance.IsRejected() {
+				continue
+			}
+			if cres, composed := Compose(ind, obs, asOf); composed {
+				if cres.Direct {
+					done[ind.ID] = true
+				} else if cres.Value != nil {
+					obs = append(obs, toc.Observation{IndicatorID: ind.ID, Date: date, Value: cres.Value, Quality: cres.Quality, Source: "worked out from " + strconv.Itoa(len(ind.ComposedOf.IndicatorIDs)) + " indicators"})
+					done[ind.ID] = true
+					added = true
+				}
 				continue
 			}
 			res, ok := Rollup(doc, ind, obs, asOf)
