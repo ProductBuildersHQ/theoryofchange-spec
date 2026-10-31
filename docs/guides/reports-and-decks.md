@@ -46,6 +46,7 @@ theoryofchange report learning-review theory.yaml -O obs-q3.yaml --period 2026-Q
 | `evidence-gaps` | Where claims rest on weak or missing evidence |
 | `full` | Every status report in one document |
 | `story` | An update for one audience (`--audience`), using the numbers and consented stories |
+| `headline` | The numbers each audience is told, from its headline list, with the latest figure, status, and caveats (`--audience` narrows it to one) |
 | `learning-review` | A period's review (`--period`): what changed, surprises, decisions |
 | `portfolio` | Pathways side by side, described without recommending |
 | `narrative` | The theory as prose, checking the solution against the problem |
