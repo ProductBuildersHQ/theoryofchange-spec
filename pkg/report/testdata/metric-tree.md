@@ -4,7 +4,8 @@ As of 2026-09-30.
 
 ## Learning Exchange
 
-No North Star is chosen for this pathway.
+- North Star: Leadership practice maturity: Emerging (on 2026-09-30)
+- Guardrail: Participant retention: Learning Exchange: 80 percent (on 2026-09-30)
 
 | Tier | Indicator | Latest | Target | Status |
 |------|-----------|--------|--------|--------|
@@ -13,8 +14,8 @@ No North Star is chosen for this pathway.
 | output | Enrollments: Learning Exchange | — | 150 participants (by 2026-12-31); 170 participants (by 2027-12-31) | Not started |
 | outcome | Attendee hours across all three program areas | 4880 hours (on 2026-09-30) | 5500 hours (by 2026-12-31); 7000 hours (by 2027-12-31); 8100 hours (by 2028-12-31) | On track |
 | outcome | Member organizations reached across the whole network | 84 member organizations (on 2026-09-30) | 85 member organizations (by 2026-12-31); 100 member organizations (by 2027-12-31); 110 member organizations (by 2028-12-31) | On track |
-| outcome | Participant retention: Learning Exchange | 80 percent (on 2026-09-30) | 82 percent (by 2026-12-31); 85 percent (by 2027-12-31); 88 percent (by 2028-12-31) | On track |
-| outcome | Leadership practice maturity | Emerging (on 2026-09-30) | Emerging (by 2026-12-31); Established (by 2027-12-31); Established (by 2028-12-31) (Three quarters of participating members at Established or above) | On track |
+| outcome | Participant retention: Learning Exchange (guardrail) | 80 percent (on 2026-09-30) | 82 percent (by 2026-12-31); 85 percent (by 2027-12-31); 88 percent (by 2028-12-31) | On track |
+| outcome | Leadership practice maturity (North Star) | Emerging (on 2026-09-30) | Emerging (by 2026-12-31); Established (by 2027-12-31); Established (by 2028-12-31) (Three quarters of participating members at Established or above) | On track |
 | outcome | Stories of members helping each other | 1 (on 2026-09-30) | 8 (by 2026-12-31); 12 (by 2027-12-31) | Off track |
 | impact | Residents served by member organizations | 62000 residents (estimate, on 2026-09-30) | 63000 residents (by 2026-12-31); 66000 residents (by 2027-12-31); 70000 residents (by 2028-12-31) | On track |
 
@@ -42,11 +43,14 @@ flowchart LR
   tier_outcome --> tier_impact
   classDef northstar fill:#fde68a,stroke:#b45309,stroke-width:2px
   classDef guardrail fill:#e5e7eb,stroke:#6b7280,stroke-dasharray:4 3
+  class i_ind_practice_maturity northstar
+  class i_ind_retention_learning guardrail
 ```
 
 ## Shared Services
 
-No North Star is chosen for this pathway.
+- North Star: Back-office share of operating budget: 20.8 percent (on 2026-09-30)
+- Guardrail: Participant retention: Shared Services: 87 percent (on 2026-09-30)
 
 | Tier | Indicator | Latest | Target | Status |
 |------|-----------|--------|--------|--------|
@@ -57,8 +61,8 @@ No North Star is chosen for this pathway.
 | outcome | Attendee hours across all three program areas | 4880 hours (on 2026-09-30) | 5500 hours (by 2026-12-31); 7000 hours (by 2027-12-31); 8100 hours (by 2028-12-31) | On track |
 | outcome | Member organizations reached: Shared Services | 29 member organizations (on 2026-09-30) | 35 member organizations (by 2026-12-31); 50 member organizations (by 2027-12-31); 60 member organizations (by 2028-12-31) | On track |
 | outcome | Member organizations reached across the whole network | 84 member organizations (on 2026-09-30) | 85 member organizations (by 2026-12-31); 100 member organizations (by 2027-12-31); 110 member organizations (by 2028-12-31) | On track |
-| outcome | Participant retention: Shared Services | 87 percent (on 2026-09-30) | 88 percent (by 2026-12-31); 90 percent (by 2027-12-31); 92 percent (by 2028-12-31) | On track |
-| outcome | Back-office share of operating budget | 20.8 percent (on 2026-09-30) | 20 percent (by 2026-12-31); 18.5 percent (by 2027-12-31); 17 percent (by 2028-12-31) | On track |
+| outcome | Participant retention: Shared Services (guardrail) | 87 percent (on 2026-09-30) | 88 percent (by 2026-12-31); 90 percent (by 2027-12-31); 92 percent (by 2028-12-31) | On track |
+| outcome | Back-office share of operating budget (North Star) | 20.8 percent (on 2026-09-30) | 20 percent (by 2026-12-31); 18.5 percent (by 2027-12-31); 17 percent (by 2028-12-31) | On track |
 | outcome | Grant applications submitted by members using the calendar | 131 applications (on 2026-09-30) | 140 applications (by 2026-12-31); 170 applications (by 2027-12-31); 200 applications (by 2028-12-31) | On track |
 | impact | Residents served by member organizations | 62000 residents (estimate, on 2026-09-30) | 63000 residents (by 2026-12-31); 66000 residents (by 2027-12-31); 70000 residents (by 2028-12-31) | On track |
 
@@ -88,20 +92,23 @@ flowchart LR
   tier_outcome --> tier_impact
   classDef northstar fill:#fde68a,stroke:#b45309,stroke-width:2px
   classDef guardrail fill:#e5e7eb,stroke:#6b7280,stroke-dasharray:4 3
+  class i_ind_overhead_share northstar
+  class i_ind_retention_shared guardrail
 ```
 
 ## Civic Voice
 
-No North Star is chosen for this pathway.
+- North Star: Joint positions adopted by members: 2 positions (on 2026-09-30)
+- Guardrail: Member organizations reached: Civic Voice: 47 member organizations (on 2026-09-30)
 
 | Tier | Indicator | Latest | Target | Status |
 |------|-----------|--------|--------|--------|
 | activity | Attendee hours: Civic Voice | 470 hours (on 2026-09-30) | 600 hours (by 2026-12-31); 900 hours (by 2027-12-31); 1100 hours (by 2028-12-31) | On track |
 | output | Policy briefings and joint-position drafts published | — | 8 documents (by 2026-12-31); 10 documents (by 2027-12-31) | Not started |
 | outcome | Attendee hours across all three program areas | 4880 hours (on 2026-09-30) | 5500 hours (by 2026-12-31); 7000 hours (by 2027-12-31); 8100 hours (by 2028-12-31) | On track |
-| outcome | Member organizations reached: Civic Voice | 47 member organizations (on 2026-09-30) | 55 member organizations (by 2026-12-31); 70 member organizations (by 2027-12-31); 80 member organizations (by 2028-12-31) | At risk |
+| outcome | Member organizations reached: Civic Voice (guardrail) | 47 member organizations (on 2026-09-30) | 55 member organizations (by 2026-12-31); 70 member organizations (by 2027-12-31); 80 member organizations (by 2028-12-31) | At risk |
 | outcome | Member organizations reached across the whole network | 84 member organizations (on 2026-09-30) | 85 member organizations (by 2026-12-31); 100 member organizations (by 2027-12-31); 110 member organizations (by 2028-12-31) | On track |
-| outcome | Joint positions adopted by members | 2 positions (on 2026-09-30) | 3 positions (by 2026-12-31); 5 positions (by 2027-12-31); 6 positions (by 2028-12-31) | On track |
+| outcome | Joint positions adopted by members (North Star) | 2 positions (on 2026-09-30) | 3 positions (by 2026-12-31); 5 positions (by 2027-12-31); 6 positions (by 2028-12-31) | On track |
 | outcome | Public planning processes that invited members | 3 processes (on 2026-09-30) | 4 processes (by 2026-12-31); 6 processes (by 2027-12-31); 8 processes (by 2028-12-31) | On track |
 | impact | Residents served by member organizations | 62000 residents (estimate, on 2026-09-30) | 63000 residents (by 2026-12-31); 66000 residents (by 2027-12-31); 70000 residents (by 2028-12-31) | On track |
 
@@ -128,5 +135,7 @@ flowchart LR
   tier_outcome --> tier_impact
   classDef northstar fill:#fde68a,stroke:#b45309,stroke-width:2px
   classDef guardrail fill:#e5e7eb,stroke:#6b7280,stroke-dasharray:4 3
+  class i_ind_joint_positions northstar
+  class i_ind_reach_civic guardrail
 ```
 

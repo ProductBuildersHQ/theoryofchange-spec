@@ -12,12 +12,16 @@ Reached through: board deck, quarterly summary.
 
 | Indicator | Latest | Status | How to describe it |
 |-----------|--------|--------|--------------------|
-| Attendee hours across all three program areas | 4880 hours (on 2026-09-30) | On track | attributable to the work |
-| Leadership practice maturity | Emerging (on 2026-09-30) | On track | a contribution, not attributable to the work alone |
+| Leadership practice across members | Emerging (on 2026-09-30) | On track | a contribution, not attributable to the work alone |
+| Back-office share of members' budgets | 20.8 percent (on 2026-09-30) | On track | a contribution, not attributable to the work alone |
+| Joint positions adopted | 2 positions (on 2026-09-30) | On track | attributable to the work |
+| Member organizations reached across the whole network | 84 member organizations (on 2026-09-30) | On track | attributable to the work |
 
 Caveats that go with these numbers:
 
 - Rated by coaches and members, so it reflects self-assessment as well as observed practice.
+- Self-reported by members; other cost changes can also move the figure.
+- Not equal to the sum of the program-area counts, which double count members in more than one program.
 
 ## Outcomes for this audience
 

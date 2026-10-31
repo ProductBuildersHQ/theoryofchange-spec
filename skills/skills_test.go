@@ -310,7 +310,7 @@ func TestAudienceStoryDraftCheck(t *testing.T) {
 	s := newSession(t, map[string]string{"theory.yaml": theory, "observations.yaml": obs})
 	scaffold := s.ok("report", "story", s.path("theory.yaml"), "-O", s.path("observations.yaml"), "--audience", "aud-funders", "--no-stamp")
 
-	faithful := "Members spent 4880 hours together this year, and as one director put it, " +
+	faithful := "The network reached 84 member organizations this year, and as one director put it, " +
 		"“I would have spent a month on that alone.”"
 	if bad := unsupported(scaffold, faithful); len(bad) != 0 {
 		t.Errorf("a faithful draft was flagged: %v", bad)

@@ -33,13 +33,17 @@ Say this back to them before showing a number.
 
 | Measure | Latest | Status |
 |---------|--------|--------|
-| Attendee hours across all three program areas | 4880 hours (on 2026-09-30) | On track |
+| Residents served by members * | 62000 residents (estimate, on 2026-09-30) | On track |
+| Member organizations the network reached | 84 member organizations (on 2026-09-30) | On track |
+| Back-office share of operating budget * | 20.8 percent (on 2026-09-30) | On track |
 | Leadership practice maturity * | Emerging (on 2026-09-30) | On track |
-| Stories of members helping each other * | 1 (on 2026-09-30) | Off track |
 
 \* A contribution: the result also depends on others.
+- Reflects members' reported reach; Riverbend Nonprofit Network cannot attribute resident outcomes to its own work.
+- Residents who use several members are counted more than once.
+- Not equal to the sum of the program-area counts, which double count members in more than one program.
+- Self-reported by members; other cost changes can also move the figure.
 - Rated by coaches and members, so it reflects self-assessment as well as observed practice.
-- Counts stories collected, not every instance of peer help.
 
 <!--
 Use the numbers as given. Say 'contributed to' for anything marked.
