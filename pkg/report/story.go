@@ -117,8 +117,10 @@ func plural(n int, one, many string) string {
 	return many
 }
 
-// audienceNumbers lists the indicators reported to the audience, with their
-// latest value and status, and the caveats that must travel with them.
+// audienceNumbers lists the numbers the audience is told, with their latest
+// value and status, and the caveats that must travel with them. They are the
+// audience's chosen headline list, in its order and wording, or else every
+// indicator reported to it.
 func audienceNumbers(in StatusInput, audienceID string) string {
 	var b strings.Builder
 	b.WriteString("## Numbers for this audience\n\n")
@@ -129,16 +131,15 @@ func audienceNumbers(in StatusInput, audienceID string) string {
 	}
 	var rows []string
 	var caveats []string
-	for _, ind := range in.Doc.Indicators {
-		if ind.Provenance.IsRejected() || !slices.Contains(ind.AudienceIDs, audienceID) {
-			continue
-		}
+	numbers, _ := AudienceNumbers(in.Doc, audienceID)
+	for _, n := range numbers {
+		ind := n.Indicator
 		iv, s := views[ind.ID], byInd[ind.ID]
 		claim := "attributable to the work"
 		if ind.EffectiveClaim() == toc.ClaimContribution {
 			claim = "a contribution, not attributable to the work alone"
 		}
-		rows = append(rows, fmt.Sprintf("| %s | %s | %s | %s |", MDCell(iv.Name), orDash(MDCell(iv.Latest)), statusLabel(string(s.State)), claim))
+		rows = append(rows, fmt.Sprintf("| %s | %s | %s | %s |", MDCell(n.Label), orDash(MDCell(iv.Latest)), statusLabel(string(s.State)), claim))
 		for _, c := range ind.Caveats {
 			if !slices.Contains(caveats, c) {
 				caveats = append(caveats, c)
