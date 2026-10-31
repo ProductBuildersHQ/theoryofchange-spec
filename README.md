@@ -95,6 +95,117 @@ never drift apart. (The outcome map here is the outcomes framework from the
 ActKnowledge method; it is not IDRC's *Outcome Mapping*, which tracks progress
 markers for the partners a program influences.)
 
+### How the chain, the metrics, and what each audience sees fit together
+
+A Theory of Change is the chain from resources to impact. Metrics hang off each step
+of it, and different readers should see a different few. The first diagram is one
+program, shown as a pathway. The second shows how its metrics reach each audience.
+
+```mermaid
+flowchart LR
+  classDef step fill:#eef7ee,stroke:#2e7d32,color:#111
+  classDef metric fill:#e8eefc,stroke:#3f51b5,color:#111
+  classDef planned fill:#fff4cc,stroke:#b8860b,stroke-dasharray: 5 3,color:#111
+  classDef above fill:#f3f3f3,stroke:#757575,color:#111
+
+  subgraph program["One program, shown as a pathway. Every arrow carries a reason, assumptions, and evidence"]
+    res["Resources<br/>inputs"]:::step --> act["Activities<br/>interventions"]:::step
+    act --> outp["Outputs"]:::step
+    outp --> st["Short-term<br/>outcomes"]:::step
+    st --> mid["Intermediate<br/>outcomes"]:::step
+    mid --> lt["Long-term<br/>outcomes"]:::step
+  end
+  subgraph above["Above the ceiling of accountability: tracked, not owned"]
+    imp["Impact"]:::above
+  end
+  lt -.->|contribution| imp
+
+  m1["Input and activity metrics<br/>staff hours, events held"]:::metric
+  m2["Output metrics<br/>reach, attendee hours"]:::metric
+  m3["Outcome metrics, the drivers<br/>skills gained, practice applied"]:::metric
+  ns["North Star<br/>one per program"]:::planned
+  gr["Guardrails<br/>equity, quality, burden"]:::planned
+  mi["Impact metric<br/>reported as a contribution"]:::metric
+
+  res -.-> m1
+  act -.-> m1
+  outp -.-> m2
+  st -.-> m3
+  mid -.-> m3
+  lt -.-> ns
+  ns -.- gr
+  imp -.-> mi
+```
+
+Reading the first diagram:
+
+- **Resource and activity metrics** show what went in and what was done.
+  **Output metrics** show reach. **Outcome metrics** are the drivers: they
+  say whether the change the program is for is happening.
+- **A North Star** is the one number that best captures the value a program delivers
+  to the people it serves. It sits on the highest outcome the program answers for, at
+  or below the ceiling of accountability, and it is an outcome, never a count of
+  outputs. Each program can have its own, because programs deliver different value.
+  **Guardrails** keep it honest by watching what it could hurt, such as equity,
+  quality, or staff burden.
+- **Impact** sits above the ceiling. It is tracked and contributed to, not claimed.
+
+```mermaid
+flowchart LR
+  classDef metric fill:#e8eefc,stroke:#3f51b5,color:#111
+  classDef planned fill:#fff4cc,stroke:#b8860b,stroke-dasharray: 5 3,color:#111
+  classDef out fill:#eef7ee,stroke:#2e7d32,color:#111
+
+  subgraph lib["One metric library: every number is defined once"]
+    common["Common-layer metrics<br/>same definition in every program"]:::metric
+    drivers["Output, driver, and activity metrics"]:::metric
+    ns["North Star for each program"]:::planned
+    gr["Guardrails"]:::planned
+  end
+
+  assigned["Indicators assigned to each audience"]:::metric
+  lib --> assigned
+
+  subgraph head["Headline metrics: a short, ordered list per audience, worded for that audience"]
+    hb["Board and leadership"]:::planned
+    hf["Funders"]:::planned
+    hm["Members"]:::planned
+    hg["Government"]:::planned
+    hc["Community"]:::planned
+  end
+  assigned --> head
+
+  subgraph channels["Where each audience sees them"]
+    cb["Board deck, quarterly review"]:::out
+    cf["Funder summary, grant report"]:::out
+    cm["Newsletter, member survey results"]:::out
+    cg["Policy briefings"]:::out
+    cc["Annual impact report, website"]:::out
+  end
+  hb --> cb
+  hf --> cf
+  hm --> cm
+  hg --> cg
+  hc --> cc
+  hf --> cc
+  hb --> cc
+```
+
+Reading the second diagram:
+
+- **Every number is defined once**, in one metric library. Two audiences that see the
+  same figure see the same figure, with the same caveats and the same marker for
+  whether it is attributable to the work or a contribution.
+- **Headline metrics are what you tell people. The North Star is what you steer by.**
+  They can differ. The board, funders, members, government, and the community each
+  get a short list, worded for them, drawn from the same indicators. A North Star may
+  lead one list and not appear in another.
+- **Solid boxes exist today.** You can assign each indicator to the audiences it
+  should be reported to, and the story report and deck use that. **Dashed boxes are
+  planned**: a North Star and guardrails for each program, and ordered, worded
+  headline lists for each audience. They are tracked in Phase 13, "Headline Metrics",
+  of the [roadmap](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/ROADMAP.md).
+
 ## What this project gives you
 
 | Benefit | How |
