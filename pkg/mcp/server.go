@@ -213,9 +213,9 @@ func (s *Server) statusTool(_ context.Context, _ *sdk.CallToolRequest, in status
 type reportIn struct {
 	Source
 	Observations
-	Kind     string `json:"kind" jsonschema:"a definition report (pathway, logic-model, outcome-map, logframe, metrics, glossary, assessment, definitions, ...) or a status report (exec, results, assumptions, interventions, evidence-gaps, full, story, headline, learning-review, portfolio, narrative, actors, custom)"`
+	Kind     string `json:"kind" jsonschema:"a definition report (pathway, logic-model, outcome-map, logframe, metrics, glossary, assessment, definitions, ...) or a status report (exec, results, assumptions, interventions, evidence-gaps, full, story, headline, metric-tree, learning-review, portfolio, narrative, actors, custom)"`
 	AsOf     string `json:"asOf,omitempty" jsonschema:"the status date, YYYY-MM-DD"`
-	Pathway  string `json:"pathway,omitempty" jsonschema:"restrict a definition report to one pathway"`
+	Pathway  string `json:"pathway,omitempty" jsonschema:"restrict a definition report, or the metric-tree report, to one pathway"`
 	Audience string `json:"audience,omitempty" jsonschema:"the audience id, for the story report; narrows the headline report"`
 	Period   string `json:"period,omitempty" jsonschema:"the period label, for the learning-review report"`
 	Template string `json:"template,omitempty" jsonschema:"the text/template source, for the custom report"`
@@ -239,7 +239,7 @@ func (s *Server) reportTool(_ context.Context, _ *sdk.CallToolRequest, in report
 	if err != nil {
 		return nil, textOut{}, err
 	}
-	text, err := service.StatusReport(in.Kind, input, sets, service.ReportParams{Audience: in.Audience, Period: in.Period, Template: in.Template}, withStatus)
+	text, err := service.StatusReport(in.Kind, input, sets, service.ReportParams{Audience: in.Audience, Period: in.Period, Pathway: in.Pathway, Template: in.Template}, withStatus)
 	return nil, textOut{Format: "markdown", Content: text}, err
 }
 
