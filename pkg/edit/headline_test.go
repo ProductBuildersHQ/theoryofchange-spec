@@ -57,3 +57,25 @@ func TestCascadeRemovesAnIndicatorFromHeadlinesAndFocus(t *testing.T) {
 		t.Errorf("guardrails = %v", res.Document.Pathways[0].Focus.GuardrailIDs)
 	}
 }
+
+// Removing an indicator that a composition is built from removes the
+// composition, since its arithmetic no longer holds, and not the indicator that
+// carried it.
+func TestRemovingAPartRemovesTheComposition(t *testing.T) {
+	doc := loadFull(t)
+	p, err := RemoveElement(doc, kindOf(t, doc, "ind-adoption-stories"), "ind-adoption-stories", true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res, err := Apply(doc, p, Options{})
+	if err != nil || !res.Applied {
+		t.Fatalf("cascade rejected: %v %s %v", err, res.Reason, res.IssuesIntroduced)
+	}
+	ind, ok := res.Document.Indicator("ind-idp-count-eu")
+	if !ok {
+		t.Fatal("the indicator that carried the composition was removed")
+	}
+	if ind.ComposedOf != nil {
+		t.Errorf("composition survived: %+v", ind.ComposedOf)
+	}
+}

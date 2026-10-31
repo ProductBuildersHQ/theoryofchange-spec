@@ -68,3 +68,26 @@ func TestHeadlineListSetEqualsItsPatch(t *testing.T) {
 		t.Errorf("headline = %+v", a.Headline)
 	}
 }
+
+// An indicator is composed of others through two flags, and a composition
+// that does not fit its operation is refused.
+func TestIndicatorCompositionFlags(t *testing.T) {
+	path := fixtureCopy(t, "full.json", "doc.json")
+	wantCode(t, run(t, "", "indicator", "set", path, "ind-idp-count-na", "--composed-op", "difference",
+		"--composed-of", "ind-adoption-stories,ind-reference-downloads"), 0)
+	doc, err := tocio.LoadDocument(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ind, ok := doc.Indicator("ind-idp-count-na")
+	if !ok || ind.ComposedOf == nil || ind.ComposedOf.Op != toc.CompositionDifference ||
+		!slices.Equal(ind.ComposedOf.IndicatorIDs, []string{"ind-adoption-stories", "ind-reference-downloads"}) {
+		t.Fatalf("indicator = %+v", ind)
+	}
+
+	before := mustRead(t, path)
+	wantCode(t, run(t, "", "indicator", "set", path, "ind-idp-count-na", "--composed-of", "ind-adoption-stories"), ExitInvalid)
+	if mustRead(t, path) != before {
+		t.Error("the file changed although the change was rejected")
+	}
+}
