@@ -270,6 +270,10 @@ func TestEveryDocumentedRuleIsRegisteredOnce(t *testing.T) {
 		"TOC-BUD-001", "TOC-BUD-002", "TOC-BUD-003", "TOC-BUD-004", "TOC-AUD-001",
 		"TOC-CAU-001", "TOC-CAU-002", "TOC-RSP-001", "TOC-RSP-002", "TOC-EQU-001", "TOC-VAL-001",
 		"TOC-PRV-001", "TOC-PRV-002", "TOC-PRV-003", "TOC-PRV-004",
+		"TOC-INT-003", "TOC-INT-004", "TOC-INT-005", "TOC-INT-006", "TOC-INT-007",
+		"TOC-AUD-002", "TOC-HLN-001", "TOC-HLN-002", "TOC-HLN-003", "TOC-HLN-004",
+		"TOC-NSM-001", "TOC-NSM-002", "TOC-NSM-003", "TOC-NSM-004", "TOC-NSM-005", "TOC-NSM-006", "TOC-NSM-007",
+		"TOC-CTX-001",
 	}
 	slices.Sort(want)
 	var got []string
