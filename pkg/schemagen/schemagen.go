@@ -130,6 +130,7 @@ func EnumValues() map[reflect.Type][]string {
 	add(typeOf[toc.RiskCategory](), strs(toc.AllRiskCategories()))
 	add(typeOf[toc.PathwayKind](), strs(toc.AllPathwayKinds()))
 	add(typeOf[toc.Aggregation](), strs(toc.AllAggregations()))
+	add(typeOf[toc.CompositionOp](), strs(toc.AllCompositionOps()))
 	add(typeOf[toc.MetricLayer](), strs(toc.AllMetricLayers()))
 	add(typeOf[toc.Claim](), strs(toc.AllClaims()))
 	add(typeOf[toc.Basis](), strs(toc.AllBases()))

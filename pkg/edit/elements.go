@@ -183,10 +183,11 @@ func fieldPointer(k ElementKind, id, dotted string) string {
 type action int
 
 const (
-	dropValue   action = iota // remove the scalar field
-	dropItem                  // remove the entry from the array field
-	dropElement               // remove the whole element that holds the reference
-	dropMetric                // remove an indicator's metricId and the roll-up that depends on it
+	dropValue       action = iota // remove the scalar field
+	dropItem                      // remove the entry from the array field
+	dropElement                   // remove the whole element that holds the reference
+	dropMetric                    // remove an indicator's metricId and the roll-up that depends on it
+	dropComposition               // remove the composition that names the element, since its arithmetic no longer holds
 )
 
 // refSite describes a field that references other elements.
@@ -235,6 +236,7 @@ var refSites = []refSite{
 	{"indicators", []string{"metricId"}, dropMetric, 0},
 	{"indicators", []string{"pathwayIds"}, dropItem, 0},
 	{"indicators", []string{"rollupFrom"}, dropItem, 0},
+	{"indicators", []string{"composedOf", "indicatorIds"}, dropComposition, 0},
 	{"metrics", []string{"weightMetricId"}, dropElement, 0},
 	{"glossary", []string{"relatedIds"}, dropItem, 0},
 	{"indicators", []string{"population", "actorIds"}, dropItem, 0},
@@ -474,6 +476,8 @@ func (f found) remedy() ([]Op, string, error) {
 		return f.removeElement()
 	case dropValue:
 		return one(Remove(f.fieldPointer()))
+	case dropComposition:
+		return one(Remove(f.elementPointer() + Pointer(f.site.field[0])))
 	case dropMetric:
 		ops := []Op{Remove(f.fieldPointer())}
 		if _, has := f.element["rollupFrom"]; has {
