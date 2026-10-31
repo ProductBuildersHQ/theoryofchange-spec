@@ -12,7 +12,7 @@ import (
 // StatusReportKinds are the report kinds made from a status snapshot.
 var StatusReportKinds = []string{
 	"exec", "results", "assumptions", "interventions", "evidence-gaps", "full",
-	"story", "headline", "learning-review", "portfolio", "narrative", "actors", "custom",
+	"story", "headline", "metric-tree", "learning-review", "portfolio", "narrative", "actors", "custom",
 }
 
 // OptionalStatusKinds are the status report kinds that also work with no
@@ -30,6 +30,8 @@ type ReportParams struct {
 	Period string
 	// PrevSets are the earlier period's observations, so new themes show.
 	PrevSets []*toc.ObservationSet
+	// Pathway narrows the metric-tree report to one pathway.
+	Pathway string
 	// Template is the text/template source of the custom report.
 	Template string
 }
@@ -63,6 +65,8 @@ func StatusReport(kind string, in report.StatusInput, sets []*toc.ObservationSet
 		return report.Story(in, sets, p.Audience)
 	case "headline":
 		return report.Headline(in, p.Audience)
+	case "metric-tree":
+		return report.MetricTree(in, p.Pathway)
 	case "learning-review":
 		return report.LearningReview(report.LearningInput{StatusInput: in, Sets: sets, PrevSets: p.PrevSets, Period: p.Period}), nil
 	case "portfolio":
