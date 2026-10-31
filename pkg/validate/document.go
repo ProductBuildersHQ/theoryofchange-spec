@@ -591,6 +591,16 @@ func (c *checker) pathways() {
 		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, toc.ElementOutcome)
 		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, toc.ElementIntervention)
 		c.docRef(p+"/childToc", pw.ID, pw.ChildToc)
+		if f := pw.Focus; f != nil {
+			c.ref(p+"/focus/northStarId", pw.ID, f.NorthStarID, toc.ElementIndicator)
+			c.ref(p+"/focus/oneMetricId", pw.ID, f.OneMetricID, toc.ElementIndicator)
+			c.refs(p+"/focus/guardrailIds", pw.ID, f.GuardrailIDs, toc.ElementIndicator)
+			for j, id := range f.GuardrailIDs {
+				if slices.Contains(f.GuardrailIDs[:j], id) {
+					c.errorf("VAL-PTH-006", p+"/focus/guardrailIds/"+strconv.Itoa(j), pw.ID, "guardrail %q is listed more than once", id)
+				}
+			}
+		}
 	}
 }
 
@@ -801,6 +811,20 @@ func (c *checker) audiencesAndThemes() {
 	for i, a := range c.doc.Audiences {
 		if strings.TrimSpace(a.Name) == "" {
 			c.errorf("VAL-AUD-001", "/audiences/"+strconv.Itoa(i)+"/name", a.ID, "audience has no name")
+		}
+		for j, h := range a.Headline {
+			hp := "/audiences/" + strconv.Itoa(i) + "/headline/" + strconv.Itoa(j)
+			if strings.TrimSpace(h.IndicatorID) == "" {
+				c.errorf("VAL-AUD-003", hp+"/indicatorId", a.ID, "headline entry names no indicator")
+				continue
+			}
+			c.ref(hp+"/indicatorId", a.ID, h.IndicatorID, toc.ElementIndicator)
+			for _, earlier := range a.Headline[:j] {
+				if earlier.IndicatorID == h.IndicatorID {
+					c.errorf("VAL-AUD-002", hp+"/indicatorId", a.ID, "indicator %q is in the headline list more than once", h.IndicatorID)
+					break
+				}
+			}
 		}
 	}
 	for i, t := range c.doc.Themes {
