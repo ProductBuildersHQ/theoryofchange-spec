@@ -502,6 +502,13 @@
       "pathwayIds": [
         "pw-supply"
       ],
+      "composedOf": {
+        "op": "ratio",
+        "indicatorIds": [
+          "ind-adoption-stories",
+          "ind-idp-count-na"
+        ]
+      },
       "dataAvailability": "unknown"
     },
     {

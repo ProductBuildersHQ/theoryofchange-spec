@@ -189,6 +189,11 @@ type Indicator struct {
 	// RollupFrom lists indicators of the same metric whose values combine
 	// into this one using the metric's aggregation.
 	RollupFrom []string `json:"rollupFrom,omitempty"`
+	// ComposedOf says the value is worked out from other indicators, such as
+	// a cost per outcome from a cost and a count. It is arithmetic on
+	// measured values and is not a causal link; an indicator that has its own
+	// observation uses that and ignores the composition.
+	ComposedOf *Composition `json:"composedOf,omitempty"`
 	// DataAvailability says whether the data this indicator needs is
 	// public, already held internally, new to collect, held by a partner,
 	// or not yet known.
@@ -273,6 +278,14 @@ func (i Indicator) EffectiveClaim() Claim {
 		return ClaimContribution
 	}
 	return i.Claim
+}
+
+// Composition builds an indicator's value from the latest values of others.
+type Composition struct {
+	Op CompositionOp `json:"op" jsonschema:"required"`
+	// IndicatorIDs are the parts. A ratio and a difference take exactly two,
+	// in order: the first is the dividend or the minuend.
+	IndicatorIDs []string `json:"indicatorIds" jsonschema:"required"`
 }
 
 // Metric is a shared metric definition with an exact formula. Indicators

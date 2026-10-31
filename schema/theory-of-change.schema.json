@@ -475,6 +475,31 @@
         "mode"
       ]
     },
+    "Composition": {
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "ratio",
+            "product",
+            "sum",
+            "difference"
+          ]
+        },
+        "indicatorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "op",
+        "indicatorIds"
+      ]
+    },
     "Consultation": {
       "properties": {
         "id": {
@@ -1207,6 +1232,9 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "composedOf": {
+          "$ref": "#/$defs/Composition"
         },
         "dataAvailability": {
           "type": "string",
