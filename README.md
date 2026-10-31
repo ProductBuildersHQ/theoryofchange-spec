@@ -160,6 +160,43 @@ exports target [prism-roadmap](https://github.com/grokify/prism-roadmap);
 rubrics and GO/NO-GO reports use
 [structured-evaluation](https://github.com/plexusone/structured-evaluation).
 
+## Credits
+
+Theory of Change is a body of practice built by many people, and this
+specification takes its methods from them:
+
+- **ActKnowledge and the Center for Theory of Change:** preconditions, rationales
+  for each link, and the accountability ceiling.
+- **UNDG, *UNDAF Companion Guidance* (2017):** assumption types, and the problem
+  tree of immediate, underlying, and structural causes.
+- **Organizational Research Services for the Annie E. Casey Foundation:** outcomes
+  along time horizons.
+- **Aspen Institute Roundtable on Community Change:** the plausible, feasible, and
+  testable criteria.
+- **Outcome Mapping (IDRC):** spheres of control, influence, and interest, and
+  boundary partners.
+- **Contribution analysis (Mayne) and process tracing (Van Evera; Befani and
+  Mayne):** attribution versus contribution, and graded evidence.
+- **Most Significant Change (Davies and Dart) and Outcome Harvesting (Wilson-Grau
+  and Britt):** stories coded into themes, and harvested outcomes.
+- **The Kellogg Foundation and logical framework traditions:** logic models and
+  logframes.
+
+It builds on the [PRISM](#part-of-the-prism-ecosystem) projects and
+[oscompat](https://github.com/grokify/oscompat), on [Cobra](https://github.com/spf13/cobra),
+[yaml.v3](https://github.com/go-yaml/yaml), the
+[MCP Go SDK](https://github.com/modelcontextprotocol/go-sdk), and the other modules
+listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and it can call
+[Marp](https://marp.app), the [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli),
+and [Pandoc](https://pandoc.org) when they are installed. [Credits](docs/credits.md)
+maps each source to the part of the spec that uses it and lists the works cited.
+Naming a source does not mean its authors endorse this project.
+
+Every dependency in the binary is under a permissive license (MIT, BSD-3-Clause, or
+Apache-2.0). Their license and notice files are in
+[`third_party/licenses/`](third_party/licenses/), regenerated with
+`scripts/third-party-notices.sh`.
+
 ## License
 
 [MIT](LICENSE)
