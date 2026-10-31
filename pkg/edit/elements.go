@@ -244,6 +244,9 @@ var refSites = []refSite{
 	{"pathways", []string{"outcomeIds"}, dropItem, 0},
 	{"pathways", []string{"interventionIds"}, dropItem, 0},
 	{"pathways", []string{"ownerActorId"}, dropValue, 0},
+	{"pathways", []string{"focus", "northStarId"}, dropValue, 0},
+	{"pathways", []string{"focus", "oneMetricId"}, dropValue, 0},
+	{"pathways", []string{"focus", "guardrailIds"}, dropItem, 0},
 	{"alignments", []string{"elementId"}, dropElement, 0},
 	{"decisions", []string{"ownerActorId"}, dropValue, 0},
 	{"decisions", []string{"relatedIds"}, dropItem, 0},
@@ -365,7 +368,7 @@ func findReference(root map[string]any, id string) (found, bool) {
 			}
 		}
 	}
-	if f, ok := findScore(root, id); ok {
+	if f, ok := findObjectRef(root, id); ok {
 		return f, true
 	}
 	for _, site := range refSites {
@@ -396,19 +399,28 @@ func findReference(root map[string]any, id string) (found, bool) {
 	return found{}, false
 }
 
-// scoreSites are the places criterion scores live: an indicator's
-// selection, and the priority of an outcome or an intervention.
-var scoreSites = []refSite{
-	{array: "indicators", field: []string{"selection", "scores"}, action: dropItem},
-	{array: "outcomes", field: []string{"priority", "scores"}, action: dropItem},
-	{array: "interventions", field: []string{"priority", "scores"}, action: dropItem},
+// objectSite is a list of objects inside an element, each of which names
+// another element by a key. Removing the referenced element removes the object.
+type objectSite struct {
+	refSite
+	key string // the key of the object that holds the reference
 }
 
-// findScore finds a score that names the criterion id. Scores are objects
-// inside their subject, so they are scanned apart from the scalar reference
-// fields.
-func findScore(root map[string]any, id string) (found, bool) {
-	for _, site := range scoreSites {
+// objectSites are the lists of objects that name an element: the criterion
+// scores of an indicator, an outcome, and an intervention, and the headline
+// list of an audience, whose entries name indicators.
+var objectSites = []objectSite{
+	{refSite{array: "indicators", field: []string{"selection", "scores"}, action: dropItem}, "criterionId"},
+	{refSite{array: "outcomes", field: []string{"priority", "scores"}, action: dropItem}, "criterionId"},
+	{refSite{array: "interventions", field: []string{"priority", "scores"}, action: dropItem}, "criterionId"},
+	{refSite{array: "audiences", field: []string{"headline"}, action: dropItem}, "indicatorId"},
+}
+
+// findObjectRef finds an object that names the element id. These are scanned
+// apart from the scalar reference fields, because the reference is a key of an
+// object inside a list and not an entry of the list.
+func findObjectRef(root map[string]any, id string) (found, bool) {
+	for _, site := range objectSites {
 		items, _ := root[site.array].([]any)
 		for ei, raw := range items {
 			el, ok := raw.(map[string]any)
@@ -419,10 +431,10 @@ func findScore(root map[string]any, id string) (found, bool) {
 			if !ok {
 				continue
 			}
-			scores, _ := holder[last].([]any)
-			for i, sc := range scores {
-				if m, ok := sc.(map[string]any); ok && m["criterionId"] == id {
-					return found{site: site, element: el, index: ei, item: i, holder: holder, left: len(scores) - 1}, true
+			objects, _ := holder[last].([]any)
+			for i, o := range objects {
+				if m, ok := o.(map[string]any); ok && m[site.key] == id {
+					return found{site: site.refSite, element: el, index: ei, item: i, holder: holder, left: len(objects) - 1}, true
 				}
 			}
 		}

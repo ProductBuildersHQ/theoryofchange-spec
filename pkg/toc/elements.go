@@ -348,6 +348,23 @@ type Audience struct {
 	// Channels are where they are reached, e.g. annual report, grant
 	// proposal, board deck, newsletter.
 	Channels []string `json:"channels,omitempty"`
+	// Headline is the short list of indicators this audience is told, in the
+	// order they are shown. It is drawn from the indicators reported to the
+	// audience. Every audience sees the same figure for an indicator; only the
+	// label and the note differ.
+	Headline []HeadlineMetric `json:"headline,omitempty"`
+}
+
+// HeadlineMetric is one number in an audience's headline list.
+type HeadlineMetric struct {
+	// IndicatorID is the indicator whose figure is shown.
+	IndicatorID string `json:"indicatorId" jsonschema:"required"`
+	// Label words the indicator for this audience, for example "organizations
+	// we worked with" in place of "Distinct organizations reached". It must not
+	// change what is counted.
+	Label string `json:"label,omitempty"`
+	// Note says why this audience is shown this number.
+	Note string `json:"note,omitempty"`
 }
 
 // Theme is an entry of the story codebook, so stories are coded the same
@@ -527,8 +544,28 @@ type Pathway struct {
 	InterventionIDs []string    `json:"interventionIds,omitempty"`
 	// ChildToc references a theory that elaborates this pathway
 	// (toc:<doc>).
-	ChildToc   string      `json:"childToc,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
+	ChildToc string `json:"childToc,omitempty" jsonschema:"pattern=^toc:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
+	// Focus names the metrics this program is steered by.
+	Focus      *Focus      `json:"focus,omitempty"`
 	Provenance *Provenance `json:"provenance,omitempty"`
+}
+
+// Focus names the metrics a program, product, or other pathway is steered by.
+// It is for steering, and is not the same as what an audience is told: see
+// Audience.Headline.
+type Focus struct {
+	// NorthStarID is the one indicator that best captures the value the pathway
+	// delivers to the people it serves. It measures an outcome at or below the
+	// ceiling of accountability, never an output or an activity.
+	NorthStarID string `json:"northStarId,omitempty"`
+	// OneMetricID is the indicator to focus on at the pathway's current stage.
+	// It changes as the stage does, and may be the same as the North Star.
+	OneMetricID string `json:"oneMetricId,omitempty"`
+	// GuardrailIDs are indicators watched so that pursuing the North Star does
+	// not harm something else, such as equity, quality, or staff burden.
+	GuardrailIDs []string `json:"guardrailIds,omitempty"`
+	// Rationale says why these were chosen.
+	Rationale string `json:"rationale,omitempty"`
 }
 
 // ExternalRef points at an element of another framework or system.
