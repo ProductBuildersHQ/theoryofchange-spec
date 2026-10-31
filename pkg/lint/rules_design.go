@@ -75,13 +75,6 @@ func activePathways(d *toc.Document) []indexed[toc.Pathway] {
 	return out
 }
 
-// serves reports whether an indicator belongs to the pathway, by its own
-// pathwayIds or by the outcome it measures.
-func serves(ind toc.Indicator, p toc.Pathway) bool {
-	return slices.Contains(ind.PathwayIDs, p.ID) || slices.Contains(p.OutcomeIDs, ind.Measures) ||
-		slices.Contains(p.InterventionIDs, ind.Measures) || ind.Measures == p.ID
-}
-
 func init() {
 	// ---- interventions, actors, evidence ----------------------------------
 	register("TOC-INT-002", validate.SeverityWarning, "Every intervention has an owner.", func(c *Context) []Finding {
@@ -135,7 +128,7 @@ func init() {
 		for _, p := range activePathways(c.Doc) {
 			found := false
 			for _, ind := range activeIndicators(c.Doc) {
-				found = found || (isSelected(ind.v) && serves(ind.v, p.v))
+				found = found || (isSelected(ind.v) && c.Doc.IndicatorServes(ind.v, p.v.ID))
 			}
 			if !found {
 				out = append(out, Finding{Path: at("pathways", p.i), Element: p.v.ID, Message: "no selected indicator serves this pathway"})
@@ -184,7 +177,7 @@ func init() {
 				continue
 			}
 			for _, p := range activePathways(c.Doc) {
-				if !slices.ContainsFunc(uses, func(x toc.Indicator) bool { return slices.Contains(x.PathwayIDs, p.v.ID) }) {
+				if !slices.ContainsFunc(uses, func(x toc.Indicator) bool { return c.Doc.IndicatorServes(x, p.v.ID) }) {
 					out = append(out, Finding{Path: at("metrics", i), Element: m.ID, Message: fmt.Sprintf("common metric is not measured in pathway %q; add an indicator, or explain the omission in an indicator's selection rationale", p.v.ID)})
 				}
 			}
@@ -201,7 +194,7 @@ func init() {
 			for _, p := range activePathways(c.Doc) {
 				uses, weighted := false, false
 				for _, ind := range activeIndicators(c.Doc) {
-					in := slices.Contains(ind.v.PathwayIDs, p.v.ID)
+					in := c.Doc.IndicatorServes(ind.v, p.v.ID)
 					uses = uses || (in && ind.v.MetricID == m.ID)
 					weighted = weighted || (in && ind.v.MetricID == m.WeightMetricID)
 				}
