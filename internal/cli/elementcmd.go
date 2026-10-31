@@ -231,12 +231,15 @@ var elementFlags = map[string][]elementFlag{
 	},
 	"pathway": {
 		sr("title", "title", "pathway name, e.g. a program area"),
-		s("kind", "kind", "program, strategy, theme, geography, or segment"),
+		s("kind", "kind", "program, product, strategy, theme, geography, or segment"),
 		s("description", "description", "longer description"),
 		s("owner", "ownerActorId", "owning actor ID"),
 		ss("outcomes", "outcomeIds", "outcome IDs in the pathway"),
 		ss("interventions", "interventionIds", "intervention IDs in the pathway"),
 		s("child", "childToc", "theory that elaborates this pathway, as toc:<doc>"),
+		s("north-star", "focus.northStarId", "indicator ID of the pathway's North Star: an outcome metric, never an output"),
+		s("one-metric", "focus.oneMetricId", "indicator ID to focus on at the pathway's current stage"),
+		ss("guardrails", "focus.guardrailIds", "indicator IDs watched so the North Star is not pursued at their cost"),
 	},
 	"decision": {
 		sr("question", "question", "what needs deciding"),
