@@ -234,7 +234,7 @@ func init() {
 		addressed := addressedCauses(c.Doc)
 		var out []Finding
 		for i, cause := range c.Doc.Causes {
-			if cause.Level != impact.CauseImmediate && !addressed[cause.ID] && cause.OutOfScope == nil {
+			if !cause.Rejected() && cause.Level != impact.CauseImmediate && !addressed[cause.ID] && cause.OutOfScope == nil {
 				out = append(out, Finding{Path: at("causes", i), Element: cause.ID, Message: "no outcome addresses this cause; address it, or set it aside with a reason"})
 			}
 		}
@@ -247,7 +247,7 @@ func init() {
 		}
 		addressed := addressedCauses(c.Doc)
 		for _, cause := range c.Doc.Causes {
-			if cause.Level != impact.CauseImmediate && addressed[cause.ID] {
+			if !cause.Rejected() && cause.Level != impact.CauseImmediate && addressed[cause.ID] {
 				return nil
 			}
 		}
