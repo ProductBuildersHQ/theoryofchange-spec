@@ -69,6 +69,14 @@ This renders the pathways, logic models, metric definitions, and glossary as one
 Markdown document. It needs no observations, so a workshop can review it before
 any data exists.
 
+To start from the problem rather than the solution, draw the problem tree: the
+core problem, its causes below, and its effects above. See the
+[problem tree guide](problem-tree.md).
+
+```bash
+impact-model report problem-tree impact-model.yaml --out problem-tree.md
+```
+
 ## Measure progress
 
 Once you have numbers, put them in an observation set (see
