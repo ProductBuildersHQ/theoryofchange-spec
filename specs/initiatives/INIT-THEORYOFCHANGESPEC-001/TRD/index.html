@@ -822,6 +822,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3190,7 +3218,7 @@ reject <code>..</code> escapes and symlinks leaving the root.</p>
 <tr>
 <td>TOC-LOG-001</td>
 <td>warning</td>
-<td>Every causal link into an <code>intermediate</code>, <code>long_term</code>, or <code>impact</code> outcome has a rationale</td>
+<td>Every causal link into a <code>medium_term</code>, <code>long_term</code>, or <code>impact</code> outcome has a rationale</td>
 </tr>
 <tr>
 <td>TOC-LOG-002</td>
@@ -3576,7 +3604,7 @@ assumptions, and pathways, ordered per INV-3.</p>
 </tr>
 <tr>
 <td><code>logic-model</code></td>
-<td><code>--diagram</code> adds a left-to-right Mermaid flow of the same stages. Per pathway: inputs (intervention resources) → activities (interventions) → outputs (<code>output</code>-level outcomes and intervention outputs) → outcomes (short / intermediate / long-term) → impact, as a table</td>
+<td><code>--diagram</code> adds a left-to-right Mermaid flow of the same stages. Per pathway: inputs (intervention resources) → activities (interventions) → outputs (<code>output</code>-level outcomes and intervention outputs) → outcomes (short / medium / long-term) → impact, as a table</td>
 </tr>
 <tr>
 <td><code>outcome-map</code></td>
@@ -3584,7 +3612,7 @@ assumptions, and pathways, ordered per INV-3.</p>
 </tr>
 <tr>
 <td><code>logframe</code></td>
-<td>Logframe matrix per pathway: rows goal (impact), purpose (long-term and intermediate outcomes), outputs (short-term and output outcomes), activities (interventions); columns narrative, indicators with targets, means of verification (indicator data source and method), and assumptions (those applying to the row's links and interventions)</td>
+<td>Logframe matrix per pathway: rows goal (impact), purpose (long-term and medium-term outcomes), outputs (short-term and output outcomes), activities (interventions); columns narrative, indicators with targets, means of verification (indicator data source and method), and assumptions (those applying to the row's links and interventions)</td>
 </tr>
 <tr>
 <td><code>metrics</code></td>
@@ -3976,7 +4004,7 @@ unless marked required.</p>
 </tr>
 <tr>
 <td><code>Outcome</code></td>
-<td><code>id</code>, <code>title</code> (req; a positive condition, not an activity), <code>description</code>, <code>level</code> (req: <code>impact</code>, <code>long_term</code>, <code>intermediate</code>, <code>short_term</code>, <code>output</code>), <code>sphere</code> (<code>control</code>, <code>influence</code>, <code>interest</code>), <code>logic</code> {<code>type</code>: <code>all</code>/<code>any</code>/<code>at_least</code>, <code>k</code>} over ungrouped incoming links (default <code>all</code>), <code>category</code> (open string; recommended vocabularies: ORS <code>impact</code>/<code>influence</code>/<code>leverage</code>/<code>capacity</code>, COM-B <code>reach</code>/<code>capability</code>/<code>opportunity</code>/<code>motivation</code>/<code>behavior</code>/<code>direct_benefit</code>/<code>wellbeing</code>, MSD AAER <code>adopt</code>/<code>adapt</code>/<code>expand</code>/<code>respond</code>), <code>changeType</code> (<code>knowledge</code>, <code>attitude</code>, <code>skill</code>, <code>behavior</code>, <code>practice</code>, <code>policy</code>, <code>norm</code>, <code>condition</code>, <code>investment</code>, <code>adoption</code>), <code>population</code>, <code>actorIds[]</code> (who changes / co-owners — supports collective outcomes), <code>contributesTo[]</code> (outcomes in a parent theory, as <code>toc:&lt;doc&gt;#&lt;outcome&gt;</code> references; resolved by <code>validate --parent</code> / <code>validate.Family</code>), <code>responsibility</code> (<code>own</code> default, <code>shared</code>, <code>partner</code>, <code>unaddressed</code>), <code>deliveredBy[]</code> (actor IDs), <code>addressesCauses[]</code> (cause IDs), <code>targetGroupIds[]</code>, <code>priority?</code> {<code>scores[]</code> {criterionId, score 1–5, note}, <code>rationale</code>}, <code>tags[]</code></td>
+<td><code>id</code>, <code>title</code> (req; a positive condition, not an activity), <code>description</code>, <code>level</code> (req: <code>impact</code>, <code>long_term</code>, <code>medium_term</code>, <code>short_term</code>, <code>output</code>), <code>sphere</code> (<code>control</code>, <code>influence</code>, <code>interest</code>), <code>logic</code> {<code>type</code>: <code>all</code>/<code>any</code>/<code>at_least</code>, <code>k</code>} over ungrouped incoming links (default <code>all</code>), <code>category</code> (open string; recommended vocabularies: ORS <code>impact</code>/<code>influence</code>/<code>leverage</code>/<code>capacity</code>, COM-B <code>reach</code>/<code>capability</code>/<code>opportunity</code>/<code>motivation</code>/<code>behavior</code>/<code>direct_benefit</code>/<code>wellbeing</code>, MSD AAER <code>adopt</code>/<code>adapt</code>/<code>expand</code>/<code>respond</code>), <code>changeType</code> (<code>knowledge</code>, <code>attitude</code>, <code>skill</code>, <code>behavior</code>, <code>practice</code>, <code>policy</code>, <code>norm</code>, <code>condition</code>, <code>investment</code>, <code>adoption</code>), <code>population</code>, <code>actorIds[]</code> (who changes / co-owners — supports collective outcomes), <code>contributesTo[]</code> (outcomes in a parent theory, as <code>toc:&lt;doc&gt;#&lt;outcome&gt;</code> references; resolved by <code>validate --parent</code> / <code>validate.Family</code>), <code>responsibility</code> (<code>own</code> default, <code>shared</code>, <code>partner</code>, <code>unaddressed</code>), <code>deliveredBy[]</code> (actor IDs), <code>addressesCauses[]</code> (cause IDs), <code>targetGroupIds[]</code>, <code>priority?</code> {<code>scores[]</code> {criterionId, score 1–5, note}, <code>rationale</code>}, <code>tags[]</code></td>
 <td>Graph node. Indicators reference outcomes, not vice versa. <code>partner</code> / <code>unaddressed</code> outcomes stay in the graph and are monitored (UNDG: monitor the whole solution tree) but are excluded from accountability counts.</td>
 </tr>
 <tr>

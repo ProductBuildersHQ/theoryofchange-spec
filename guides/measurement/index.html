@@ -500,6 +500,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Indicators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-an-indicator-sits-in-the-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where an indicator sits in the chain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#north-star-guardrails-and-headline-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        North Star, guardrails, and headline lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#working-a-metric-out-from-others" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working a metric out from others
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -974,6 +1013,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1306,6 +1373,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Indicators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-an-indicator-sits-in-the-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where an indicator sits in the chain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#north-star-guardrails-and-headline-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        North Star, guardrails, and headline lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#working-a-metric-out-from-others" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working a metric out from others
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1439,19 +1545,85 @@ up</strong> from other indicators; a direct observation always beats a roll-up.<
 <p>An indicator's <strong>claim</strong> says what the organization can say about it:
 <code>attribution</code> (we caused this) or <code>contribution</code> (we contributed to it). The
 default is contribution.</p>
+<h3 id="where-an-indicator-sits-in-the-chain">Where an indicator sits in the chain<a class="headerlink" href="#where-an-indicator-sits-in-the-chain" title="Permanent link">&para;</a></h3>
+<p>What an indicator measures decides its <strong>tier</strong>, which is never stored:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>The indicator measures</th>
+<th>For example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity</code></td>
+<td>an intervention</td>
+<td>hours delivered, dollars spent</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td>an output-level outcome</td>
+<td>people reached</td>
+</tr>
+<tr>
+<td><code>outcome</code></td>
+<td>a short-term, medium-term, or long-term outcome</td>
+<td>skills gained, practice applied. These are the <em>driver</em> metrics</td>
+</tr>
+<tr>
+<td><code>impact</code></td>
+<td>an impact outcome</td>
+<td>residents served, reported as a contribution</td>
+</tr>
+</tbody>
+</table>
+<p>Resources are measured as activity-tier indicators with a unit such as hours or
+dollars. <code>theoryofchange report metric-tree</code> lays a pathway's indicators out in
+this order.</p>
+<h3 id="north-star-guardrails-and-headline-lists">North Star, guardrails, and headline lists<a class="headerlink" href="#north-star-guardrails-and-headline-lists" title="Permanent link">&para;</a></h3>
+<p>Three choices sit on top of the tiers, and they are different things:</p>
+<ul>
+<li><strong>A North Star</strong> is the one number a program or product steers by. Set it in the
+  pathway's <code>focus</code>, with an optional <code>oneMetricId</code> and the <code>guardrailIds</code> that watch
+  what pursuing it could harm. It should measure an outcome at or below the ceiling
+  of accountability, never an output or an activity.</li>
+<li><strong>A headline list</strong> is what an audience is told: a short, ordered list on the
+  audience, each entry an indicator with an optional <code>label</code> and <code>note</code> worded for
+  that reader. Every audience sees the same figure for an indicator; only the label
+  and note differ. A North Star may lead one list and not appear in another.</li>
+<li><strong>Purpose</strong> is <code>context.mission</code> and <code>context.vision</code>, plain statements. They are
+  not part of the causal chain.</li>
+</ul>
+<p><code>theoryofchange report headline</code> shows what each audience is told, and the story
+report and deck use the same lists. <code>theoryofchange lint</code> checks all of it: the
+<code>TOC-NSM-*</code>, <code>TOC-HLN-*</code>, <code>TOC-AUD-002</code>, and <code>TOC-CTX-001</code> rules.</p>
+<h3 id="working-a-metric-out-from-others">Working a metric out from others<a class="headerlink" href="#working-a-metric-out-from-others" title="Permanent link">&para;</a></h3>
+<p>Some of the numbers people ask for are arithmetic on others, such as the cost per
+applied change. Give that indicator a <code>composedOf</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">composedOf</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">op</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ratio</span><span class="w">              </span><span class="c1"># ratio, difference, product, or sum</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">indicatorIds</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ind-cost</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ind-changes-applied</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># cost divided by changes</span>
+</code></pre></div>
+<p>A ratio and a difference take exactly two indicators, in order. When the indicator
+has no observation of its own, its value is worked out from the latest value of each
+part, and it is marked as an estimate if any part is. If a part is missing, or a
+divisor is zero, there is no value and nothing is guessed. A composition is
+arithmetic, not a causal link, and an indicator is either composed or rolled up,
+not both.</p>
 <h2 id="observations">Observations<a class="headerlink" href="#observations" title="Permanent link">&para;</a></h2>
 <p>Measurements go in an <strong>observation set</strong>, a separate file that refers to the
 theory by ID:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ObservationSet</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">specVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.1&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">tocId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">riverbend-network</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2026-Q3</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">observations</span><span class="p">:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">indicatorId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ind-hours-learning</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-09-30&quot;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3650</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Attendance sheets</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">quality</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">verified</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ObservationSet</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">specVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.1&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">tocId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">riverbend-network</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2026-Q3</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">observations</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">indicatorId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ind-hours-learning</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-09-30&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3650</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Attendance sheets</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">quality</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">verified</span>
 </code></pre></div>
 <p>An observation has a date and either a <code>value</code> (quantitative) or a <code>level</code>
 (qualitative), plus a source, a quality (<code>verified</code>, <code>reported</code>, or <code>estimated</code>), and an
@@ -1464,28 +1636,28 @@ optional note. The same file also holds:</p>
 <li><strong>Notes</strong>: context that belongs with the numbers.</li>
 </ul>
 <p>Check a set against the theory it measures:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>theoryofchange<span class="w"> </span>validate<span class="w"> </span>observations-2026-q3.yaml<span class="w"> </span>--toc<span class="w"> </span>theory.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>theoryofchange<span class="w"> </span>validate<span class="w"> </span>observations-2026-q3.yaml<span class="w"> </span>--toc<span class="w"> </span>theory.yaml
 </code></pre></div>
 <h2 id="load-a-spreadsheet">Load a spreadsheet<a class="headerlink" href="#load-a-spreadsheet" title="Permanent link">&para;</a></h2>
 <p>Most programs already keep their numbers in a spreadsheet. Describe its columns
 once in a <strong>mapping</strong> file, then import:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">tocId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">riverbend-network</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2026-Q4</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">dateFormat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">02/01/2006</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">columns</span><span class="p">:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">indicator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Measure</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Month end</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Value</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">pathway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Program</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">quality</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Quality</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Source</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="nt">indicatorAliases</span><span class="p">:</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">Leadership practice maturity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ind-practice-maturity</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nt">metricAliases</span><span class="p">:</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nt">Attendee hours</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">met-attendee-hours</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">tocId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">riverbend-network</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2026-Q4</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">dateFormat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">02/01/2006</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nt">columns</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">indicator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Measure</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Month end</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Value</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">pathway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Program</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">quality</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Quality</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Source</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nt">indicatorAliases</span><span class="p">:</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="nt">Leadership practice maturity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ind-practice-maturity</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="nt">metricAliases</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="nt">Attendee hours</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">met-attendee-hours</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>theoryofchange<span class="w"> </span>import<span class="w"> </span>observations<span class="w"> </span>--csv<span class="w"> </span>q4.csv<span class="w"> </span>--map<span class="w"> </span>mapping.yaml<span class="w"> </span>--toc<span class="w"> </span>theory.yaml<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--out<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--unmatched<span class="w"> </span>q4-unmatched.csv
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>theoryofchange<span class="w"> </span>import<span class="w"> </span>observations<span class="w"> </span>--csv<span class="w"> </span>q4.csv<span class="w"> </span>--map<span class="w"> </span>mapping.yaml<span class="w"> </span>--toc<span class="w"> </span>theory.yaml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--out<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--unmatched<span class="w"> </span>q4-unmatched.csv
 </code></pre></div>
 <p>A row can name an indicator directly, through an alias, or through a metric plus
 a pathway. <strong>Every row either becomes an observation or is reported as unmatched</strong>
@@ -1493,7 +1665,7 @@ with its row number and the reason; nothing is dropped silently. Unmatched rows
 are written to <code>--unmatched</code> as a sheet you can fix and import again. The exit
 code is 1 when some rows were unmatched (the rest are still written).</p>
 <h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>theoryofchange<span class="w"> </span>status<span class="w"> </span>theory.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--as-of<span class="w"> </span><span class="m">2026</span>-12-31<span class="w"> </span>--out<span class="w"> </span>status-q4.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>theoryofchange<span class="w"> </span>status<span class="w"> </span>theory.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--as-of<span class="w"> </span><span class="m">2026</span>-12-31<span class="w"> </span>--out<span class="w"> </span>status-q4.json
 </code></pre></div>
 <p><code>status</code> prints a summary. <code>--format json</code> prints the full snapshot, and <code>--out</code>
 writes it to a file. The date defaults to the latest observation.</p>
@@ -1557,8 +1729,8 @@ its assumptions, and whether it has a rationale. Confidence for a route to
 impact is derived from its links, so a weak link shows up where it matters.</p>
 <h2 id="what-changed">What changed<a class="headerlink" href="#what-changed" title="Permanent link">&para;</a></h2>
 <p>Keep each snapshot and compare:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>theoryofchange<span class="w"> </span>status<span class="w"> </span>theory.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--prev<span class="w"> </span>status-q3.json
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>theoryofchange<span class="w"> </span>report<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>theory.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--prev<span class="w"> </span>status-q3.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>theoryofchange<span class="w"> </span>status<span class="w"> </span>theory.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--prev<span class="w"> </span>status-q3.json
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>theoryofchange<span class="w"> </span>report<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>theory.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q4.yaml<span class="w"> </span>--prev<span class="w"> </span>status-q3.json
 </code></pre></div>
 <p>The comparison lists the indicators, outcomes, links, and assumptions whose
 status or confidence changed, and the elements that were added or removed.</p>

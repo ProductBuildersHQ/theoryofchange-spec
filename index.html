@@ -358,6 +358,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the chain, the metrics, and what each audience sees fit together
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -950,6 +961,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1307,6 +1346,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the chain, the metrics, and what each audience sees fit together
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1438,7 +1488,7 @@ a different reader:</p>
 <tr>
 <td><strong>Logic model</strong></td>
 <td>What goes in, what is done, and what comes out?</td>
-<td>Stages from inputs, activities, and outputs through short-term, intermediate, and long-term outcomes to impact, one model per pathway</td>
+<td>Stages from inputs, activities, and outputs through short-term, medium-term, and long-term outcomes to impact, one model per pathway</td>
 </tr>
 <tr>
 <td><strong>Logframe</strong></td>
@@ -1462,6 +1512,111 @@ Change; you cannot recover the theory from a logic model. So this project keeps 
 never drift apart. (The outcome map here is the outcomes framework from the
 ActKnowledge method; it is not IDRC's <em>Outcome Mapping</em>, which tracks progress
 markers for the partners a program influences.)</p>
+<h3 id="how-the-chain-the-metrics-and-what-each-audience-sees-fit-together">How the chain, the metrics, and what each audience sees fit together<a class="headerlink" href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" title="Permanent link">&para;</a></h3>
+<p>A Theory of Change is the chain from resources to impact. Metrics hang off each step
+of it, and different readers should see a different few. The first diagram is one
+program, shown as a pathway. The second shows how its metrics reach each audience.</p>
+<pre class="mermaid"><code>flowchart LR
+  classDef step fill:#eef7ee,stroke:#2e7d32,color:#111
+  classDef metric fill:#e8eefc,stroke:#3f51b5,color:#111
+  classDef focus fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
+  classDef above fill:#f3f3f3,stroke:#757575,color:#111
+
+  subgraph program["One program, shown as a pathway. Every arrow carries a reason, assumptions, and evidence"]
+    res["Resources&lt;br/&gt;inputs"]:::step --&gt; act["Activities&lt;br/&gt;interventions"]:::step
+    act --&gt; outp["Outputs"]:::step
+    outp --&gt; st["Short-term&lt;br/&gt;outcomes"]:::step
+    st --&gt; mid["Medium-term&lt;br/&gt;outcomes"]:::step
+    mid --&gt; lt["Long-term&lt;br/&gt;outcomes"]:::step
+  end
+  subgraph above["Above the ceiling of accountability: tracked, not owned"]
+    imp["Impact"]:::above
+  end
+  lt -.-&gt;|contribution| imp
+
+  m1["Input and activity metrics&lt;br/&gt;staff hours, events held"]:::metric
+  m2["Output metrics&lt;br/&gt;reach, attendee hours"]:::metric
+  m3["Outcome metrics, the drivers&lt;br/&gt;skills gained, practice applied"]:::metric
+  ns["North Star&lt;br/&gt;one per program"]:::focus
+  gr["Guardrails&lt;br/&gt;equity, quality, burden"]:::focus
+  mi["Impact metric&lt;br/&gt;reported as a contribution"]:::metric
+
+  res -.-&gt; m1
+  act -.-&gt; m1
+  outp -.-&gt; m2
+  st -.-&gt; m3
+  mid -.-&gt; m3
+  lt -.-&gt; ns
+  ns -.- gr
+  imp -.-&gt; mi</code></pre>
+<p>Reading the first diagram:</p>
+<ul>
+<li><strong>Resource and activity metrics</strong> show what went in and what was done.
+  <strong>Output metrics</strong> show reach. <strong>Outcome metrics</strong> are the drivers: they
+  say whether the change the program is for is happening.</li>
+<li><strong>A North Star</strong> is the one number that best captures the value a program delivers
+  to the people it serves. It sits on the highest outcome the program answers for, at
+  or below the ceiling of accountability, and it is an outcome, never a count of
+  outputs. Each program can have its own, because programs deliver different value.
+  <strong>Guardrails</strong> keep it honest by watching what it could hurt, such as equity,
+  quality, or staff burden.</li>
+<li><strong>Impact</strong> sits above the ceiling. It is tracked and contributed to, not claimed.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+  classDef metric fill:#e8eefc,stroke:#3f51b5,color:#111
+  classDef focus fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
+  classDef out fill:#eef7ee,stroke:#2e7d32,color:#111
+
+  subgraph lib["One metric library: every number is defined once"]
+    common["Common-layer metrics&lt;br/&gt;same definition in every program"]:::metric
+    drivers["Output, driver, and activity metrics"]:::metric
+    ns["North Star for each program"]:::focus
+    gr["Guardrails"]:::focus
+  end
+
+  assigned["Indicators assigned to each audience"]:::metric
+  lib --&gt; assigned
+
+  subgraph head["Headline metrics: a short, ordered list per audience, worded for that audience"]
+    hb["Board and leadership"]:::focus
+    hf["Funders"]:::focus
+    hm["Members"]:::focus
+    hg["Government"]:::focus
+    hc["Community"]:::focus
+  end
+  assigned --&gt; head
+
+  subgraph channels["Where each audience sees them"]
+    cb["Board deck, quarterly review"]:::out
+    cf["Funder summary, grant report"]:::out
+    cm["Newsletter, member survey results"]:::out
+    cg["Policy briefings"]:::out
+    cc["Annual impact report, website"]:::out
+  end
+  hb --&gt; cb
+  hf --&gt; cf
+  hm --&gt; cm
+  hg --&gt; cg
+  hc --&gt; cc
+  hf --&gt; cc
+  hb --&gt; cc</code></pre>
+<p>Reading the second diagram:</p>
+<ul>
+<li><strong>Every number is defined once</strong>, in one metric library. Two audiences that see the
+  same figure see the same figure, with the same caveats and the same marker for
+  whether it is attributable to the work or a contribution.</li>
+<li><strong>Headline metrics are what you tell people. The North Star is what you steer by.</strong>
+  They can differ. The board, funders, members, government, and the community each
+  get a short list, worded for them, drawn from the same indicators. A North Star may
+  lead one list and not appear in another.</li>
+<li><strong>Every box is something you can record and report today.</strong> Mark an indicator as a
+  program's North Star, with its guardrails, in the pathway's <code>focus</code>. Give each
+  audience an ordered, worded <code>headline</code> list. <code>theoryofchange report metric-tree</code>
+  shows a program's North Star and every indicator from activity to impact, and
+  <code>theoryofchange report headline</code> shows what each audience is told. The amber boxes
+  are the choices you make: which number a program steers by, and which few each
+  audience leads with. <code>theoryofchange lint</code> checks them.</li>
+</ul>
 <h2 id="what-this-project-gives-you">What this project gives you<a class="headerlink" href="#what-this-project-gives-you" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1481,7 +1636,7 @@ markers for the partners a program influences.)</p>
 </tr>
 <tr>
 <td><strong>Quality you can check</strong></td>
-<td>A schema, structural validation, 48 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat</td>
+<td>A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat</td>
 </tr>
 <tr>
 <td><strong>Progress you can measure</strong></td>

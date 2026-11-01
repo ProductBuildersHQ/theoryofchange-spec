@@ -822,6 +822,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1154,6 +1182,50 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-12-attribution-and-notices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 12 — Attribution and Notices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-13-headline-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 13 — Headline Metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-14-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 14 — Vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-15-layered-logic-model-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 15 — Layered Logic Model Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1434,6 +1506,50 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-12-attribution-and-notices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 12 — Attribution and Notices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-13-headline-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 13 — Headline Metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-14-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 14 — Vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-15-layered-logic-model-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 15 — Layered Logic Model Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1457,330 +1573,330 @@
 <h1 id="roadmap-theory-of-change-specification-go-first-model-json-schema-measurement-and-leadership-reporting">ROADMAP — Theory of Change Specification — Go-first model, JSON Schema, measurement, and leadership reporting<a class="headerlink" href="#roadmap-theory-of-change-specification-go-first-model-json-schema-measurement-and-leadership-reporting" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-THEORYOFCHANGESPEC-001</code>
 <strong>Repository:</strong> <code>github.com/ProductBuildersHQ/theoryofchange-spec</code>
-<strong>Status:</strong> Planned — 0 of 11 phases completed</p>
+<strong>Status:</strong> In progress — 13 of 15 phases completed</p>
 <blockquote>
 <p>RMI IDs are stable and permanent. Commits implementing an item carry the trailer <code>Refs: RMI-THEORYOFCHANGESPEC-&lt;NNN&gt;</code>. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI <code>0NN</code> corresponds to PLAN step <code>P-NN</code>; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each <code>Satisfies</code> line are defined in PRD.md and TRD.md.</p>
 </blockquote>
 <h2 id="phase-1-core-model-and-schema">Phase 1 — Core Model and Schema<a class="headerlink" href="#phase-1-core-model-and-schema" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Scaffold the module, map the Theory of Change vocabulary to Go types with a small minimal-valid document, and publish a lint-clean, embedded JSON Schema
-<strong>Status:</strong> Planned — 0 of 6 items completed</p>
+<strong>Status:</strong> Completed — 6 of 6 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-001</code> Repository scaffold: go.mod, CI workflows (go-ci, go-lint, go-sast), lint config, README, CLAUDE.md, LICENSE</li>
-<li>Type: enabler · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-001</code> Repository scaffold: go.mod, CI workflows (go-ci, go-lint, go-sast), lint config, README, CLAUDE.md, LICENSE</li>
+<li>Type: enabler · Status: completed</li>
 <li>Satisfies: — (enabler)</li>
 <li>Acceptance: <code>go build ./...</code> and <code>golangci-lint run</code> pass; CI workflows green</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-002</code> Concept-to-type mapping and glossary from the research brief</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-002</code> Concept-to-type mapping and glossary from the research brief</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-001</code></li>
 <li>Satisfies: PRD G-1</li>
 <li>Acceptance: every core concept of research §8.4 and §9.8 maps to a planned Go type or a documented deferral</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-003</code> <code>pkg/ref</code> reference grammar (<code>toc:&lt;doc&gt;#&lt;element&gt;</code>) with slug validation</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-003</code> <code>pkg/ref</code> reference grammar (<code>toc:&lt;doc&gt;#&lt;element&gt;</code>) with slug validation</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-001</code></li>
 <li>Satisfies: PRD-FR-604, TRD-015</li>
 <li>Acceptance: parse/format round-trip; invalid refs rejected</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-004</code> <code>pkg/toc</code> core document model with a minimal required set (goal, outcome, link, indicator), reusing prism-core</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-004</code> <code>pkg/toc</code> core document model with a minimal required set (goal, outcome, link, indicator), reusing prism-core</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-002</code>, <code>RMI-THEORYOFCHANGESPEC-003</code></li>
 <li>Satisfies: PRD-FR-101…110, TRD-001, TRD-016</li>
 <li>Acceptance: round-trip marshal tests; enum <code>Valid</code>/<code>All</code> helpers tested; minimal fixture round-trips</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-005</code> ObservationSet, Status, StatusDiff, and ActorRegistry document types</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-005</code> ObservationSet, Status, StatusDiff, and ActorRegistry document types</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-004</code></li>
 <li>Satisfies: PRD-FR-111, PRD-FR-406, TRD-002</li>
 <li>Acceptance: round-trip tests for each document kind</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-006</code> Schema pipeline: <code>cmd/generate-schema</code>, embedded <code>schema/</code> with Get/Names/Validate, schemakit lint, CI drift check</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-006</code> Schema pipeline: <code>cmd/generate-schema</code>, embedded <code>schema/</code> with Get/Names/Validate, schemakit lint, CI drift check</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-004</code>, <code>RMI-THEORYOFCHANGESPEC-005</code></li>
 <li>Satisfies: PRD-FR-201, PRD-FR-202, TRD-003, TRD-004</li>
 <li>Acceptance: <code>schemakit lint --property-case camelCase</code> reports 0 violations; regeneration leaves no diff; every schema loads from embed</li>
 </ul>
 <h2 id="phase-2-load-validate-and-edit">Phase 2 — Load, Validate, and Edit<a class="headerlink" href="#phase-2-load-validate-and-edit" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Trusted documents, a queryable causal graph, and one validated patch engine through which every edit flows
-<strong>Status:</strong> Planned — 0 of 6 items completed</p>
+<strong>Status:</strong> Completed — 6 of 6 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-007</code> <code>pkg/tocio</code> JSON/YAML loading with limits, observation-set merge, and canonical formatting</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-007</code> <code>pkg/tocio</code> JSON/YAML loading with limits, observation-set merge, and canonical formatting</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-006</code></li>
 <li>Satisfies: PRD-FR-203, PRD-FR-704, TRD-005, TRD-031</li>
 <li>Acceptance: one fixture in YAML and JSON yields equal documents; <code>Format</code> idempotent</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-008</code> <code>pkg/validate</code> schema, ID uniqueness and format, reference resolution with JSON-pointer issues</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-008</code> <code>pkg/validate</code> schema, ID uniqueness and format, reference resolution with JSON-pointer issues</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-007</code></li>
 <li>Satisfies: PRD-FR-301, TRD-006</li>
 <li>Acceptance: table tests per error class</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-009</code> <code>pkg/graph</code> build and queries (upstream, downstream, paths to impact, cycles, levels, orphans, dead ends, ceiling)</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-009</code> <code>pkg/graph</code> build and queries (upstream, downstream, paths to impact, cycles, levels, orphans, dead ends, ceiling)</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-008</code></li>
 <li>Satisfies: PRD-FR-302, TRD-007</li>
 <li>Acceptance: unit and property tests; 1,000-node benchmark recorded</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-046</code> <code>pkg/edit</code> patch engine: RFC 6902 with <code>@id</code> addressing, atomic apply, error-delta rejection, dry run</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-046</code> <code>pkg/edit</code> patch engine: RFC 6902 with <code>@id</code> addressing, atomic apply, error-delta rejection, dry run</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-008</code></li>
 <li>Satisfies: PRD-FR-701, PRD-FR-702, PRD G-14, TRD-029</li>
 <li>Acceptance: error-introducing patches rejected with input untouched; unknown <code>@id</code> fails the whole patch</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-011</code> <code>pkg/service</code> and <code>cmd/theoryofchange</code> (Cobra) with validate, graph, schema, init, fmt, and patch commands</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-011</code> <code>pkg/service</code> and <code>cmd/theoryofchange</code> (Cobra) with validate, graph, schema, init, fmt, and patch commands</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-009</code>, <code>RMI-THEORYOFCHANGESPEC-046</code></li>
 <li>Satisfies: PRD US-1, PRD US-16, TRD §6.1</li>
 <li>Acceptance: CLI tests cover exit codes and output formats; <code>fmt --check</code> exits 1 on unformatted input</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-047</code> Element commands (<code>add</code> / <code>set</code> / <code>rm --cascade</code>) compiled to patches for core element kinds</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-047</code> Element commands (<code>add</code> / <code>set</code> / <code>rm --cascade</code>) compiled to patches for core element kinds</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-046</code>, <code>RMI-THEORYOFCHANGESPEC-011</code></li>
 <li>Satisfies: PRD-FR-703, PRD US-16, TRD-030</li>
 <li>Acceptance: each command equals its patch equivalent; <code>rm</code> without <code>--cascade</code> rejects dangling references</li>
 </ul>
 <h2 id="phase-3-pathways-metric-library-provenance-and-reference-examples">Phase 3 — Pathways, Metric Library, Provenance, and Reference Examples<a class="headerlink" href="#phase-3-pathways-metric-library-provenance-and-reference-examples" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Program pathways, shared metric definitions, a glossary, and provenance on every element, proven on fictional reference examples
-<strong>Status:</strong> Planned — 0 of 4 items completed</p>
+<strong>Status:</strong> Completed — 4 of 4 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-032</code> Pathways (program areas) and parent / child ToC references, with element commands</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-032</code> Pathways (program areas) and parent / child ToC references, with element commands</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-008</code>, <code>RMI-THEORYOFCHANGESPEC-047</code></li>
 <li>Satisfies: PRD-FR-112, PRD US-9, TRD-017</li>
 <li>Acceptance: pathway round-trip; child ToC outcomes resolve against the parent</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-033</code> Metric library, glossary, and indicator extensions (metricId, pathwayIds, claim, caveats, rollupFrom, theme_count), with element commands</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-033</code> Metric library, glossary, and indicator extensions (metricId, pathwayIds, claim, caveats, rollupFrom, theme_count), with element commands</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-032</code></li>
 <li>Satisfies: PRD-FR-113, PRD-FR-114, PRD-FR-117, PRD US-10, TRD-017</li>
 <li>Acceptance: roll-up declarations validated against metric aggregation; claim defaults to contribution when omitted</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-052</code> Provenance on every element (stated / inferred / hypothesis / confirmed / rejected, cited evidence), indicator dataAvailability, and Consultation records; rejected elements excluded from analysis</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-052</code> Provenance on every element (stated / inferred / hypothesis / confirmed / rejected, cited evidence), indicator dataAvailability, and Consultation records; rejected elements excluded from analysis</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-033</code></li>
 <li>Satisfies: PRD-FR-124, PRD-FR-125, PRD-FR-123, TRD-036</li>
 <li>Acceptance: round-trip tests; rejected elements absent from graph, measurement, and default reports</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-010</code> Reference examples (fictional) with provenance: intermediary organization (three pathways, two impact layers, metric library, glossary) and market adoption (open agent-authorization standard, AAER categories)</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-010</code> Reference examples (fictional) with provenance: intermediary organization (three pathways, two impact layers, metric library, glossary) and market adoption (open agent-authorization standard, AAER categories)</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-033</code>, <code>RMI-THEORYOFCHANGESPEC-052</code></li>
 <li>Satisfies: PRD G-1, PRD G-9, PRD US-1</li>
 <li>Acceptance: both examples validate; exercise groups, feedback links, qualitative indicators, and every provenance basis</li>
 </ul>
 <h2 id="phase-4-workshop-pack-and-source-drafting">Phase 4 — Workshop Pack and Source Drafting<a class="headerlink" href="#phase-4-workshop-pack-and-source-drafting" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Draft a theory from public sources and render the pathway diagram, logic models, metric definitions, glossary, CSV exports, and a Marp workshop deck from the document alone — adopter milestone M0
-<strong>Status:</strong> Planned — 0 of 6 items completed</p>
+<strong>Status:</strong> Completed — 6 of 6 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-022</code> Versioned <code>report.View</code> model built from document and graph, status optional, with basis badges</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-022</code> Versioned <code>report.View</code> model built from document and graph, status optional, with basis badges</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-009</code>, <code>RMI-THEORYOFCHANGESPEC-010</code></li>
 <li>Satisfies: PRD-FR-501, PRD-FR-502, PRD-FR-505, TRD-010</li>
 <li>Acceptance: view tests with and without a status snapshot; inferred elements carry badges</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-023</code> Mermaid pathway renderer with level subgraphs, optional health styling, feedback links, ceiling, and pathway filter</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-023</code> Mermaid pathway renderer with level subgraphs, optional health styling, feedback links, ceiling, and pathway filter</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-022</code></li>
 <li>Satisfies: PRD-FR-501, PRD G-12</li>
 <li>Acceptance: golden Mermaid output</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-037</code> Logic-model (per pathway), metric-definitions, and glossary reports</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-037</code> Logic-model (per pathway), metric-definitions, and glossary reports</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-022</code></li>
 <li>Satisfies: PRD-FR-505, PRD US-12, TRD-022</li>
 <li>Acceptance: golden files over the intermediary example</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-049</code> <code>pkg/slides</code> Marp engine and workshop deck (<code>theoryofchange deck workshop</code>)</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-049</code> <code>pkg/slides</code> Marp engine and workshop deck (<code>theoryofchange deck workshop</code>)</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-023</code>, <code>RMI-THEORYOFCHANGESPEC-037</code></li>
 <li>Satisfies: PRD-FR-801, PRD G-15, PRD US-17, TRD-033</li>
 <li>Acceptance: golden workshop deck; deck numbers and labels equal the reports'</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-039</code> <code>theoryofchange report</code> definition kinds, <code>definitions</code> pack, and <code>theoryofchange export csv</code> (indicators, metrics, glossary)</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-039</code> <code>theoryofchange report</code> definition kinds, <code>definitions</code> pack, and <code>theoryofchange export csv</code> (indicators, metrics, glossary)</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-023</code>, <code>RMI-THEORYOFCHANGESPEC-037</code>, <code>RMI-THEORYOFCHANGESPEC-011</code></li>
 <li>Satisfies: PRD-FR-204, PRD-FR-505, PRD G-12, TRD-021</li>
 <li>Acceptance: CLI tests; CSV golden files (RFC 4180)</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-053</code> <code>theoryofchange evidence add</code> and the toc-draft-from-sources agent skill</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-053</code> <code>theoryofchange evidence add</code> and the toc-draft-from-sources agent skill</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-047</code>, <code>RMI-THEORYOFCHANGESPEC-052</code>, <code>RMI-THEORYOFCHANGESPEC-039</code></li>
 <li>Satisfies: PRD-FR-606, PRD US-19, PRD G-17, TRD-037</li>
 <li>Acceptance: smoke test over saved fixture pages yields a draft where every element has a basis and every <code>stated</code> element cites a source</li>
 </ul>
 <h2 id="phase-5-review-and-agreement">Phase 5 — Review and Agreement<a class="headerlink" href="#phase-5-review-and-agreement" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Assessment report, Pandoc-ready sharing exports with stamps, review packet and sheet, review import as proposals, and approval of the agreed baseline — adopter milestone M1
-<strong>Status:</strong> Planned — 0 of 5 items completed</p>
+<strong>Status:</strong> Completed — 5 of 5 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-054</code> Assessment report: provenance mix, gaps, data availability, assumptions needing testing, generated questions, short narrative</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-054</code> Assessment report: provenance mix, gaps, data availability, assumptions needing testing, generated questions, short narrative</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-022</code>, <code>RMI-THEORYOFCHANGESPEC-052</code></li>
 <li>Satisfies: PRD-FR-512, PRD US-19, TRD-038</li>
 <li>Acceptance: golden file over the intermediary example</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-056</code> Pandoc Markdown profile with PNG diagrams, export stamps on every artifact, and <code>theoryofchange export docx|pptx</code></li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-056</code> Pandoc Markdown profile with PNG diagrams, export stamps on every artifact, and <code>theoryofchange export docx|pptx</code></li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-039</code>, <code>RMI-THEORYOFCHANGESPEC-049</code>, <code>RMI-THEORYOFCHANGESPEC-023</code></li>
 <li>Satisfies: PRD-FR-901, PRD-FR-902, TRD-039</li>
 <li>Acceptance: golden Markdown; stamp present in every format; pandoc export test skipped when absent</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-057</code> Review packet (ID-tagged response tables) and review sheet (CSV) exports</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-057</code> Review packet (ID-tagged response tables) and review sheet (CSV) exports</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-054</code>, <code>RMI-THEORYOFCHANGESPEC-056</code></li>
 <li>Satisfies: PRD-FR-903, PRD US-20, TRD-039</li>
 <li>Acceptance: golden packet and sheet; every element row carries its stable ID</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-058</code> ReviewResponse schema and <code>theoryofchange import review</code> (JSON and --from-csv) producing proposed patches and a consultation record</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-058</code> ReviewResponse schema and <code>theoryofchange import review</code> (JSON and --from-csv) producing proposed patches and a consultation record</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-057</code>, <code>RMI-THEORYOFCHANGESPEC-046</code></li>
 <li>Satisfies: PRD-FR-904, PRD-FR-905, PRD US-20, TRD-040</li>
 <li>Acceptance: seeded rows from every origin map to ops or flagged notes; stale hashes flagged; document never modified</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-055</code> <code>theoryofchange approve</code> with approvers, revision, version label, and refusal checks</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-055</code> <code>theoryofchange approve</code> with approvers, revision, version label, and refusal checks</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-058</code>, <code>RMI-THEORYOFCHANGESPEC-052</code></li>
 <li>Satisfies: PRD-FR-707, PRD US-21, TRD-041</li>
 <li>Acceptance: approval sets status and revision through the patch engine; refuses on errors or open hypotheses without --force</li>
 </ul>
 <h2 id="phase-6-measurement-framework-design">Phase 6 — Measurement Framework Design<a class="headerlink" href="#phase-6-measurement-framework-design" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Metric selection and collection burden, audiences and stories, UNDG change analysis, and the full intermediary example — adopter milestone M1.5 (collection plan)
-<strong>Status:</strong> Planned — 0 of 5 items completed</p>
+<strong>Status:</strong> Completed — 5 of 5 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-034</code> Metric selection criteria and scores, collection cost, measurement budget, and <code>pkg/burden</code> totals</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-034</code> Metric selection criteria and scores, collection cost, measurement budget, and <code>pkg/burden</code> totals</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-033</code></li>
 <li>Satisfies: PRD-FR-115, PRD G-10, PRD US-11, TRD-020</li>
 <li>Acceptance: burden arithmetic table tests (minutes per week, questions per respondent per year, per pathway and mode)</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-035</code> Audiences, theme codebook, and Story / LearningReview observation types</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-035</code> Audiences, theme codebook, and Story / LearningReview observation types</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-033</code></li>
 <li>Satisfies: PRD-FR-116, PRD-FR-117, PRD-FR-118, TRD-017, TRD-018</li>
 <li>Acceptance: unknown theme IDs and missing consent rejected by validation</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-044</code> Change-analysis model: problem-tree causes, outcome responsibility and delivering actors, prioritization criteria for outcomes and interventions, target groups, assumption and risk enrichment</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-044</code> Change-analysis model: problem-tree causes, outcome responsibility and delivering actors, prioritization criteria for outcomes and interventions, target groups, assumption and risk enrichment</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-032</code>, <code>RMI-THEORYOFCHANGESPEC-034</code></li>
 <li>Satisfies: PRD-FR-105, PRD-FR-108, PRD-FR-119…122, TRD-025</li>
 <li>Acceptance: round-trip tests; unknown cause / target-group / actor references rejected by validation</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-036</code> Intermediary example extended with framework-design and change-analysis data; schemas regenerated lint-clean</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-036</code> Intermediary example extended with framework-design and change-analysis data; schemas regenerated lint-clean</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-034</code>, <code>RMI-THEORYOFCHANGESPEC-035</code>, <code>RMI-THEORYOFCHANGESPEC-044</code></li>
 <li>Satisfies: PRD G-9 success metric</li>
 <li>Acceptance: example with 8–12 selected metrics, budget, audiences, codebook, sample stories, problem tree, partner-delivered outcomes, and consultations validates; <code>schemakit lint</code> 0 violations</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-038</code> Metric-selection and collection-plan reports and CSV exports</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-038</code> Metric-selection and collection-plan reports and CSV exports</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-022</code>, <code>RMI-THEORYOFCHANGESPEC-034</code>, <code>RMI-THEORYOFCHANGESPEC-039</code></li>
 <li>Satisfies: PRD-FR-505, PRD US-11, PRD US-12, TRD-022</li>
 <li>Acceptance: golden files; collection-plan totals equal <code>pkg/burden</code> results</li>
 </ul>
 <h2 id="phase-7-quality-lint-rubric-and-judging">Phase 7 — Quality: Lint, Rubric, and Judging<a class="headerlink" href="#phase-7-quality-lint-rubric-and-judging" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Deterministic lint with profiles, the LLM-as-a-Judge rubric with a development profile, and reproducible file-based judging with multi-judge agreement
-<strong>Status:</strong> Planned — 0 of 6 items completed</p>
+<strong>Status:</strong> Completed — 6 of 6 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-012</code> Lint engine: rule registry, draft / standard / full profiles, options, structured-evaluation SummaryReport output</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-012</code> Lint engine: rule registry, draft / standard / full profiles, options, structured-evaluation SummaryReport output</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-009</code></li>
 <li>Satisfies: PRD-FR-303, PRD-FR-304, PRD-FR-804, TRD-008, TRD-035</li>
 <li>Acceptance: registry and report-shape tests; minimal fixture is GO under <code>draft</code></li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-013</code> Structure and logic rules (TOC-STR-<em>, TOC-LOG-</em>) with seeded-defect fixtures</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-013</code> Structure and logic rules (TOC-STR-<em>, TOC-LOG-</em>) with seeded-defect fixtures</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-012</code></li>
 <li>Satisfies: PRD-FR-303, TRD §6.4</li>
 <li>Acceptance: each rule triggered by exactly one fixture; reference examples report 0 errors</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-014</code> Assumption, measurement, intervention, accountability, actor, evidence, pathway, metric, claim, budget, audience, cause, responsibility, risk, equity, validation, and provenance rules with seeded-defect fixtures</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-014</code> Assumption, measurement, intervention, accountability, actor, evidence, pathway, metric, claim, budget, audience, cause, responsibility, risk, equity, validation, and provenance rules with seeded-defect fixtures</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-012</code>, <code>RMI-THEORYOFCHANGESPEC-036</code></li>
 <li>Satisfies: PRD-FR-303, PRD US-10, PRD US-11, TRD §6.4</li>
 <li>Acceptance: one fixture per rule; ≥ 15 rules total implemented and tested</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-015</code> ToC spec template, core RubricSet (sector-neutral UNDG checklist plus plausible / feasible / testable), and development rubric profile for LLM-as-a-Judge, embedded in <code>spec/</code></li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-015</code> ToC spec template, core RubricSet (sector-neutral UNDG checklist plus plausible / feasible / testable), and development rubric profile for LLM-as-a-Judge, embedded in <code>spec/</code></li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-004</code></li>
 <li>Satisfies: PRD-FR-601, TRD-012, TRD-028</li>
 <li>Acceptance: both rubrics parse into <code>rubric.RubricSet</code>, <code>Validate()</code> passes, weights sum to 1.0; every UNDG checklist item maps to a criterion</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-050</code> <code>pkg/judge</code> and <code>theoryofchange judge show | record | summary</code>: bundle hashing, verdict validation, multi-judge agreement</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-050</code> <code>pkg/judge</code> and <code>theoryofchange judge show | record | summary</code>: bundle hashing, verdict validation, multi-judge agreement</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-015</code>, <code>RMI-THEORYOFCHANGESPEC-039</code></li>
 <li>Satisfies: PRD-FR-803, PRD G-16, PRD US-18, TRD-034</li>
 <li>Acceptance: bundle golden; verdicts with mismatched bundle hash rejected; aggregation reports per-category agreement</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-016</code> <code>theoryofchange lint</code> CLI and rubric discrimination eval with at least two judges and agreement, recorded in <code>docs/evals/</code></li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-016</code> <code>theoryofchange lint</code> CLI and rubric discrimination eval with at least two judges and agreement, recorded in <code>docs/evals/</code></li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-013</code>, <code>RMI-THEORYOFCHANGESPEC-014</code>, <code>RMI-THEORYOFCHANGESPEC-050</code></li>
 <li>Satisfies: PRD US-2, PRD success metrics "LLM-judge discrimination" and "Judge agreement recorded"</li>
 <li>Acceptance: no judge raises a high or critical finding on the reference example, after which it goes to human review; seeded weak ToC fails ≥ 3 rubric categories; agreement reported</li>
 </ul>
 <h2 id="phase-8-measurement">Phase 8 — Measurement<a class="headerlink" href="#phase-8-measurement" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Turn spreadsheet data and observations into indicator, outcome, pathway, and assumption status with reproducible roll-ups and confidence — adopter milestone M2
-<strong>Status:</strong> Planned — 0 of 6 items completed</p>
+<strong>Status:</strong> Completed — 6 of 6 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-017</code> Indicator progress, expected progress, status (including baseline_only), and health mapping</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-017</code> Indicator progress, expected progress, status (including baseline_only), and health mapping</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-008</code>, <code>RMI-THEORYOFCHANGESPEC-033</code></li>
 <li>Satisfies: PRD-FR-401, PRD-FR-402, PRD-FR-509, TRD-009, TRD-019</li>
 <li>Acceptance: table tests cover every status branch</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-018</code> Outcome, pathway-status, and cross-pathway metric roll-ups through precondition logic and nested groups</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-018</code> Outcome, pathway-status, and cross-pathway metric roll-ups through precondition logic and nested groups</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-009</code>, <code>RMI-THEORYOFCHANGESPEC-017</code></li>
 <li>Satisfies: PRD-FR-403, PRD-FR-113, TRD-019</li>
 <li>Acceptance: tests for all / any / at_least / nested groups and each metric aggregation</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-019</code> Assumption propagation and link / path confidence scoring</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-019</code> Assumption propagation and link / path confidence scoring</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-018</code></li>
 <li>Satisfies: PRD-FR-404, PRD-FR-405</li>
 <li>Acceptance: invalidated assumption flags every downstream outcome (US-5); confidence tests with documented weights</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-020</code> <code>measure.Evaluate</code> status snapshot, theme counts, and <code>Diff</code> between periods; determinism</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-020</code> <code>measure.Evaluate</code> status snapshot, theme counts, and <code>Diff</code> between periods; determinism</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-019</code>, <code>RMI-THEORYOFCHANGESPEC-035</code></li>
 <li>Satisfies: PRD-FR-406, TRD INV-3</li>
 <li>Acceptance: golden snapshots byte-identical across two runs</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-040</code> CSV observation import with mapping file and unmatched-row reporting</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-040</code> CSV observation import with mapping file and unmatched-row reporting</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-007</code>, <code>RMI-THEORYOFCHANGESPEC-033</code></li>
 <li>Satisfies: PRD-FR-204, PRD US-13, TRD-021</li>
 <li>Acceptance: seeded bad rows all reported; 0 silent drops</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-021</code> <code>theoryofchange status</code> and <code>theoryofchange import</code> CLI; performance benchmarks</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-021</code> <code>theoryofchange status</code> and <code>theoryofchange import</code> CLI; performance benchmarks</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-020</code>, <code>RMI-THEORYOFCHANGESPEC-040</code>, <code>RMI-THEORYOFCHANGESPEC-011</code></li>
 <li>Satisfies: PRD US-4, PRD US-13, TRD §8</li>
 <li>Acceptance: CLI tests; 200-node benchmark under 1 s</li>
 </ul>
 <h2 id="phase-9-reporting-story-and-presentations">Phase 9 — Reporting, Story, and Presentations<a class="headerlink" href="#phase-9-reporting-story-and-presentations" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Executive, audience story, learning-review, portfolio, narrative, and division-of-labour reports, plus exec / learning-review / story decks with optional export — adopter milestone M3
-<strong>Status:</strong> Planned — 0 of 8 items completed</p>
+<strong>Status:</strong> Completed — 8 of 8 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-024</code> Status reports: exec, results, assumptions, interventions, evidence-gaps, full</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-024</code> Status reports: exec, results, assumptions, interventions, evidence-gaps, full</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-020</code>, <code>RMI-THEORYOFCHANGESPEC-022</code>, <code>RMI-THEORYOFCHANGESPEC-023</code></li>
 <li>Satisfies: PRD-FR-501, PRD US-3</li>
 <li>Acceptance: golden files; every reported status cites its inputs</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-041</code> Audience story report with consent-gated quotes</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-041</code> Audience story report with consent-gated quotes</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-024</code>, <code>RMI-THEORYOFCHANGESPEC-035</code></li>
 <li>Satisfies: PRD-FR-506, PRD US-14, TRD-023</li>
 <li>Acceptance: golden files; no-consent and restricted quotes absent</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-042</code> Learning-review and portfolio reports</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-042</code> Learning-review and portfolio reports</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-024</code>, <code>RMI-THEORYOFCHANGESPEC-034</code></li>
 <li>Satisfies: PRD-FR-507, PRD-FR-508, PRD US-14</li>
 <li>Acceptance: golden files over two observation periods</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-045</code> Narrative (programme / strategy document scaffold) and division-of-labour reports; accountable vs monitored-only separation</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-045</code> Narrative (programme / strategy document scaffold) and division-of-labour reports; accountable vs monitored-only separation</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-022</code>, <code>RMI-THEORYOFCHANGESPEC-044</code></li>
 <li>Satisfies: PRD-FR-510, PRD-FR-511, PRD-FR-120, TRD-026, TRD-027</li>
 <li>Acceptance: golden files over a mixed-responsibility fixture</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-060</code> Projection artifacts: outcome map (outcomes framework), logframe matrix, and logic-model diagram, as definition reports and in the definitions pack</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-060</code> Projection artifacts: outcome map (outcomes framework), logframe matrix, and logic-model diagram, as definition reports and in the definitions pack</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-022</code>, <code>RMI-THEORYOFCHANGESPEC-044</code></li>
 <li>Satisfies: PRD-FR-513</li>
 <li>Acceptance: golden files; every row names the element IDs it was projected from; a one-pathway theory and a multi-pathway theory both render</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-025</code> Custom report templates and restricted-evidence suppression</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-025</code> Custom report templates and restricted-evidence suppression</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-024</code></li>
 <li>Satisfies: PRD-FR-502, PRD-FR-503, TRD-011</li>
 <li>Acceptance: custom template test; restricted excerpt absent from all outputs</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-051</code> Exec, learning-review, and story decks; <code>--export pdf|pptx|html</code> via optional <code>mmdc</code> and <code>marp</code></li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-051</code> Exec, learning-review, and story decks; <code>--export pdf|pptx|html</code> via optional <code>mmdc</code> and <code>marp</code></li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-049</code>, <code>RMI-THEORYOFCHANGESPEC-024</code>, <code>RMI-THEORYOFCHANGESPEC-041</code>, <code>RMI-THEORYOFCHANGESPEC-042</code></li>
 <li>Satisfies: PRD-FR-801, PRD-FR-802, PRD US-17, TRD-033</li>
 <li>Acceptance: golden decks; export test produces files when tools are present and exits 3 with guidance when absent</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-026</code> <code>theoryofchange report</code> status kinds in CLI and executive-report benchmark</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-026</code> <code>theoryofchange report</code> status kinds in CLI and executive-report benchmark</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-025</code>, <code>RMI-THEORYOFCHANGESPEC-041</code>, <code>RMI-THEORYOFCHANGESPEC-042</code>, <code>RMI-THEORYOFCHANGESPEC-045</code>, <code>RMI-THEORYOFCHANGESPEC-021</code></li>
 <li>Satisfies: PRD G-5</li>
 <li>Acceptance: CLI tests; exec report for 200-node ToC under 1 s</li>
 </ul>
 <h2 id="phase-10-agents-and-revisions">Phase 10 — Agents and Revisions<a class="headerlink" href="#phase-10-agents-and-revisions" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> MCP tools (including validated patching), agent skills, semantic theory diffs, and automated Google sharing — adopter milestone M4
-<strong>Status:</strong> Planned — 0 of 4 items completed</p>
+<strong>Status:</strong> In progress — 3 of 4 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-027</code> MCP server exposing schema, validate, lint, graph, status, report, patch, deck, and judge-bundle tools with root confinement</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-027</code> MCP server exposing schema, validate, lint, graph, status, report, patch, deck, and judge-bundle tools with root confinement</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-026</code>, <code>RMI-THEORYOFCHANGESPEC-046</code>, <code>RMI-THEORYOFCHANGESPEC-050</code></li>
 <li>Satisfies: PRD-FR-602, PRD-FR-706, PRD US-6, TRD-013</li>
 <li>Acceptance: in-memory transport test drives every tool; path traversal rejected; <code>toc_patch</code> rejects error-introducing patches</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-048</code> <code>pkg/diff</code> semantic theory diff and <code>theoryofchange diff --revision</code></li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-048</code> <code>pkg/diff</code> semantic theory diff and <code>theoryofchange diff --revision</code></li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-046</code>, <code>RMI-THEORYOFCHANGESPEC-009</code></li>
 <li>Satisfies: PRD-FR-705, PRD US-16, PRD US-21, TRD-032</li>
 <li>Acceptance: golden diffs keyed by element ID, including rejected elements; draft Revision lists changed IDs</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-043</code> Agent skills: toc-author (edits via patches), toc-status-refresh, toc-learning-review, toc-audience-story</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-043</code> Agent skills: toc-author (edits via patches), toc-status-refresh, toc-learning-review, toc-audience-story</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-026</code>, <code>RMI-THEORYOFCHANGESPEC-039</code>, <code>RMI-THEORYOFCHANGESPEC-047</code></li>
 <li>Satisfies: PRD-FR-605, PRD US-15, PRD G-13, TRD-024</li>
 <li>Acceptance: smoke test runs each skill's command sequence twice with identical outputs</li>
@@ -1792,28 +1908,126 @@
 </ul>
 <h2 id="phase-11-ecosystem-integration-and-release">Phase 11 — Ecosystem Integration and Release<a class="headerlink" href="#phase-11-ecosystem-integration-and-release" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> PRISM exports, the USM/UFM integration contract and competing-futures fixture, and the v0.1.0 release
-<strong>Status:</strong> Planned — 0 of 4 items completed</p>
+<strong>Status:</strong> In progress — 3 of 4 items completed</p>
 <ul>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-028</code> <code>pkg/prismx</code> OKR and outcome-journey export with import-boundary test</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-028</code> <code>pkg/prismx</code> OKR and outcome-journey export with import-boundary test</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-020</code></li>
 <li>Satisfies: PRD-FR-603, PRD US-7, TRD-014</li>
 <li>Acceptance: exported OKR documents pass prism-roadmap validation; core packages do not import prism-roadmap</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-029</code> Actor registry resolution, cross-document references, and competing-futures fixture</li>
-<li>Type: capability · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-029</code> Actor registry resolution, cross-document references, and competing-futures fixture</li>
+<li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-008</code>, <code>RMI-THEORYOFCHANGESPEC-032</code></li>
 <li>Satisfies: PRD G-8, PRD US-8, TRD §7.3</li>
 <li>Acceptance: three competing-future ToCs sharing one actor registry validate with no schema changes</li>
 <li>[ ] <code>RMI-THEORYOFCHANGESPEC-030</code> USM/UFM integration contract document</li>
-<li>Type: capability · Status: planned</li>
+<li>Type: capability · Status: in_progress</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-029</code></li>
 <li>Satisfies: PRD G-8</li>
 <li>Acceptance: contract reviewed by USM/UFM owners</li>
-<li>[ ] <code>RMI-THEORYOFCHANGESPEC-031</code> Documentation, CHANGELOG, v0.1.0 release, and spec-type sync follow-up for specification-workflow-spec</li>
-<li>Type: release · Status: planned</li>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-031</code> Documentation, CHANGELOG, v0.1.0 release, and spec-type sync follow-up for specification-workflow-spec</li>
+<li>Type: release · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-027</code>, <code>RMI-THEORYOFCHANGESPEC-043</code>, <code>RMI-THEORYOFCHANGESPEC-048</code>, <code>RMI-THEORYOFCHANGESPEC-059</code>, <code>RMI-THEORYOFCHANGESPEC-028</code>, <code>RMI-THEORYOFCHANGESPEC-030</code>, <code>RMI-THEORYOFCHANGESPEC-051</code></li>
 <li>Satisfies: all PRD success metrics (release gate)</li>
 <li>Acceptance: CI green before tag; publication scan clean; follow-up RMI filed in specification-workflow-spec</li>
+</ul>
+<h2 id="phase-12-attribution-and-notices">Phase 12 — Attribution and Notices<a class="headerlink" href="#phase-12-attribution-and-notices" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Credit the methods and projects the spec builds on, and carry the notices its dependencies require
+<strong>Status:</strong> Completed — 1 of 1 items completed</p>
+<ul>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-061</code> Credits, third-party notices, and a dependency license audit</li>
+<li>Type: capability · Status: completed</li>
+<li>Satisfies: — (documentation and compliance)</li>
+<li>Acceptance: README and docs credit the methods and projects used; THIRD_PARTY_NOTICES.md carries each distributed dependency's license and notice text; every module compiled into the CLI is permissively licensed</li>
+</ul>
+<h2 id="phase-13-headline-metrics">Phase 13 — Headline Metrics<a class="headerlink" href="#phase-13-headline-metrics" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Tie the causal chain to the metrics each program steers by and each audience is told: a North Star per program, guardrails, curated headline numbers per audience, and metrics worked out from others
+<strong>Status:</strong> Completed — 7 of 7 items completed</p>
+<ul>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-062</code> Headline metrics per audience and a North Star per program, with a metric-chain diagram</li>
+<li>Type: capability · Status: completed</li>
+<li>Satisfies: PRD G-8</li>
+<li>
+<p>Acceptance: The README and docs index show how resources, activities, outputs, outcomes, impact, North Star metrics, and audience headline metrics link; audiences can list an ordered, worded set of headline indicators; the story report and deck use it; lint checks it</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-063</code> Shared pathway and tier helpers used by every rule and report</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-062</code></li>
+<li>
+<p>Acceptance: One function says which pathways an indicator serves and which tier it is; PTH-002/003 and MET-001/003 agree; no rule re-derives membership</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-064</code> Model headline metrics: audience headline lists, pathway focus (North Star, one metric, guardrails), product kind, mission and vision</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-063</code></li>
+<li>
+<p>Acceptance: Go types, JSON Schemas regenerated, references validated; existing documents still validate</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-065</code> Lint the activity-to-impact chain, headline lists, and North Stars</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-064</code></li>
+<li>
+<p>Acceptance: Rules report an activity that leads nowhere, a link and intervention that disagree, an audience with no numbers, a North Star that is not an outcome at or below the ceiling</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-066</code> Reports: metric tree, headline use in story and deck, headline report, estimates shown as estimates</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-065</code></li>
+<li>
+<p>Acceptance: A metric-tree report per pathway; story and deck use the audience headline list and drop the hardcoded five; an estimated value reads as an estimate</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-067</code> Structured metric composition and derived indicator values</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-066</code></li>
+<li>
+<p>Acceptance: A metric can be a ratio or product of other metrics; a derived value is computed when its parts are observed; no cycles</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-068</code> Examples, guides, MCP text, and the metric-chain diagram updated for headline metrics</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-066</code>, <code>RMI-THEORYOFCHANGESPEC-067</code></li>
+<li>Acceptance: The Riverbend example uses the new fields; a guide explains tiers, North Star, and headline; the diagram's planned boxes become solid</li>
+</ul>
+<h2 id="phase-14-vocabulary">Phase 14 — Vocabulary<a class="headerlink" href="#phase-14-vocabulary" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Make the terms consistent and easy to learn
+<strong>Status:</strong> Completed — 1 of 1 items completed</p>
+<ul>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-069</code> Rename the intermediate outcome level to medium_term so short, medium, and long form one series</li>
+<li>Type: capability · Status: completed</li>
+<li>Acceptance: the level is medium_term in the model, schema, reports, examples, and docs; every test passes; no alias is kept</li>
+</ul>
+<h2 id="phase-15-layered-logic-model-diagram">Phase 15 — Layered Logic Model Diagram<a class="headerlink" href="#phase-15-layered-logic-model-diagram" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Draw the logic model as stage columns with real edges, from one shared diagram spec
+<strong>Status:</strong> Completed — 3 of 3 items completed</p>
+<ul>
+<li>[x] <code>RMI-THEORYOFCHANGESPEC-070</code> Derive a layered logic model graph (stages, nodes, edges) from a view</li>
+<li>Type: capability · Status: completed</li>
+<li>
+<p>Acceptance: inputs, activities, outputs, and outcomes by level are columns; edges come from resources, interventions, and links; order is deterministic and reduces crossings; tests cover each edge kind</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-071</code> Emit the logic model graph as D2 and Mermaid through d2vision and add report kinds</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-070</code></li>
+<li>
+<p>Acceptance: logic-model-layered and logic-model-d2 reports; the existing logic-model diagram is unchanged; the D2 compiles and keeps every label; stage columns align</p>
+</li>
+<li>
+<p>[x] <code>RMI-THEORYOFCHANGESPEC-072</code> Use the layered logic model diagram in the workshop deck beside the existing slide</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-071</code></li>
+<li>Acceptance: the deck has the layered diagram as a slide and the existing table and diagram remain; docs describe both and how they differ</li>
 </ul>
 
 

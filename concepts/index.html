@@ -957,6 +957,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1428,6 +1456,11 @@ as <code>NNN</code>) that adds the type or field. Concepts not in v0 are listed 
 <td>004</td>
 </tr>
 <tr>
+<td>Purpose: why the organization exists and what it works toward (a statement, not a causal element)</td>
+<td><code>Context.Mission</code>, <code>Context.Vision</code></td>
+<td>064</td>
+</tr>
+<tr>
 <td>Ceiling of accountability (ActKnowledge)</td>
 <td><code>Document.Ceiling</code></td>
 <td>004</td>
@@ -1476,7 +1509,7 @@ as <code>NNN</code>) that adds the type or field. Concepts not in v0 are listed 
 <tbody>
 <tr>
 <td>Long-term goal, impact, outcome, precondition</td>
-<td><code>Outcome</code> with <code>Level</code> (<code>impact</code>, <code>long_term</code>, <code>intermediate</code>, <code>short_term</code>, <code>output</code>)</td>
+<td><code>Outcome</code> with <code>Level</code> (<code>impact</code>, <code>long_term</code>, <code>medium_term</code>, <code>short_term</code>, <code>output</code>)</td>
 <td>004</td>
 </tr>
 <tr>
@@ -1530,9 +1563,9 @@ as <code>NNN</code>) that adds the type or field. Concepts not in v0 are listed 
 <td>004</td>
 </tr>
 <tr>
-<td>Pathways / program areas</td>
-<td><code>Document.Pathways[]</code> (<code>Pathway</code>)</td>
-<td>032</td>
+<td>Pathways / program areas / products</td>
+<td><code>Document.Pathways[]</code> (<code>Pathway</code>, kind <code>program</code> or <code>product</code>)</td>
+<td>032, 064</td>
 </tr>
 <tr>
 <td>Nested ToCs (overarching vs outcome-level, UNDG)</td>
@@ -1679,6 +1712,26 @@ as <code>NNN</code>) that adds the type or field. Concepts not in v0 are listed 
 <td>Attribution vs contribution</td>
 <td><code>Indicator.Claim</code>, <code>Caveats</code></td>
 <td>033</td>
+</tr>
+<tr>
+<td>Metric tier: activity, output, outcome, impact (input, output, and driver metrics)</td>
+<td><code>Document.IndicatorTier</code> (derived from what the indicator measures; never stored)</td>
+<td>063</td>
+</tr>
+<tr>
+<td>North Star, one metric that matters, guardrails, for a program or product</td>
+<td><code>Pathway.Focus</code> (<code>NorthStarID</code>, <code>OneMetricID</code>, <code>GuardrailIDs</code>, <code>Rationale</code>)</td>
+<td>064</td>
+</tr>
+<tr>
+<td>Headline metrics: the few numbers an audience leads with, in its order and wording</td>
+<td><code>Audience.Headline[]</code> (<code>HeadlineMetric</code>: <code>IndicatorID</code>, <code>Label</code>, <code>Note</code>)</td>
+<td>064</td>
+</tr>
+<tr>
+<td>A metric worked out from others, such as cost per outcome</td>
+<td><code>Indicator.ComposedOf</code> (<code>Composition</code>: <code>Op</code> ratio, product, sum, or difference, and <code>IndicatorIDs</code>)</td>
+<td>067</td>
 </tr>
 <tr>
 <td>Data availability</td>

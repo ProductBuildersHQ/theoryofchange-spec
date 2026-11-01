@@ -624,6 +624,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#the-layered-logic-model-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The layered logic model diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -961,6 +972,34 @@
     
   
     USM and UFM Integration Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
   
 
     
@@ -1402,6 +1441,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#the-layered-logic-model-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The layered logic model diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1447,6 +1497,14 @@ them before any data exists.</p>
 <tr>
 <td><code>logic-model</code></td>
 <td>Inputs, activities, outputs, and outcomes for each pathway. <code>--diagram</code> draws it left to right (also <code>logic-model-diagram</code>)</td>
+</tr>
+<tr>
+<td><code>logic-model-layered</code></td>
+<td>The logic model as columns, from inputs to impact, with a box for each item and an arrow wherever the theory says one leads to another. Written as Mermaid</td>
+</tr>
+<tr>
+<td><code>logic-model-d2</code></td>
+<td>The same layered diagram as <a href="https://d2lang.com">D2</a>, where a grid keeps every stage in its own column. Render it with <code>d2 diagram.d2 diagram.svg</code></td>
 </tr>
 <tr>
 <td><code>outcome-map</code></td>
@@ -1523,6 +1581,14 @@ them before any data exists.</p>
 <tr>
 <td><code>story</code></td>
 <td>An update for one audience (<code>--audience</code>), using the numbers and consented stories</td>
+</tr>
+<tr>
+<td><code>headline</code></td>
+<td>The numbers each audience is told, from its headline list, with the latest figure, status, and caveats (<code>--audience</code> narrows it to one)</td>
+</tr>
+<tr>
+<td><code>metric-tree</code></td>
+<td>Per pathway: its North Star and guardrails, then its indicators from activity to impact, as a table and a diagram (<code>--pathway</code> narrows it)</td>
 </tr>
 <tr>
 <td><code>learning-review</code></td>
@@ -1616,6 +1682,23 @@ current value, score, status, and confidence. <code>export journey</code> writes
 journeys. Both are JSON for the PRISM tools.</p>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
 <p><a href="../review-round-trip/">Review round trip</a></p>
+<h2 id="the-layered-logic-model-diagram">The layered logic model diagram<a class="headerlink" href="#the-layered-logic-model-diagram" title="Permanent link">&para;</a></h2>
+<p><code>logic-model --diagram</code> draws each stage as a group and joins the groups, which
+says only that one stage follows another. The layered diagram draws the real
+relationships:</p>
+<ul>
+<li>an <strong>input</strong> leads to the activities that use it, and one input can feed several;</li>
+<li>an <strong>activity</strong> leads to the outputs it lists, which lead on to the outcomes it targets;</li>
+<li>an <strong>outcome</strong> leads to the outcomes its causal links point to, so one box can lead to
+  several, and several can lead to one.</li>
+</ul>
+<p>The order within a column is chosen to keep arrows from crossing. A link that
+runs back to an earlier stage is feedback. It is left out of the diagram, where
+it would cut across the boxes between, and listed under it.</p>
+<p>Both diagrams are available, so you can compare them. The layered one is made
+by <code>pkg/logicmodel</code>, which builds a layered graph from the theory and writes it
+through <a href="https://github.com/grokify/d2vision">d2vision</a>'s diagram spec, the same
+spec that writes the D2 and the Mermaid.</p>
 
 
 
