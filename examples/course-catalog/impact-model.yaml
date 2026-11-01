@@ -37,6 +37,8 @@ outcomes:
     description: Programs run more reliably and reach more people because staff have the skills to run them.
     level: impact
     sphere: interest
+    addressesEffects:
+      - eff-weaker-programs
     provenance:
       basis: hypothesis
   - id: oc-lt-skills-applied
@@ -44,6 +46,8 @@ outcomes:
     level: long_term
     sphere: influence
     responsibility: own
+    addressesEffects:
+      - eff-untrained-leadership
     provenance:
       basis: inferred
   - id: oc-mt-certified
@@ -499,3 +503,18 @@ causes:
     level: immediate
     evidenceIds:
       - ev-platform-logs
+effects:
+  - id: eff-untrained-leadership
+    statement: Small nonprofits are run without management, fundraising, or data skills.
+    evidenceIds:
+      - ev-learner-survey
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-learner-survey
+  - id: eff-weaker-programs
+    statement: Programs run less reliably and reach fewer people than they could.
+    parents:
+      - eff-untrained-leadership
+    provenance:
+      basis: inferred

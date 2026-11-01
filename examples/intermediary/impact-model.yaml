@@ -55,6 +55,8 @@ outcomes:
       - act-network
       - act-members-small
       - act-members-large
+    addressesEffects:
+      - eff-service-gaps
     targetGroupIds:
       - tg-low-access-residents
     priority:
@@ -84,6 +86,8 @@ outcomes:
     population: Residents of Riverbend County
     actorIds:
       - act-residents
+    addressesEffects:
+      - eff-needs-unheard
     provenance:
       basis: hypothesis
       note: Proposed in the staff workshop; no direct evidence yet.
@@ -98,6 +102,8 @@ outcomes:
     actorIds:
       - act-members-small
       - act-members-large
+    addressesEffects:
+      - eff-staff-turnover
     audienceIds:
       - aud-board
       - aud-funders
@@ -132,6 +138,8 @@ outcomes:
     population: Member nonprofits
     actorIds:
       - act-members-small
+    addressesEffects:
+      - eff-lost-grants
     provenance:
       basis: inferred
       evidenceIds:
@@ -2955,6 +2963,35 @@ causes:
     level: underlying
     outOfScope:
       reason: Funder behavior is outside what the network can change; it only widens the pipeline.
+effects:
+  - id: eff-service-gaps
+    statement: Residents wait longer for help, or go without, when a member cuts a program.
+    affectedGroupIds:
+      - tg-small-members
+    evidenceIds:
+      - ev-county-services
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-county-services
+  - id: eff-staff-turnover
+    statement: Member staff burn out and leave, taking what they know with them.
+    evidenceIds:
+      - ev-member-survey
+    provenance:
+      basis: inferred
+  - id: eff-lost-grants
+    statement: Members miss grants they could have won, so programs run on thinner budgets.
+    parents:
+      - eff-staff-turnover
+    provenance:
+      basis: hypothesis
+  - id: eff-needs-unheard
+    statement: Residents' needs are missing from local plans and funding decisions.
+    parents:
+      - eff-service-gaps
+    provenance:
+      basis: inferred
 targetGroups:
   - id: tg-small-members
     name: Small member nonprofits
