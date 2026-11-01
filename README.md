@@ -28,11 +28,10 @@ model, the pathway of change, the outcome map, and the logframe are different
 **views** of it, each made for a different reader, and none of them is a part of
 another.
 
-> **Status:** the latest release, v0.2.0, was published as `theoryofchange-spec`.
-> This repository is now `impact-model`, and the next release (v0.3.0) carries
-> the rename: the module, the command, the document `kind`, and the schema names.
-> A document written for v0.2.0 needs `kind: ImpactModel` and a few renamed
-> fields. See [the decision](docs/design/adrs/0001-rename-to-impact-model.md).
+> **Status:** the latest release is v0.3.0, the first as `impact-model`; see the
+> [release notes](docs/releases/v0.3.0.md). It renames the module, the command, the document `kind`,
+> and the schema names, so a document written for v0.2.0 needs
+> `kind: ImpactModel` and a few renamed fields. See [the decision](docs/design/adrs/0001-rename-to-impact-model.md).
 
 ## What is an impact model?
 
@@ -259,9 +258,6 @@ to explain *why* what they do should lead to what they hope for, and then show
 whether it did.
 
 ## Quick start
-
-The command is available from v0.3.0. Until it is tagged, build it from a checkout
-with `go build ./cmd/impact-model`.
 
 ```bash
 go install github.com/ProductBuildersHQ/impact-model/cmd/impact-model@latest

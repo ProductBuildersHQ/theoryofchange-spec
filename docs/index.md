@@ -11,11 +11,10 @@ model, the pathway of change, the outcome map, and the logframe are different
 **views** of it, each made for a different reader, and none of them is a part of
 another.
 
-> **Status:** the latest release, v0.2.0, was published as `theoryofchange-spec`.
-> This repository is now `impact-model`, and the next release (v0.3.0) carries
-> the rename: the module, the command, the document `kind`, and the schema names.
-> A document written for v0.2.0 needs `kind: ImpactModel` and a few renamed
-> fields. See [the decision](design/adrs/0001-rename-to-impact-model.md).
+> **Status:** the latest release is v0.3.0, the first as `impact-model`; see the
+> [release notes](releases/v0.3.0.md). It renames the module, the command, the document `kind`,
+> and the schema names, so a document written for v0.2.0 needs
+> `kind: ImpactModel` and a few renamed fields. See [the decision](design/adrs/0001-rename-to-impact-model.md).
 
 ## What is an impact model?
 
@@ -254,7 +253,7 @@ whether it did.
 | Connect an AI agent | [MCP server and agent skills](guides/mcp-and-skills.md) |
 | Look at a complete impact model | [Examples](guides/examples.md) |
 
-The [release notes](releases/v0.2.0.md) list what the latest release contains, and [v0.1.0](releases/v0.1.0.md) the first.
+The [release notes](releases/v0.3.0.md) list what the latest release contains, and [v0.1.0](releases/v0.1.0.md) the first.
 
 ## Part of the PRISM ecosystem
 
