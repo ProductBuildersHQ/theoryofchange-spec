@@ -5,6 +5,32 @@
   "versioning": "semver",
   "commitConvention": "conventional",
   "maintainers": ["grokify"],
+  "unreleased": {
+    "added": [
+      {
+        "description": "The MCP tool `impact_export` exports the OKR, outcome-journey, V2MOM, and DMAIC documents, with the latest values and status when observations are given; a model the format cannot be drawn from is refused, naming what to add"
+      },
+      {
+        "description": "`service.ExportPRISM` draws every PRISM export, so the command line and the MCP server refuse the same models with the same errors; `prismx.Omission` has camelCase JSON fields"
+      }
+    ],
+    "changed": [
+      {
+        "description": "The definitions pack opens with the problem tree when the model records causes or effects. In Go, `report.Definitions` takes the impact model and returns an error: `Definitions(whole, pathways, doc) (string, error)` (breaking for Go callers)"
+      }
+    ],
+    "documentation": [
+      {
+        "description": "The README and the documentation home list the problem tree among the projections, the problem, causes, and effects in an impact model, and the journey, V2MOM, and DMAIC exports; a test keeps their shared sections identical"
+      },
+      {
+        "description": "Credits name problem-tree analysis in the logical framework approach, V2MOM, Six Sigma's DMAIC, and Shewhart's control charts, and the PRISM exports' use of prism-roadmap's goals packages"
+      },
+      {
+        "description": "The reports guide lists what the definitions pack contains, and the MCP guide and TRD list `impact_export` and `impact_diff`"
+      }
+    ]
+  },
   "releases": [
     {
       "version": "v0.5.0",
