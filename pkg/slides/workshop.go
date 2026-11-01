@@ -12,6 +12,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/logicmodel"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
 )
@@ -102,6 +103,7 @@ func Workshop(whole *report.View, pathways []*report.View, o Options) string {
 	}
 	if len(pathways) == 0 {
 		d.logicModel(whole)
+		d.layeredLogicModel(whole)
 	}
 	d.assumptions(whole)
 	d.metrics(whole)
@@ -188,6 +190,25 @@ func (d *deck) pathway(v *report.View) {
 	d.diagram("Pathway: "+title, report.Mermaid(v, report.MermaidOptions{}),
 		"Ask the people who run this pathway to correct it. What do you do that is not on the page? What on the page do you not do?")
 	d.logicModel(v)
+	d.layeredLogicModel(v)
+}
+
+// layeredLogicModel draws the logic model as columns with an arrow wherever one
+// item leads to another. It follows the table of the same logic model, which it
+// does not replace.
+func (d *deck) layeredLogicModel(v *report.View) {
+	g := logicmodel.Build(v)
+	if len(g.Stages) < 2 {
+		return
+	}
+	text, err := g.Mermaid()
+	if err != nil {
+		// A graph built from a view only holds flowchart content, so this is a
+		// fault in the generator and cannot be passed to the room as a slide.
+		panic(fmt.Sprintf("slides: layered logic model: %v", err))
+	}
+	d.diagram("Logic model, step by step: "+report.PathwayTitle(v), text,
+		"Follow one input to the change it is for. Is each arrow a thing that really leads to the next? Where does an arrow have no reason behind it?")
 }
 
 func (d *deck) logicModel(v *report.View) {
