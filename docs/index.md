@@ -28,12 +28,6 @@ flowchart LR
   im -.-> v2["V2MOM (planned)"]:::planned
 ```
 
-> **Status:** the latest release is v0.3.0, the first as `impact-model`; see the
-> [release notes](releases/v0.3.0.md). It renames the module, the command,
-> the document `kind`, and the schema names, so a document written for v0.2.0
-> needs `kind: ImpactModel` and a few renamed fields. See
-> [the decision](design/adrs/0001-rename-to-impact-model.md).
-
 ## What is an impact model?
 
 An impact model is one structured description of **how and why change is
