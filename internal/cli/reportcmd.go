@@ -49,6 +49,27 @@ func renderError(path string, err error) error {
 	return &ExitError{Code: ExitUsageErr, Err: err}
 }
 
+// renderJSON loads a document, produces a JSON document with fn, and writes
+// it to --out or standard output, without a stamp.
+func renderJSON(e *env, cmd *cobra.Command, path string, fn func(*impact.Model) (string, error)) error {
+	doc, err := loadForRender(path)
+	if err != nil {
+		return err
+	}
+	text, err := fn(doc)
+	if err != nil {
+		return renderError(path, err)
+	}
+	if out := flagString(cmd, "out"); out != "" {
+		if err := impactio.WriteFile(out, []byte(text)); err != nil {
+			return &ExitError{Code: ExitUsageErr, Err: err}
+		}
+		return nil
+	}
+	fmt.Fprint(e.out, text)
+	return nil
+}
+
 // render loads a document, produces text with fn, stamps it (Markdown gets a
 // metadata block, CSV a leading comment row) unless --no-stamp is set, and
 // writes it to --out or standard output.
@@ -117,9 +138,14 @@ actors, and custom also work with no observations.`,
 				}
 				kind = "logic-model-diagram"
 			}
-			return render(e, cmd, args[1], false, func(doc *impact.Model) (string, error) {
+			fn := func(doc *impact.Model) (string, error) {
 				return service.DefinitionReport(doc, kind, flagString(cmd, "pathway"))
-			})
+			}
+			if strings.HasSuffix(kind, "-json") {
+				// A JSON document cannot carry the Markdown stamp.
+				return renderJSON(e, cmd, args[1], fn)
+			}
+			return render(e, cmd, args[1], false, fn)
 		},
 	}
 	f := cmd.Flags()
