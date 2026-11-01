@@ -16,7 +16,7 @@
         <link rel="prev" href="../measurement/">
       
       
-        <link rel="next" href="../review-round-trip/">
+        <link rel="next" href="../v2mom/">
       
       
         
@@ -639,6 +639,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v2mom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2MOM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1820,11 +1848,13 @@ can tell that a PDF, a Word file, and a spreadsheet came from the same version.
 <h2 id="prism-exports">PRISM exports<a class="headerlink" href="#prism-exports" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>okr<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-o<span class="w"> </span>okr.json
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>journey<span class="w"> </span>impact-model.yaml<span class="w"> </span>-o<span class="w"> </span>journeys.json
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>v2mom<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-o<span class="w"> </span>v2mom.json
 </code></pre></div>
 <p><code>export okr</code> turns each owned outcome that has measured indicators into an
 objective, with each indicator as a key result carrying baseline, target,
 current value, score, status, and confidence. <code>export journey</code> writes outcome
-journeys. Both are JSON for the PRISM tools.</p>
+journeys. <code>export v2mom</code> writes a V2MOM with one method per pathway; the
+<a href="../v2mom/">V2MOM guide</a> maps each part. All three are JSON for the PRISM tools.</p>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
 <p><a href="../review-round-trip/">Review round trip</a></p>
 <h2 id="the-layered-logic-model-diagram">The layered logic model diagram<a class="headerlink" href="#the-layered-logic-model-diagram" title="Permanent link">&para;</a></h2>

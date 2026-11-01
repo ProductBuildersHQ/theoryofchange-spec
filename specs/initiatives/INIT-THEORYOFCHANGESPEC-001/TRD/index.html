@@ -488,6 +488,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../guides/v2mom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2MOM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../guides/review-round-trip/" class="md-nav__link">
         
   
@@ -2622,7 +2650,7 @@ no persistence, no statistical inference).</p>
 </tr>
 <tr>
 <td>TRD-014</td>
-<td><code>pkg/prismx</code> MUST export OKR documents and outcome journeys; no package under <code>pkg/impact</code>, <code>pkg/graph</code>, <code>pkg/validate</code>, <code>pkg/lint</code>, <code>pkg/measure</code> MAY import <code>prism-roadmap</code></td>
+<td><code>pkg/prismx</code> MUST export OKR documents, outcome journeys, and V2MOM documents (one method per pathway; refused without a vision, values, or a pathway); no package under <code>pkg/impact</code>, <code>pkg/graph</code>, <code>pkg/validate</code>, <code>pkg/lint</code>, <code>pkg/measure</code> MAY import <code>prism-roadmap</code></td>
 <td>PRD-FR-603</td>
 <td><code>go list -deps</code> import-boundary test</td>
 </tr>
@@ -2917,7 +2945,7 @@ no persistence, no statistical inference).</p>
 <tr>
 <td><code>pkg/prismx</code></td>
 <td>PRISM adapters</td>
-<td><code>ToOKR</code>, <code>ToOutcomeJourneys</code>; prism-roadmap import is confined here.</td>
+<td><code>ToOKR</code>, <code>ToOutcomeJourneys</code>, <code>ToV2MOM</code>; prism-roadmap import is confined here.</td>
 </tr>
 <tr>
 <td><code>pkg/service</code></td>
@@ -3101,7 +3129,7 @@ no persistence, no statistical inference).</p>
 <td>0; 2</td>
 </tr>
 <tr>
-<td><code>impact-model export okr\|journey &lt;toc&gt; [-O obs...]</code></td>
+<td><code>impact-model export okr\|journey\|v2mom &lt;model&gt; [-O obs...]</code></td>
 <td>PRISM exports</td>
 <td>0; 2</td>
 </tr>
@@ -3242,6 +3270,7 @@ no persistence, no statistical inference).</p>
 <a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="c1">// pkg/prismx</span>
 <a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToOKR</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Document</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">okr</span><span class="p">.</span><span class="nx">OKRDocument</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 <a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToOutcomeJourneys</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Document</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="nx">journey</span><span class="p">.</span><span class="nx">OutcomeJourney</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToV2MOM</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Model</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">v2mom</span><span class="p">.</span><span class="nx">V2MOM</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="c1">// wraps ErrNotV2MOMReady</span>
 </code></pre></div>
 <p>Errors: functions return wrapped sentinel errors —
 <code>ErrInvalidDocument</code>, <code>ErrUnknownReference</code>, <code>ErrCycle</code> (only from APIs that
@@ -4146,8 +4175,8 @@ unless marked required.</p>
 </tr>
 <tr>
 <td><code>Context</code></td>
-<td><code>problemStatement</code> (req), <code>rootCauses[]</code>, <code>targetPopulation</code>, <code>market?</code> (ExternalRef), <code>geography?</code>, <code>timeHorizon {start,end}</code> (optional, keeping the minimal document small; date-range lint rules apply only when set), <code>narrative</code></td>
-<td>Problem analysis / problem tree inputs.</td>
+<td><code>problemStatement</code> (req), <code>rootCauses[]</code>, <code>targetPopulation</code>, <code>market?</code> (ExternalRef), <code>geography?</code>, <code>timeHorizon {start,end}</code> (optional, keeping the minimal document small; date-range lint rules apply only when set), <code>mission</code>, <code>vision</code>, <code>values[] {name (req), description}</code> (ordered, most important first; a value needs a name and names are unique: VAL-DOC-006, VAL-DOC-007), <code>narrative</code></td>
+<td>Problem analysis / problem tree inputs. Mission, vision, and values frame the model and are not outcomes; the V2MOM export needs the vision and at least one value.</td>
 </tr>
 <tr>
 <td><code>Ceiling</code></td>

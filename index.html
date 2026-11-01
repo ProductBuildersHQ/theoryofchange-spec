@@ -638,6 +638,34 @@
   
   
     <li class="md-nav__item">
+      <a href="guides/v2mom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V2MOM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="guides/review-round-trip/" class="md-nav__link">
         
   
@@ -1596,14 +1624,17 @@
 <h1 id="impact-model">Impact Model<a class="headerlink" href="#impact-model" title="Permanent link">&para;</a></h1>
 <p><strong>Impact Model</strong> is an AI-native format from
 <a href="https://github.com/ProductBuildersHQ">ProductBuildersHQ</a> for describing how a
-program, product, or organization expects to bring about change: what it does,
-why that should work, and how it will know. It is a Go-first data model with
+program, product, or organization expects to bring about change. It is a
+<a href="https://en.wikipedia.org/wiki/Causal_model">causal model</a>: it states which
+interventions should change which outcomes, why each step should lead to the
+next, and how to measure whether it did. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the <code>impact-model</code> CLI, and an MCP server.</p>
 <p>You describe the change once, in one impact model. The
 <a href="https://en.wikipedia.org/wiki/Theory_of_change">theory of change</a>, the logic
-model, the outcome map, the logframe, and strategy formats such as OKRs and V2MOM
-are <strong>projections</strong> of it. Each draws the same model for a different reader and
-leaves something out, and none of them is a part of another.</p>
+model, the outcome map, the logframe, strategy formats such as OKRs and V2MOM,
+and improvement formats such as DMAIC are <strong>projections</strong> of it. Each draws the
+same model for a different reader and leaves something out, and none of them is
+a part of another.</p>
 <pre class="mermaid"><code>flowchart LR
   classDef model fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
   classDef method fill:#eef7ee,stroke:#2e7d32,color:#111
@@ -1616,7 +1647,8 @@ leaves something out, and none of them is a part of another.</p>
   im --&gt; om["Outcome map"]:::method
   im --&gt; lf["Logframe"]:::method
   im --&gt; okr["OKRs"]:::strategy
-  im -.-&gt; v2["V2MOM (planned)"]:::planned</code></pre>
+  im --&gt; v2["V2MOM"]:::strategy
+  im -.-&gt; dm["DMAIC (planned)"]:::planned</code></pre>
 <h2 id="what-is-an-impact-model">What is an impact model?<a class="headerlink" href="#what-is-an-impact-model" title="Permanent link">&para;</a></h2>
 <p>An impact model is one structured description of <strong>how and why change is
 expected to happen</strong>. It holds:</p>
@@ -1677,8 +1709,13 @@ projection, and one model can produce many.</p>
 <td><code>export okr</code>, <code>export journey</code></td>
 </tr>
 <tr>
-<td><strong>V2MOM</strong> <em>(planned)</em></td>
-<td>What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision, values, methods, obstacles, and measures, drawn from the model's vision, values, interventions, assumptions and risks, and indicators</td>
+<td><strong>V2MOM</strong></td>
+<td>What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision and values from the context, one method per pathway with its interventions as projects, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions. See <a href="guides/v2mom/">the mapping</a></td>
+<td><code>export v2mom</code></td>
+</tr>
+<tr>
+<td><strong>DMAIC</strong> <em>(planned)</em></td>
+<td>Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them</td>
 <td>—</td>
 </tr>
 </tbody>
@@ -1909,6 +1946,10 @@ whether it did.</p>
 <tr>
 <td>Produce reports and decks</td>
 <td><a href="guides/reports-and-decks/">Reports and decks</a></td>
+</tr>
+<tr>
+<td>Export a V2MOM, and see how it maps</td>
+<td><a href="guides/v2mom/">V2MOM</a></td>
 </tr>
 <tr>
 <td>Send an impact model out for review</td>
