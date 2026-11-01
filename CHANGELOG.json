@@ -263,7 +263,10 @@
     ],
     "build": [
       {
-        "description": "`github.com/grokify/structured-goals` is no longer a dependency; third-party notices drop it and the modules only it needed"
+        "description": "`github.com/grokify/structured-goals` is no longer a dependency, and the third-party notices drop it"
+      },
+      {
+        "description": "Bumped `github.com/grokify/prism-roadmap` from v0.21.0 to v0.22.0 and `github.com/grokify/prism-core` from v0.5.0 to v0.6.0"
       }
     ]
   }
