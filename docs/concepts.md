@@ -11,6 +11,7 @@ projections of it, drawn by the `report` command:
 
 | Method | Projection shows | Report kinds |
 |--------|------|--------------|
+| Problem tree | The core problem, its causes (roots) below and its effects (branches) above, with the outcomes that address each | `problem-tree`, `problem-tree-d2`, `problem-tree-json` |
 | Theory of change | Pathways of change, with the reasons and assumptions behind each link | `pathway` |
 | Logic model | Inputs, activities, outputs, and outcomes by level, for each pathway | `logic-model`, `logic-model-layered`, `logic-model-d2` |
 | Outcome map | Outcomes by level, with who is responsible for each | `outcome-map` |
@@ -38,7 +39,8 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Ceiling of accountability (ActKnowledge) | `Model.Ceiling` | 004 |
 | Revision / adaptive management, quality review (plausible, feasible, testable) | `Model.Revisions[]` (`Revision`, `QualityReview`) | 004 |
 | Decisions requested | `Model.Decisions[]` | 004 |
-| Problem tree: immediate / underlying / structural causes (UNDG) | `Model.Causes[]` (`Cause`) | 044 |
+| Problem tree: immediate / underlying / structural causes (UNDG), each contributing to others | `Model.Causes[]` (`Cause`, `Parents`) | 044, IMPACTMODEL-009 |
+| Problem tree: effects of the core problem (branches) | `Model.Effects[]` (`Effect`); `Outcome.AddressesEffects` | IMPACTMODEL-009 |
 | Target groups (UNDG equity) | `Model.TargetGroups[]` | 044 |
 | Validation and consultation trail (UNDG) | `Model.Consultations[]` (`Consultation`) | 052 |
 | Glossary (shared vocabulary) | `Model.Glossary[]` (`GlossaryTerm`) | 033 |
@@ -132,6 +134,9 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Long-term outcome | The goal the initiative holds itself accountable for |
 | Outcome | A condition that must exist for the theory to work and does not yet exist, phrased as a state, not an activity |
 | Output | A direct product of an intervention, within the organization's control |
+| Core problem | The problem the impact model responds to, `context.problemStatement`; the middle of the problem tree |
+| Cause | A condition that leads to the core problem, directly or through other causes; a root of the problem tree |
+| Effect | A consequence of the core problem, directly or through other effects; a branch of the problem tree |
 | Precondition | An outcome that must hold for a higher outcome; incoming links to an outcome are its preconditions |
 | Precondition group | An explicit AND / OR / k-of-n combination of preconditions |
 | Causal link | A directed claim that one outcome (or intervention) contributes to another, with a rationale |

@@ -23,6 +23,7 @@ const (
 	ElementTerm           ElementKind = "term"
 	ElementCriterion      ElementKind = "criterion"
 	ElementCause          ElementKind = "cause"
+	ElementEffect         ElementKind = "effect"
 	ElementTargetGroup    ElementKind = "targetGroup"
 	ElementAudience       ElementKind = "audience"
 	ElementTheme          ElementKind = "theme"
@@ -67,6 +68,7 @@ func (d *Model) Elements() []ElementRef {
 	add(ElementMetric, "metrics", idsOf(d.Metrics, func(v Metric) string { return v.ID }))
 	add(ElementTerm, "glossary", idsOf(d.Glossary, func(v GlossaryTerm) string { return v.ID }))
 	add(ElementCause, "causes", idsOf(d.Causes, func(v Cause) string { return v.ID }))
+	add(ElementEffect, "effects", idsOf(d.Effects, func(v Effect) string { return v.ID }))
 	add(ElementTargetGroup, "targetGroups", idsOf(d.TargetGroups, func(v TargetGroup) string { return v.ID }))
 	add(ElementAudience, "audiences", idsOf(d.Audiences, func(v Audience) string { return v.ID }))
 	add(ElementTheme, "themes", idsOf(d.Themes, func(v Theme) string { return v.ID }))
@@ -201,8 +203,13 @@ func AllElementKinds() []ElementKind {
 	return []ElementKind{
 		ElementOutcome, ElementGroup, ElementLink, ElementIntervention, ElementAssumption,
 		ElementIndicator, ElementActor, ElementEvidence, ElementExternalFactor, ElementRisk,
-		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementCause, ElementTargetGroup, ElementAudience, ElementTheme, ElementCriterion, ElementConsultation,
+		ElementDecision, ElementPathway, ElementMetric, ElementTerm, ElementCause, ElementEffect, ElementTargetGroup, ElementAudience, ElementTheme, ElementCriterion, ElementConsultation,
 	}
+}
+
+// Effect returns the effect with the given ID.
+func (d *Model) Effect(id string) (*Effect, bool) {
+	return find(d.Effects, id, func(v Effect) string { return v.ID })
 }
 
 // Cause returns the cause with the given ID.

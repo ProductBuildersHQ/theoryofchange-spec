@@ -26,6 +26,7 @@
             "metric",
             "term",
             "cause",
+            "effect",
             "targetGroup",
             "audience",
             "theme",

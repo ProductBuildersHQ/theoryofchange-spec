@@ -295,6 +295,7 @@ func (c *checker) outcomes() {
 		enum(c, p+"/responsibility", o.ID, o.Responsibility)
 		c.actorRefs(p+"/deliveredBy", o.ID, o.DeliveredBy)
 		c.refs(p+"/addressesCauses", o.ID, o.AddressesCauses, impact.ElementCause)
+		c.refs(p+"/addressesEffects", o.ID, o.AddressesEffects, impact.ElementEffect)
 		c.refs(p+"/targetGroupIds", o.ID, o.TargetGroupIDs, impact.ElementTargetGroup)
 		if o.Priority != nil {
 			c.scores(p+"/priority/scores", o.ID, o.Priority.Scores, impact.SubjectOutcome)
@@ -932,28 +933,72 @@ func (c *checker) causesAndGroups() {
 		if cause.OutOfScope != nil && strings.TrimSpace(cause.OutOfScope.Reason) == "" {
 			c.errorf("VAL-CAU-005", p+"/outOfScope/reason", cause.ID, "a cause set aside needs a reason")
 		}
-		c.ref(p+"/parent", cause.ID, cause.Parent, impact.ElementCause)
-		if cause.Parent == cause.ID && cause.ID != "" {
-			c.errorf("VAL-CAU-003", p+"/parent", cause.ID, "a cause cannot be its own parent")
-		} else if c.causeCycle(cause.ID) {
-			c.errorf("VAL-CAU-004", p+"/parent", cause.ID, "the parent chain of cause %q loops back on itself", cause.ID)
+		c.refs(p+"/parents", cause.ID, cause.Parents, impact.ElementCause)
+		c.prov("causes", i, cause.ID, cause.Provenance)
+		switch {
+		case slices.Contains(cause.Parents, cause.ID) && cause.ID != "":
+			c.errorf("VAL-CAU-003", p+"/parents", cause.ID, "a cause cannot be its own parent")
+		case reachesItself(cause.ID, causeParents(c.doc)):
+			c.errorf("VAL-CAU-004", p+"/parents", cause.ID, "the parents of cause %q lead back to it", cause.ID)
+		}
+	}
+	for i, e := range c.doc.Effects {
+		p := "/effects/" + strconv.Itoa(i)
+		if strings.TrimSpace(e.Statement) == "" {
+			c.errorf("VAL-EFF-001", p+"/statement", e.ID, "effect has no statement")
+		}
+		c.refs(p+"/parents", e.ID, e.Parents, impact.ElementEffect)
+		c.refs(p+"/affectedGroupIds", e.ID, e.AffectedGroupIDs, impact.ElementTargetGroup)
+		c.refs(p+"/evidenceIds", e.ID, e.EvidenceIDs, impact.ElementEvidence)
+		if e.OutOfScope != nil && strings.TrimSpace(e.OutOfScope.Reason) == "" {
+			c.errorf("VAL-EFF-004", p+"/outOfScope/reason", e.ID, "an effect set aside needs a reason")
+		}
+		c.prov("effects", i, e.ID, e.Provenance)
+		switch {
+		case slices.Contains(e.Parents, e.ID) && e.ID != "":
+			c.errorf("VAL-EFF-002", p+"/parents", e.ID, "an effect cannot be its own parent")
+		case reachesItself(e.ID, effectParents(c.doc)):
+			c.errorf("VAL-EFF-003", p+"/parents", e.ID, "the parents of effect %q lead back to it", e.ID)
 		}
 	}
 }
 
-// causeCycle reports whether following parents from id returns to id.
-func (c *checker) causeCycle(id string) bool {
-	seen := map[string]bool{id: true}
-	cur, ok := c.doc.Cause(id)
-	for ok && cur.Parent != "" {
-		if cur.Parent == id {
-			return cur.Parent != cur.ID
-		}
-		if seen[cur.Parent] {
-			return false
-		}
-		seen[cur.Parent] = true
-		cur, ok = c.doc.Cause(cur.Parent)
+func causeParents(d *impact.Model) map[string][]string {
+	out := map[string][]string{}
+	for _, c := range d.Causes {
+		out[c.ID] = c.Parents
 	}
-	return false
+	return out
+}
+
+func effectParents(d *impact.Model) map[string][]string {
+	out := map[string][]string{}
+	for _, e := range d.Effects {
+		out[e.ID] = e.Parents
+	}
+	return out
+}
+
+// reachesItself reports whether following parents from id, through any
+// branch, returns to id. A node that is its own parent is reported
+// separately, so a direct self-reference does not count here.
+func reachesItself(id string, parents map[string][]string) bool {
+	seen := map[string]bool{}
+	var walk func(cur string) bool
+	walk = func(cur string) bool {
+		for _, p := range parents[cur] {
+			if p == id && cur != id {
+				return true
+			}
+			if p == cur || seen[p] {
+				continue
+			}
+			seen[p] = true
+			if walk(p) {
+				return true
+			}
+		}
+		return false
+	}
+	return walk(id)
 }

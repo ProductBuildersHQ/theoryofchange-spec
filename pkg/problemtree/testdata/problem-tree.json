@@ -1,0 +1,233 @@
+{
+  "direction": "up",
+  "gridColumns": 1,
+  "verticalGap": 70,
+  "classes": {
+    "cause": {
+      "fill": "#f3e6d8",
+      "stroke": "#8d5a2b",
+      "borderRadius": 12
+    },
+    "effect": {
+      "fill": "#e4f3e5",
+      "stroke": "#2e7d32",
+      "borderRadius": 12
+    },
+    "problem": {
+      "fill": "#ffe0b2",
+      "stroke": "#e08a1e",
+      "borderRadius": 12,
+      "fontSize": 20,
+      "bold": true
+    },
+    "row": {
+      "fill": "transparent",
+      "strokeWidth": 0
+    },
+    "set_aside": {
+      "fill": "#f3f3f3",
+      "stroke": "#9e9e9e",
+      "borderRadius": 12,
+      "opacity": 0.7
+    },
+    "zone": {
+      "fill": "transparent",
+      "strokeWidth": 0,
+      "fontSize": 20,
+      "bold": true
+    }
+  },
+  "containers": [
+    {
+      "id": "effects",
+      "label": "Effects (branches)",
+      "gridColumns": 1,
+      "verticalGap": 70,
+      "class": "zone",
+      "containers": [
+        {
+          "id": "r2",
+          "gridRows": 1,
+          "horizontalGap": 30,
+          "class": "row",
+          "nodes": [
+            {
+              "id": "eff-malnutrition",
+              "label": "Malnutrition and low energy",
+              "class": "effect"
+            },
+            {
+              "id": "eff-costs",
+              "label": "Higher health costs",
+              "class": "effect"
+            },
+            {
+              "id": "eff-dental",
+              "label": "Increased dental care",
+              "class": "effect"
+            }
+          ]
+        },
+        {
+          "id": "r1",
+          "gridRows": 1,
+          "horizontalGap": 30,
+          "class": "row",
+          "nodes": [
+            {
+              "id": "eff-weight",
+              "label": "Overweight or underweight",
+              "class": "effect"
+            },
+            {
+              "id": "eff-diabetes",
+              "label": "Diabetes and heart disease",
+              "class": "effect"
+            },
+            {
+              "id": "eff-decay",
+              "label": "Tooth decay",
+              "class": "effect"
+            },
+            {
+              "id": "eff-mental",
+              "label": "Depression, anxiety, and eating disorders",
+              "class": "effect"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "label": "Core problem",
+      "gridColumns": 1,
+      "verticalGap": 70,
+      "class": "zone",
+      "containers": [
+        {
+          "id": "r0",
+          "gridRows": 1,
+          "horizontalGap": 30,
+          "class": "row",
+          "nodes": [
+            {
+              "id": "problem",
+              "label": "Poor eating health",
+              "class": "problem"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "causes",
+      "label": "Causes (roots)",
+      "gridColumns": 1,
+      "verticalGap": 70,
+      "class": "zone",
+      "containers": [
+        {
+          "id": "r_1",
+          "gridRows": 1,
+          "horizontalGap": 30,
+          "class": "row",
+          "nodes": [
+            {
+              "id": "cause-stress",
+              "label": "Stress",
+              "class": "cause"
+            },
+            {
+              "id": "cause-busy",
+              "label": "Too busy",
+              "class": "cause"
+            },
+            {
+              "id": "cause-poverty",
+              "label": "Poverty (set aside)",
+              "class": "set_aside"
+            },
+            {
+              "id": "cause-water",
+              "label": "Low water intake",
+              "class": "cause"
+            }
+          ]
+        },
+        {
+          "id": "r_2",
+          "gridRows": 1,
+          "horizontalGap": 30,
+          "class": "row",
+          "nodes": [
+            {
+              "id": "cause-fastfood",
+              "label": "Availability of fast food",
+              "class": "cause"
+            },
+            {
+              "id": "cause-alcohol",
+              "label": "High alcohol intake",
+              "class": "cause"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "causes.r_1.cause-stress",
+      "to": "core.r0.problem"
+    },
+    {
+      "from": "causes.r_1.cause-busy",
+      "to": "core.r0.problem"
+    },
+    {
+      "from": "causes.r_2.cause-fastfood",
+      "to": "causes.r_1.cause-busy"
+    },
+    {
+      "from": "causes.r_1.cause-poverty",
+      "to": "core.r0.problem"
+    },
+    {
+      "from": "causes.r_1.cause-water",
+      "to": "core.r0.problem"
+    },
+    {
+      "from": "causes.r_2.cause-alcohol",
+      "to": "causes.r_1.cause-water"
+    },
+    {
+      "from": "core.r0.problem",
+      "to": "effects.r1.eff-weight"
+    },
+    {
+      "from": "effects.r1.eff-weight",
+      "to": "effects.r2.eff-malnutrition"
+    },
+    {
+      "from": "core.r0.problem",
+      "to": "effects.r1.eff-diabetes"
+    },
+    {
+      "from": "effects.r1.eff-diabetes",
+      "to": "effects.r2.eff-costs"
+    },
+    {
+      "from": "core.r0.problem",
+      "to": "effects.r1.eff-decay"
+    },
+    {
+      "from": "effects.r1.eff-decay",
+      "to": "effects.r2.eff-dental"
+    },
+    {
+      "from": "core.r0.problem",
+      "to": "effects.r1.eff-mental"
+    }
+  ]
+}

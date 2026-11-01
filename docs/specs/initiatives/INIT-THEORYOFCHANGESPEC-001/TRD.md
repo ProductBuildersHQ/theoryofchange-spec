@@ -76,7 +76,7 @@ no persistence, no statistical inference).
 | TRD-022 | `pkg/report` MUST render the definition reports with no observations and the story, learning-review, and portfolio reports in §6.6 | PRD-FR-505…508 | Golden-file tests |
 | TRD-023 | Story quotes MUST be rendered only when `consent` is `granted` and sensitivity is renderable | PRD-FR-506 | Restricted / no-consent absence tests |
 | TRD-024 | `skills/` MUST contain the agent skills in §6.11; each skill's command sequence MUST be executable by a smoke test | PRD-FR-605 | Skill smoke test runs commands twice and compares outputs |
-| TRD-025 | `pkg/impact` MUST define `Cause`, `Consultation`, `TargetGroup`, outcome `responsibility` / `deliveredBy` / `addressesCauses`, `priority` scores, and the assumption and risk fields in §7.1 | PRD-FR-105, 108, 119…123 | Round-trip tests; schema lint |
+| TRD-025 | `pkg/impact` MUST define `Cause`, `Effect`, `Consultation`, `TargetGroup`, outcome `responsibility` / `deliveredBy` / `addressesCauses` / `addressesEffects`, `priority` scores, and the assumption and risk fields in §7.1 | PRD-FR-105, 108, 119…123, 126 | Round-trip tests; schema lint |
 | TRD-026 | Measurement MUST monitor every outcome regardless of responsibility, and reports MUST separate accountable (`own`, `shared`) from monitored-only (`partner`, `unaddressed`) outcomes | PRD-FR-120 | Status and report tests over mixed-responsibility fixture |
 | TRD-027 | `pkg/report` MUST render the `narrative` and `actors` reports in §6.6 | PRD-FR-510, 511 | Golden files |
 | TRD-028 | `spec/` MUST ship the core rubric plus a `development` rubric profile covering the UNDG checklist split in research §9.6 | PRD-FR-601 | Both parse and `Validate()`; checklist-coverage test maps every checklist item to a criterion ID |
@@ -94,6 +94,7 @@ no persistence, no statistical inference).
 | TRD-040 | `pkg/review` MUST validate `ReviewResponse` and produce a proposed patch plus `Consultation` without modifying the document (§6.15) | PRD-FR-904, 905 | Import tests incl. stale hash |
 | TRD-041 | `impact-model approve` per §6.15 is the only writer of status `approved` | PRD-FR-707, US-21 | Approval tests; grep test |
 | TRD-042 | `skills/toc-share-google` per §6.11, with manual fallback | PRD-FR-607 | Skill smoke test with recorded tool outputs |
+| TRD-043 | `pkg/problemtree` MUST build the problem tree as layered nodes and edges, export it as a d2vision diagram spec (JSON), and render D2 and Mermaid from that spec; the `problem-tree`, `problem-tree-d2`, and `problem-tree-json` reports per §6.6 | PRD-FR-514 | Golden diagram tests on the examples; layering and cycle tests |
 
 ## 3. System Invariants
 
@@ -374,6 +375,7 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | IMP-AUD-001 | info | Every audience is targeted by ≥ 1 selected indicator or story theme |
 | IMP-CAU-001 | warning | Every `underlying` and `structural` cause is addressed by ≥ 1 outcome or marked `outOfScope` with a reason |
 | IMP-CAU-002 | info | When causes are declared, outcomes address ≥ 1 non-`immediate` cause (root causes, not only immediate ones) |
+| IMP-CAU-003 | warning | A cause contributes only to causes at its own level or nearer the problem (`structural` → `underlying` → `immediate`); a parent at a deeper level usually means the link was written backwards |
 | IMP-RSP-001 | warning | Outcomes with responsibility `partner` or `shared` name ≥ 1 delivering actor; `shared` names ≥ 2 |
 | IMP-RSP-002 | info | `partner` and `unaddressed` outcomes on a path to impact still have ≥ 1 indicator (monitor the whole solution tree) |
 | IMP-ASM-004 | warning | Assumptions with `needsTesting: true` have a `test` and either a monitoring indicator or a linked decision / evaluation question |
@@ -388,6 +390,8 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | IMP-DMA-001 | warning | An indicator of a pathway marked `projections: [dmaic]` declares a `frequency` and a data source (`dataSource` or `collection.system`) |
 | IMP-DMA-002 | warning | An indicator of a DMAIC pathway is measured ≥ 20 times a year, so control limits can be set within about a year |
 | IMP-DMA-003 | warning | A survey indicator of a DMAIC pathway gets ≥ 30 responses per measurement (`collection.respondentsPerYear` × `sampleRate` ÷ measurements per year), and states `respondentsPerYear` |
+| IMP-EFF-001 | warning | Every effect is relieved by ≥ 1 outcome (`addressesEffects`) or marked `outOfScope` with a reason |
+| IMP-EFF-002 | info | Outcomes that relieve effects include ≥ 1 at `long_term` or `impact` level (effects are what the program ultimately reduces; causes are what it works on) |
 
 Rule IDs are permanent. Retired rules keep their ID reserved.
 
@@ -507,7 +511,17 @@ Definition reports (no observations required):
 | `metric-selection` | Candidate indicators × selection criteria with weighted score, status, rationale; sorted by score |
 | `collection-plan` | Selected indicators: definition, source system, mode, owner, frequency, minutes per period, questions per respondent; totals vs budget |
 | `glossary` | Glossary terms and theme codebook |
+| `problem-tree` | Markdown: the problem tree as a Mermaid `flowchart BT` (causes in rows below the core problem, effects in rows above, arrows upward), then a table of causes and one of effects, each with its level or parents and the outcomes that address it or why it is set aside |
+| `problem-tree-d2` | The same diagram in D2, whose grid keeps each row in place |
+| `problem-tree-json` | The diagram document itself: the d2vision diagram spec (nodes with row, edges) that `problem-tree` and `problem-tree-d2` are rendered from |
 | `definitions` | All definition reports in one document (the workshop pack) |
+
+Problem tree layering: the core problem is row 0. A cause with no parents is in
+row −1; any other cause is one row below its lowest parent (`row = min(parent
+rows) − 1`), so every arrow from a cause points up. Effects mirror this upward:
+an effect with no parents is in row +1, any other is one row above its highest
+parent. Rejected causes and effects are left out. Within a row, nodes keep file
+order.
 
 `report.View` is a documented, versioned struct (`ViewVersion = "1"`);
 changing field names is a breaking change.
@@ -795,8 +809,9 @@ type Document struct {
 | `Perspective` | `actorId`, `role` (`proponent`, `funder`, `implementer`, `observer`), `futureRef?` | Whose theory this is. USM uses the actor; UFM uses `futureRef` to group a ToC under a competing future. |
 | `Context` | `problemStatement` (req), `rootCauses[]`, `targetPopulation`, `market?` (ExternalRef), `geography?`, `timeHorizon {start,end}` (optional, keeping the minimal document small; date-range lint rules apply only when set), `mission`, `vision`, `values[] {name (req), description}` (ordered, most important first; a value needs a name and names are unique: VAL-DOC-006, VAL-DOC-007), `narrative` | Problem analysis / problem tree inputs. Mission, vision, and values frame the model and are not outcomes; the V2MOM export needs the vision and at least one value. |
 | `Ceiling` | `level` (outcome level) or `outcomeIds[]`, `rationale` | Ceiling of accountability; outcomes above it are tracked but not owned. |
-| `Outcome` | `id`, `title` (req; a positive condition, not an activity), `description`, `level` (req: `impact`, `long_term`, `medium_term`, `short_term`, `output`), `sphere` (`control`, `influence`, `interest`), `logic` {`type`: `all`/`any`/`at_least`, `k`} over ungrouped incoming links (default `all`), `category` (open string; recommended vocabularies: ORS `impact`/`influence`/`leverage`/`capacity`, COM-B `reach`/`capability`/`opportunity`/`motivation`/`behavior`/`direct_benefit`/`wellbeing`, MSD AAER `adopt`/`adapt`/`expand`/`respond`), `changeType` (`knowledge`, `attitude`, `skill`, `behavior`, `practice`, `policy`, `norm`, `condition`, `investment`, `adoption`), `population`, `actorIds[]` (who changes / co-owners — supports collective outcomes), `contributesTo[]` (outcomes in a parent theory, as `model:<doc>#<outcome>` references; resolved by `validate --parent` / `validate.Family`), `responsibility` (`own` default, `shared`, `partner`, `unaddressed`), `deliveredBy[]` (actor IDs), `addressesCauses[]` (cause IDs), `targetGroupIds[]`, `priority?` {`scores[]` {criterionId, score 1–5, note}, `rationale`}, `tags[]` | Graph node. Indicators reference outcomes, not vice versa. `partner` / `unaddressed` outcomes stay in the graph and are monitored (UNDG: monitor the whole solution tree) but are excluded from accountability counts. |
-| `Cause` | `id`, `statement` (req), `level` (req: `immediate`, `underlying`, `structural`), `parent?` (cause ID it contributes to), `affectedGroupIds[]`, `evidenceIds[]`, `outOfScope?` {reason} | Problem tree; outcomes map to causes via `addressesCauses`. |
+| `Outcome` | `id`, `title` (req; a positive condition, not an activity), `description`, `level` (req: `impact`, `long_term`, `medium_term`, `short_term`, `output`), `sphere` (`control`, `influence`, `interest`), `logic` {`type`: `all`/`any`/`at_least`, `k`} over ungrouped incoming links (default `all`), `category` (open string; recommended vocabularies: ORS `impact`/`influence`/`leverage`/`capacity`, COM-B `reach`/`capability`/`opportunity`/`motivation`/`behavior`/`direct_benefit`/`wellbeing`, MSD AAER `adopt`/`adapt`/`expand`/`respond`), `changeType` (`knowledge`, `attitude`, `skill`, `behavior`, `practice`, `policy`, `norm`, `condition`, `investment`, `adoption`), `population`, `actorIds[]` (who changes / co-owners — supports collective outcomes), `contributesTo[]` (outcomes in a parent theory, as `model:<doc>#<outcome>` references; resolved by `validate --parent` / `validate.Family`), `responsibility` (`own` default, `shared`, `partner`, `unaddressed`), `deliveredBy[]` (actor IDs), `addressesCauses[]` (cause IDs), `addressesEffects[]` (effect IDs), `targetGroupIds[]`, `priority?` {`scores[]` {criterionId, score 1–5, note}, `rationale`}, `tags[]` | Graph node. Indicators reference outcomes, not vice versa. `partner` / `unaddressed` outcomes stay in the graph and are monitored (UNDG: monitor the whole solution tree) but are excluded from accountability counts. |
+| `Cause` | `id`, `statement` (req), `level` (req: `immediate`, `underlying`, `structural`), `parents[]` (cause IDs it contributes to; empty for a direct cause of the core problem), `affectedGroupIds[]`, `evidenceIds[]`, `outOfScope?` {reason}, `provenance?` | Problem tree roots; outcomes map to causes via `addressesCauses`. Causes form a network; validation rejects a cause among its own parents (VAL-CAU-003) and a parent chain that loops (VAL-CAU-004). |
+| `Effect` | `id`, `statement` (req), `parents[]` (effect IDs it follows from; empty for a direct effect of the core problem), `affectedGroupIds[]`, `evidenceIds[]`, `outOfScope?` {reason}, `provenance?` | Problem tree branches; outcomes map to effects via `addressesEffects`. Validation: a statement (VAL-EFF-001), no effect among its own parents (VAL-EFF-002), no looping parent chain (VAL-EFF-003), a reason when set aside (VAL-EFF-004). The core problem is `context.problemStatement`. |
 | `TargetGroup` | `id`, `name` (req), `description`, `size?`, `actorIds[]` | Priority population (e.g. under-resourced member organizations, residents of low-access areas). |
 | `Consultation` | `id`, `date` (req), `step` (req: `focus`, `change_analysis`, `assumptions_risks`, `actors`, `measurement`, `whole`), `method` (`workshop`, `interview`, `survey`, `document_review`, `evidence_review`, `meeting`), `stakeholderGroups[]` (groups or actor IDs, never personal names required), `count?`, `findings[]`, `changedIds[]` | Validation trail per UNDG principle (a) and the validate-each-step loop. |
 | `PreconditionGroup` | `id`, `target` (outcome ID), `members[]` (outcome or group IDs; ≥ 2), `logic` {`all`/`any`/`at_least`, `k`}, `sufficiency` (text) | Explicit AND/OR/k-of-n "cluster" (ActKnowledge). Groups nest, so `(A AND B) OR C` is expressible. Incoming links whose source is a group member are evaluated through the group; the group's result feeds the target's `logic`. |
@@ -1069,3 +1084,4 @@ No open question blocks implementation.
 | 0.3 | 2026-10-29 | John Wang | UNDG primary-source review: problem tree (causes), outcome responsibility and delivering actors, focus / solution prioritization criteria, target groups, consultation records, partnership assumptions with plausibility and needs-testing, risk categories, narrative and division-of-labour reports, core + development rubric profiles |
 | 0.4 | 2026-10-29 | John Wang | Editing (patch engine with ID addressing, element commands, canonical fmt, semantic diff, impact_patch), presentations (Marp decks, optional SVG/PDF/PPTX export), judging (bundles, verdict files, multi-judge agreement), lint profiles |
 | 0.5 | 2026-10-29 | John Wang | Public-source drafting with element provenance and data availability, assessment report, sharing exports (pandoc profile, review packet and sheet, export stamps), ReviewResponse import as proposals, approval, impact-draft-from-sources and toc-share-google skills over external Google tooling |
+| 0.6 | 2026-11-01 | John Wang | Problem trees: causes become a network (`parents[]`), effects (branches) with `addressesEffects`, lint IMP-EFF-001/002, and the problem-tree reports built from a JSON diagram spec (TRD-043) |

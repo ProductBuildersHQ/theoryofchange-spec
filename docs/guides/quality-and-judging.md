@@ -29,7 +29,7 @@ impact-model lint --list
 ```
 
 Validation says a document is well formed; lint says whether the impact model is
-sound. There are 69 deterministic rules, each with an ID such as `IMP-LOG-001`,
+sound. There are 72 deterministic rules, each with an ID such as `IMP-LOG-001`,
 grouped by what they look at:
 
 | Area | What the rules look for |
@@ -43,7 +43,8 @@ grouped by what they look at:
 | The chain from activity to impact (`INT`) | Every intervention says what it produces, leads through the outcomes it targets to an impact, agrees with the links that name it, is measured, and states its resources |
 | North Stars and headline lists (`NSM`, `HLN`, `AUD`, `CTX`) | A North Star measures an outcome at or below the ceiling, has a baseline, a target, and a guardrail, and belongs to its own pathway; a headline list is short, reported to its audience, and producible; an audience told about outcomes is also told numbers; the impact model states its mission or vision |
 | Provenance and evidence (`PRV`, `EVD`) | Every element says where it comes from; stated elements cite a source; an approved impact model has no hypotheses among what the organization answers for |
-| Equity, causes, audiences (`EQU`, `CAU`, `AUD`) | Outcomes for target groups are measured by those groups; each deeper cause is addressed or set aside with a reason; every audience is the target of something reported |
+| Equity, causes, audiences (`EQU`, `CAU`, `AUD`) | Outcomes for target groups are measured by those groups; each deeper cause is addressed or set aside with a reason, and no cause contributes to a deeper one; every audience is the target of something reported |
+| Effects (`EFF`) | Each effect in the problem tree is relieved by an outcome or set aside with a reason, and effects are relieved by long-term or impact outcomes, not only earlier ones |
 | Pathways and validation (`PTH`, `VAL`) | Every pathway reaches impact and has a selected indicator; the main steps have been checked with the people the impact model concerns |
 | DMAIC readiness (`DMA`) | For a pathway marked `projections: [dmaic]`: every indicator says how often it is measured and where the data comes from, is measured at least 20 times a year, and, for a survey, gets at least 30 responses per measurement. Pathways not marked are not checked |
 

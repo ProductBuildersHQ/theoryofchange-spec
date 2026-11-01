@@ -36,6 +36,7 @@ var elementKinds = []ElementKind{
 	{"metric", "metrics"},
 	{"term", "glossary"},
 	{"cause", "causes"},
+	{"effect", "effects"},
 	{"target-group", "targetGroups"},
 	{"audience", "audiences"},
 	{"theme", "themes"},
@@ -208,11 +209,15 @@ var refSites = []refSite{
 	{"outcomes", []string{"audienceIds"}, dropItem, 0},
 	{"outcomes", []string{"deliveredBy"}, dropItem, 0},
 	{"outcomes", []string{"addressesCauses"}, dropItem, 0},
+	{"outcomes", []string{"addressesEffects"}, dropItem, 0},
 	{"outcomes", []string{"targetGroupIds"}, dropItem, 0},
 	{"indicators", []string{"targetGroupIds"}, dropItem, 0},
-	{"causes", []string{"parent"}, dropValue, 0},
+	{"causes", []string{"parents"}, dropItem, 0},
 	{"causes", []string{"affectedGroupIds"}, dropItem, 0},
 	{"causes", []string{"evidenceIds"}, dropItem, 0},
+	{"effects", []string{"parents"}, dropItem, 0},
+	{"effects", []string{"affectedGroupIds"}, dropItem, 0},
+	{"effects", []string{"evidenceIds"}, dropItem, 0},
 	{"targetGroups", []string{"actorIds"}, dropItem, 0},
 	{"indicators", []string{"audienceIds"}, dropItem, 0},
 	{"indicators", []string{"themeIds"}, dropItem, 1},
@@ -260,6 +265,7 @@ func init() {
 	for _, array := range []string{
 		"outcomes", "preconditionGroups", "links", "interventions", "assumptions",
 		"indicators", "actors", "externalFactors", "risks", "metrics", "pathways",
+		"causes", "effects",
 	} {
 		refSites = append(refSites, refSite{array, []string{"provenance", "evidenceIds"}, dropItem, 0})
 	}

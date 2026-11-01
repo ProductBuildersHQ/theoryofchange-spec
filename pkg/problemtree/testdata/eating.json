@@ -1,0 +1,29 @@
+{
+  "kind": "ImpactModel",
+  "specVersion": "0.1",
+  "id": "eating-health",
+  "metadata": {"name": "Eating health (illustration)"},
+  "context": {"problemStatement": "Poor eating health"},
+  "outcomes": [
+    {"id": "oc-healthy", "title": "People eat well", "level": "impact", "addressesEffects": ["eff-diabetes"]},
+    {"id": "oc-time", "title": "People have time to cook", "level": "short_term", "addressesCauses": ["cause-busy"]}
+  ],
+  "links": [{"id": "ln-1", "from": "oc-time", "to": "oc-healthy", "type": "causes", "rationale": "Time to cook means fewer fast meals."}],
+  "causes": [
+    {"id": "cause-stress", "statement": "Stress", "level": "immediate"},
+    {"id": "cause-busy", "statement": "Too busy", "level": "immediate"},
+    {"id": "cause-fastfood", "statement": "Availability of fast food", "level": "underlying", "parents": ["cause-busy"]},
+    {"id": "cause-poverty", "statement": "Poverty", "level": "structural", "outOfScope": {"reason": "Beyond this program."}},
+    {"id": "cause-water", "statement": "Low water intake", "level": "immediate"},
+    {"id": "cause-alcohol", "statement": "High alcohol intake", "level": "underlying", "parents": ["cause-water"]}
+  ],
+  "effects": [
+    {"id": "eff-weight", "statement": "Overweight or underweight"},
+    {"id": "eff-malnutrition", "statement": "Malnutrition and low energy", "parents": ["eff-weight"]},
+    {"id": "eff-diabetes", "statement": "Diabetes and heart disease"},
+    {"id": "eff-costs", "statement": "Higher health costs", "parents": ["eff-diabetes"]},
+    {"id": "eff-decay", "statement": "Tooth decay"},
+    {"id": "eff-dental", "statement": "Increased dental care", "parents": ["eff-decay"]},
+    {"id": "eff-mental", "statement": "Depression, anxiety, and eating disorders"}
+  ]
+}

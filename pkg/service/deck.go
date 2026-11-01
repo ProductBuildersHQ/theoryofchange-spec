@@ -8,6 +8,7 @@ import (
 	"github.com/ProductBuildersHQ/impact-model/pkg/burden"
 	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 	"github.com/ProductBuildersHQ/impact-model/pkg/logicmodel"
+	"github.com/ProductBuildersHQ/impact-model/pkg/problemtree"
 	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 	"github.com/ProductBuildersHQ/impact-model/pkg/slides"
 )
@@ -64,6 +65,12 @@ func DefinitionReport(doc *impact.Model, kind, pathway string) (string, error) {
 		return logicmodel.Diagrams(whole, pathways, logicmodel.FormatMermaid)
 	case "logic-model-d2":
 		return logicmodel.Diagrams(whole, pathways, logicmodel.FormatD2)
+	case "problem-tree":
+		return problemtree.Report(doc, problemtree.FormatMermaid)
+	case "problem-tree-d2":
+		return problemtree.Report(doc, problemtree.FormatD2)
+	case "problem-tree-json":
+		return problemtree.Build(doc).JSON()
 	case "outcome-map":
 		return report.OutcomeMaps(whole, pathways), nil
 	case "logframe":

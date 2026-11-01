@@ -2,6 +2,7 @@ package cli
 
 import (
 	"archive/zip"
+	"encoding/json"
 	"io"
 	"os"
 	"os/exec"
@@ -362,5 +363,21 @@ func TestStatusReportErrors(t *testing.T) {
 		if r := run(t, "", args...); r.code != ExitUsageErr {
 			t.Errorf("%s: exit %d, want %d (%s)", name, r.code, ExitUsageErr, r.err)
 		}
+	}
+}
+
+// The problem tree's JSON report is the diagram spec alone: no Markdown stamp,
+// so it parses as JSON.
+func TestProblemTreeJSONReportIsUnstamped(t *testing.T) {
+	r := run(t, "", "report", "problem-tree-json", "../../pkg/problemtree/testdata/eating.json")
+	wantCode(t, r, ExitOK)
+	var spec map[string]any
+	if err := json.Unmarshal([]byte(r.stdout), &spec); err != nil {
+		t.Fatalf("not JSON: %v\n%.200s", err, r.stdout)
+	}
+	md := run(t, "", "report", "problem-tree", "../../pkg/problemtree/testdata/eating.json")
+	wantCode(t, md, ExitOK)
+	if !strings.HasPrefix(md.stdout, "---\n") || !strings.Contains(md.stdout, "```mermaid") {
+		t.Errorf("the Markdown report is not stamped or has no diagram: %.200s", md.stdout)
 	}
 }

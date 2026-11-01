@@ -64,7 +64,9 @@ type Model struct {
 	Glossary []GlossaryTerm `json:"glossary,omitempty"`
 
 	// Causes are the problem tree; TargetGroups the priority populations.
-	Causes       []Cause       `json:"causes,omitempty"`
+	Causes []Cause `json:"causes,omitempty"`
+	// Effects are the problem tree's branches: what the core problem leads to.
+	Effects      []Effect      `json:"effects,omitempty"`
 	TargetGroups []TargetGroup `json:"targetGroups,omitempty"`
 
 	// Audiences say who needs to see results; Themes are the story codebook.
