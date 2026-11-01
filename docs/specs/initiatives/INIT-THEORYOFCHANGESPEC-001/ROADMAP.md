@@ -1,10 +1,10 @@
-# ROADMAP — Theory of Change Specification — Go-first model, JSON Schema, measurement, and leadership reporting
+# ROADMAP — Impact Model Specification — Go-first model, JSON Schema, measurement, and leadership reporting
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
-**Repository:** `github.com/ProductBuildersHQ/theoryofchange-spec`
-**Status:** In progress — 14 of 16 phases completed
+**Repository:** `github.com/ProductBuildersHQ/impact-model`
+**Status:** In progress — 16 of 18 phases completed
 
-> RMI IDs are stable and permanent. Commits implementing an item carry the trailer `Refs: RMI-THEORYOFCHANGESPEC-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
+> RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, `Refs: <RMI-ID>`. Items from before the rename to impact-model are `RMI-THEORYOFCHANGESPEC-001` to `-076`; later items are `RMI-IMPACTMODEL-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
 ## Phase 1 — Core Model and Schema
 
@@ -20,12 +20,12 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-001`
   - Satisfies: PRD G-1
   - Acceptance: every core concept of research §8.4 and §9.8 maps to a planned Go type or a documented deferral
-- [x] `RMI-THEORYOFCHANGESPEC-003` `pkg/ref` reference grammar (`toc:<doc>#<element>`) with slug validation
+- [x] `RMI-THEORYOFCHANGESPEC-003` `pkg/ref` reference grammar (`model:<doc>#<element>`) with slug validation
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-001`
   - Satisfies: PRD-FR-604, TRD-015
   - Acceptance: parse/format round-trip; invalid refs rejected
-- [x] `RMI-THEORYOFCHANGESPEC-004` `pkg/toc` core document model with a minimal required set (goal, outcome, link, indicator), reusing prism-core
+- [x] `RMI-THEORYOFCHANGESPEC-004` `pkg/impact` core document model with a minimal required set (goal, outcome, link, indicator), reusing prism-core
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-002`, `RMI-THEORYOFCHANGESPEC-003`
   - Satisfies: PRD-FR-101…110, TRD-001, TRD-016
@@ -46,7 +46,7 @@
 **Theme:** Trusted documents, a queryable causal graph, and one validated patch engine through which every edit flows
 **Status:** Completed — 6 of 6 items completed
 
-- [x] `RMI-THEORYOFCHANGESPEC-007` `pkg/tocio` JSON/YAML loading with limits, observation-set merge, and canonical formatting
+- [x] `RMI-THEORYOFCHANGESPEC-007` `pkg/impactio` JSON/YAML loading with limits, observation-set merge, and canonical formatting
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-006`
   - Satisfies: PRD-FR-203, PRD-FR-704, TRD-005, TRD-031
@@ -66,7 +66,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-008`
   - Satisfies: PRD-FR-701, PRD-FR-702, PRD G-14, TRD-029
   - Acceptance: error-introducing patches rejected with input untouched; unknown `@id` fails the whole patch
-- [x] `RMI-THEORYOFCHANGESPEC-011` `pkg/service` and `cmd/theoryofchange` (Cobra) with validate, graph, schema, init, fmt, and patch commands
+- [x] `RMI-THEORYOFCHANGESPEC-011` `pkg/service` and `cmd/impact-model` (Cobra) with validate, graph, schema, init, fmt, and patch commands
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-009`, `RMI-THEORYOFCHANGESPEC-046`
   - Satisfies: PRD US-1, PRD US-16, TRD §6.1
@@ -123,17 +123,17 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-022`
   - Satisfies: PRD-FR-505, PRD US-12, TRD-022
   - Acceptance: golden files over the intermediary example
-- [x] `RMI-THEORYOFCHANGESPEC-049` `pkg/slides` Marp engine and workshop deck (`theoryofchange deck workshop`)
+- [x] `RMI-THEORYOFCHANGESPEC-049` `pkg/slides` Marp engine and workshop deck (`impact-model deck workshop`)
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-023`, `RMI-THEORYOFCHANGESPEC-037`
   - Satisfies: PRD-FR-801, PRD G-15, PRD US-17, TRD-033
   - Acceptance: golden workshop deck; deck numbers and labels equal the reports'
-- [x] `RMI-THEORYOFCHANGESPEC-039` `theoryofchange report` definition kinds, `definitions` pack, and `theoryofchange export csv` (indicators, metrics, glossary)
+- [x] `RMI-THEORYOFCHANGESPEC-039` `impact-model report` definition kinds, `definitions` pack, and `impact-model export csv` (indicators, metrics, glossary)
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-023`, `RMI-THEORYOFCHANGESPEC-037`, `RMI-THEORYOFCHANGESPEC-011`
   - Satisfies: PRD-FR-204, PRD-FR-505, PRD G-12, TRD-021
   - Acceptance: CLI tests; CSV golden files (RFC 4180)
-- [x] `RMI-THEORYOFCHANGESPEC-053` `theoryofchange evidence add` and the toc-draft-from-sources agent skill
+- [x] `RMI-THEORYOFCHANGESPEC-053` `impact-model evidence add` and the impact-draft-from-sources agent skill
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-047`, `RMI-THEORYOFCHANGESPEC-052`, `RMI-THEORYOFCHANGESPEC-039`
   - Satisfies: PRD-FR-606, PRD US-19, PRD G-17, TRD-037
@@ -149,7 +149,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-022`, `RMI-THEORYOFCHANGESPEC-052`
   - Satisfies: PRD-FR-512, PRD US-19, TRD-038
   - Acceptance: golden file over the intermediary example
-- [x] `RMI-THEORYOFCHANGESPEC-056` Pandoc Markdown profile with PNG diagrams, export stamps on every artifact, and `theoryofchange export docx|pptx`
+- [x] `RMI-THEORYOFCHANGESPEC-056` Pandoc Markdown profile with PNG diagrams, export stamps on every artifact, and `impact-model export docx|pptx`
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-039`, `RMI-THEORYOFCHANGESPEC-049`, `RMI-THEORYOFCHANGESPEC-023`
   - Satisfies: PRD-FR-901, PRD-FR-902, TRD-039
@@ -159,12 +159,12 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-054`, `RMI-THEORYOFCHANGESPEC-056`
   - Satisfies: PRD-FR-903, PRD US-20, TRD-039
   - Acceptance: golden packet and sheet; every element row carries its stable ID
-- [x] `RMI-THEORYOFCHANGESPEC-058` ReviewResponse schema and `theoryofchange import review` (JSON and --from-csv) producing proposed patches and a consultation record
+- [x] `RMI-THEORYOFCHANGESPEC-058` ReviewResponse schema and `impact-model import review` (JSON and --from-csv) producing proposed patches and a consultation record
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-057`, `RMI-THEORYOFCHANGESPEC-046`
   - Satisfies: PRD-FR-904, PRD-FR-905, PRD US-20, TRD-040
   - Acceptance: seeded rows from every origin map to ops or flagged notes; stale hashes flagged; document never modified
-- [x] `RMI-THEORYOFCHANGESPEC-055` `theoryofchange approve` with approvers, revision, version label, and refusal checks
+- [x] `RMI-THEORYOFCHANGESPEC-055` `impact-model approve` with approvers, revision, version label, and refusal checks
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-058`, `RMI-THEORYOFCHANGESPEC-052`
   - Satisfies: PRD-FR-707, PRD US-21, TRD-041
@@ -226,12 +226,12 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-004`
   - Satisfies: PRD-FR-601, TRD-012, TRD-028
   - Acceptance: both rubrics parse into `rubric.RubricSet`, `Validate()` passes, weights sum to 1.0; every UNDG checklist item maps to a criterion
-- [x] `RMI-THEORYOFCHANGESPEC-050` `pkg/judge` and `theoryofchange judge show | record | summary`: bundle hashing, verdict validation, multi-judge agreement
+- [x] `RMI-THEORYOFCHANGESPEC-050` `pkg/judge` and `impact-model judge show | record | summary`: bundle hashing, verdict validation, multi-judge agreement
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-015`, `RMI-THEORYOFCHANGESPEC-039`
   - Satisfies: PRD-FR-803, PRD G-16, PRD US-18, TRD-034
   - Acceptance: bundle golden; verdicts with mismatched bundle hash rejected; aggregation reports per-category agreement
-- [x] `RMI-THEORYOFCHANGESPEC-016` `theoryofchange lint` CLI and rubric discrimination eval with at least two judges and agreement, recorded in `docs/evals/`
+- [x] `RMI-THEORYOFCHANGESPEC-016` `impact-model lint` CLI and rubric discrimination eval with at least two judges and agreement, recorded in `docs/evals/`
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-013`, `RMI-THEORYOFCHANGESPEC-014`, `RMI-THEORYOFCHANGESPEC-050`
   - Satisfies: PRD US-2, PRD success metrics "LLM-judge discrimination" and "Judge agreement recorded"
@@ -267,7 +267,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-007`, `RMI-THEORYOFCHANGESPEC-033`
   - Satisfies: PRD-FR-204, PRD US-13, TRD-021
   - Acceptance: seeded bad rows all reported; 0 silent drops
-- [x] `RMI-THEORYOFCHANGESPEC-021` `theoryofchange status` and `theoryofchange import` CLI; performance benchmarks
+- [x] `RMI-THEORYOFCHANGESPEC-021` `impact-model status` and `impact-model import` CLI; performance benchmarks
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-020`, `RMI-THEORYOFCHANGESPEC-040`, `RMI-THEORYOFCHANGESPEC-011`
   - Satisfies: PRD US-4, PRD US-13, TRD §8
@@ -313,7 +313,7 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-049`, `RMI-THEORYOFCHANGESPEC-024`, `RMI-THEORYOFCHANGESPEC-041`, `RMI-THEORYOFCHANGESPEC-042`
   - Satisfies: PRD-FR-801, PRD-FR-802, PRD US-17, TRD-033
   - Acceptance: golden decks; export test produces files when tools are present and exits 3 with guidance when absent
-- [x] `RMI-THEORYOFCHANGESPEC-026` `theoryofchange report` status kinds in CLI and executive-report benchmark
+- [x] `RMI-THEORYOFCHANGESPEC-026` `impact-model report` status kinds in CLI and executive-report benchmark
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-025`, `RMI-THEORYOFCHANGESPEC-041`, `RMI-THEORYOFCHANGESPEC-042`, `RMI-THEORYOFCHANGESPEC-045`, `RMI-THEORYOFCHANGESPEC-021`
   - Satisfies: PRD G-5
@@ -328,13 +328,13 @@
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-026`, `RMI-THEORYOFCHANGESPEC-046`, `RMI-THEORYOFCHANGESPEC-050`
   - Satisfies: PRD-FR-602, PRD-FR-706, PRD US-6, TRD-013
-  - Acceptance: in-memory transport test drives every tool; path traversal rejected; `toc_patch` rejects error-introducing patches
-- [x] `RMI-THEORYOFCHANGESPEC-048` `pkg/diff` semantic theory diff and `theoryofchange diff --revision`
+  - Acceptance: in-memory transport test drives every tool; path traversal rejected; `impact_patch` rejects error-introducing patches
+- [x] `RMI-THEORYOFCHANGESPEC-048` `pkg/diff` semantic theory diff and `impact-model diff --revision`
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-046`, `RMI-THEORYOFCHANGESPEC-009`
   - Satisfies: PRD-FR-705, PRD US-16, PRD US-21, TRD-032
   - Acceptance: golden diffs keyed by element ID, including rejected elements; draft Revision lists changed IDs
-- [x] `RMI-THEORYOFCHANGESPEC-043` Agent skills: toc-author (edits via patches), toc-status-refresh, toc-learning-review, toc-audience-story
+- [x] `RMI-THEORYOFCHANGESPEC-043` Agent skills: impact-author (edits via patches), impact-status-refresh, impact-learning-review, impact-audience-story
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-026`, `RMI-THEORYOFCHANGESPEC-039`, `RMI-THEORYOFCHANGESPEC-047`
   - Satisfies: PRD-FR-605, PRD US-15, PRD G-13, TRD-024
@@ -458,3 +458,30 @@
   - Type: capability · Status: completed
   - Acceptance: CHANGELOG.json has v0.2.0 and CHANGELOG.md is generated from it; docs/releases/v0.2.0.md exists; the guides cover headline metrics, composed indicators, and the layered diagram; mkdocs build --strict passes
 
+## Phase 17 — Rename to impact-model
+
+**Theme:** One impact model, with the theory of change, logic model, and other methodologies as views of it
+**Status:** Completed — 3 of 3 items completed
+
+- [x] `RMI-THEORYOFCHANGESPEC-074` Rename the module, packages, command, kind, schemas, MCP tools, and skills to impact-model
+  - Type: capability · Status: completed
+  - Acceptance: module path github.com/ProductBuildersHQ/impact-model; pkg/impact and pkg/impactio; command impact-model; kind ImpactModel; schemas impact-model*; tools impact_*; skills impact-*; build, vet, tests, and lint pass
+
+- [x] `RMI-THEORYOFCHANGESPEC-075` Rewrite the documentation around one impact model with several views
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-074`
+  - Acceptance: README, docs index, concepts, guides, specs, and examples use the impact-model names, commands, and file names; the theory of change and the logic model are described as views of one model and not one of the other
+
+- [x] `RMI-THEORYOFCHANGESPEC-076` Record the rename in an architecture decision record, the changelog, and the roadmap
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-075`
+  - Acceptance: an ADR states the decision, what changed, and what did not; CHANGELOG.json notes the breaking rename; the roadmap lists the phase
+
+## Phase 18 — Release v0.3.0
+
+**Theme:** Prepare the first release as impact-model: changelog, release notes, and an upgrade guide for the rename
+**Status:** Completed — 1 of 1 items completed
+
+- [x] `RMI-IMPACTMODEL-001` Prepare v0.3.0: changelog, release notes, and the upgrade guide for the rename
+  - Type: capability · Status: completed
+  - Acceptance: CHANGELOG.json has v0.3.0 and CHANGELOG.md is generated from it; docs/releases/v0.3.0.md maps every old name to its new one; README and docs index point to it; mkdocs build --strict passes

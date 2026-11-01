@@ -7,19 +7,19 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // randomDAG builds a document with 50-200 outcomes and a few interventions;
 // every link goes from a lower to a higher index, so the graph is acyclic.
-func randomDAG(r *rand.Rand) *toc.Document {
+func randomDAG(r *rand.Rand) *impact.Model {
 	n := 50 + r.IntN(151)
 	s := newSpec()
-	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelMediumTerm, toc.LevelLongTerm}
+	levels := []impact.Level{impact.LevelOutput, impact.LevelShortTerm, impact.LevelMediumTerm, impact.LevelLongTerm}
 	for i := range n {
 		l := levels[r.IntN(len(levels))]
 		if r.IntN(10) == 0 {
-			l = toc.LevelImpact
+			l = impact.LevelImpact
 		}
 		s.outcome(fmt.Sprintf("n%d", i), l)
 	}
@@ -110,7 +110,7 @@ func checkProperties(t *testing.T, g *Graph) {
 		}
 	}
 	for _, n := range nodes {
-		isImpact := n.Kind == toc.ElementOutcome && n.Level == toc.LevelImpact
+		isImpact := n.Kind == impact.ElementOutcome && n.Level == impact.LevelImpact
 		paths := g.PathsToImpact(n.ID, 50)
 		if g.HasPathToImpact(n.ID) != (len(paths) > 0) {
 			t.Fatalf("HasPathToImpact(%s) disagrees with paths", n.ID)
@@ -120,7 +120,7 @@ func checkProperties(t *testing.T, g *Graph) {
 				t.Fatalf("path %v does not start at %s", p, n.ID)
 			}
 			last, _ := g.Node(p[len(p)-1])
-			if last.Level != toc.LevelImpact {
+			if last.Level != impact.LevelImpact {
 				t.Fatalf("path %v does not end at impact", p)
 			}
 			seen := map[string]bool{}
@@ -133,7 +133,7 @@ func checkProperties(t *testing.T, g *Graph) {
 					t.Fatalf("path %v uses missing edge %s->%s", p, p[i-1], id)
 				}
 				if i < len(p)-1 {
-					if nd, _ := g.Node(id); nd.Level == toc.LevelImpact {
+					if nd, _ := g.Node(id); nd.Level == impact.LevelImpact {
 						t.Fatalf("path %v continues past impact", p)
 					}
 				}
@@ -188,9 +188,9 @@ func TestRandomGraphsWithCycles(t *testing.T) {
 		n := 60
 		s := newSpec()
 		for i := range n {
-			l := toc.LevelMediumTerm
+			l := impact.LevelMediumTerm
 			if i%11 == 0 {
-				l = toc.LevelImpact
+				l = impact.LevelImpact
 			}
 			s.outcome(fmt.Sprintf("n%d", i), l)
 		}
@@ -229,7 +229,7 @@ func TestRandomGraphsWithCycles(t *testing.T) {
 			t.Fatalf("TopologicalOrder err = %v with %d cycles", err, len(cyc))
 		}
 		for id := range g.Levels() {
-			if nd, _ := g.Node(id); inCycle[id] && nd.Level != toc.LevelImpact {
+			if nd, _ := g.Node(id); inCycle[id] && nd.Level != impact.LevelImpact {
 				t.Fatalf("Levels includes cyclic node %s", id)
 			}
 		}
@@ -252,11 +252,11 @@ func BenchmarkQueries1000(b *testing.B) {
 	r := newRand(1, 2)
 	s := newSpec()
 	const n = 1000
-	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelMediumTerm, toc.LevelLongTerm}
+	levels := []impact.Level{impact.LevelOutput, impact.LevelShortTerm, impact.LevelMediumTerm, impact.LevelLongTerm}
 	for i := range n {
 		l := levels[r.IntN(len(levels))]
 		if i < 5 {
-			l = toc.LevelImpact
+			l = impact.LevelImpact
 		}
 		s.outcome(fmt.Sprintf("n%d", i), l)
 	}

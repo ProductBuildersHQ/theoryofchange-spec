@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // Narrative renders a programme or strategy document scaffold, following the
@@ -14,7 +14,7 @@ import (
 // deliver, who does what, how it will be monitored and evaluated, who has
 // been consulted, and key messages. It needs no observations. When a status
 // snapshot is given, outcomes show their status.
-func Narrative(v *View, doc *toc.Document, st *toc.Status) string {
+func Narrative(v *View, doc *impact.Model, st *impact.Status) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "# %s: programme narrative\n\n", mdText(v.Document.Title))
 	if st != nil {
@@ -48,7 +48,7 @@ func narrativeSummary(v *View) string {
 // causalAnalysis lays the problem tree out by level, with the outcomes that
 // address each cause, so the solution can be checked against the problem at
 // every level.
-func causalAnalysis(v *View, doc *toc.Document) string {
+func causalAnalysis(v *View, doc *impact.Model) string {
 	var b strings.Builder
 	b.WriteString("## Causal analysis\n\n")
 	if len(doc.Causes) == 0 {
@@ -73,7 +73,7 @@ func causalAnalysis(v *View, doc *toc.Document) string {
 			addressedBy[c] = append(addressedBy[c], mdText(titles[o.ID])+" (`"+o.ID+"`)")
 		}
 	}
-	for _, lv := range []toc.CauseLevel{toc.CauseStructural, toc.CauseUnderlying, toc.CauseImmediate} {
+	for _, lv := range []impact.CauseLevel{impact.CauseStructural, impact.CauseUnderlying, impact.CauseImmediate} {
 		var rows []string
 		for _, c := range doc.Causes {
 			if c.Level != lv {
@@ -112,14 +112,14 @@ func causalAnalysis(v *View, doc *toc.Document) string {
 
 // priorities shows the weighted scores behind which outcomes and
 // interventions were chosen, with the stated reasons.
-func priorities(doc *toc.Document) string {
+func priorities(doc *impact.Model) string {
 	var b strings.Builder
 	b.WriteString("## Priorities and why\n\n")
 	any := false
 	for _, s := range []struct {
 		heading string
-		subject toc.SelectionSubject
-	}{{"Outcomes", toc.SubjectOutcome}, {"Interventions", toc.SubjectIntervention}} {
+		subject impact.SelectionSubject
+	}{{"Outcomes", impact.SubjectOutcome}, {"Interventions", impact.SubjectIntervention}} {
 		rows := priorityRows(doc, s.subject)
 		if len(rows) == 0 {
 			continue
@@ -134,7 +134,7 @@ func priorities(doc *toc.Document) string {
 	return b.String()
 }
 
-func risksAndAssumptions(v *View, doc *toc.Document) string {
+func risksAndAssumptions(v *View, doc *impact.Model) string {
 	var b strings.Builder
 	b.WriteString("## Assumptions and risks\n\n")
 	if len(v.Assumptions) == 0 {
@@ -167,7 +167,7 @@ func risksAndAssumptions(v *View, doc *toc.Document) string {
 
 // partnerDelivered lists what the organization monitors but others deliver,
 // and what nobody delivers.
-func partnerDelivered(v *View, st *toc.Status) string {
+func partnerDelivered(v *View, st *impact.Status) string {
 	var b strings.Builder
 	b.WriteString("## What partners deliver\n\n")
 	b.WriteString(outsideAccountability(v, st))
@@ -177,14 +177,14 @@ func partnerDelivered(v *View, st *toc.Status) string {
 // outsideAccountability renders the outcomes that are monitored but not
 // answered for, split into those partners deliver, those nobody delivers,
 // and those above the ceiling of accountability.
-func outsideAccountability(v *View, st *toc.Status) string {
+func outsideAccountability(v *View, st *impact.Status) string {
 	var partner, unaddressed, above []OutcomeView
 	for _, o := range v.Outcomes {
 		switch {
 		case o.Accountable:
-		case o.Responsibility == string(toc.ResponsibilityPartner):
+		case o.Responsibility == string(impact.ResponsibilityPartner):
 			partner = append(partner, o)
-		case o.Responsibility == string(toc.ResponsibilityUnaddressed):
+		case o.Responsibility == string(impact.ResponsibilityUnaddressed):
 			unaddressed = append(unaddressed, o)
 		default:
 			above = append(above, o)
@@ -207,10 +207,10 @@ func outsideAccountability(v *View, st *toc.Status) string {
 		b.WriteString("\n")
 	}
 	list("Delivered by partners", "These are part of the solution and are monitored, but others answer for them.", partner)
-	list("Needed, and delivered by no one", "The theory depends on these. Nobody has taken them on.", unaddressed)
+	list("Needed, and delivered by no one", "The impact model depends on these. Nobody has taken them on.", unaddressed)
 	list("Above the ceiling of accountability", "These are tracked and contributed to, but not owned.", above)
 	if b.Len() == 0 {
-		return "Everything in this theory is within what the organization answers for.\n\n"
+		return "Everything in this impact model is within what the organization answers for.\n\n"
 	}
 	return b.String()
 }
@@ -230,10 +230,10 @@ func implementation(v *View) string {
 	return b.String()
 }
 
-// monitoring sets out how the theory will be watched and tested: the
+// monitoring sets out how the impact model will be watched and tested: the
 // assumptions that need testing, how often indicators are collected, and
 // the questions an evaluation should answer.
-func monitoring(v *View, doc *toc.Document) string {
+func monitoring(v *View, doc *impact.Model) string {
 	var b strings.Builder
 	b.WriteString("## Monitoring and evaluation\n\n### Assumptions to test\n\n")
 	var tests []string
@@ -285,7 +285,7 @@ func linkTitle(v *View, id string) string {
 }
 
 // validationTrail lists who has been consulted and what changed as a result.
-func validationTrail(doc *toc.Document) string {
+func validationTrail(doc *impact.Model) string {
 	var b strings.Builder
 	b.WriteString("## Who has been consulted\n\n")
 	if len(doc.Consultations) == 0 {
@@ -307,7 +307,7 @@ func keyMessages(v *View) string {
 	var goals []string
 	accountable, monitored := 0, 0
 	for _, o := range v.Outcomes {
-		if o.Level == toc.LevelImpact {
+		if o.Level == impact.LevelImpact {
 			goals = append(goals, mdText(o.Title))
 		}
 		if o.Accountable {
@@ -320,7 +320,7 @@ func keyMessages(v *View) string {
 		fmt.Fprintf(&b, "- The change this work is for: %s.\n", strings.Join(goals, "; "))
 	}
 	if v.Document.Ceiling != "" {
-		fmt.Fprintf(&b, "- The organization answers for the theory up to: %s.\n", v.Document.Ceiling)
+		fmt.Fprintf(&b, "- The organization answers for the impact model up to: %s.\n", v.Document.Ceiling)
 	}
 	fmt.Fprintf(&b, "- %d outcome(s) are the organization's to deliver or share; %d are monitored but delivered by others or beyond the ceiling.\n", accountable, monitored)
 	return b.String()

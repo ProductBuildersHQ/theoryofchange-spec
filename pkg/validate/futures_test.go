@@ -5,15 +5,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
-func future(id, actor, futureRef string) *toc.Document {
-	d := toc.NewDocument(id, "A problem.")
+func future(id, actor, futureRef string) *impact.Model {
+	d := impact.NewModel(id, "A problem.")
 	d.ActorRegistry = "shared-actors"
-	d.Perspective = &toc.Perspective{ActorID: actor, Role: toc.PerspectiveProponent, FutureRef: futureRef}
-	d.Outcomes = []toc.Outcome{{ID: "oc-a", Title: "A", Level: toc.LevelImpact}}
+	d.Perspective = &impact.Perspective{ActorID: actor, Role: impact.PerspectiveProponent, FutureRef: futureRef}
+	d.Outcomes = []impact.Outcome{{ID: "oc-a", Title: "A", Level: impact.LevelImpact}}
 	return d
 }
 
@@ -35,46 +35,46 @@ func TestFuturesAcceptsThreeFuturesSharingOneRegistry(t *testing.T) {
 func TestFuturesFindsProblems(t *testing.T) {
 	tests := []struct {
 		name   string
-		docs   func() []*toc.Document
+		docs   func() []*impact.Model
 		code   string
 		sev    Severity
 		source string
 	}{
-		{"no perspective", func() []*toc.Document {
+		{"no perspective", func() []*impact.Model {
 			d := future("a", "x", "ufm:one")
 			d.Perspective = nil
-			return []*toc.Document{d}
+			return []*impact.Model{d}
 		}, "VAL-FUT-001", SeverityWarning, "future[a]"},
-		{"no future", func() []*toc.Document { return []*toc.Document{future("a", "x", "")} }, "VAL-FUT-001", SeverityWarning, "future[a]"},
-		{"badly formed future", func() []*toc.Document { return []*toc.Document{future("a", "x", "open-wins")} }, "VAL-FUT-002", SeverityError, "future[a]"},
-		{"different registries", func() []*toc.Document {
+		{"no future", func() []*impact.Model { return []*impact.Model{future("a", "x", "")} }, "VAL-FUT-001", SeverityWarning, "future[a]"},
+		{"badly formed future", func() []*impact.Model { return []*impact.Model{future("a", "x", "open-wins")} }, "VAL-FUT-002", SeverityError, "future[a]"},
+		{"different registries", func() []*impact.Model {
 			b := future("b", "y", "ufm:two")
 			b.ActorRegistry = "other-actors"
-			return []*toc.Document{future("a", "x", "ufm:one"), b}
+			return []*impact.Model{future("a", "x", "ufm:one"), b}
 		}, "VAL-FUT-003", SeverityError, "futures"},
-		{"one names no registry", func() []*toc.Document {
+		{"one names no registry", func() []*impact.Model {
 			b := future("b", "y", "ufm:two")
 			b.ActorRegistry = ""
-			return []*toc.Document{future("a", "x", "ufm:one"), b}
+			return []*impact.Model{future("a", "x", "ufm:one"), b}
 		}, "VAL-FUT-003", SeverityWarning, "futures"},
-		{"same actor, same future", func() []*toc.Document {
-			return []*toc.Document{future("a", "x", "ufm:one"), future("b", "x", "ufm:one")}
+		{"same actor, same future", func() []*impact.Model {
+			return []*impact.Model{future("a", "x", "ufm:one"), future("b", "x", "ufm:one")}
 		}, "VAL-FUT-004", SeverityError, "future[b]"},
-		{"reference to a missing element", func() []*toc.Document {
+		{"reference to a missing element", func() []*impact.Model {
 			a := future("a", "x", "ufm:one")
-			a.Alignments = []toc.Alignment{{ElementID: "oc-a", Target: toc.ExternalRef{Framework: toc.FrameworkCustom, Ref: "toc:b#oc-ghost"}}}
-			return []*toc.Document{a, future("b", "y", "ufm:two")}
+			a.Alignments = []impact.Alignment{{ElementID: "oc-a", Target: impact.ExternalRef{Framework: impact.FrameworkCustom, Ref: "model:b#oc-ghost"}}}
+			return []*impact.Model{a, future("b", "y", "ufm:two")}
 		}, "VAL-FUT-006", SeverityError, "future[a]"},
-		{"malformed reference", func() []*toc.Document {
+		{"malformed reference", func() []*impact.Model {
 			a := future("a", "x", "ufm:one")
-			a.Alignments = []toc.Alignment{{ElementID: "oc-a", Target: toc.ExternalRef{Framework: toc.FrameworkCustom, Ref: "toc:Not A Slug#x"}}}
-			return []*toc.Document{a}
+			a.Alignments = []impact.Alignment{{ElementID: "oc-a", Target: impact.ExternalRef{Framework: impact.FrameworkCustom, Ref: "model:Not A Slug#x"}}}
+			return []*impact.Model{a}
 		}, "VAL-FUT-005", SeverityError, "future[a]"},
-		{"different markets", func() []*toc.Document {
+		{"different markets", func() []*impact.Model {
 			a, b := future("a", "x", "ufm:one"), future("b", "y", "ufm:two")
-			a.Context.Market = &toc.ExternalRef{Framework: toc.FrameworkMarketSpec, Ref: "market:one"}
-			b.Context.Market = &toc.ExternalRef{Framework: toc.FrameworkMarketSpec, Ref: "market:two"}
-			return []*toc.Document{a, b}
+			a.Context.Market = &impact.ExternalRef{Framework: impact.FrameworkMarketSpec, Ref: "market:one"}
+			b.Context.Market = &impact.ExternalRef{Framework: impact.FrameworkMarketSpec, Ref: "market:two"}
+			return []*impact.Model{a, b}
 		}, "VAL-FUT-007", SeverityWarning, "future[b]"},
 	}
 	for _, tt := range tests {
@@ -91,26 +91,26 @@ func TestFuturesFindsProblems(t *testing.T) {
 
 func TestReferencesToTheoriesOutsideTheSetAreNotChecked(t *testing.T) {
 	a := future("a", "x", "ufm:one")
-	a.Alignments = []toc.Alignment{{ElementID: "oc-a", Target: toc.ExternalRef{Framework: toc.FrameworkCustom, Ref: "toc:elsewhere#oc-anything"}}}
+	a.Alignments = []impact.Alignment{{ElementID: "oc-a", Target: impact.ExternalRef{Framework: impact.FrameworkCustom, Ref: "model:elsewhere#oc-anything"}}}
 	if issues := Futures(a); len(issues) != 0 {
 		t.Errorf("issues: %v", issues)
 	}
 }
 
-// The competing-futures example is three theories and one registry that
+// The competing-futures example is three impact models and one registry that
 // validate with no change to the schema.
 func TestCompetingFuturesExample(t *testing.T) {
 	data, err := os.ReadFile("../../examples/competing-futures/actors.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
-	reg, err := tocio.ParseActorRegistry(data, tocio.FormatYAML)
+	reg, err := impactio.ParseActorRegistry(data, impactio.FormatYAML)
 	if err != nil {
 		t.Fatal(err)
 	}
-	var docs []*toc.Document
+	var docs []*impact.Model
 	for _, name := range []string{"future-open", "future-bundle", "future-extension"} {
-		d, err := tocio.LoadDocument("../../examples/competing-futures/" + name + ".yaml")
+		d, err := impactio.LoadDocument("../../examples/competing-futures/" + name + ".yaml")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -140,11 +140,11 @@ func TestCompetingFuturesExample(t *testing.T) {
 	}
 }
 
-func regActor(r *toc.ActorRegistry, id string) (toc.Actor, bool) {
+func regActor(r *impact.ActorRegistry, id string) (impact.Actor, bool) {
 	for _, a := range r.Actors {
 		if a.ID == id {
 			return a, true
 		}
 	}
-	return toc.Actor{}, false
+	return impact.Actor{}, false
 }

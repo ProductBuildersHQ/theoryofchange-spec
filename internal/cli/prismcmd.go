@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/prismx"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/prismx"
 )
 
 func newPrismExportCmd(e *env, kind string) *cobra.Command {
@@ -23,10 +23,10 @@ meant to reach. With observations (-O), target confidence comes from the
 status.`
 	}
 	cmd := &cobra.Command{
-		Use:     kind + " <toc-file>",
+		Use:     kind + " <model-file>",
 		Short:   short,
 		Long:    long + "\n\nThe output is JSON.",
-		Example: fmt.Sprintf("  theoryofchange export %s theory.yaml -O obs-q3.yaml -o %s.json", kind, kind),
+		Example: fmt.Sprintf("  impact-model export %s impact-model.yaml -O obs-q3.yaml -o %s.json", kind, kind),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runPrismExport(e, cmd, kind, args[0])
@@ -43,7 +43,7 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 	if err != nil {
 		return err
 	}
-	var st *toc.Status
+	var st *impact.Status
 	if len(observationPaths(cmd)) > 0 || flagString(cmd, "as-of") != "" {
 		in, _, err := loadStatus(e, cmd, path)
 		if err != nil {
@@ -65,7 +65,7 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	if out := flagString(cmd, "out"); out != "" {
-		if err := tocio.WriteFile(out, buf.Bytes()); err != nil {
+		if err := impactio.WriteFile(out, buf.Bytes()); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		return nil

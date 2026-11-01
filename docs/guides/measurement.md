@@ -1,7 +1,7 @@
 # Measuring Progress
 
-A theory says what you expect. Measuring says how far you have come. The
-measurement is a pure function of three inputs: the theory, the observations,
+An impact model says what you expect. Measuring says how far you have come. The
+measurement is a pure function of three inputs: the impact model, the observations,
 and a date. The same inputs always give the same answer.
 
 ## Indicators
@@ -33,7 +33,7 @@ What an indicator measures decides its **tier**, which is never stored:
 | `impact` | an impact outcome | residents served, reported as a contribution |
 
 Resources are measured as activity-tier indicators with a unit such as hours or
-dollars. `theoryofchange report metric-tree` lays a pathway's indicators out in
+dollars. `impact-model report metric-tree` lays a pathway's indicators out in
 this order.
 
 ### North Star, guardrails, and headline lists
@@ -51,9 +51,9 @@ Three choices sit on top of the tiers, and they are different things:
 - **Purpose** is `context.mission` and `context.vision`, plain statements. They are
   not part of the causal chain.
 
-`theoryofchange report headline` shows what each audience is told, and the story
-report and deck use the same lists. `theoryofchange lint` checks all of it: the
-`TOC-NSM-*`, `TOC-HLN-*`, `TOC-AUD-002`, and `TOC-CTX-001` rules.
+`impact-model report headline` shows what each audience is told, and the story
+report and deck use the same lists. `impact-model lint` checks all of it: the
+`TOC-NSM-*`, `TOC-HLN-*`, `IMP-AUD-002`, and `IMP-CTX-001` rules.
 
 ### Working a metric out from others
 
@@ -76,12 +76,12 @@ not both.
 ## Observations
 
 Measurements go in an **observation set**, a separate file that refers to the
-theory by ID:
+Impact model by ID:
 
 ```yaml
 kind: ObservationSet
 specVersion: "0.1"
-tocId: riverbend-network
+modelId: riverbend-network
 period: 2026-Q3
 observations:
   - indicatorId: ind-hours-learning
@@ -101,10 +101,10 @@ optional note. The same file also holds:
 - **Learning reviews**: what changed in a period, the surprises, and decisions.
 - **Notes**: context that belongs with the numbers.
 
-Check a set against the theory it measures:
+Check a set against the impact model it measures:
 
 ```bash
-theoryofchange validate observations-2026-q3.yaml --toc theory.yaml
+impact-model validate observations-2026-q3.yaml --model impact-model.yaml
 ```
 
 ## Load a spreadsheet
@@ -113,7 +113,7 @@ Most programs already keep their numbers in a spreadsheet. Describe its columns
 once in a **mapping** file, then import:
 
 ```yaml
-tocId: riverbend-network
+modelId: riverbend-network
 period: 2026-Q4
 dateFormat: 02/01/2006
 columns:
@@ -130,7 +130,7 @@ metricAliases:
 ```
 
 ```bash
-theoryofchange import observations --csv q4.csv --map mapping.yaml --toc theory.yaml \
+impact-model import observations --csv q4.csv --map mapping.yaml --model impact-model.yaml \
   --out obs-q4.yaml --unmatched q4-unmatched.csv
 ```
 
@@ -143,7 +143,7 @@ code is 1 when some rows were unmatched (the rest are still written).
 ## Status
 
 ```bash
-theoryofchange status theory.yaml -O obs-q3.yaml -O obs-q4.yaml --as-of 2026-12-31 --out status-q4.json
+impact-model status impact-model.yaml -O obs-q3.yaml -O obs-q4.yaml --as-of 2026-12-31 --out status-q4.json
 ```
 
 `status` prints a summary. `--format json` prints the full snapshot, and `--out`
@@ -188,8 +188,8 @@ impact is derived from its links, so a weak link shows up where it matters.
 Keep each snapshot and compare:
 
 ```bash
-theoryofchange status theory.yaml -O obs-q4.yaml --prev status-q3.json
-theoryofchange report exec theory.yaml -O obs-q4.yaml --prev status-q3.json
+impact-model status impact-model.yaml -O obs-q4.yaml --prev status-q3.json
+impact-model report exec impact-model.yaml -O obs-q4.yaml --prev status-q3.json
 ```
 
 The comparison lists the indicators, outcomes, links, and assumptions whose

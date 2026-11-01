@@ -1,7 +1,7 @@
-// Package burden totals what it costs to collect the indicators a theory
+// Package burden totals what it costs to collect the indicators an impact model
 // selects: staff minutes per week and questions per respondent per year,
 // overall and per pathway and collection mode, against the measurement
-// budget. It reads only the document and never the clock, so the same theory
+// budget. It reads only the document and never the clock, so the same impact model
 // always gives the same totals.
 package burden
 
@@ -12,7 +12,7 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // Calendar. Collection periods are converted with a fixed 52-week year, a
@@ -100,7 +100,7 @@ type Line struct {
 	Totals
 }
 
-// Report is the collection burden of a theory.
+// Report is the collection burden of an impact model.
 type Report struct {
 	// Lines are the selected indicators in document order.
 	Lines []Line `json:"lines"`
@@ -110,24 +110,24 @@ type Report struct {
 	// order, then indicators with no pathway under an empty key. An
 	// indicator serving several pathways counts in each.
 	ByPathway []Group `json:"byPathway"`
-	// ByMode lists collection modes in the order of toc.AllCollectionModes,
+	// ByMode lists collection modes in the order of impact.AllCollectionModes,
 	// then indicators with no collection under an empty key.
 	ByMode []Group `json:"byMode"`
 	// Uncosted lists selected indicators with no collection data, which the
 	// totals therefore leave out.
 	Uncosted []string `json:"uncosted"`
-	// Budget is nil when the theory declares none.
+	// Budget is nil when the impact model declares none.
 	Budget *Budget `json:"budget,omitempty"`
 }
 
 // Compute totals the selected indicators of doc. Retired and candidate
 // indicators, and indicators with no selection record, are not counted.
-func Compute(doc *toc.Document) (*Report, error) {
+func Compute(doc *impact.Model) (*Report, error) {
 	r := &Report{Lines: []Line{}, ByPathway: []Group{}, ByMode: []Group{}, Uncosted: []string{}}
 	byPathway := map[string]*Totals{}
 	byMode := map[string]*Totals{}
 	for _, ind := range doc.Indicators {
-		if ind.Selection == nil || ind.Selection.Status != toc.SelectionSelected || ind.Provenance.IsRejected() {
+		if ind.Selection == nil || ind.Selection.Status != impact.SelectionSelected || ind.Provenance.IsRejected() {
 			continue
 		}
 		cost, err := costOf(ind)
@@ -157,7 +157,7 @@ func Compute(doc *toc.Document) (*Report, error) {
 	}
 	r.ByPathway = groups(byPathway, pathwayOrder)
 	var modeOrder []string
-	for _, m := range toc.AllCollectionModes() {
+	for _, m := range impact.AllCollectionModes() {
 		modeOrder = append(modeOrder, string(m))
 	}
 	r.ByMode = groups(byMode, modeOrder)
@@ -165,7 +165,7 @@ func Compute(doc *toc.Document) (*Report, error) {
 	return r, nil
 }
 
-func costOf(ind toc.Indicator) (Totals, error) {
+func costOf(ind impact.Indicator) (Totals, error) {
 	c := ind.Collection
 	if c == nil || c.Period == "" {
 		return Totals{}, nil
@@ -227,7 +227,7 @@ func groups(m map[string]*Totals, order []string) []Group {
 	return out
 }
 
-func compare(b *toc.MeasurementBudget, r *Report) *Budget {
+func compare(b *impact.MeasurementBudget, r *Report) *Budget {
 	if b == nil {
 		return nil
 	}

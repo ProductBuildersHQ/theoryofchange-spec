@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Regenerate THIRD_PARTY_NOTICES.md and third_party/licenses/ from the modules
-# that are compiled into the theoryofchange binary.
+# that are compiled into the impact-model binary.
 #
 # Each module's LICENSE, COPYING, and NOTICE files are copied verbatim. The
 # license is named from the text of those files, and the script stops with an
@@ -13,7 +13,7 @@ cd "$(dirname "$0")/.."
 
 out=third_party/licenses
 notices=THIRD_PARTY_NOTICES.md
-cli=./cmd/theoryofchange
+cli=./cmd/impact-model
 
 rm -rf "$out"
 mkdir -p "$out"
@@ -56,7 +56,7 @@ copyright() {
   cat <<'HEADER'
 # Third-party notices
 
-The `theoryofchange` command and its MCP server are built from this repository
+The `impact-model` command and its MCP server are built from this repository
 together with the Go modules below. This repository is licensed under the
 [MIT License](LICENSE). Each module keeps its own license, and the full text of
 every license and notice file is in [`third_party/licenses/`](third_party/licenses/),
@@ -128,7 +128,7 @@ have not agreed to relicense remain MIT. Both licenses are permissive, and its
 ## Used to build, not distributed
 
 These modules are used by the schema generator and the tests. They are not
-compiled into the `theoryofchange` binary, so no notice travels with it, and
+compiled into the `impact-model` binary, so no notice travels with it, and
 they are listed here for completeness.
 
 | Module | Version | License |

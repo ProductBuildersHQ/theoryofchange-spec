@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/observation-set.schema.json",
+  "$id": "https://github.com/ProductBuildersHQ/impact-model/schema/v0/observation-set.schema.json",
   "$ref": "#/$defs/ObservationSet",
   "$defs": {
     "AssumptionAssessment": {
@@ -167,7 +167,7 @@
         "specVersion": {
           "type": "string"
         },
-        "tocId": {
+        "modelId": {
           "type": "string"
         },
         "period": {
@@ -209,7 +209,7 @@
       "required": [
         "kind",
         "specVersion",
-        "tocId"
+        "modelId"
       ]
     },
     "Story": {
@@ -289,6 +289,6 @@
       ]
     }
   },
-  "title": "Theory of Change Observation Set",
-  "description": "Indicator observations, assumption assessments, and notes for one Theory of Change and period."
+  "title": "Impact Model Observation Set",
+  "description": "Indicator observations, assumption assessments, and notes for one impact model and period."
 }

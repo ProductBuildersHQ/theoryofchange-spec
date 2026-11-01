@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
 // ReviewRow is one element put to a reviewer. The response columns are not
@@ -143,7 +143,7 @@ func ReviewPacket(v *report.View) string {
 	b.WriteString("This is a draft for you to correct. For each row, write one of " +
 		strings.Join(Decisions, ", ") + " in the **Decision** column. " +
 		"If you choose change, say what it should be in **Suggested change**. " +
-		"Use **Comment** for anything else. Please leave the ID column as it is: it is how your answers are matched to the theory.\n\n")
+		"Use **Comment** for anything else. Please leave the ID column as it is: it is how your answers are matched to the impact model.\n\n")
 	b.WriteString("Rows marked inferred or hypothesis are our reading, not something the organization said, and are the most important to check.\n\n")
 	for _, sec := range sections {
 		var table strings.Builder

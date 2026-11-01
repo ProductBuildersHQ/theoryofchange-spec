@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // Removing an indicator removes it from every headline list and every focus

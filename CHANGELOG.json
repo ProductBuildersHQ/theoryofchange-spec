@@ -1,11 +1,51 @@
 {
   "irVersion": "1.0",
-  "project": "theoryofchange-spec",
-  "repository": "https://github.com/ProductBuildersHQ/theoryofchange-spec",
+  "project": "impact-model",
+  "repository": "https://github.com/ProductBuildersHQ/impact-model",
   "versioning": "semver",
   "commitConvention": "conventional",
   "maintainers": ["grokify"],
   "releases": [
+    {
+      "version": "v0.3.0",
+      "date": "2026-11-01",
+      "highlights": [
+        {
+          "description": "The project is now `impact-model`: one impact model, drawn as a theory of change, a logic model, an outcome map, or a logframe, none of them a part of another (breaking)"
+        },
+        {
+          "description": "The first release under the module path `github.com/ProductBuildersHQ/impact-model` and the command `impact-model`"
+        }
+      ],
+      "changed": [
+        {
+          "description": "The project is now the impact model, and the theory of change, the logic model, the outcome map, and the logframe are views of it. The module is `github.com/ProductBuildersHQ/impact-model`, the command is `impact-model`, and the packages are `pkg/impact` and `pkg/impactio`, with the root type `Model`"
+        },
+        {
+          "description": "The document says `kind: ImpactModel` (and `ImpactModelStatus` for a status), the schemas are `impact-model` and `impact-model-status`, and a file is named `impact-model.yaml`. The fields `tocId` and `childToc` are `modelId` and `childModel`, and a cross-document reference starts `model:` where it started `toc:`"
+        },
+        {
+          "description": "Lint rule IDs start `IMP-` where they started `TOC-`, the `--toc` flag is `--model`, the MCP tools are `impact_*`, and the agent skills are `impact-*`"
+        },
+        {
+          "description": "Help text, messages, and reports say impact model where they said theory or Theory of Change. The workshop deck keeps Theory of Change in its title"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "The README, the docs index, and the concepts page describe one impact model with several views, and say that none of them is a part of another"
+        },
+        {
+          "description": "ADR 0001 records the rename: what changed, what did not, and the alternatives"
+        },
+        {
+          "description": "Third-party notices include d2vision, which the layered logic model diagram compiles in"
+        },
+        {
+          "description": "Release notes for v0.3.0, with a table of every old name and its new one"
+        }
+      ]
+    },
     {
       "version": "v0.2.0",
       "date": "2026-11-01",

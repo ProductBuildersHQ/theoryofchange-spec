@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/burden"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
 // StatusReportKinds are the report kinds made from a status snapshot.
@@ -29,7 +29,7 @@ type ReportParams struct {
 	// Period names the review merged by the learning-review report.
 	Period string
 	// PrevSets are the earlier period's observations, so new themes show.
-	PrevSets []*toc.ObservationSet
+	PrevSets []*impact.ObservationSet
 	// Pathway narrows the metric-tree report to one pathway.
 	Pathway string
 	// Template is the text/template source of the custom report.
@@ -38,10 +38,10 @@ type ReportParams struct {
 
 // StatusReport renders a report made from a status snapshot. sets are the
 // observation sets the snapshot was computed from. withStatus is false only
-// for a narrative, actors, or custom report of a theory with no
+// for a narrative, actors, or custom report of an impact model with no
 // observations, whose input then has a view without status.
-func StatusReport(kind string, in report.StatusInput, sets []*toc.ObservationSet, p ReportParams, withStatus bool) (string, error) {
-	var status *toc.Status
+func StatusReport(kind string, in report.StatusInput, sets []*impact.ObservationSet, p ReportParams, withStatus bool) (string, error) {
+	var status *impact.Status
 	if withStatus {
 		status = in.Status
 	}
@@ -88,9 +88,9 @@ func StatusReport(kind string, in report.StatusInput, sets []*toc.ObservationSet
 	return "", fmt.Errorf("unknown status report %q", kind)
 }
 
-// ViewWithoutStatus builds the report input for a theory that has no
+// ViewWithoutStatus builds the report input for an impact model that has no
 // observations.
-func ViewWithoutStatus(doc *toc.Document) (report.StatusInput, error) {
+func ViewWithoutStatus(doc *impact.Model) (report.StatusInput, error) {
 	g, err := BuildGraph(doc)
 	if err != nil {
 		return report.StatusInput{}, err

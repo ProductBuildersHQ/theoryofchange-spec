@@ -20,32 +20,32 @@
     {
       "category": "logic_flow",
       "score": "pass",
-      "reasoning": "Lint TOC-LOG-001/002 are GO: every link carries a rationale and assumption (e.g. ln-cohorts-skills). Precondition groups state logic and sufficiency: grp-capable (all), grp-collab (at_least 2, marked hypothesis), grp-voice (all). The reinforcing loop ln-collab-recruit is explicit."
+      "reasoning": "Lint IMP-LOG-001/002 are GO: every link carries a rationale and assumption (e.g. ln-cohorts-skills). Precondition groups state logic and sufficiency: grp-capable (all), grp-collab (at_least 2, marked hypothesis), grp-voice (all). The reinforcing loop ln-collab-recruit is explicit."
     },
     {
       "category": "root_causes",
       "score": "pass",
-      "reasoning": "context.rootCauses and the cause tree trace immediate causes (cause-no-peer-exchange, cause-high-overhead) to underlying (cause-isolation) and structural (cause-no-standing-voice) causes. TOC-CAU-001 is GO. cause-funding-volatility is set aside with a reason in outOfScope."
+      "reasoning": "context.rootCauses and the cause tree trace immediate causes (cause-no-peer-exchange, cause-high-overhead) to underlying (cause-isolation) and structural (cause-no-standing-voice) causes. IMP-CAU-001 is GO. cause-funding-volatility is set aside with a reason in outOfScope."
     },
     {
       "category": "assumptions_risks",
       "score": "pass",
-      "reasoning": "Critical and high assumptions (asm-skills-applied, asm-members-deliver, asm-time-to-attend, asm-vendor-terms, asm-officials-receptive, asm-positions-hold) have types, criticality and tests (TOC-ASM-001/004 GO). Risks rsk-time-burden, rsk-large-dominate, rsk-funder-shift etc. have mitigations and relatedAssumptionIds. Context and partner assumptions appear (asm-peer-trust, asm-officials-receptive). Evidence gaps on two assumptions are covered under evidence."
+      "reasoning": "Critical and high assumptions (asm-skills-applied, asm-members-deliver, asm-time-to-attend, asm-vendor-terms, asm-officials-receptive, asm-positions-hold) have types, criticality and tests (IMP-ASM-001/004 GO). Risks rsk-time-burden, rsk-large-dominate, rsk-funder-shift etc. have mitigations and relatedAssumptionIds. Context and partner assumptions appear (asm-peer-trust, asm-officials-receptive). Evidence gaps on two assumptions are covered under evidence."
     },
     {
       "category": "actors",
       "score": "pass",
-      "reasoning": "All interventions have owners (TOC-INT-002 GO); pathways pw-learning/shared/civic name ownerActorId; shared outcome oc-resident-access lists deliveredBy. Partners with stance and influence are identified (act-county-office, act-members-large, act-regional-funder, act-city-council stance unknown)."
+      "reasoning": "All interventions have owners (IMP-INT-002 GO); pathways pw-learning/shared/civic name ownerActorId; shared outcome oc-resident-access lists deliveredBy. Partners with stance and influence are identified (act-county-office, act-members-large, act-regional-funder, act-city-council stance unknown)."
     },
     {
       "category": "evidence",
       "score": "partial",
-      "reasoning": "Most links and assumptions cite followable evidence (ev-peer-learning, ev-pooled-purchasing, ev-county-services), and the contradicting ev-collab-study is acknowledged. However TOC-ASM-002 flags asm-officials-receptive and asm-positions-hold as high-criticality with no evidence; asm-officials-receptive is marked stated yet its provenance cites ev-funder-interview, a funder interview that does not concern county planning staff, so its basis looks overstated. Restricted ev-funder-interview is not penalised. Gaps are listed in the assessment."
+      "reasoning": "Most links and assumptions cite followable evidence (ev-peer-learning, ev-pooled-purchasing, ev-county-services), and the contradicting ev-collab-study is acknowledged. However IMP-ASM-002 flags asm-officials-receptive and asm-positions-hold as high-criticality with no evidence; asm-officials-receptive is marked stated yet its provenance cites ev-funder-interview, a funder interview that does not concern county planning staff, so its basis looks overstated. Restricted ev-funder-interview is not penalised. Gaps are listed in the assessment."
     },
     {
       "category": "targeting",
       "score": "partial",
-      "reasoning": "Target groups tg-small-members and tg-low-access-residents are named and oc-resident-access targets the latter. But TOC-EQU-001 warns that no indicator breaks results down by tg-low-access-residents (ind-residents-served is split by neighborhood and age group only), so results are not broken down by the group."
+      "reasoning": "Target groups tg-small-members and tg-low-access-residents are named and oc-resident-access targets the latter. But IMP-EQU-001 warns that no indicator breaks results down by tg-low-access-residents (ind-residents-served is split by neighborhood and age group only), so results are not broken down by the group."
     },
     {
       "category": "presentation",
@@ -60,17 +60,17 @@
     {
       "category": "feasible",
       "score": "pass",
-      "reasoning": "ceilingOfAccountability is long_term with rationale; resident impacts are tracked, not owned (TOC-ACC-001/002 GO). Resources are examined: rsk-staff-capacity (8 staff, three programs), open dec-liaison-staff, measurementBudget fits (TOC-BUD-001/002 GO), and dec-certification dropped an over-reach."
+      "reasoning": "ceilingOfAccountability is long_term with rationale; resident impacts are tracked, not owned (IMP-ACC-001/002 GO). Resources are examined: rsk-staff-capacity (8 staff, three programs), open dec-liaison-staff, measurementBudget fits (IMP-BUD-001/002 GO), and dec-certification dropped an over-reach."
     },
     {
       "category": "testable",
       "score": "partial",
-      "reasoning": "Lint TOC-MEA-002 warns of 4 indicators missing baseline, target or data source (ind-story-peer-help, ind-service-deals, ind-calendar-current, ind-briefings), and the assessment lists four outcomes within accountability with no indicator: oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use, oc-st-channel. TOC-MET-003 also warns the pw-learning roll-up cannot be computed. Most other indicators have baselines, targets, sources and frequencies."
+      "reasoning": "Lint IMP-MEA-002 warns of 4 indicators missing baseline, target or data source (ind-story-peer-help, ind-service-deals, ind-calendar-current, ind-briefings), and the assessment lists four outcomes within accountability with no indicator: oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use, oc-st-channel. IMP-MET-003 also warns the pw-learning roll-up cannot be computed. Most other indicators have baselines, targets, sources and frequencies."
     },
     {
       "category": "structural_integrity",
       "score": "partial",
-      "reasoning": "Lint reports no errors but four unexplained WARN rules: TOC-ASM-002 (asm-officials-receptive, asm-positions-hold), TOC-EQU-001 (oc-resident-access), TOC-MEA-002 (4 findings), TOC-MET-003 (pw-learning, met-enrollments). The document does not explain them, so not GO."
+      "reasoning": "Lint reports no errors but four unexplained WARN rules: IMP-ASM-002 (asm-officials-receptive, asm-positions-hold), IMP-EQU-001 (oc-resident-access), IMP-MEA-002 (4 findings), IMP-MET-003 (pw-learning, met-enrollments). The document does not explain them, so not GO."
     }
   ],
   "findings": [
@@ -87,15 +87,15 @@
       "category": "testable",
       "severity": "medium",
       "title": "Outcomes within accountability lack indicators and baselines",
-      "description": "oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use, oc-st-channel have no indicator; ind-story-peer-help, ind-service-deals, ind-calendar-current, ind-briefings lack baseline/target (TOC-MEA-002).",
-      "recommendation": "Add indicators, baselines and targets; add the weight metric for pw-learning (TOC-MET-003)."
+      "description": "oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use, oc-st-channel have no indicator; ind-story-peer-help, ind-service-deals, ind-calendar-current, ind-briefings lack baseline/target (IMP-MEA-002).",
+      "recommendation": "Add indicators, baselines and targets; add the weight metric for pw-learning (IMP-MET-003)."
     },
     {
       "id": "f3",
       "category": "evidence",
       "severity": "medium",
       "title": "Evidence basis overstated for high assumptions",
-      "description": "asm-officials-receptive is marked stated but cites a funder interview rather than evidence about county planning staff; asm-positions-hold cites none (TOC-ASM-002).",
+      "description": "asm-officials-receptive is marked stated but cites a funder interview rather than evidence about county planning staff; asm-positions-hold cites none (IMP-ASM-002).",
       "recommendation": "Cite relevant evidence or re-mark as inferred/hypothesis."
     },
     {
@@ -103,7 +103,7 @@
       "category": "targeting",
       "severity": "low",
       "title": "No disaggregation for low-access residents",
-      "description": "TOC-EQU-001 on oc-resident-access.",
+      "description": "IMP-EQU-001 on oc-resident-access.",
       "recommendation": "Break ind-residents-served down by tg-low-access-residents."
     }
   ],

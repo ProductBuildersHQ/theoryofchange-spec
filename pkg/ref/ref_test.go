@@ -13,10 +13,10 @@ func TestParseRoundTrip(t *testing.T) {
 		doc     string
 		element string
 	}{
-		{"toc:agent-auth-open-standard", "agent-auth-open-standard", ""},
-		{"toc:agent-auth-open-standard#oc-idp-support", "agent-auth-open-standard", "oc-idp-support"},
-		{"toc:a#b", "a", "b"},
-		{"toc:network2026#ind-attendee-hours", "network2026", "ind-attendee-hours"},
+		{"model:agent-auth-open-standard", "agent-auth-open-standard", ""},
+		{"model:agent-auth-open-standard#oc-idp-support", "agent-auth-open-standard", "oc-idp-support"},
+		{"model:a#b", "a", "b"},
+		{"model:network2026#ind-attendee-hours", "network2026", "ind-attendee-hours"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.in, func(t *testing.T) {
@@ -44,17 +44,17 @@ func TestParseInvalid(t *testing.T) {
 	}{
 		{"", ErrInvalidPrefix},
 		{"agent-auth", ErrInvalidPrefix},
-		{"TOC:agent-auth", ErrInvalidPrefix},
-		{"toc:", ErrEmptySlug},
-		{"toc:Agent-Auth", ErrInvalidSlug},
-		{"toc:1abc", ErrInvalidSlug},
-		{"toc:abc-", ErrInvalidSlug},
-		{"toc:a--b", ErrInvalidSlug},
-		{"toc:a_b", ErrInvalidSlug},
-		{"toc:doc#", ErrEmptySlug},
-		{"toc:doc#El", ErrInvalidSlug},
-		{"toc:doc#a#b", ErrInvalidSlug},
-		{"toc:" + strings.Repeat("a", MaxSlugLength+1), ErrSlugTooLong},
+		{"MODEL:agent-auth", ErrInvalidPrefix},
+		{"model:", ErrEmptySlug},
+		{"model:Agent-Auth", ErrInvalidSlug},
+		{"model:1abc", ErrInvalidSlug},
+		{"model:abc-", ErrInvalidSlug},
+		{"model:a--b", ErrInvalidSlug},
+		{"model:a_b", ErrInvalidSlug},
+		{"model:doc#", ErrEmptySlug},
+		{"model:doc#El", ErrInvalidSlug},
+		{"model:doc#a#b", ErrInvalidSlug},
+		{"model:" + strings.Repeat("a", MaxSlugLength+1), ErrSlugTooLong},
 	}
 	for _, tt := range tests {
 		t.Run(tt.in, func(t *testing.T) {
@@ -83,7 +83,7 @@ func TestNewAndMustNew(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New: %v", err)
 	}
-	if r.IsElement() || r.String() != "toc:doc" {
+	if r.IsElement() || r.String() != "model:doc" {
 		t.Fatalf("unexpected ref %+v", r)
 	}
 	if _, err := New("doc", "Bad"); err == nil {
@@ -115,7 +115,7 @@ func TestJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Marshal: %v", err)
 	}
-	if string(b) != `{"target":"toc:doc#oc-1"}` {
+	if string(b) != `{"target":"model:doc#oc-1"}` {
 		t.Fatalf("Marshal = %s", b)
 	}
 	var got holder

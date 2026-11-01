@@ -46,7 +46,7 @@ schemas are generated from the Go types with
 uses the [official Go SDK](https://github.com/modelcontextprotocol/go-sdk). The
 list of every module compiled into the binary, with its license and copyright
 notice, is in
-[THIRD_PARTY_NOTICES.md](https://github.com/ProductBuildersHQ/theoryofchange-spec/blob/main/THIRD_PARTY_NOTICES.md).
+[THIRD_PARTY_NOTICES.md](https://github.com/ProductBuildersHQ/impact-model/blob/main/THIRD_PARTY_NOTICES.md).
 
 Some commands call [Marp](https://marp.app), the
 [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli), and
@@ -65,11 +65,11 @@ template comes from [visionspec](https://github.com/ProductBuildersHQ/visionspec
 - The names of organizations and publications are used to credit their work.
   Naming a source does not mean that its authors or publishers have reviewed or
   endorse this project.
-- This project is licensed under the [MIT License](https://github.com/ProductBuildersHQ/theoryofchange-spec/blob/main/LICENSE). The software it depends on keeps its own
+- This project is licensed under the [MIT License](https://github.com/ProductBuildersHQ/impact-model/blob/main/LICENSE). The software it depends on keeps its own
   licenses, which are all permissive.
 
 If a credit is missing or wrong, please
-[open an issue](https://github.com/ProductBuildersHQ/theoryofchange-spec/issues).
+[open an issue](https://github.com/ProductBuildersHQ/impact-model/issues).
 
 ## Works cited above
 

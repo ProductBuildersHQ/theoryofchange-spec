@@ -9,7 +9,7 @@ import (
 // observations, in the order the definitions pack presents them.
 var DefinitionKinds = []string{"pathway", "logic-model", "logic-model-diagram", "logic-model-layered", "logic-model-d2", "outcome-map", "logframe", "metrics", "metric-selection", "collection-plan", "glossary", "assessment", "definitions"}
 
-// PathwayDiagrams renders the causal-pathway diagram of the whole theory,
+// PathwayDiagrams renders the causal-pathway diagram of the whole impact model,
 // then one per pathway, each as a titled Mermaid block.
 func PathwayDiagrams(whole *View, pathways []*View) string {
 	var b strings.Builder
@@ -17,7 +17,7 @@ func PathwayDiagrams(whole *View, pathways []*View) string {
 	diagram := func(title string, v *View) {
 		fmt.Fprintf(&b, "### %s\n\n```mermaid\n%s```\n\n", mdText(title), Mermaid(v, MermaidOptions{}))
 	}
-	diagram("The theory on one page", whole)
+	diagram("The theory of change on one page", whole)
 	for _, v := range pathways {
 		diagram(PathwayTitle(v), v)
 	}

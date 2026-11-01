@@ -1,4 +1,4 @@
-// Package schema embeds the JSON Schemas generated from pkg/toc and
+// Package schema embeds the JSON Schemas generated from pkg/impact and
 // validates documents against them.
 //
 // Never edit the *.schema.json files by hand; regenerate them with:
@@ -28,9 +28,9 @@ const suffix = ".schema.json"
 
 // Schema names.
 const (
-	TheoryOfChange = "theory-of-change"
+	ImpactModel    = "impact-model"
 	ObservationSet = "observation-set"
-	Status         = "theory-of-change-status"
+	Status         = "impact-model-status"
 	StatusDiff     = "status-diff"
 	ActorRegistry  = "actor-registry"
 	ReviewResponse = "review-response"

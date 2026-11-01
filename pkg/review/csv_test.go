@@ -4,10 +4,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
-const sheet = "# toc:riverbend-network version:0.2.0 hash:sha256:current\r\n" +
+const sheet = "# model:riverbend-network version:0.2.0 hash:sha256:current\r\n" +
 	"kind,id,statement,basis,sources,decision,suggested_change,comment\r\n" +
 	"outcome,oc-st-leader-skills,Leaders gain skills,stated,,Agree,,\r\n" +
 	"outcome,oc-resident-access,Residents get services,inferred,,change,\"title: Residents reach services\ncategory: access\",\r\n" +
@@ -19,13 +19,13 @@ func TestFromSheet(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if resp.TocID != "riverbend-network" || resp.Version != "0.2.0" || resp.ContentHash != "sha256:current" || resp.Method != toc.ReviewSheet {
+	if resp.ModelID != "riverbend-network" || resp.Version != "0.2.0" || resp.ContentHash != "sha256:current" || resp.Method != impact.ReviewSheet {
 		t.Fatalf("response = %+v", resp)
 	}
 	if len(resp.Rows) != 3 {
 		t.Fatalf("rows = %+v", resp.Rows)
 	}
-	if resp.Rows[0].Decision != toc.DecisionAgree || resp.Rows[0].Origin != toc.OriginSheet {
+	if resp.Rows[0].Decision != impact.DecisionAgree || resp.Rows[0].Origin != impact.OriginSheet {
 		t.Errorf("row 0 = %+v", resp.Rows[0])
 	}
 	if !strings.Contains(resp.Rows[1].SuggestedChange, "\ncategory: access") {
@@ -46,7 +46,7 @@ func TestFromSheet(t *testing.T) {
 
 func TestFromSheetWithoutStampIsStale(t *testing.T) {
 	body := sheet[strings.Index(sheet, "kind,"):]
-	resp, err := FromSheet([]byte(body), SheetMeta{Reviewers: []string{"x"}, Date: "2026-03-01", TocID: "riverbend-network"})
+	resp, err := FromSheet([]byte(body), SheetMeta{Reviewers: []string{"x"}, Date: "2026-03-01", ModelID: "riverbend-network"})
 	if err != nil {
 		t.Fatal(err)
 	}

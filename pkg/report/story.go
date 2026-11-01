@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // Disclosure is a story as a report may show it.
 type Disclosure struct {
-	Story toc.Story
+	Story impact.Story
 	// ShowQuote is true only when consent is granted and the story's
 	// sensitivity may be rendered verbatim.
 	ShowQuote bool
@@ -24,9 +24,9 @@ type Disclosure struct {
 // only if its sensitivity may be rendered verbatim, so a restricted story
 // appears without the words of the person. Stories dated after asOf are not
 // considered. The order is by date, then ID, so output is stable.
-func Disclose(sets []*toc.ObservationSet, asOf time.Time, keep func(toc.Story) bool) (shown []Disclosure, withheld int) {
+func Disclose(sets []*impact.ObservationSet, asOf time.Time, keep func(impact.Story) bool) (shown []Disclosure, withheld int) {
 	seen := map[string]bool{}
-	var all []toc.Story
+	var all []impact.Story
 	for _, set := range sets {
 		for _, s := range set.Stories {
 			if seen[s.ID] {
@@ -42,14 +42,14 @@ func Disclose(sets []*toc.ObservationSet, asOf time.Time, keep func(toc.Story) b
 			all = append(all, s)
 		}
 	}
-	slices.SortStableFunc(all, func(a, b toc.Story) int {
+	slices.SortStableFunc(all, func(a, b impact.Story) int {
 		if c := strings.Compare(a.Date, b.Date); c != 0 {
 			return c
 		}
 		return strings.Compare(a.ID, b.ID)
 	})
 	for _, s := range all {
-		if s.Consent != toc.ConsentGranted {
+		if s.Consent != impact.ConsentGranted {
 			withheld++
 			continue
 		}
@@ -62,7 +62,7 @@ func Disclose(sets []*toc.ObservationSet, asOf time.Time, keep func(toc.Story) b
 // the numbers and outcomes reported to it, the stories it may be told, and
 // how the stories fall under the codebook's themes. It is a scaffold for
 // someone to turn into prose; every number comes from the snapshot.
-func Story(in StatusInput, sets []*toc.ObservationSet, audienceID string) (string, error) {
+func Story(in StatusInput, sets []*impact.ObservationSet, audienceID string) (string, error) {
 	aud, ok := in.Doc.Audience(audienceID)
 	if !ok {
 		return "", fmt.Errorf("report: unknown audience %q", audienceID)
@@ -83,7 +83,7 @@ func Story(in StatusInput, sets []*toc.ObservationSet, audienceID string) (strin
 	b.WriteString(audienceNumbers(in, audienceID))
 	b.WriteString(audienceOutcomes(in, audienceID))
 
-	shown, withheld := Disclose(sets, asOf, func(s toc.Story) bool { return slices.Contains(s.AudienceIDs, audienceID) })
+	shown, withheld := Disclose(sets, asOf, func(s impact.Story) bool { return slices.Contains(s.AudienceIDs, audienceID) })
 	b.WriteString("## Stories\n\n")
 	if len(shown) == 0 {
 		b.WriteString("No story that this audience may be told is available yet.\n\n")
@@ -136,7 +136,7 @@ func audienceNumbers(in StatusInput, audienceID string) string {
 		ind := n.Indicator
 		iv, s := views[ind.ID], byInd[ind.ID]
 		claim := "attributable to the work"
-		if ind.EffectiveClaim() == toc.ClaimContribution {
+		if ind.EffectiveClaim() == impact.ClaimContribution {
 			claim = "a contribution, not attributable to the work alone"
 		}
 		rows = append(rows, fmt.Sprintf("| %s | %s | %s | %s |", MDCell(n.Label), orDash(MDCell(iv.Latest)), statusLabel(string(s.State)), claim))
@@ -193,7 +193,7 @@ func audienceOutcomes(in StatusInput, audienceID string) string {
 
 // themeCounts counts the shown stories under each codebook theme, in the
 // codebook's order.
-func themeCounts(doc *toc.Document, shown []Disclosure) string {
+func themeCounts(doc *impact.Model, shown []Disclosure) string {
 	counts := map[string]int{}
 	for _, d := range shown {
 		for _, id := range d.Story.ThemeIDs {

@@ -47,7 +47,7 @@ Outcomes above the ceiling are tracked but not owned: we contribute to them, we 
 
 ---
 
-# The theory on one page
+# The theory of change on one page
 
 ```mermaid
 flowchart BT

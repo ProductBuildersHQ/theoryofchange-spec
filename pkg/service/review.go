@@ -1,18 +1,18 @@
 package service
 
 import (
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/review"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/share"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/review"
+	"github.com/ProductBuildersHQ/impact-model/pkg/share"
 )
 
 // ImportReview maps a review response onto doc as proposals. doc is never
 // modified. Quoted text is matched against the statements the review packet
 // showed, and the response's hash against the current document's. step is
-// the consultation step to record; empty means the whole theory.
-func ImportReview(doc *toc.Document, resp *toc.ReviewResponse, step toc.ConsultationStep) (*review.Result, error) {
+// the consultation step to record; empty means the whole impact model.
+func ImportReview(doc *impact.Model, resp *impact.ReviewResponse, step impact.ConsultationStep) (*review.Result, error) {
 	g, err := BuildGraph(doc)
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func ImportReview(doc *toc.Document, resp *toc.ReviewResponse, step toc.Consulta
 	for i, r := range rows {
 		candidates[i] = review.Candidate{ID: r.ID, Statement: r.Statement}
 	}
-	hash, err := tocio.ContentHash(doc)
+	hash, err := impactio.ContentHash(doc)
 	if err != nil {
 		return nil, err
 	}

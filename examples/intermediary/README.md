@@ -7,7 +7,7 @@ areas modeled as pathways: Learning Exchange, Shared Services, and Civic Voice.
 
 Files:
 
-- `theory.yaml` - the Theory of Change (id `riverbend-network`)
+- `impact-model.yaml` - the Theory of Change (id `riverbend-network`)
 - `observations-2026-q3.yaml` - one period of measurements and assessments
 
 ## Features demonstrated
@@ -41,8 +41,8 @@ Files:
 ## Check it
 
 ```bash
-theoryofchange validate theory.yaml
-theoryofchange validate observations-2026-q3.yaml --toc theory.yaml
-theoryofchange graph theory.yaml
-theoryofchange fmt --check theory.yaml observations-2026-q3.yaml
+impact-model validate impact-model.yaml
+impact-model validate observations-2026-q3.yaml --model impact-model.yaml
+impact-model graph impact-model.yaml
+impact-model fmt --check impact-model.yaml observations-2026-q3.yaml
 ```

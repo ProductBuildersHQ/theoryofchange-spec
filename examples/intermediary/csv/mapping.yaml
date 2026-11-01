@@ -1,5 +1,5 @@
 # How the network's monthly spreadsheet maps onto observations.
-tocId: riverbend-network
+modelId: riverbend-network
 period: 2026-Q4
 dateFormat: 02/01/2006
 columns:

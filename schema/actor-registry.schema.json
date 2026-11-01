@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/actor-registry.schema.json",
+  "$id": "https://github.com/ProductBuildersHQ/impact-model/schema/v0/actor-registry.schema.json",
   "$ref": "#/$defs/ActorRegistry",
   "$defs": {
     "Actor": {
@@ -232,6 +232,6 @@
       ]
     }
   },
-  "title": "Theory of Change Actor Registry",
-  "description": "A shared list of actors referenced by several theories."
+  "title": "Impact Model Actor Registry",
+  "description": "A shared list of actors referenced by several impact models."
 }

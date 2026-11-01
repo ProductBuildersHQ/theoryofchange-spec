@@ -8,21 +8,21 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 func newInitCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "init",
-		Short: "Write a starter Theory of Change",
-		Long: `Write a small starter Theory of Change that already passes validation, with
+		Short: "Write a starter impact model",
+		Long: `Write a small starter impact model that already passes validation, with
 TODO placeholders to replace. The output is YAML unless --format json is
 given or --out ends in .json.
 
 Available templates: ` + strings.Join(service.Templates(), ", ") + `.`,
-		Example: `  theoryofchange init --id youth-employment --name "Youth Employment" --out theory.yaml
-  theoryofchange init --format json > theory.json`,
+		Example: `  impact-model init --id youth-employment --name "Youth Employment" --out impact-model.yaml
+  impact-model init --format json > impact-model.json`,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			out := flagString(cmd, "out")
@@ -39,7 +39,7 @@ Available templates: ` + strings.Join(service.Templates(), ", ") + `.`,
 			if err != nil {
 				return usageErr("%v", err)
 			}
-			data, err := tocio.Canonical(doc, f)
+			data, err := impactio.Canonical(doc, f)
 			if err != nil {
 				return &ExitError{Code: ExitUsageErr, Err: err}
 			}
@@ -54,7 +54,7 @@ Available templates: ` + strings.Join(service.Templates(), ", ") + `.`,
 			} else if err != nil && !errors.Is(err, os.ErrNotExist) {
 				return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("stat %s: %w", out, err)}
 			}
-			if err := tocio.WriteFile(out, data); err != nil {
+			if err := impactio.WriteFile(out, data); err != nil {
 				return &ExitError{Code: ExitUsageErr, Err: err}
 			}
 			if !flagBool(cmd, "quiet") {
@@ -74,19 +74,19 @@ Available templates: ` + strings.Join(service.Templates(), ", ") + `.`,
 	return cmd
 }
 
-func initFormat(cmd *cobra.Command, out string) (tocio.Format, error) {
+func initFormat(cmd *cobra.Command, out string) (impactio.Format, error) {
 	switch flagString(cmd, "format") {
 	case "json":
-		return tocio.FormatJSON, nil
+		return impactio.FormatJSON, nil
 	case "yaml", "yml":
-		return tocio.FormatYAML, nil
+		return impactio.FormatYAML, nil
 	case "":
 		if out != "" {
-			if f, err := tocio.FormatFromPath(out); err == nil {
+			if f, err := impactio.FormatFromPath(out); err == nil {
 				return f, nil
 			}
 		}
-		return tocio.FormatYAML, nil
+		return impactio.FormatYAML, nil
 	default:
 		return "", usageErr("--format must be yaml or json")
 	}

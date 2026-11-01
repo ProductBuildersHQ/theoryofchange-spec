@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 const (
@@ -17,19 +17,19 @@ const (
 	statedID   = "oc-st-leader-skills"
 )
 
-func load(t *testing.T) *toc.Document {
+func load(t *testing.T) *impact.Model {
 	t.Helper()
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
 	return doc
 }
 
-func response(rows ...toc.ReviewItem) *toc.ReviewResponse {
-	return &toc.ReviewResponse{
-		Kind: toc.KindReviewResponse, SpecVersion: "0.1", TocID: "riverbend-network", ContentHash: hash,
-		Reviewers: []string{"program staff"}, Method: toc.ReviewSheet, Date: "2026-03-01", Rows: rows,
+func response(rows ...impact.ReviewItem) *impact.ReviewResponse {
+	return &impact.ReviewResponse{
+		Kind: impact.KindReviewResponse, SpecVersion: "0.1", ModelID: "riverbend-network", ContentHash: hash,
+		Reviewers: []string{"program staff"}, Method: impact.ReviewSheet, Date: "2026-03-01", Rows: rows,
 	}
 }
 
@@ -37,7 +37,7 @@ func opts(c ...Candidate) Options { return Options{ContentHash: hash, Candidates
 
 func TestAgreeConfirmsBasis(t *testing.T) {
 	doc := load(t)
-	res, err := Import(doc, response(toc.ReviewItem{ElementID: statedID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet}), opts())
+	res, err := Import(doc, response(impact.ReviewItem{ElementID: statedID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet}), opts())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func TestAgreeConfirmsBasis(t *testing.T) {
 	}
 	o, _ := applied.Document.Outcome(statedID)
 	p := o.Provenance
-	if p.Basis != toc.BasisConfirmed || p.DecidedAt != "2026-03-01" || p.DecidedBy != "program staff" {
+	if p.Basis != impact.BasisConfirmed || p.DecidedAt != "2026-03-01" || p.DecidedBy != "program staff" {
 		t.Errorf("provenance = %+v", p)
 	}
 	if len(p.EvidenceIDs) != 1 {
@@ -60,7 +60,7 @@ func TestAgreeConfirmsBasis(t *testing.T) {
 
 func TestRemoveRejects(t *testing.T) {
 	doc := load(t)
-	res, _ := Import(doc, response(toc.ReviewItem{ElementID: inferredID, Decision: toc.DecisionRemove, Origin: toc.OriginTable}), opts())
+	res, _ := Import(doc, response(impact.ReviewItem{ElementID: inferredID, Decision: impact.DecisionRemove, Origin: impact.OriginTable}), opts())
 	applied, err := edit.Apply(doc, res.Patch, edit.Options{AllowErrors: true})
 	if err != nil || !applied.Applied {
 		t.Fatalf("apply: %v %+v", err, applied)
@@ -73,8 +73,8 @@ func TestRemoveRejects(t *testing.T) {
 
 func TestStructuredChange(t *testing.T) {
 	doc := load(t)
-	row := toc.ReviewItem{
-		ElementID: statedID, Decision: toc.DecisionChange, Origin: toc.OriginSuggestion,
+	row := impact.ReviewItem{
+		ElementID: statedID, Decision: impact.DecisionChange, Origin: impact.OriginSuggestion,
 		SuggestedChange: "title: Leaders gain coaching skills\ncategory: leadership",
 	}
 	res, _ := Import(doc, response(row), opts())
@@ -93,14 +93,14 @@ func TestStructuredChange(t *testing.T) {
 
 func TestFlaggedRows(t *testing.T) {
 	doc := load(t)
-	rows := []toc.ReviewItem{
-		{ElementID: statedID, Decision: toc.DecisionChange, SuggestedChange: "Make this about confidence too", Origin: toc.OriginSheet},
-		{ElementID: statedID, Decision: toc.DecisionUnsure, Origin: toc.OriginSheet},
-		{ElementID: statedID, Comment: "Who funds this?", Origin: toc.OriginComment},
-		{ElementID: "no-such-id", Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
-		{Comment: "What about the funders?", Origin: toc.OriginComment},
-		{QuotedText: "text that is nowhere", Decision: toc.DecisionAgree, Origin: toc.OriginComment},
-		{ElementID: statedID, Decision: toc.DecisionChange, SuggestedChange: "id: other", Origin: toc.OriginSheet},
+	rows := []impact.ReviewItem{
+		{ElementID: statedID, Decision: impact.DecisionChange, SuggestedChange: "Make this about confidence too", Origin: impact.OriginSheet},
+		{ElementID: statedID, Decision: impact.DecisionUnsure, Origin: impact.OriginSheet},
+		{ElementID: statedID, Comment: "Who funds this?", Origin: impact.OriginComment},
+		{ElementID: "no-such-id", Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
+		{Comment: "What about the funders?", Origin: impact.OriginComment},
+		{QuotedText: "text that is nowhere", Decision: impact.DecisionAgree, Origin: impact.OriginComment},
+		{ElementID: statedID, Decision: impact.DecisionChange, SuggestedChange: "id: other", Origin: impact.OriginSheet},
 	}
 	res, _ := Import(doc, response(rows...), opts())
 	if res.Mapped != 0 || len(res.Patch) != 0 || len(res.Flags) != len(rows) {
@@ -122,9 +122,9 @@ func TestQuotedTextResolution(t *testing.T) {
 		{ID: statedID, Statement: "Leaders gain coaching-based skills and confidence"},
 		{ID: "a", Statement: "Same words"}, {ID: "b", Statement: "Same  words"},
 	}
-	rows := []toc.ReviewItem{
-		{QuotedText: "  Leaders gain coaching-based\nskills and confidence ", Decision: toc.DecisionAgree, Origin: toc.OriginComment},
-		{QuotedText: "Same words", Decision: toc.DecisionAgree, Origin: toc.OriginComment},
+	rows := []impact.ReviewItem{
+		{QuotedText: "  Leaders gain coaching-based\nskills and confidence ", Decision: impact.DecisionAgree, Origin: impact.OriginComment},
+		{QuotedText: "Same words", Decision: impact.DecisionAgree, Origin: impact.OriginComment},
 	}
 	res, _ := Import(doc, response(rows...), opts(cands...))
 	if res.Mapped != 1 || len(res.Flags) != 1 || !strings.Contains(res.Flags[0].Reason, "several") || res.Flags[0].Row != 2 {
@@ -138,8 +138,8 @@ func TestQuotedTextResolution(t *testing.T) {
 func TestStaleHashFlagsEveryRow(t *testing.T) {
 	doc := load(t)
 	resp := response(
-		toc.ReviewItem{ElementID: statedID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
-		toc.ReviewItem{Comment: "hello", Origin: toc.OriginComment},
+		impact.ReviewItem{ElementID: statedID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
+		impact.ReviewItem{Comment: "hello", Origin: impact.OriginComment},
 	)
 	resp.ContentHash = "sha256:older"
 	res, _ := Import(doc, resp, opts())
@@ -157,9 +157,9 @@ func TestStaleHashFlagsEveryRow(t *testing.T) {
 
 func TestLaterRowsSeeEarlierOnes(t *testing.T) {
 	doc := load(t)
-	rows := []toc.ReviewItem{
-		{ElementID: statedID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
-		{ElementID: statedID, Decision: toc.DecisionChange, SuggestedChange: "title: Better title", Origin: toc.OriginSheet},
+	rows := []impact.ReviewItem{
+		{ElementID: statedID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
+		{ElementID: statedID, Decision: impact.DecisionChange, SuggestedChange: "title: Better title", Origin: impact.OriginSheet},
 	}
 	res, _ := Import(doc, response(rows...), opts())
 	if res.Mapped != 2 || res.NeedsHuman() {
@@ -175,8 +175,8 @@ func TestDocumentNeverModified(t *testing.T) {
 	doc := load(t)
 	before := mustJSON(t, doc)
 	_, err := Import(doc, response(
-		toc.ReviewItem{ElementID: statedID, Decision: toc.DecisionRemove, Origin: toc.OriginSheet},
-		toc.ReviewItem{ElementID: inferredID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
+		impact.ReviewItem{ElementID: statedID, Decision: impact.DecisionRemove, Origin: impact.OriginSheet},
+		impact.ReviewItem{ElementID: inferredID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
 	), opts())
 	if err != nil {
 		t.Fatal(err)
@@ -189,14 +189,14 @@ func TestDocumentNeverModified(t *testing.T) {
 func TestConsultation(t *testing.T) {
 	doc := load(t)
 	resp := response(
-		toc.ReviewItem{ElementID: statedID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
-		toc.ReviewItem{ElementID: inferredID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
-		toc.ReviewItem{ElementID: inferredID, Decision: toc.DecisionRemove, Origin: toc.OriginSheet},
-		toc.ReviewItem{Comment: "note", Origin: toc.OriginComment},
+		impact.ReviewItem{ElementID: statedID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
+		impact.ReviewItem{ElementID: inferredID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
+		impact.ReviewItem{ElementID: inferredID, Decision: impact.DecisionRemove, Origin: impact.OriginSheet},
+		impact.ReviewItem{Comment: "note", Origin: impact.OriginComment},
 	)
 	res, _ := Import(doc, resp, opts())
 	c := res.Consultation
-	if c.ID != "consult-review-2026-03-01" || c.Step != toc.StepWhole || c.Method != toc.MethodDocumentReview ||
+	if c.ID != "consult-review-2026-03-01" || c.Step != impact.StepWhole || c.Method != impact.MethodDocumentReview ||
 		!slices.Equal(c.StakeholderGroups, []string{"program staff"}) {
 		t.Errorf("consultation = %+v", c)
 	}
@@ -205,29 +205,29 @@ func TestConsultation(t *testing.T) {
 		t.Errorf("findings = %v, want %v", c.Findings, want)
 	}
 
-	doc.Consultations = append(doc.Consultations, toc.Consultation{ID: c.ID, Date: "2026-03-01", Step: toc.StepWhole})
+	doc.Consultations = append(doc.Consultations, impact.Consultation{ID: c.ID, Date: "2026-03-01", Step: impact.StepWhole})
 	if got := consultationID(doc, "2026-03-01"); got != "consult-review-2026-03-01-2" {
 		t.Errorf("collision id = %q", got)
 	}
-	resp.Method = toc.ReviewWorkshop
-	if res, _ := Import(doc, resp, opts()); res.Consultation.Method != toc.MethodWorkshop {
+	resp.Method = impact.ReviewWorkshop
+	if res, _ := Import(doc, resp, opts()); res.Consultation.Method != impact.MethodWorkshop {
 		t.Errorf("workshop method = %q", res.Consultation.Method)
 	}
 }
 
 func TestWrongTheoryRefused(t *testing.T) {
 	resp := response()
-	resp.TocID = "another-theory"
+	resp.ModelID = "another-model"
 	if _, err := Import(load(t), resp, opts()); err == nil {
-		t.Fatal("a response for another theory was accepted")
+		t.Fatal("a response for another impact model was accepted")
 	}
 }
 
 func TestDeterministic(t *testing.T) {
 	doc := load(t)
 	resp := response(
-		toc.ReviewItem{ElementID: statedID, Decision: toc.DecisionAgree, Origin: toc.OriginSheet},
-		toc.ReviewItem{Comment: "x", Origin: toc.OriginComment},
+		impact.ReviewItem{ElementID: statedID, Decision: impact.DecisionAgree, Origin: impact.OriginSheet},
+		impact.ReviewItem{Comment: "x", Origin: impact.OriginComment},
 	)
 	a, _ := Import(doc, resp, opts())
 	b, _ := Import(doc, resp, opts())

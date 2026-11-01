@@ -11,13 +11,13 @@ import (
 
 	"github.com/plexusone/structured-evaluation/rubric"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
-func load(t *testing.T) *toc.Document {
+func load(t *testing.T) *impact.Model {
 	t.Helper()
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,7 +36,7 @@ func bundle(t *testing.T) *Bundle {
 // verdict passes every category, except the overrides.
 func verdict(b *Bundle, judgeID string, override map[string]rubric.ScoreValue) *Verdict {
 	v := &Verdict{BundleHash: b.BundleHash}
-	v.Metadata = rubric.ReportMetadata{Document: "theory.yaml", GeneratedAt: time.Date(2026, 3, 1, 0, 0, 0, 0, time.UTC), ReviewerID: judgeID}
+	v.Metadata = rubric.ReportMetadata{Document: "impact-model.yaml", GeneratedAt: time.Date(2026, 3, 1, 0, 0, 0, 0, time.UTC), ReviewerID: judgeID}
 	v.ReviewType = "toc"
 	v.Judge = &rubric.JudgeMetadata{JudgeID: judgeID}
 	v.Findings = []rubric.Finding{}
@@ -58,7 +58,7 @@ func TestBundleIsDeterministicAndHashed(t *testing.T) {
 	ja, _ := json.Marshal(a)
 	jb, _ := json.Marshal(b)
 	if string(ja) != string(jb) || a.BundleHash == "" {
-		t.Error("two bundles of the same theory differ")
+		t.Error("two bundles of the same impact model differ")
 	}
 	if a.Kind != BundleKind || a.Profile != "core" || a.Rubric == nil || a.Lint == nil || a.Instructions == "" || !strings.Contains(a.Narrative, "assessment") {
 		t.Errorf("bundle is incomplete: %+v", a)
@@ -70,7 +70,7 @@ func TestBundleIsDeterministicAndHashed(t *testing.T) {
 		t.Fatal(err)
 	}
 	if c.BundleHash == a.BundleHash {
-		t.Error("editing the theory did not change the hash")
+		t.Error("editing the impact model did not change the hash")
 	}
 	dev, err := Build(load(t), "development")
 	if err != nil {
@@ -87,9 +87,9 @@ func TestBundleIsDeterministicAndHashed(t *testing.T) {
 func TestRestrictedEvidenceNeverReachesTheJudge(t *testing.T) {
 	doc := load(t)
 	doc.Evidence = append(doc.Evidence,
-		toc.Evidence{ID: "ev-secret", Title: "Board minutes", Excerpt: "SECRET-EXCERPT", Summary: "SECRET-SUMMARY", URL: "https://example.org/SECRET-URL", Sensitivity: toc.SensitivityRestricted},
-		toc.Evidence{ID: "ev-unset", Title: "Interview", Excerpt: "UNSET-EXCERPT"},
-		toc.Evidence{ID: "ev-open", Title: "Public report", Excerpt: "PUBLIC-EXCERPT", Sensitivity: toc.SensitivityPublic},
+		impact.Evidence{ID: "ev-secret", Title: "Board minutes", Excerpt: "SECRET-EXCERPT", Summary: "SECRET-SUMMARY", URL: "https://example.org/SECRET-URL", Sensitivity: impact.SensitivityRestricted},
+		impact.Evidence{ID: "ev-unset", Title: "Interview", Excerpt: "UNSET-EXCERPT"},
+		impact.Evidence{ID: "ev-open", Title: "Public report", Excerpt: "PUBLIC-EXCERPT", Sensitivity: impact.SensitivityPublic},
 	)
 	b, err := Build(doc, "core")
 	if err != nil {
@@ -112,7 +112,7 @@ func TestRestrictedEvidenceNeverReachesTheJudge(t *testing.T) {
 func TestRecordChecksTheVerdict(t *testing.T) {
 	b := bundle(t)
 	dir := t.TempDir()
-	path := filepath.Join(dir, "theory.yaml")
+	path := filepath.Join(dir, "impact-model.yaml")
 
 	v := verdict(b, "judge-a", nil)
 	got, err := Record(path, b, v, "")
@@ -150,7 +150,7 @@ func TestRecordChecksTheVerdict(t *testing.T) {
 
 func TestJudgeNamesCannotEscapeTheStore(t *testing.T) {
 	b := bundle(t)
-	path := filepath.Join(t.TempDir(), "theory.yaml")
+	path := filepath.Join(t.TempDir(), "impact-model.yaml")
 	for _, name := range []string{"../evil", "a/b", ".hidden", "UPPER", "a b", strings.Repeat("a", 65), "..", "a..b"} {
 		if _, err := Record(path, b, verdict(b, "x", nil), name); !errors.Is(err, ErrJudgeName) {
 			t.Errorf("name %q: error = %v", name, err)
@@ -187,7 +187,7 @@ func TestVerdictsAreFlatReports(t *testing.T) {
 
 func recordAll(t *testing.T, b *Bundle, vs map[string]*Verdict) (string, []string, map[string]*Verdict) {
 	t.Helper()
-	path := filepath.Join(t.TempDir(), "theory.yaml")
+	path := filepath.Join(t.TempDir(), "impact-model.yaml")
 	for name, v := range vs {
 		if _, err := Record(path, b, v, name); err != nil {
 			t.Fatal(err)
@@ -277,7 +277,7 @@ func TestSummarizeSingleJudgeAndFailures(t *testing.T) {
 	_, names, vs = recordAll(t, b, map[string]*Verdict{"blocker": blocking})
 	s, _ = Summarize(b, names, vs, rubric.AggregationMajority)
 	if s.Pass || !strings.Contains(strings.Join(s.Reasons, ";"), "structural_integrity") {
-		t.Errorf("a failed blocking category must fail the theory: %+v", s.Reasons)
+		t.Errorf("a failed blocking category must fail the impact model: %+v", s.Reasons)
 	}
 
 	lots := verdict(b, "finder", nil)
@@ -287,7 +287,7 @@ func TestSummarizeSingleJudgeAndFailures(t *testing.T) {
 	_, names, vs = recordAll(t, b, map[string]*Verdict{"finder": lots})
 	s, _ = Summarize(b, names, vs, rubric.AggregationMajority)
 	if s.Pass {
-		t.Error("high findings above the rubric's limit must fail the theory")
+		t.Error("high findings above the rubric's limit must fail the impact model")
 	}
 
 	if _, err := Summarize(b, nil, nil, rubric.AggregationMajority); err == nil {

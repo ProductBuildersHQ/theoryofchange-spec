@@ -156,5 +156,5 @@ The division of labour across all actors is in the actors report.
 ## Key messages
 
 - The change this work is for: Residents get timely, good-quality services from local nonprofits; Residents' priorities shape local public decisions.
-- The organization answers for the theory up to: Long-term outcome and below.
+- The organization answers for the impact model up to: Long-term outcome and below.
 - 19 outcome(s) are the organization's to deliver or share; 3 are monitored but delivered by others or beyond the ceiling.

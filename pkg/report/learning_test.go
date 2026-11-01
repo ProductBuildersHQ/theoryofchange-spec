@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/burden"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 func learningInput(t *testing.T) LearningInput {
@@ -49,10 +49,10 @@ func TestLearningReviewOnlyMergesTheNamedPeriod(t *testing.T) {
 
 func TestLearningReviewGatesStoriesLikeTheStoryReport(t *testing.T) {
 	in := learningInput(t)
-	in.Sets = []*toc.ObservationSet{{Stories: []toc.Story{
-		{ID: "a", Date: "2026-03-01", Title: "Granted", Summary: "Told", Quote: "QUOTE-A", Consent: toc.ConsentGranted, Sensitivity: toc.SensitivityPublic, ThemeIDs: []string{"thm-peer-help"}},
-		{ID: "b", Date: "2026-03-02", Title: "Refused", Summary: "SUMMARY-B", Quote: "QUOTE-B", Consent: toc.ConsentNotGranted, Sensitivity: toc.SensitivityPublic, ThemeIDs: []string{"thm-peer-help"}},
-		{ID: "c", Date: "2026-03-03", Title: "Restricted", Summary: "Told too", Quote: "QUOTE-C", Consent: toc.ConsentGranted, Sensitivity: toc.SensitivityRestricted},
+	in.Sets = []*impact.ObservationSet{{Stories: []impact.Story{
+		{ID: "a", Date: "2026-03-01", Title: "Granted", Summary: "Told", Quote: "QUOTE-A", Consent: impact.ConsentGranted, Sensitivity: impact.SensitivityPublic, ThemeIDs: []string{"thm-peer-help"}},
+		{ID: "b", Date: "2026-03-02", Title: "Refused", Summary: "SUMMARY-B", Quote: "QUOTE-B", Consent: impact.ConsentNotGranted, Sensitivity: impact.SensitivityPublic, ThemeIDs: []string{"thm-peer-help"}},
+		{ID: "c", Date: "2026-03-03", Title: "Restricted", Summary: "Told too", Quote: "QUOTE-C", Consent: impact.ConsentGranted, Sensitivity: impact.SensitivityRestricted},
 	}}}
 	out := LearningReview(in)
 	if !strings.Contains(out, "QUOTE-A") || strings.Contains(out, "QUOTE-B") || strings.Contains(out, "QUOTE-C") || strings.Contains(out, "SUMMARY-B") {
@@ -69,11 +69,11 @@ func TestLearningReviewGatesStoriesLikeTheStoryReport(t *testing.T) {
 
 func TestNewThemesAreMarked(t *testing.T) {
 	in := learningInput(t)
-	story := func(id, theme string) toc.Story {
-		return toc.Story{ID: id, Date: "2026-03-01", Title: id, Summary: "s", Consent: toc.ConsentGranted, Sensitivity: toc.SensitivityPublic, ThemeIDs: []string{theme}}
+	story := func(id, theme string) impact.Story {
+		return impact.Story{ID: id, Date: "2026-03-01", Title: id, Summary: "s", Consent: impact.ConsentGranted, Sensitivity: impact.SensitivityPublic, ThemeIDs: []string{theme}}
 	}
-	in.Sets = []*toc.ObservationSet{{Stories: []toc.Story{story("a", "thm-peer-help"), story("b", "thm-shared-savings")}}}
-	in.PrevSets = []*toc.ObservationSet{{Stories: []toc.Story{story("old", "thm-peer-help")}}}
+	in.Sets = []*impact.ObservationSet{{Stories: []impact.Story{story("a", "thm-peer-help"), story("b", "thm-shared-savings")}}}
+	in.PrevSets = []*impact.ObservationSet{{Stories: []impact.Story{story("old", "thm-peer-help")}}}
 	out := LearningReview(in)
 	if !strings.Contains(out, "| Savings from shared services (new) | 1 |") || strings.Contains(out, "Members helping each other (new)") {
 		t.Errorf("new themes:\n%s", out)
@@ -120,7 +120,7 @@ func TestPortfolioWithoutPathways(t *testing.T) {
 	in.View.Pathways = nil
 	cost, _ := burden.Compute(in.Doc)
 	if !strings.Contains(Portfolio(in, cost), "no pathways") {
-		t.Error("a theory with no pathways should say so")
+		t.Error("An impact model with no pathways should say so")
 	}
 }
 

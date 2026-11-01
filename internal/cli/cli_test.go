@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
-const fixtures = "../../pkg/toc/testdata/"
+const fixtures = "../../pkg/impact/testdata/"
 
 type result struct {
 	code        int
@@ -67,7 +67,7 @@ func wantCode(t *testing.T, r result, code int) {
 func TestVersionAndHelp(t *testing.T) {
 	r := run(t, "", "--version")
 	wantCode(t, r, 0)
-	if !strings.Contains(r.stdout, "theoryofchange version") {
+	if !strings.Contains(r.stdout, "impact-model version") {
 		t.Fatalf("version output = %q", r.stdout)
 	}
 	r = run(t, "")
@@ -96,7 +96,7 @@ func TestValidate(t *testing.T) {
 	good := fixtureCopy(t, "full.json", "good.json")
 	r := run(t, "", "validate", good)
 	wantCode(t, r, 0)
-	if !strings.Contains(r.stdout, "good.json: ok (TheoryOfChange)") {
+	if !strings.Contains(r.stdout, "good.json: ok (ImpactModel)") {
 		t.Fatalf("stdout = %q", r.stdout)
 	}
 	if r := run(t, "", "validate", "-q", good); r.stdout != "" {
@@ -127,7 +127,7 @@ func TestValidate(t *testing.T) {
 	if err := json.Unmarshal([]byte(r.stdout), &reports); err != nil {
 		t.Fatalf("stdout is not JSON: %v\n%s", err, r.stdout)
 	}
-	if len(reports) != 1 || reports[0].Kind != "TheoryOfChange" || reports[0].Issues[0].Code != "VAL-REF-001" {
+	if len(reports) != 1 || reports[0].Kind != "ImpactModel" || reports[0].Issues[0].Code != "VAL-REF-001" {
 		t.Fatalf("reports = %+v", reports)
 	}
 
@@ -136,27 +136,27 @@ func TestValidate(t *testing.T) {
 }
 
 func TestValidateObservationsAgainstTheory(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	obs := fixtureCopy(t, "observations.json", "obs.json")
 	wantCode(t, run(t, "", "validate", obs), 0)
-	wantCode(t, run(t, "", "validate", obs, "--toc", theory), 0)
+	wantCode(t, run(t, "", "validate", obs, "--model", theory), 0)
 
 	bad := filepath.Join(t.TempDir(), "obs-bad.json")
 	data := strings.Replace(mustRead(t, obs), `"indicatorId": "ind-idp-count"`, `"indicatorId": "ind-ghost"`, 1)
 	if err := os.WriteFile(bad, []byte(data), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	r := run(t, "", "validate", bad, "--toc", theory)
+	r := run(t, "", "validate", bad, "--model", theory)
 	wantCode(t, r, 1)
 	if !strings.Contains(r.stdout, "VAL-REF-001") {
 		t.Fatalf("stdout = %q", r.stdout)
 	}
 	wantCode(t, run(t, "", "validate", bad), 0)
-	wantCode(t, run(t, "", "validate", bad, "--toc", filepath.Join(t.TempDir(), "none.json")), 2)
+	wantCode(t, run(t, "", "validate", bad, "--model", filepath.Join(t.TempDir(), "none.json")), 2)
 }
 
 func TestGraph(t *testing.T) {
-	doc := fixtureCopy(t, "full.json", "theory.json")
+	doc := fixtureCopy(t, "full.json", "impact-model.json")
 
 	r := run(t, "", "graph", doc)
 	wantCode(t, r, 0)
@@ -187,7 +187,7 @@ func TestGraph(t *testing.T) {
 
 	r = run(t, "", "graph", doc, "--format", "dot")
 	wantCode(t, r, 0)
-	if !strings.HasPrefix(r.stdout, "digraph theoryofchange {") || !strings.Contains(r.stdout, "[style=dashed]") {
+	if !strings.HasPrefix(r.stdout, "digraph impact-model {") || !strings.Contains(r.stdout, "[style=dashed]") {
 		t.Fatalf("dot = %q", r.stdout)
 	}
 
@@ -221,7 +221,7 @@ func TestGraphOfInvalidDocumentExitsOne(t *testing.T) {
 func TestSchema(t *testing.T) {
 	r := run(t, "", "schema")
 	wantCode(t, r, 0)
-	if !strings.Contains(r.stdout, "theory-of-change\n") || !strings.Contains(r.stdout, "observation-set\n") {
+	if !strings.Contains(r.stdout, "impact-model\n") || !strings.Contains(r.stdout, "observation-set\n") {
 		t.Fatalf("names = %q", r.stdout)
 	}
 	r = run(t, "", "schema", "--format", "json")
@@ -229,7 +229,7 @@ func TestSchema(t *testing.T) {
 	if err := json.Unmarshal([]byte(r.stdout), &names); err != nil || len(names) != 7 {
 		t.Fatalf("names JSON = %q (%v)", r.stdout, err)
 	}
-	r = run(t, "", "schema", "theory-of-change")
+	r = run(t, "", "schema", "impact-model")
 	wantCode(t, r, 0)
 	var s map[string]any
 	if err := json.Unmarshal([]byte(r.stdout), &s); err != nil || s["$id"] == nil {
@@ -243,20 +243,20 @@ func TestSchema(t *testing.T) {
 func TestInit(t *testing.T) {
 	r := run(t, "", "init", "--id", "demo", "--name", "Demo")
 	wantCode(t, r, 0)
-	if !strings.HasPrefix(r.stdout, "kind: TheoryOfChange\n") {
+	if !strings.HasPrefix(r.stdout, "kind: ImpactModel\n") {
 		t.Fatalf("default output should be YAML: %q", r.stdout)
 	}
-	if _, err := tocio.ParseDocument([]byte(r.stdout), tocio.FormatYAML); err != nil {
+	if _, err := impactio.ParseDocument([]byte(r.stdout), impactio.FormatYAML); err != nil {
 		t.Fatalf("init output does not parse: %v", err)
 	}
 
 	r = run(t, "", "init", "--format", "json")
 	wantCode(t, r, 0)
-	if _, err := tocio.ParseDocument([]byte(r.stdout), tocio.FormatJSON); err != nil {
+	if _, err := impactio.ParseDocument([]byte(r.stdout), impactio.FormatJSON); err != nil {
 		t.Fatalf("init JSON does not parse: %v", err)
 	}
 
-	out := filepath.Join(t.TempDir(), "theory.json")
+	out := filepath.Join(t.TempDir(), "impact-model.json")
 	r = run(t, "", "init", "--out", out, "--problem", "Funders see anecdotes.")
 	wantCode(t, r, 0)
 	if !strings.HasPrefix(mustRead(t, out), "{") || !strings.Contains(mustRead(t, out), "Funders see anecdotes.") {
@@ -308,7 +308,7 @@ func TestFmt(t *testing.T) {
 }
 
 func TestPatch(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	rename := `[{"op":"replace","path":"/outcomes/@oc-idp-support/title","value":"Providers ship it"}]`
 
 	// Dry run prints the document, writes nothing.
@@ -381,7 +381,7 @@ func TestPatch(t *testing.T) {
 }
 
 func TestPatchYAMLFile(t *testing.T) {
-	out := filepath.Join(t.TempDir(), "theory.yaml")
+	out := filepath.Join(t.TempDir(), "impact-model.yaml")
 	wantCode(t, run(t, "", "init", "--id", "demo", "--out", out, "-q"), 0)
 	patch := `[{"op":"replace","path":"/outcomes/@oc-first/title","value":"Staff write strong applications"}]`
 	wantCode(t, run(t, patch, "patch", out, "-", "-q"), 0)
@@ -412,10 +412,10 @@ func TestValidateAgainstParent(t *testing.T) {
 		return path
 	}
 	parent := write("parent.json", `{
-  "kind": "TheoryOfChange", "specVersion": "0.1", "id": "agent-ecosystem-trust",
+  "kind": "ImpactModel", "specVersion": "0.1", "id": "agent-ecosystem-trust",
   "metadata": {}, "context": {"problemStatement": "p"},
   "outcomes": [{"id": "oc-trusted-agents", "title": "Agents are trusted", "level": "impact"}],
-  "pathways": [{"id": "pw-authz", "title": "Authorization", "childToc": "toc:open-agent-auth"}]
+  "pathways": [{"id": "pw-authz", "title": "Authorization", "childModel": "model:open-agent-auth"}]
 }`)
 	child := fixtureCopy(t, "full.json", "child.json")
 	r := run(t, "", "validate", child, "--parent", parent)
@@ -439,19 +439,19 @@ func TestValidateWithARegistryAndAsFutures(t *testing.T) {
 	files := []string{futuresDir + "future-open.yaml", futuresDir + "future-bundle.yaml", futuresDir + "future-extension.yaml"}
 	registry := futuresDir + "actors.yaml"
 
-	// Without the registry each theory warns that it cannot resolve its actors.
+	// Without the registry each impact model warns that it cannot resolve its actors.
 	r := run(t, "", append([]string{"validate"}, files...)...)
 	wantCode(t, r, ExitOK)
 	if !strings.Contains(r.stdout, "VAL-REF-004") {
 		t.Errorf("expected unresolved-actor warnings:\n%s", r.stdout)
 	}
-	// With it, the theories are clean, and so are they as a set of futures.
+	// With it, the impact models are clean, and so are they as a set of futures.
 	r = run(t, "", append(append([]string{"validate"}, files...), "--registry", registry, "--futures")...)
 	wantCode(t, r, ExitOK)
 	if strings.Contains(r.stdout, "warning") || !strings.Contains(r.stdout, "competing futures: ok") {
 		t.Errorf("stdout = %s", r.stdout)
 	}
-	// Two theories speaking for the same actor in the same future are reported.
+	// Two impact models speaking for the same actor in the same future are reported.
 	dir := t.TempDir()
 	dup := filepath.Join(dir, "dup.yaml")
 	body := strings.Replace(mustRead(t, files[0]), "id: future-open-wins", "id: future-dup", 1)

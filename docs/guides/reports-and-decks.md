@@ -1,42 +1,42 @@
 # Reports and Decks
 
-Every report, deck, and table is built from the same view of the theory, so a
+Every report, deck, and table is built from the same view of the impact model, so a
 number or a label never differs between artifacts. The output is deterministic:
 the same inputs give byte-identical files.
 
 ## Definition reports
 
-These describe the theory and need no observations, so a workshop can review
+These describe the impact model and need no observations, so a workshop can review
 them before any data exists.
 
 ```bash
-theoryofchange report logic-model theory.yaml --pathway pw-supply
-theoryofchange report definitions theory.yaml --out definitions.md
+impact-model report logic-model impact-model.yaml --pathway pw-supply
+impact-model report definitions impact-model.yaml --out definitions.md
 ```
 
 | Kind | What it shows |
 |------|---------------|
 | `pathway` | The causal pathways, as diagrams |
 | `logic-model` | Inputs, activities, outputs, and outcomes for each pathway. `--diagram` draws it left to right (also `logic-model-diagram`) |
-| `logic-model-layered` | The logic model as columns, from inputs to impact, with a box for each item and an arrow wherever the theory says one leads to another. Written as Mermaid |
+| `logic-model-layered` | The logic model as columns, from inputs to impact, with a box for each item and an arrow wherever the impact model says one leads to another. Written as Mermaid |
 | `logic-model-d2` | The same layered diagram as [D2](https://d2lang.com), where a grid keeps every stage in its own column. Render it with `d2 diagram.d2 diagram.svg` |
 | `outcome-map` | The outcomes framework, marking what is monitored but not owned |
 | `logframe` | A results-framework matrix with indicators, means of verification, and assumptions |
 | `metrics` | Metric definitions and how they combine across pathways |
 | `metric-selection` | Candidate indicators scored against your criteria, best first |
 | `collection-plan` | What is collected, how, how often, and the burden against the budget |
-| `glossary` | The words the theory uses |
-| `assessment` | How much of the theory is stated, inferred, or still a hypothesis |
+| `glossary` | The words the impact model uses |
+| `assessment` | How much of the impact model is stated, inferred, or still a hypothesis |
 | `definitions` | All of the above as one document |
 
 ## Status reports
 
-These need observations (`-O`) and describe how far the theory has come.
+These need observations (`-O`) and describe how far the impact model has come.
 
 ```bash
-theoryofchange report exec theory.yaml -O obs-q3.yaml --prev status-q2.json
-theoryofchange report story theory.yaml -O obs-q3.yaml --audience aud-funders
-theoryofchange report learning-review theory.yaml -O obs-q3.yaml --period 2026-Q3
+impact-model report exec impact-model.yaml -O obs-q3.yaml --prev status-q2.json
+impact-model report story impact-model.yaml -O obs-q3.yaml --audience aud-funders
+impact-model report learning-review impact-model.yaml -O obs-q3.yaml --period 2026-Q3
 ```
 
 | Kind | What it shows |
@@ -52,7 +52,7 @@ theoryofchange report learning-review theory.yaml -O obs-q3.yaml --period 2026-Q
 | `metric-tree` | Per pathway: its North Star and guardrails, then its indicators from activity to impact, as a table and a diagram (`--pathway` narrows it) |
 | `learning-review` | A period's review (`--period`): what changed, surprises, decisions |
 | `portfolio` | Pathways side by side, described without recommending |
-| `narrative` | The theory as prose, checking the solution against the problem |
+| `narrative` | The impact model as prose, checking the solution against the problem |
 | `actors` | Who does what, including partners |
 | `custom` | Your own Go `text/template` over the report view (`--template`) |
 
@@ -69,8 +69,8 @@ document lives.
 ## Slide decks
 
 ```bash
-theoryofchange deck workshop theory.yaml -o workshop.md
-theoryofchange deck exec theory.yaml -O obs-q3.yaml --export exec.pdf
+impact-model deck workshop impact-model.yaml -o workshop.md
+impact-model deck exec impact-model.yaml -O obs-q3.yaml --export exec.pdf
 ```
 
 | Deck | Contents |
@@ -82,14 +82,14 @@ theoryofchange deck exec theory.yaml -O obs-q3.yaml --export exec.pdf
 
 A deck is written as [Marp](https://marp.app) Markdown. With `--export file`
 (`.pdf`, `.pptx`, or `.html`) it is also rendered by `marp`, and by `mmdc` when it
-has diagrams. Each deck carries speaker notes and shows the export stamp (theory, version, and
+has diagrams. Each deck carries speaker notes and shows the export stamp (impact model, version, and
 hash) on its title slide.
 
 ## Word and PowerPoint
 
 ```bash
-theoryofchange export docx definitions theory.yaml --out theory.docx --reference-doc template.docx
-theoryofchange export pptx workshop theory.yaml --out workshop.pptx
+impact-model export docx definitions impact-model.yaml --out impact-model.docx --reference-doc template.docx
+impact-model export pptx workshop impact-model.yaml --out workshop.pptx
 ```
 
 These convert the Markdown to a Pandoc-ready profile (diagrams as PNG, basis
@@ -100,7 +100,7 @@ written and the exit code is 3.
 ## Spreadsheets
 
 ```bash
-theoryofchange export csv indicators theory.yaml --out indicators.csv
+impact-model export csv indicators impact-model.yaml --out indicators.csv
 ```
 
 Tables: `indicators`, `metrics`, `glossary`, `metric-selection`, and
@@ -109,16 +109,16 @@ Tables: `indicators`, `metrics`, `glossary`, `metric-selection`, and
 
 ## The export stamp
 
-Every export starts with a stamp, `toc:<id> version:<v> hash:<h>`, where the hash
-is of the theory's canonical form. The same hash appears in every format, so you
+Every export starts with a stamp, `model:<id> version:<v> hash:<h>`, where the hash
+is of the impact model's canonical form. The same hash appears in every format, so you
 can tell that a PDF, a Word file, and a spreadsheet came from the same version.
 `--no-stamp` leaves it off, and `--as-of` records the date the artifact describes.
 
 ## PRISM exports
 
 ```bash
-theoryofchange export okr theory.yaml -O obs-q3.yaml -o okr.json
-theoryofchange export journey theory.yaml -o journeys.json
+impact-model export okr impact-model.yaml -O obs-q3.yaml -o okr.json
+impact-model export journey impact-model.yaml -o journeys.json
 ```
 
 `export okr` turns each owned outcome that has measured indicators into an
@@ -146,6 +146,6 @@ runs back to an earlier stage is feedback. It is left out of the diagram, where
 it would cut across the boxes between, and listed under it.
 
 Both diagrams are available, so you can compare them. The layered one is made
-by `pkg/logicmodel`, which builds a layered graph from the theory and writes it
+by `pkg/logicmodel`, which builds a layered graph from the impact model and writes it
 through [d2vision](https://github.com/grokify/d2vision)'s diagram spec, the same
 spec that writes the D2 and the Mermaid.

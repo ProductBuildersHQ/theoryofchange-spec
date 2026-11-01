@@ -4,9 +4,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 // The focus flags set the North Star, the one metric, and the guardrails, and
@@ -16,7 +16,7 @@ func TestPathwayFocusFlags(t *testing.T) {
 	r := run(t, "", "pathway", "set", path, "pw-supply", "--kind", "product",
 		"--north-star", "ind-idp-count", "--one-metric", "ind-idp-roadmaps", "--guardrails", "ind-reference-downloads,ind-idp-count-na")
 	wantCode(t, r, 0)
-	doc, err := tocio.LoadDocument(path)
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func TestPathwayFocusFlags(t *testing.T) {
 	if !ok || pw.Focus == nil {
 		t.Fatalf("pathway = %+v", pw)
 	}
-	if pw.Kind != toc.PathwayProduct || pw.Focus.NorthStarID != "ind-idp-count" || pw.Focus.OneMetricID != "ind-idp-roadmaps" ||
+	if pw.Kind != impact.PathwayProduct || pw.Focus.NorthStarID != "ind-idp-count" || pw.Focus.OneMetricID != "ind-idp-roadmaps" ||
 		!slices.Equal(pw.Focus.GuardrailIDs, []string{"ind-reference-downloads", "ind-idp-count-na"}) {
 		t.Errorf("kind %q, focus %+v", pw.Kind, pw.Focus)
 	}
@@ -59,7 +59,7 @@ func TestHeadlineListSetEqualsItsPatch(t *testing.T) {
 	if mustRead(t, viaCommand) != mustRead(t, viaPatch) {
 		t.Fatalf("command and patch produced different files:\n--- command\n%s\n--- patch\n%s", mustRead(t, viaCommand), mustRead(t, viaPatch))
 	}
-	doc, err := tocio.LoadDocument(viaCommand)
+	doc, err := impactio.LoadDocument(viaCommand)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,12 +75,12 @@ func TestIndicatorCompositionFlags(t *testing.T) {
 	path := fixtureCopy(t, "full.json", "doc.json")
 	wantCode(t, run(t, "", "indicator", "set", path, "ind-idp-count-na", "--composed-op", "difference",
 		"--composed-of", "ind-adoption-stories,ind-reference-downloads"), 0)
-	doc, err := tocio.LoadDocument(path)
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		t.Fatal(err)
 	}
 	ind, ok := doc.Indicator("ind-idp-count-na")
-	if !ok || ind.ComposedOf == nil || ind.ComposedOf.Op != toc.CompositionDifference ||
+	if !ok || ind.ComposedOf == nil || ind.ComposedOf.Op != impact.CompositionDifference ||
 		!slices.Equal(ind.ComposedOf.IndicatorIDs, []string{"ind-adoption-stories", "ind-reference-downloads"}) {
 		t.Fatalf("indicator = %+v", ind)
 	}

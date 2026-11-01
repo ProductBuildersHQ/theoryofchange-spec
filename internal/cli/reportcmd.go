@@ -9,12 +9,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/share"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/share"
 )
 
 // asOfFlags adds the flags that control the export stamp.
@@ -24,7 +24,7 @@ func asOfFlags(cmd *cobra.Command) {
 }
 
 // stampFor builds the export stamp for doc from the --as-of flag.
-func stampFor(cmd *cobra.Command, doc *toc.Document) (share.Stamp, error) {
+func stampFor(cmd *cobra.Command, doc *impact.Model) (share.Stamp, error) {
 	s, err := share.NewStamp(doc, flagString(cmd, "as-of"))
 	if err != nil {
 		return share.Stamp{}, &ExitError{Code: ExitUsageErr, Err: err}
@@ -33,8 +33,8 @@ func stampFor(cmd *cobra.Command, doc *toc.Document) (share.Stamp, error) {
 }
 
 // loadForRender loads a document and maps a failure to the exit code.
-func loadForRender(path string) (*toc.Document, error) {
-	doc, err := tocio.LoadDocument(path)
+func loadForRender(path string) (*impact.Model, error) {
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: err}
 	}
@@ -52,7 +52,7 @@ func renderError(path string, err error) error {
 // render loads a document, produces text with fn, stamps it (Markdown gets a
 // metadata block, CSV a leading comment row) unless --no-stamp is set, and
 // writes it to --out or standard output.
-func render(e *env, cmd *cobra.Command, path string, csv bool, fn func(*toc.Document) (string, error)) error {
+func render(e *env, cmd *cobra.Command, path string, csv bool, fn func(*impact.Model) (string, error)) error {
 	doc, err := loadForRender(path)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func render(e *env, cmd *cobra.Command, path string, csv bool, fn func(*toc.Docu
 		}
 	}
 	if out := flagString(cmd, "out"); out != "" {
-		if err := tocio.WriteFile(out, []byte(text)); err != nil {
+		if err := impactio.WriteFile(out, []byte(text)); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		return nil
@@ -84,27 +84,27 @@ func render(e *env, cmd *cobra.Command, path string, csv bool, fn func(*toc.Docu
 
 func newReportCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "report <kind> <toc-file>",
-		Short: "Render a report from a Theory of Change",
+		Use:   "report <kind> <model-file>",
+		Short: "Render a report from an impact model",
 		Long: `Render a report as portable Markdown.
 
 Definition reports need no observations, so a workshop can review them before
 any data exists. Kinds: ` + strings.Join(report.DefinitionKinds, ", ") + `.
 "definitions" renders all of them as one document.
 
-Status reports describe how far the theory has come, from observation files
+Status reports describe how far the impact model has come, from observation files
 (-o) as of a date (--as-of, or the latest date in the observations). Kinds:
 exec, results, assumptions, interventions, evidence-gaps, full, story
 (--audience), headline (--audience narrows it), metric-tree (--pathway narrows it), learning-review (--period), portfolio, narrative, actors, and
 custom (--template, a Go text/template over the report view). narrative,
 actors, and custom also work with no observations.`,
-		Example: `  theoryofchange report definitions theory.yaml --out definitions.md
-  theoryofchange report logic-model theory.yaml --pathway pw-supply
-  theoryofchange report exec theory.yaml -O obs-q3.yaml --prev status-q2.json
-  theoryofchange report story theory.yaml -O obs-q3.yaml --audience aud-funders
-  theoryofchange report headline theory.yaml -O obs-q3.yaml
-  theoryofchange report metric-tree theory.yaml -O obs-q3.yaml --pathway pw-supply
-  theoryofchange report custom theory.yaml --template board.tmpl`,
+		Example: `  impact-model report definitions impact-model.yaml --out definitions.md
+  impact-model report logic-model impact-model.yaml --pathway pw-supply
+  impact-model report exec impact-model.yaml -O obs-q3.yaml --prev status-q2.json
+  impact-model report story impact-model.yaml -O obs-q3.yaml --audience aud-funders
+  impact-model report headline impact-model.yaml -O obs-q3.yaml
+  impact-model report metric-tree impact-model.yaml -O obs-q3.yaml --pathway pw-supply
+  impact-model report custom impact-model.yaml --template board.tmpl`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if service.IsStatusReport(args[0]) {
@@ -117,7 +117,7 @@ actors, and custom also work with no observations.`,
 				}
 				kind = "logic-model-diagram"
 			}
-			return render(e, cmd, args[1], false, func(doc *toc.Document) (string, error) {
+			return render(e, cmd, args[1], false, func(doc *impact.Model) (string, error) {
 				return service.DefinitionReport(doc, kind, flagString(cmd, "pathway"))
 			})
 		},
@@ -140,7 +140,7 @@ func runStatusReport(e *env, cmd *cobra.Command, kind, path string) error {
 	withStatus := !slices.Contains(service.OptionalStatusKinds, kind) || flagString(cmd, "as-of") != "" || len(observationPaths(cmd)) > 0
 	var (
 		in   report.StatusInput
-		sets []*toc.ObservationSet
+		sets []*impact.ObservationSet
 		err  error
 	)
 	if withStatus {
@@ -172,7 +172,7 @@ func runStatusReport(e *env, cmd *cobra.Command, kind, path string) error {
 		text = share.StampMarkdown(st, in.Doc.Metadata.Name, text)
 	}
 	if out := flagString(cmd, "out"); out != "" {
-		if err := tocio.WriteFile(out, []byte(text)); err != nil {
+		if err := impactio.WriteFile(out, []byte(text)); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		return nil
@@ -189,7 +189,7 @@ func observationPaths(cmd *cobra.Command) []string {
 	return paths
 }
 
-func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, sets []*toc.ObservationSet, withStatus bool) (string, error) {
+func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, sets []*impact.ObservationSet, withStatus bool) (string, error) {
 	p := service.ReportParams{Audience: flagString(cmd, "audience"), Period: flagString(cmd, "period"), Pathway: flagString(cmd, "pathway")}
 	if kind == "story" && p.Audience == "" {
 		return "", usageErr("the story report needs --audience")
@@ -200,7 +200,7 @@ func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, se
 			panic(fmt.Sprintf("cli: --prev-observations is not a string slice flag: %v", err))
 		}
 		if len(prev) > 0 {
-			if p.PrevSets, err = tocio.LoadObservations(prev...); err != nil {
+			if p.PrevSets, err = impactio.LoadObservations(prev...); err != nil {
 				return "", &ExitError{Code: ExitUsageErr, Err: err}
 			}
 		}
@@ -226,18 +226,18 @@ func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, se
 func newExportCmd(e *env) *cobra.Command {
 	export := &cobra.Command{
 		Use:   "export",
-		Short: "Export tables from a Theory of Change",
+		Short: "Export tables from an impact model",
 	}
 	csv := &cobra.Command{
-		Use:   "csv <table> <toc-file>",
+		Use:   "csv <table> <model-file>",
 		Short: "Export a table as CSV (RFC 4180)",
 		Long: `Export a table for spreadsheets. Tables: ` + strings.Join(report.CSVTables, ", ") + `.
 Multi-valued cells are joined with "; ". The first row is a comment carrying the
-export stamp ("# toc:<id> version:<v> hash:<h>"); --no-stamp leaves it off.`,
-		Example: `  theoryofchange export csv indicators theory.yaml --out indicators.csv`,
+export stamp ("# model:<id> version:<v> hash:<h>"); --no-stamp leaves it off.`,
+		Example: `  impact-model export csv indicators impact-model.yaml --out indicators.csv`,
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return render(e, cmd, args[1], true, func(doc *toc.Document) (string, error) {
+			return render(e, cmd, args[1], true, func(doc *impact.Model) (string, error) {
 				return service.ExportCSV(doc, args[0])
 			})
 		},

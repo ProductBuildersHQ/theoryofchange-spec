@@ -16,14 +16,14 @@ buyers" means the same thing in each.
 - Several theories of one market, each with its own `perspective` and
   `futureRef`, and no change to the schema.
 - Actors defined once in a registry and referenced by ID from every theory.
-- References from one theory to another's elements, as `toc:<doc>#<element>`:
+- References from one theory to another's elements, as `model:<doc>#<element>`:
   the bundled-scheme theory watches the open standard's pilot count as a
   competitor signal, and the extension theory aligns with one of its outcomes.
 
 ## Check it
 
 ```bash
-theoryofchange validate future-open.yaml future-bundle.yaml future-extension.yaml \
+impact-model validate future-open.yaml future-bundle.yaml future-extension.yaml \
   --registry actors.yaml --futures
 ```
 

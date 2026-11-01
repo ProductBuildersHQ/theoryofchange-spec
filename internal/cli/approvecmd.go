@@ -8,35 +8,35 @@ import (
 	core "github.com/grokify/prism-core"
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/approve"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/approve"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 func newApproveCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "approve <toc-file> --version <label> --date <YYYY-MM-DD> --approver <name[:role]>...",
-		Short: "Record a theory as approved",
-		Long: `Mark a theory approved: set its status to approved and its version label, and
+		Use:   "approve <model-file> --version <label> --date <YYYY-MM-DD> --approver <name[:role]>...",
+		Short: "Record an impact model as approved",
+		Long: `Mark an impact model approved: set its status to approved and its version label, and
 append a revision (trigger: review) naming the approvers. The change is made
 through the patch engine, in the file's own format.
 
 Approval is refused, with exit code 1 and nothing written, when:
 
-  - the theory has validation errors;
+  - the impact model has validation errors;
   - elements are still hypotheses. Confirm or reject them, or use --force with
     --reason, which is recorded in the revision;
   - the version label is missing or already in use, the date is missing, or
     there is no approver.
 
 Approver names are people: use a name or role you are happy to publish.`,
-		Example: `  theoryofchange approve theory.yaml --version 1.0.0 --date 2026-04-01 \
+		Example: `  impact-model approve impact-model.yaml --version 1.0.0 --date 2026-04-01 \
     --approver "Board chair:chair" --approver "Executive director:director"`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error { return runApprove(e, cmd, args[0]) },
 	}
 	f := cmd.Flags()
-	f.String("version", "", "version label for the approved theory (required)")
+	f.String("version", "", "version label for the approved impact model (required)")
 	f.String("date", "", "date of approval, YYYY-MM-DD (required)")
 	f.StringSlice("approver", nil, "approver as name or name:role (repeatable, required)")
 	f.String("summary", "", "what was approved")
@@ -51,7 +51,7 @@ func runApprove(e *env, cmd *cobra.Command, path string) error {
 	if err != nil {
 		return err
 	}
-	doc, err := tocio.LoadDocument(path)
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}

@@ -1,12 +1,12 @@
 # Examples
 
 Three complete examples are in the repository's
-[`examples/`](https://github.com/ProductBuildersHQ/theoryofchange-spec/tree/main/examples)
+[`examples/`](https://github.com/ProductBuildersHQ/impact-model/tree/main/examples)
 directory. **Everything in them is fictional**: the organizations, people,
 numbers, and URLs (all under `example.org`) are invented for illustration.
 
 Each is valid, is in canonical form, and is checked by the test suite, and the two
-reference theories lint with no errors, so you can copy one as a starting point.
+reference impact models lint with no errors, so you can copy one as a starting point.
 
 ## Membership network
 
@@ -21,32 +21,32 @@ design with weighted selection criteria and a collection budget; a problem tree
 and target groups; audiences and a story codebook; a mission and vision, a North
 Star with a guardrail for each program area, and headline lists that lead the
 board, funders, and members with different numbers; and a spreadsheet import with
-its column mapping. The folder holds the theory, a quarter of observations with
+its column mapping. The folder holds the impact model, a quarter of observations with
 stories and a learning review, and a monthly CSV with its `mapping.yaml`.
 
 ```bash
-theoryofchange status examples/intermediary/theory.yaml \
+impact-model status examples/intermediary/impact-model.yaml \
   -O examples/intermediary/observations-2026-q3.yaml
-theoryofchange import observations --csv examples/intermediary/csv/monthly-q4.csv \
-  --map examples/intermediary/csv/mapping.yaml --toc examples/intermediary/theory.yaml
+impact-model import observations --csv examples/intermediary/csv/monthly-q4.csv \
+  --map examples/intermediary/csv/mapping.yaml --model examples/intermediary/impact-model.yaml
 ```
 
 ## Market adoption
 
 `examples/market-adoption`: a fictional open standard driven to adoption in a
 market with two competing approaches, a proprietary single-vendor scheme and an
-extension of an older authorization framework. It shows a theory about a market
+extension of an older authorization framework. It shows an impact model about a market
 rather than a program: adoption outcomes, the competition modelled as outcomes in
 the `interest` sphere, and a shared actor registry. It uses the
 Adopt-Adapt-Expand-Respond market-systems framing.
 
 ## Competing futures
 
-`examples/competing-futures`: three theories that describe different futures of
+`examples/competing-futures`: three impact models that describe different futures of
 one market and share one registry of actors. Validate them together:
 
 ```bash
-theoryofchange validate examples/competing-futures/future-*.yaml \
+impact-model validate examples/competing-futures/future-*.yaml \
   --registry examples/competing-futures/actors.yaml --futures
 ```
 

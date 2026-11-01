@@ -13,7 +13,7 @@ title: "Riverbend Nonprofit Network theory of change: executive summary"
 
 As of 2026-09-30
 
-_Theory of Change riverbend-network · version 0.2 · hash abc123_
+_Impact model riverbend-network · version 0.2 · hash abc123_
 
 <!--
 Lead with the headline. Say what the status is as of, and that every colour on the pathway comes from the status snapshot.
@@ -234,7 +234,7 @@ Start with the first row. Ask what would have to be true for it to recover, and 
 
 
 <!--
-These are the beliefs the theory leans on that are broken, at risk, or still untested.
+These are the beliefs the impact model leans on that are broken, at risk, or still untested.
 -->
 
 ---

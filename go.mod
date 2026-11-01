@@ -1,4 +1,4 @@
-module github.com/ProductBuildersHQ/theoryofchange-spec
+module github.com/ProductBuildersHQ/impact-model
 
 go 1.26.5
 

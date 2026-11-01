@@ -1,5 +1,5 @@
-// Package approve builds the patch that records a theory as approved, and
-// refuses when the theory is not ready. It only builds the patch; applying it
+// Package approve builds the patch that records an impact model as approved, and
+// refuses when the impact model is not ready. It only builds the patch; applying it
 // is the patch engine's job, so approval is an ordinary, reviewable edit.
 package approve
 
@@ -12,17 +12,17 @@ import (
 
 	core "github.com/grokify/prism-core"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
-// StatusApproved is the metadata status of an approved theory.
+// StatusApproved is the metadata status of an approved impact model.
 const StatusApproved = "approved"
 
 // Request describes an approval.
 type Request struct {
-	// Version is the label the approved theory carries. It must differ from
+	// Version is the label the approved impact model carries. It must differ from
 	// the version already recorded.
 	Version string
 	// Date is the day of approval (YYYY-MM-DD).
@@ -63,9 +63,9 @@ func (e *RefusedError) Error() string {
 func (e *RefusedError) Unwrap() error { return ErrRefused }
 
 // Build returns the patch that approves doc. It refuses when the request is
-// incomplete, when the theory has validation errors, or when it still holds
+// incomplete, when the impact model has validation errors, or when it still holds
 // hypotheses (unless forced with a reason).
-func Build(doc *toc.Document, req Request) (edit.Patch, error) {
+func Build(doc *impact.Model, req Request) (edit.Patch, error) {
 	var refusals []Refusal
 	add := func(code, msg string, ids ...string) { refusals = append(refusals, Refusal{code, msg, ids}) }
 
@@ -84,7 +84,7 @@ func Build(doc *toc.Document, req Request) (edit.Patch, error) {
 		add("request", "forcing approval requires a reason")
 	}
 	if errs := errorIssues(doc); len(errs) > 0 {
-		add("errors", fmt.Sprintf("the theory has %d validation error(s)", len(errs)), issueIDs(errs)...)
+		add("errors", fmt.Sprintf("the impact model has %d validation error(s)", len(errs)), issueIDs(errs)...)
 	}
 	hyp, err := Hypotheses(doc)
 	if err != nil {
@@ -99,7 +99,7 @@ func Build(doc *toc.Document, req Request) (edit.Patch, error) {
 	return patch(doc, req, hyp)
 }
 
-func patch(doc *toc.Document, req Request, hypotheses []string) (edit.Patch, error) {
+func patch(doc *impact.Model, req Request, hypotheses []string) (edit.Patch, error) {
 	summary := strings.TrimSpace(req.Summary)
 	if summary == "" {
 		summary = "Approved after review."
@@ -116,9 +116,9 @@ func patch(doc *toc.Document, req Request, hypotheses []string) (edit.Patch, err
 		a.Approved, a.ApprovedAt = true, at
 		approvers[i] = a
 	}
-	rev := toc.Revision{
+	rev := impact.Revision{
 		Version: req.Version, Date: req.Date, Summary: summary,
-		Trigger: toc.TriggerReview, Approvers: approvers,
+		Trigger: impact.TriggerReview, Approvers: approvers,
 	}
 	var ops []edit.Op
 	for _, step := range []struct {
@@ -136,7 +136,7 @@ func patch(doc *toc.Document, req Request, hypotheses []string) (edit.Patch, err
 	}
 	var revOp edit.Op
 	if len(doc.Revisions) == 0 {
-		revOp, err = edit.Add(edit.Pointer("revisions"), []toc.Revision{rev})
+		revOp, err = edit.Add(edit.Pointer("revisions"), []impact.Revision{rev})
 	} else {
 		revOp, err = edit.Add(edit.Pointer("revisions", "-"), rev)
 	}
@@ -146,7 +146,7 @@ func patch(doc *toc.Document, req Request, hypotheses []string) (edit.Patch, err
 	return append(ops, revOp), nil
 }
 
-func currentVersion(doc *toc.Document) string {
+func currentVersion(doc *impact.Model) string {
 	if doc.Metadata.Version != "" {
 		return doc.Metadata.Version
 	}
@@ -156,7 +156,7 @@ func currentVersion(doc *toc.Document) string {
 	return ""
 }
 
-func errorIssues(doc *toc.Document) []validate.Issue {
+func errorIssues(doc *impact.Model) []validate.Issue {
 	var out []validate.Issue
 	for _, i := range validate.Document(doc) {
 		if i.Severity == validate.SeverityError {
@@ -178,7 +178,7 @@ func issueIDs(issues []validate.Issue) []string {
 
 // Hypotheses lists the IDs of active elements whose basis is hypothesis, in
 // document order. Rejected elements are not counted.
-func Hypotheses(doc *toc.Document) ([]string, error) {
+func Hypotheses(doc *impact.Model) ([]string, error) {
 	data, err := json.Marshal(doc)
 	if err != nil {
 		return nil, fmt.Errorf("approve: encode document: %w", err)
@@ -203,7 +203,7 @@ func Hypotheses(doc *toc.Document) ([]string, error) {
 			return nil, fmt.Errorf("approve: decode %s: %w", field, err)
 		}
 		for _, it := range items {
-			if it.Provenance != nil && it.Provenance.Basis == string(toc.BasisHypothesis) {
+			if it.Provenance != nil && it.Provenance.Basis == string(impact.BasisHypothesis) {
 				ids = append(ids, it.ID)
 			}
 		}

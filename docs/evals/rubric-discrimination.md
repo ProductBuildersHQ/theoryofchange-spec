@@ -2,14 +2,14 @@
 
 Does the core rubric tell a sound theory from a weak one, and do two
 independent judges agree? Two judges scored two theories against the core
-rubric (12 categories) through `theoryofchange judge`.
+rubric (12 categories) through `impact-model judge`.
 
 ## Setup
 
-- **Reference theory:** `examples/intermediary/theory.yaml`, after it was
+- **Reference theory:** `examples/intermediary/impact-model.yaml`, after it was
   extended with measurement design and change analysis. Lint: GO under the
   standard profile, 0 errors, 9 warnings.
-- **Weak theory:** `docs/evals/fixtures/weak-theory.yaml`, a fictional theory
+- **Weak theory:** `docs/evals/fixtures/weak-impact-model.yaml`, a fictional theory
   seeded with the usual faults: a vague problem, outcomes that restate
   activities, no rationale or assumption on its one causal link, no evidence,
   no consultation, one unexplained indicator. It validates; lint is GO with 6

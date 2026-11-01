@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/burden"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // invertedScore flips a 1 to 5 score, so a criterion where low is better
@@ -20,7 +20,7 @@ const invertedScore = 6
 // counts as 1), and an inverted criterion counts as 6 minus its score. It
 // reports false when nothing could be scored, and ignores scores that name
 // an unknown criterion, which validation reports separately.
-func WeightedScore(doc *toc.Document, scores []toc.CriterionScore) (float64, bool) {
+func WeightedScore(doc *impact.Model, scores []impact.CriterionScore) (float64, bool) {
 	var sum, weights float64
 	for _, s := range scores {
 		cr, ok := doc.Criterion(s.CriterionID)
@@ -54,7 +54,7 @@ func scoreText(score float64, ok bool) string {
 // scored is one subject with its scores, ready to tabulate.
 type scored struct {
 	id, name, status, rationale string
-	scores                      []toc.CriterionScore
+	scores                      []impact.CriterionScore
 	weighted                    float64
 	ok                          bool
 }
@@ -80,8 +80,8 @@ func byScore(rows []scored) {
 	})
 }
 
-func criteriaFor(doc *toc.Document, subject toc.SelectionSubject) []toc.SelectionCriterion {
-	var out []toc.SelectionCriterion
+func criteriaFor(doc *impact.Model, subject impact.SelectionSubject) []impact.SelectionCriterion {
+	var out []impact.SelectionCriterion
 	for _, c := range doc.SelectionCriteria {
 		if c.AppliesTo == subject {
 			out = append(out, c)
@@ -90,7 +90,7 @@ func criteriaFor(doc *toc.Document, subject toc.SelectionSubject) []toc.Selectio
 	return out
 }
 
-func criterionHeader(c toc.SelectionCriterion) string {
+func criterionHeader(c impact.SelectionCriterion) string {
 	h := MDCell(c.Name)
 	if c.Inverted {
 		h += " (lower is better)"
@@ -98,7 +98,7 @@ func criterionHeader(c toc.SelectionCriterion) string {
 	return h
 }
 
-func scoreCell(scores []toc.CriterionScore, id string) string {
+func scoreCell(scores []impact.CriterionScore, id string) string {
 	for _, s := range scores {
 		if s.CriterionID == id {
 			return strconv.Itoa(s.Score)
@@ -107,7 +107,7 @@ func scoreCell(scores []toc.CriterionScore, id string) string {
 	return "—"
 }
 
-func selectionRows(doc *toc.Document) []scored {
+func selectionRows(doc *impact.Model) []scored {
 	var rows []scored
 	for _, ind := range doc.Indicators {
 		if ind.Selection == nil || ind.Provenance.IsRejected() {
@@ -120,9 +120,9 @@ func selectionRows(doc *toc.Document) []scored {
 	return rows
 }
 
-func priorityRows(doc *toc.Document, subject toc.SelectionSubject) []scored {
+func priorityRows(doc *impact.Model, subject impact.SelectionSubject) []scored {
 	var rows []scored
-	add := func(id, name string, p *toc.Priority, rejected bool) {
+	add := func(id, name string, p *impact.Priority, rejected bool) {
 		if p == nil || rejected {
 			return
 		}
@@ -130,15 +130,15 @@ func priorityRows(doc *toc.Document, subject toc.SelectionSubject) []scored {
 		rows = append(rows, scored{id, name, "", p.Rationale, p.Scores, w, ok})
 	}
 	switch subject {
-	case toc.SubjectOutcome:
+	case impact.SubjectOutcome:
 		for _, o := range doc.Outcomes {
 			add(o.ID, o.Title, o.Priority, o.Provenance.IsRejected())
 		}
-	case toc.SubjectIntervention:
+	case impact.SubjectIntervention:
 		for _, in := range doc.Interventions {
 			add(in.ID, in.Title, in.Priority, in.Provenance.IsRejected())
 		}
-	case toc.SubjectIndicator:
+	case impact.SubjectIndicator:
 	}
 	byScore(rows)
 	return rows
@@ -146,7 +146,7 @@ func priorityRows(doc *toc.Document, subject toc.SelectionSubject) []scored {
 
 // scoreTable renders subjects against their criteria. The status column is
 // shown only for indicators.
-func scoreTable(b *strings.Builder, heading string, criteria []toc.SelectionCriterion, rows []scored, withStatus bool) {
+func scoreTable(b *strings.Builder, heading string, criteria []impact.SelectionCriterion, rows []scored, withStatus bool) {
 	cols := []string{heading}
 	if withStatus {
 		cols = append(cols, "Status")
@@ -176,7 +176,7 @@ func scoreTable(b *strings.Builder, heading string, criteria []toc.SelectionCrit
 // run from 1 (poor) to 5 (strong); a criterion marked "lower is better" is
 // flipped before it is weighted. Outcome and intervention priorities follow
 // when they have been scored.
-func MetricSelection(v *View, doc *toc.Document) string {
+func MetricSelection(v *View, doc *impact.Model) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "## Metric selection\n\n")
 	rows := selectionRows(doc)
@@ -189,7 +189,7 @@ func MetricSelection(v *View, doc *toc.Document) string {
 		counts[r.status]++
 	}
 	var parts []string
-	for _, st := range toc.AllSelectionStatuses() {
+	for _, st := range impact.AllSelectionStatuses() {
 		if n := counts[string(st)]; n > 0 {
 			parts = append(parts, fmt.Sprintf("%d %s", n, st))
 		}
@@ -199,11 +199,11 @@ func MetricSelection(v *View, doc *toc.Document) string {
 		fmt.Fprintf(&b, "Target: between %d and %d selected metrics.\n\n", bg.TargetSelectedMetrics.Min, bg.TargetSelectedMetrics.Max)
 	}
 	b.WriteString("### Indicators\n\n")
-	scoreTable(&b, "Indicator", criteriaFor(doc, toc.SubjectIndicator), rows, true)
+	scoreTable(&b, "Indicator", criteriaFor(doc, impact.SubjectIndicator), rows, true)
 	for _, s := range []struct {
-		subject toc.SelectionSubject
+		subject impact.SelectionSubject
 		heading string
-	}{{toc.SubjectOutcome, "Outcome"}, {toc.SubjectIntervention, "Intervention"}} {
+	}{{impact.SubjectOutcome, "Outcome"}, {impact.SubjectIntervention, "Intervention"}} {
 		if pr := priorityRows(doc, s.subject); len(pr) > 0 {
 			fmt.Fprintf(&b, "### %s priorities\n\n", s.heading)
 			scoreTable(&b, s.heading, criteriaFor(doc, s.subject), pr, false)
@@ -212,7 +212,7 @@ func MetricSelection(v *View, doc *toc.Document) string {
 	return b.String()
 }
 
-func pathwayName(doc *toc.Document, id string) string {
+func pathwayName(doc *impact.Model, id string) string {
 	if id == "" {
 		return "No pathway"
 	}
@@ -237,7 +237,7 @@ func rounded(v float64) string { return strconv.FormatFloat(math.Round(v*100)/10
 // each one's mode, time, and questions, the totals overall, per pathway and
 // per mode, and the comparison with the measurement budget. The numbers are
 // those of the burden report, which the caller computes once.
-func CollectionPlan(doc *toc.Document, rep *burden.Report) string {
+func CollectionPlan(doc *impact.Model, rep *burden.Report) string {
 	var b strings.Builder
 	b.WriteString("## Collection plan\n\n")
 	if len(rep.Lines) == 0 {
@@ -310,8 +310,8 @@ func yesNo(v bool) string {
 
 // ---- CSV ------------------------------------------------------------------
 
-func metricSelectionCSV(doc *toc.Document) (string, error) {
-	criteria := criteriaFor(doc, toc.SubjectIndicator)
+func metricSelectionCSV(doc *impact.Model) (string, error) {
+	criteria := criteriaFor(doc, impact.SubjectIndicator)
 	header := []string{"id", "name", "status"}
 	for _, c := range criteria {
 		header = append(header, c.ID)
@@ -336,7 +336,7 @@ func metricSelectionCSV(doc *toc.Document) (string, error) {
 	return writeCSV(header, rows)
 }
 
-func collectionPlanCSV(doc *toc.Document, rep *burden.Report) (string, error) {
+func collectionPlanCSV(doc *impact.Model, rep *burden.Report) (string, error) {
 	rows := make([][]string, 0, len(rep.Lines))
 	for _, l := range rep.Lines {
 		ind, _ := doc.Indicator(l.ID)

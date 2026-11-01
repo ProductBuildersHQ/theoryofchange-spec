@@ -20,32 +20,32 @@
     {
       "category": "logic_flow",
       "score": "pass",
-      "reasoning": "Every link in the document has a rationale (e.g. ln-cohorts-skills, ln-pooled-overhead). Precondition logic is stated with sufficiency text: grp-capable (all), grp-collab (at_least 2), grp-voice (all). Weakest links are flagged as hypothesis, not hidden: ln-collab-access, ln-collab-resvoice, ln-ties-positions. Lint TOC-LOG-001 and TOC-LOG-002 are GO."
+      "reasoning": "Every link in the document has a rationale (e.g. ln-cohorts-skills, ln-pooled-overhead). Precondition logic is stated with sufficiency text: grp-capable (all), grp-collab (at_least 2), grp-voice (all). Weakest links are flagged as hypothesis, not hidden: ln-collab-access, ln-collab-resvoice, ln-ties-positions. Lint IMP-LOG-001 and IMP-LOG-002 are GO."
     },
     {
       "category": "root_causes",
       "score": "pass",
-      "reasoning": "Problem is traced from structural (cause-no-standing-voice) to underlying (cause-isolation, cause-funding-volatility) to immediate causes (cause-no-peer-exchange, cause-high-overhead). Outcomes address these via addressesCauses: oc-im-peer-network, oc-im-lower-overhead, oc-im-officials-engage, oc-lt-collective-voice. cause-funding-volatility is set aside with a reason (outOfScope). Lint TOC-CAU-001 GO."
+      "reasoning": "Problem is traced from structural (cause-no-standing-voice) to underlying (cause-isolation, cause-funding-volatility) to immediate causes (cause-no-peer-exchange, cause-high-overhead). Outcomes address these via addressesCauses: oc-im-peer-network, oc-im-lower-overhead, oc-im-officials-engage, oc-lt-collective-voice. cause-funding-volatility is set aside with a reason (outOfScope). Lint IMP-CAU-001 GO."
     },
     {
       "category": "assumptions_risks",
       "score": "pass",
-      "reasoning": "Assumptions carry type, criticality and, for the critical and high ones, a test (asm-skills-applied, asm-members-deliver, asm-vendor-terms, asm-officials-receptive, asm-positions-hold). Context and partner assumptions are present (asm-peer-trust, asm-funders-fit, asm-officials-receptive). Risks mirror them with mitigations (rsk-time-burden, rsk-large-dominate, rsk-funder-shift). Lint TOC-ASM-002 warns that asm-officials-receptive and asm-positions-hold (both high) cite no evidence, which is noted under finding F4."
+      "reasoning": "Assumptions carry type, criticality and, for the critical and high ones, a test (asm-skills-applied, asm-members-deliver, asm-vendor-terms, asm-officials-receptive, asm-positions-hold). Context and partner assumptions are present (asm-peer-trust, asm-funders-fit, asm-officials-receptive). Risks mirror them with mitigations (rsk-time-burden, rsk-large-dominate, rsk-funder-shift). Lint IMP-ASM-002 warns that asm-officials-receptive and asm-positions-hold (both high) cite no evidence, which is noted under finding F4."
     },
     {
       "category": "actors",
       "score": "pass",
-      "reasoning": "Every intervention has an owner (ownerActorId; lint TOC-INT-002 GO). Shared outcomes name deliverers (oc-resident-access deliveredBy; oc-im-officials-engage deliveredBy and responsibility partner). Partner stances are recorded on actors (e.g. act-county-office neutral, act-regional-funder supporter, act-vendors neutral)."
+      "reasoning": "Every intervention has an owner (ownerActorId; lint IMP-INT-002 GO). Shared outcomes name deliverers (oc-resident-access deliveredBy; oc-im-officials-engage deliveredBy and responsibility partner). Partner stances are recorded on actors (e.g. act-county-office neutral, act-regional-funder supporter, act-vendors neutral)."
     },
     {
       "category": "evidence",
       "score": "pass",
-      "reasoning": "Stated elements cite followable sources (e.g. oc-im-leaders-practice -\u003e ev-peer-learning with a URL; oc-out-services -\u003e ev-pooled-purchasing). Contrary evidence is kept (ev-collab-study, direction contradicts, which supports asm-peer-trust). Gaps are listed in the assessment (Gaps: outcomes with no indicator, indicators by data availability, assumptions needing testing). ev-funder-interview is restricted and is not penalized. Lint TOC-PRV-002 and TOC-PRV-003 are GO. The assessment states that 31 elements have no basis recorded (see F6)."
+      "reasoning": "Stated elements cite followable sources (e.g. oc-im-leaders-practice -\u003e ev-peer-learning with a URL; oc-out-services -\u003e ev-pooled-purchasing). Contrary evidence is kept (ev-collab-study, direction contradicts, which supports asm-peer-trust). Gaps are listed in the assessment (Gaps: outcomes with no indicator, indicators by data availability, assumptions needing testing). ev-funder-interview is restricted and is not penalized. Lint IMP-PRV-002 and IMP-PRV-003 are GO. The assessment states that 31 elements have no basis recorded (see F6)."
     },
     {
       "category": "targeting",
       "score": "partial",
-      "reasoning": "Target groups are named (tg-small-members, tg-low-access-residents) and outcomes say what changes for them (oc-im-peer-network targets small members). But results are not broken down by target group: lint TOC-EQU-001 warns that oc-resident-access is for tg-low-access-residents with no disaggregated indicator. ind-residents-served breaks down by neighborhood and age group only. No indicator is disaggregated by tg-small-members either."
+      "reasoning": "Target groups are named (tg-small-members, tg-low-access-residents) and outcomes say what changes for them (oc-im-peer-network targets small members). But results are not broken down by target group: lint IMP-EQU-001 warns that oc-resident-access is for tg-low-access-residents with no disaggregated indicator. ind-residents-served breaks down by neighborhood and age group only. No indicator is disaggregated by tg-small-members either."
     },
     {
       "category": "presentation",
@@ -65,12 +65,12 @@
     {
       "category": "testable",
       "score": "partial",
-      "reasoning": "Most accountable outcomes are measured, and many indicators have baselines, targets, sources and frequencies (e.g. ind-hours-learning, ind-overhead-share). Four accountable outcomes have no indicator: oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use, oc-st-channel (narrative Gaps). Lint TOC-MEA-002 warns that ind-story-peer-help, ind-service-deals, ind-calendar-current and ind-briefings lack baseline, target and/or source. Lint TOC-MEA-001 is GO, but the stand-in mapping for those four outcomes is not visible in the document."
+      "reasoning": "Most accountable outcomes are measured, and many indicators have baselines, targets, sources and frequencies (e.g. ind-hours-learning, ind-overhead-share). Four accountable outcomes have no indicator: oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use, oc-st-channel (narrative Gaps). Lint IMP-MEA-002 warns that ind-story-peer-help, ind-service-deals, ind-calendar-current and ind-briefings lack baseline, target and/or source. Lint IMP-MEA-001 is GO, but the stand-in mapping for those four outcomes is not visible in the document."
     },
     {
       "category": "structural_integrity",
       "score": "partial",
-      "reasoning": "The document validates. Lint status is WARN overall, not GO, with four warning rules: TOC-ASM-002, TOC-EQU-001, TOC-MEA-002, TOC-MET-003. The narrative Gaps section partly explains the MEA-002 and EQU-001 findings, but TOC-ASM-002 and TOC-MET-003 (the retention roll-up cannot be computed without met-enrollments weights in pw-learning and pw-shared) are not explained anywhere in the document."
+      "reasoning": "The document validates. Lint status is WARN overall, not GO, with four warning rules: IMP-ASM-002, IMP-EQU-001, IMP-MEA-002, IMP-MET-003. The narrative Gaps section partly explains the MEA-002 and EQU-001 findings, but IMP-ASM-002 and IMP-MET-003 (the retention roll-up cannot be computed without met-enrollments weights in pw-learning and pw-shared) are not explained anywhere in the document."
     }
   ],
   "findings": [
@@ -87,7 +87,7 @@
       "category": "targeting",
       "severity": "medium",
       "title": "No indicator broken down by target group",
-      "description": "Lint TOC-EQU-001 (oc-resident-access, tg-low-access-residents). ind-residents-served breaks down by neighborhood and age group only. No indicator is disaggregated by tg-small-members, although oc-im-peer-network targets that group.",
+      "description": "Lint IMP-EQU-001 (oc-resident-access, tg-low-access-residents). ind-residents-served breaks down by neighborhood and age group only. No indicator is disaggregated by tg-small-members, although oc-im-peer-network targets that group.",
       "recommendation": "Add a disaggregation by tg-low-access-residents and tg-small-members to the indicators that measure their outcomes, or state why it is not feasible within the measurement budget."
     },
     {
@@ -95,7 +95,7 @@
       "category": "testable",
       "severity": "medium",
       "title": "Accountable outcomes without indicators; indicators missing baselines",
-      "description": "oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use and oc-st-channel are within the ceiling of accountability and have no indicator (narrative Gaps). Lint TOC-MEA-002 flags ind-story-peer-help, ind-service-deals, ind-calendar-current and ind-briefings for missing baseline, target, source or frequency.",
+      "description": "oc-lt-capable-members, oc-im-peer-network, oc-st-calendar-use and oc-st-channel are within the ceiling of accountability and have no indicator (narrative Gaps). Lint IMP-MEA-002 flags ind-story-peer-help, ind-service-deals, ind-calendar-current and ind-briefings for missing baseline, target, source or frequency.",
       "recommendation": "Add an indicator for each of the four outcomes, or record the stand-in, and complete the four indicators' baselines, targets and sources."
     },
     {
@@ -103,7 +103,7 @@
       "category": "assumptions_risks",
       "severity": "medium",
       "title": "High-criticality assumptions cite no evidence",
-      "description": "Lint TOC-ASM-002: asm-officials-receptive and asm-positions-hold are high criticality and cite no evidence. asm-positions-hold is untested (plausibility low). asm-officials-receptive is at_risk.",
+      "description": "Lint IMP-ASM-002: asm-officials-receptive and asm-positions-hold are high criticality and cite no evidence. asm-positions-hold is untested (plausibility low). asm-officials-receptive is at_risk.",
       "recommendation": "Cite the evidence behind both assumptions, or mark them as hypotheses and prioritise their tests before the civic pathway is approved."
     },
     {
@@ -126,7 +126,7 @@
       "id": "F7",
       "category": "structural_integrity",
       "severity": "low",
-      "title": "Lint warning TOC-MET-003 not explained",
+      "title": "Lint warning IMP-MET-003 not explained",
       "description": "met-retention-rate is measured in pw-learning and pw-shared but not met-enrollments, so the enrollment-weighted roll-up cannot be computed. The document does not explain this.",
       "recommendation": "Add met-enrollments to the affected pathways' measurement, or document why the roll-up is not reported."
     }

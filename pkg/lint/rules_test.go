@@ -4,39 +4,39 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
-// clean returns a small theory that breaks none of the structure or logic
+// clean returns a small impact model that breaks none of the structure or logic
 // rules: one impact reached by two medium-term outcomes, each reached from a
 // short-term outcome that an intervention brings about.
-func clean() *toc.Document {
-	d := toc.NewDocument("lint-base", "People cannot reach services.")
-	all := &toc.Logic{Type: toc.LogicAll}
-	d.Outcomes = []toc.Outcome{
-		{ID: "oc-impact", Title: "Services are reachable", Level: toc.LevelImpact, Logic: all},
-		{ID: "oc-a", Title: "Providers share rides", Level: toc.LevelMediumTerm},
-		{ID: "oc-b", Title: "Providers share schedules", Level: toc.LevelMediumTerm},
-		{ID: "oc-s1", Title: "Providers know each other", Level: toc.LevelShortTerm},
-		{ID: "oc-s2", Title: "Providers meet monthly", Level: toc.LevelShortTerm},
+func clean() *impact.Model {
+	d := impact.NewModel("lint-base", "People cannot reach services.")
+	all := &impact.Logic{Type: impact.LogicAll}
+	d.Outcomes = []impact.Outcome{
+		{ID: "oc-impact", Title: "Services are reachable", Level: impact.LevelImpact, Logic: all},
+		{ID: "oc-a", Title: "Providers share rides", Level: impact.LevelMediumTerm},
+		{ID: "oc-b", Title: "Providers share schedules", Level: impact.LevelMediumTerm},
+		{ID: "oc-s1", Title: "Providers know each other", Level: impact.LevelShortTerm},
+		{ID: "oc-s2", Title: "Providers meet monthly", Level: impact.LevelShortTerm},
 	}
-	link := func(id, from, to string) toc.CausalLink {
-		return toc.CausalLink{ID: id, From: from, To: to, Rationale: "Because it helps.", AssumptionIDs: []string{"asm-1"}}
+	link := func(id, from, to string) impact.CausalLink {
+		return impact.CausalLink{ID: id, From: from, To: to, Rationale: "Because it helps.", AssumptionIDs: []string{"asm-1"}}
 	}
-	d.Links = []toc.CausalLink{
+	d.Links = []impact.CausalLink{
 		link("ln-a-i", "oc-a", "oc-impact"), link("ln-b-i", "oc-b", "oc-impact"),
 		link("ln-s1-a", "oc-s1", "oc-a"), link("ln-s2-b", "oc-s2", "oc-b"),
 	}
-	d.Assumptions = []toc.Assumption{{ID: "asm-1", Statement: "Providers want to cooperate.", AppliesTo: []string{"ln-a-i"}}}
-	d.Interventions = []toc.Intervention{
+	d.Assumptions = []impact.Assumption{{ID: "asm-1", Statement: "Providers want to cooperate.", AppliesTo: []string{"ln-a-i"}}}
+	d.Interventions = []impact.Intervention{
 		{ID: "int-1", Title: "Host mixers", Targets: []string{"oc-s1"}},
 		{ID: "int-2", Title: "Host meetings", Targets: []string{"oc-s2"}},
 	}
 	return d
 }
 
-func runRule(t *testing.T, doc *toc.Document, id string) []Finding {
+func runRule(t *testing.T, doc *impact.Model, id string) []Finding {
 	t.Helper()
 	g, err := graph.Build(doc)
 	if err != nil {
@@ -77,28 +77,28 @@ func TestStructureAndLogicRulesFindSeededDefects(t *testing.T) {
 	tests := []struct {
 		rule    string
 		element string
-		seed    func(d *toc.Document)
+		seed    func(d *impact.Model)
 	}{
-		{"TOC-STR-001", "", func(d *toc.Document) { d.Outcomes[0].Level = toc.LevelLongTerm }},
-		{"TOC-STR-002", "oc-impact", func(d *toc.Document) {
-			d.Links = append(d.Links, toc.CausalLink{ID: "ln-i-a", From: "oc-impact", To: "oc-a", Rationale: "r", AssumptionIDs: []string{"asm-1"}})
+		{"IMP-STR-001", "", func(d *impact.Model) { d.Outcomes[0].Level = impact.LevelLongTerm }},
+		{"IMP-STR-002", "oc-impact", func(d *impact.Model) {
+			d.Links = append(d.Links, impact.CausalLink{ID: "ln-i-a", From: "oc-impact", To: "oc-a", Rationale: "r", AssumptionIDs: []string{"asm-1"}})
 		}},
-		{"TOC-STR-003", "oc-lost", func(d *toc.Document) {
-			d.Outcomes = append(d.Outcomes, toc.Outcome{ID: "oc-lost", Title: "Strays", Level: toc.LevelShortTerm})
+		{"IMP-STR-003", "oc-lost", func(d *impact.Model) {
+			d.Outcomes = append(d.Outcomes, impact.Outcome{ID: "oc-lost", Title: "Strays", Level: impact.LevelShortTerm})
 			d.Interventions[0].Targets = append(d.Interventions[0].Targets, "oc-lost")
 		}},
-		{"TOC-STR-004", "oc-s2", func(d *toc.Document) { d.Interventions[1].Targets = []string{"oc-s1"} }},
-		{"TOC-STR-005", "oc-impact", func(d *toc.Document) { d.Outcomes[0].Logic = &toc.Logic{Type: toc.LogicAtLeast, K: 3} }},
-		{"TOC-STR-006", "ln-down", func(d *toc.Document) {
-			d.Links = append(d.Links, toc.CausalLink{ID: "ln-down", From: "oc-a", To: "oc-s1", Rationale: "r"})
+		{"IMP-STR-004", "oc-s2", func(d *impact.Model) { d.Interventions[1].Targets = []string{"oc-s1"} }},
+		{"IMP-STR-005", "oc-impact", func(d *impact.Model) { d.Outcomes[0].Logic = &impact.Logic{Type: impact.LogicAtLeast, K: 3} }},
+		{"IMP-STR-006", "ln-down", func(d *impact.Model) {
+			d.Links = append(d.Links, impact.CausalLink{ID: "ln-down", From: "oc-a", To: "oc-s1", Rationale: "r"})
 		}},
-		{"TOC-STR-007", "grp-y", func(d *toc.Document) {
-			d.Groups = []toc.PreconditionGroup{{ID: "grp-y", Target: "oc-impact", Members: []string{"oc-a", "oc-s1"}, Logic: toc.Logic{Type: toc.LogicAll}}}
+		{"IMP-STR-007", "grp-y", func(d *impact.Model) {
+			d.Groups = []impact.PreconditionGroup{{ID: "grp-y", Target: "oc-impact", Members: []string{"oc-a", "oc-s1"}, Logic: impact.Logic{Type: impact.LogicAll}}}
 		}},
-		{"TOC-LOG-001", "ln-a-i", func(d *toc.Document) { d.Links[0].Rationale = "" }},
-		{"TOC-LOG-002", "ln-s1-a", func(d *toc.Document) { d.Links[2].AssumptionIDs = nil }},
-		{"TOC-LOG-003", "oc-impact", func(d *toc.Document) { d.Links = slices.Delete(d.Links, 1, 2) }},
-		{"TOC-LOG-004", "oc-impact", func(d *toc.Document) { d.Outcomes[0].Logic = nil }},
+		{"IMP-LOG-001", "ln-a-i", func(d *impact.Model) { d.Links[0].Rationale = "" }},
+		{"IMP-LOG-002", "ln-s1-a", func(d *impact.Model) { d.Links[2].AssumptionIDs = nil }},
+		{"IMP-LOG-003", "oc-impact", func(d *impact.Model) { d.Links = slices.Delete(d.Links, 1, 2) }},
+		{"IMP-LOG-004", "oc-impact", func(d *impact.Model) { d.Outcomes[0].Logic = nil }},
 	}
 	for _, tt := range tests {
 		t.Run(tt.rule+"/"+tt.element, func(t *testing.T) {
@@ -117,10 +117,10 @@ func TestStructureAndLogicRulesFindSeededDefects(t *testing.T) {
 
 func TestRejectedElementsAreIgnored(t *testing.T) {
 	doc := clean()
-	rejected := &toc.Provenance{Basis: toc.BasisRejected}
-	doc.Links = append(doc.Links, toc.CausalLink{ID: "ln-dropped", From: "oc-s1", To: "oc-impact", Provenance: rejected})
-	doc.Outcomes = append(doc.Outcomes, toc.Outcome{ID: "oc-dropped", Title: "Dropped", Level: toc.LevelShortTerm, Provenance: rejected})
-	for _, rule := range []string{"TOC-LOG-001", "TOC-STR-003", "TOC-STR-004"} {
+	rejected := &impact.Provenance{Basis: impact.BasisRejected}
+	doc.Links = append(doc.Links, impact.CausalLink{ID: "ln-dropped", From: "oc-s1", To: "oc-impact", Provenance: rejected})
+	doc.Outcomes = append(doc.Outcomes, impact.Outcome{ID: "oc-dropped", Title: "Dropped", Level: impact.LevelShortTerm, Provenance: rejected})
+	for _, rule := range []string{"IMP-LOG-001", "IMP-STR-003", "IMP-STR-004"} {
 		if f := runRule(t, doc, rule); len(f) != 0 {
 			t.Errorf("%s reported on a rejected element: %+v", rule, f)
 		}
@@ -129,8 +129,8 @@ func TestRejectedElementsAreIgnored(t *testing.T) {
 
 func TestFeedbackLinksMayRunDownwardAndLoop(t *testing.T) {
 	doc := clean()
-	doc.Links = append(doc.Links, toc.CausalLink{ID: "ln-loop", From: "oc-impact", To: "oc-a", Feedback: true})
-	for _, rule := range []string{"TOC-STR-002", "TOC-STR-006"} {
+	doc.Links = append(doc.Links, impact.CausalLink{ID: "ln-loop", From: "oc-impact", To: "oc-a", Feedback: true})
+	for _, rule := range []string{"IMP-STR-002", "IMP-STR-006"} {
 		if f := runRule(t, doc, rule); len(f) != 0 {
 			t.Errorf("%s reported on a feedback link: %+v", rule, f)
 		}
@@ -140,24 +140,24 @@ func TestFeedbackLinksMayRunDownwardAndLoop(t *testing.T) {
 func TestInterventionsDoNotCountAsPreconditions(t *testing.T) {
 	doc := clean()
 	// oc-s1 now has two targeting interventions but still no causal links
-	// into it; TOC-LOG-004 is about links only.
-	doc.Interventions = append(doc.Interventions, toc.Intervention{ID: "int-3", Title: "More", Targets: []string{"oc-s1"}})
-	if f := runRule(t, doc, "TOC-LOG-004"); len(f) != 0 {
+	// into it; IMP-LOG-004 is about links only.
+	doc.Interventions = append(doc.Interventions, impact.Intervention{ID: "int-3", Title: "More", Targets: []string{"oc-s1"}})
+	if f := runRule(t, doc, "IMP-LOG-004"); len(f) != 0 {
 		t.Errorf("interventions were counted as incoming links: %+v", f)
 	}
 }
 
 func TestNoImpactDoesNotAlsoReportEveryDeadEnd(t *testing.T) {
 	doc := clean()
-	doc.Outcomes[0].Level = toc.LevelLongTerm
-	if f := runRule(t, doc, "TOC-STR-003"); len(f) != 0 {
-		t.Errorf("TOC-STR-003 repeated the missing-impact problem: %+v", f)
+	doc.Outcomes[0].Level = impact.LevelLongTerm
+	if f := runRule(t, doc, "IMP-STR-003"); len(f) != 0 {
+		t.Errorf("IMP-STR-003 repeated the missing-impact problem: %+v", f)
 	}
 }
 
 func TestReferenceExamplesReportNoErrors(t *testing.T) {
 	for _, path := range []string{
-		"../../examples/intermediary/theory.yaml", "../../examples/market-adoption/theory.yaml",
+		"../../examples/intermediary/impact-model.yaml", "../../examples/market-adoption/impact-model.yaml",
 	} {
 		doc, g := load(t, path)
 		res, err := Run(doc, g, Options{Profile: ProfileFull})

@@ -11,11 +11,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/share"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/share"
 )
 
 // workshopKind is the export kind that selects the workshop deck.
@@ -29,7 +29,7 @@ func newExportDocCmd(format string) *cobra.Command {
 		short = "Export the workshop deck as a PowerPoint file through Pandoc"
 	}
 	cmd := &cobra.Command{
-		Use:   format + " <kind> <toc-file> --out <file>." + format,
+		Use:   format + " <kind> <model-file> --out <file>." + format,
 		Short: short,
 		Long: fmt.Sprintf(`%s.
 
@@ -39,7 +39,7 @@ external tools mmdc (diagrams) and pandoc. If a needed tool is not
 installed, nothing is written and the exit code is 3.
 
 Kinds: %s.`, short, strings.ToUpper(format), kinds),
-		Example: fmt.Sprintf("  theoryofchange export %s %s theory.yaml --out theory.%s --reference-doc template.%s",
+		Example: fmt.Sprintf("  impact-model export %s %s impact-model.yaml --out impact model.%s --reference-doc template.%s",
 			format, strings.Split(kinds, ",")[0], format, format),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -115,13 +115,13 @@ func withPandoc(cmd *cobra.Command, format string, build func(share.Profile) (st
 	if err != nil {
 		return toolMissing("pandoc")
 	}
-	dir, err := os.MkdirTemp("", "theoryofchange-export-")
+	dir, err := os.MkdirTemp("", "impact-model-export-")
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	defer func() {
 		if err := os.RemoveAll(dir); err != nil {
-			fmt.Fprintf(cmd.ErrOrStderr(), "theoryofchange: remove %s: %v\n", dir, err)
+			fmt.Fprintf(cmd.ErrOrStderr(), "impact-model: remove %s: %v\n", dir, err)
 		}
 	}()
 
@@ -131,7 +131,7 @@ func withPandoc(cmd *cobra.Command, format string, build func(share.Profile) (st
 		return err
 	}
 	src := filepath.Join(dir, "export.md")
-	if err := tocio.WriteFile(src, []byte(md)); err != nil {
+	if err := impactio.WriteFile(src, []byte(md)); err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	abs, err := filepath.Abs(out)
@@ -149,8 +149,8 @@ func withPandoc(cmd *cobra.Command, format string, build func(share.Profile) (st
 	return nil
 }
 
-// reviewView builds the whole-theory view the review exports render.
-func reviewView(path string) (*toc.Document, *report.View, error) {
+// reviewView builds the whole impact model view the review exports render.
+func reviewView(path string) (*impact.Model, *report.View, error) {
 	doc, err := loadForRender(path)
 	if err != nil {
 		return nil, nil, err
@@ -168,7 +168,7 @@ func reviewView(path string) (*toc.Document, *report.View, error) {
 
 func newReviewPacketCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "review-packet <toc-file>",
+		Use:   "review-packet <model-file>",
 		Short: "Export the review packet: one ID-tagged table per element kind",
 		Long: `Export the review packet for reviewers who work in a document. Each element
 kind has a table with the element's ID, statement, basis, and sources, and
@@ -178,8 +178,8 @@ With --format md (the default) the Markdown is written to --out or standard
 output. With --format docx it is converted by pandoc and --out is required;
 if pandoc is missing, nothing is written and the exit code is 3. Sources are
 named by ID and title only: excerpts and URLs are never included.`,
-		Example: `  theoryofchange export review-packet theory.yaml --out packet.md
-  theoryofchange export review-packet theory.yaml --format docx --out packet.docx`,
+		Example: `  impact-model export review-packet impact-model.yaml --out packet.md
+  impact-model export review-packet impact-model.yaml --format docx --out packet.docx`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			format := flagString(cmd, "format")
@@ -222,13 +222,13 @@ func packetStamp(cmd *cobra.Command, st share.Stamp, title, body string) string 
 
 func newReviewSheetCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "review-sheet <toc-file>",
+		Use:   "review-sheet <model-file>",
 		Short: "Export the review sheet: the same rows as CSV",
 		Long: `Export the review rows for reviewers who work in a spreadsheet: one row per
 element with kind, id, statement, basis, and sources, and empty decision,
 suggested_change, and comment columns. The first row is a comment carrying the
 export stamp; --no-stamp leaves it off.`,
-		Example: `  theoryofchange export review-sheet theory.yaml --out sheet.csv`,
+		Example: `  impact-model export review-sheet impact-model.yaml --out sheet.csv`,
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			doc, v, err := reviewView(args[0])
@@ -257,7 +257,7 @@ export stamp; --no-stamp leaves it off.`,
 // writeText writes text to --out or standard output.
 func writeText(e *env, cmd *cobra.Command, text string) error {
 	if out := flagString(cmd, "out"); out != "" {
-		if err := tocio.WriteFile(out, []byte(text)); err != nil {
+		if err := impactio.WriteFile(out, []byte(text)); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		return nil
@@ -283,7 +283,7 @@ func diagramRenderer(ctx context.Context, dir string) func(string) (string, erro
 		n++
 		in := filepath.Join(dir, fmt.Sprintf("d%d.mmd", n))
 		png := filepath.Join(dir, fmt.Sprintf("d%d.png", n))
-		if err := tocio.WriteFile(in, []byte(source)); err != nil {
+		if err := impactio.WriteFile(in, []byte(source)); err != nil {
 			return "", &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		if err := runTool(ctx, mmdc, "-i", in, "-o", png, "-s", "2"); err != nil {

@@ -1,8 +1,8 @@
-// Package schemagen generates the JSON Schemas for the Theory of Change
-// document kinds from the Go types in pkg/toc.
+// Package schemagen generates the JSON Schemas for the impact model
+// document kinds from the Go types in pkg/impact.
 //
 // Go structs are the source of truth. Enumeration types are emitted as
-// string enums whose values come from the pkg/toc All… functions, so the
+// string enums whose values come from the pkg/impact All… functions, so the
 // schema and the code cannot drift.
 package schemagen
 
@@ -15,11 +15,11 @@ import (
 
 	"github.com/invopop/jsonschema"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // BaseURL is the prefix of every schema $id.
-const BaseURL = "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/"
+const BaseURL = "https://github.com/ProductBuildersHQ/impact-model/schema/v0/"
 
 // Definition describes one generated schema.
 type Definition struct {
@@ -33,13 +33,13 @@ type Definition struct {
 // Definitions returns the schemas this module publishes, in a stable order.
 func Definitions() []Definition {
 	return []Definition{
-		{"theory-of-change", "Theory of Change", "A Theory of Change document: context, outcomes, causal links, interventions, assumptions, indicators, actors, and evidence.", &toc.Document{}},
-		{"observation-set", "Theory of Change Observation Set", "Indicator observations, assumption assessments, and notes for one Theory of Change and period.", &toc.ObservationSet{}},
-		{"theory-of-change-status", "Theory of Change Status", "A computed status snapshot of indicators, outcomes, pathways, links, and assumptions at a date.", &toc.Status{}},
-		{"status-diff", "Theory of Change Status Diff", "Changes between two status snapshots.", &toc.StatusDiff{}},
-		{"actor-registry", "Theory of Change Actor Registry", "A shared list of actors referenced by several theories.", &toc.ActorRegistry{}},
-		{"csv-mapping", "Theory of Change CSV Mapping", "How the columns of a spreadsheet map onto indicator observations.", &toc.CSVMapping{}},
-		{"review-response", "Theory of Change Review Response", "What reviewers said about a Theory of Change, by element, independent of the channel it was collected through.", &toc.ReviewResponse{}},
+		{"impact-model", "Impact Model", "An impact model document: context, outcomes, causal links, interventions, assumptions, indicators, actors, and evidence.", &impact.Model{}},
+		{"observation-set", "Impact Model Observation Set", "Indicator observations, assumption assessments, and notes for one impact model and period.", &impact.ObservationSet{}},
+		{"impact-model-status", "Impact Model Status", "A computed status snapshot of indicators, outcomes, pathways, links, and assumptions at a date.", &impact.Status{}},
+		{"status-diff", "Impact Model Status Diff", "Changes between two status snapshots.", &impact.StatusDiff{}},
+		{"actor-registry", "Impact Model Actor Registry", "A shared list of actors referenced by several impact models.", &impact.ActorRegistry{}},
+		{"csv-mapping", "Impact Model CSV Mapping", "How the columns of a spreadsheet map onto indicator observations.", &impact.CSVMapping{}},
+		{"review-response", "Impact Model Review Response", "What reviewers said about an impact model, by element, independent of the channel it was collected through.", &impact.ReviewResponse{}},
 	}
 }
 
@@ -98,65 +98,65 @@ func GenerateOne(d Definition) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// EnumValues maps each pkg/toc enumeration type to its values.
+// EnumValues maps each pkg/impact enumeration type to its values.
 func EnumValues() map[reflect.Type][]string {
 	m := map[reflect.Type][]string{}
 	add := func(t reflect.Type, values []string) { m[t] = values }
-	add(typeOf[toc.Level](), strs(toc.AllLevels()))
-	add(typeOf[toc.Sphere](), strs(toc.AllSpheres()))
-	add(typeOf[toc.LogicType](), strs(toc.AllLogicTypes()))
-	add(typeOf[toc.ChangeType](), strs(toc.AllChangeTypes()))
-	add(typeOf[toc.LinkType](), strs(toc.AllLinkTypes()))
-	add(typeOf[toc.Polarity](), strs(toc.AllPolarities()))
-	add(typeOf[toc.LoopType](), strs(toc.AllLoopTypes()))
-	add(typeOf[toc.InterventionType](), strs(toc.AllInterventionTypes()))
-	add(typeOf[toc.InterventionStatus](), strs(toc.AllInterventionStatuses()))
-	add(typeOf[toc.AssumptionType](), strs(toc.AllAssumptionTypes()))
-	add(typeOf[toc.AssumptionStatus](), strs(toc.AllAssumptionStatuses()))
-	add(typeOf[toc.Criticality](), strs(toc.AllCriticalities()))
-	add(typeOf[toc.Rating](), strs(toc.AllRatings()))
-	add(typeOf[toc.MeasurementType](), strs(toc.AllMeasurementTypes()))
-	add(typeOf[toc.Direction](), strs(toc.AllDirections()))
-	add(typeOf[toc.ActorType](), strs(toc.AllActorTypes()))
-	add(typeOf[toc.ActorRole](), strs(toc.AllActorRoles()))
-	add(typeOf[toc.Stance](), strs(toc.AllStances()))
-	add(typeOf[toc.PerspectiveRole](), strs(toc.AllPerspectiveRoles()))
-	add(typeOf[toc.EvidenceType](), strs(toc.AllEvidenceTypes()))
-	add(typeOf[toc.Strength](), strs(toc.AllStrengths()))
-	add(typeOf[toc.EvidenceDirection](), strs(toc.AllEvidenceDirections()))
-	add(typeOf[toc.ProcessTracingTest](), strs(toc.AllProcessTracingTests()))
-	add(typeOf[toc.Sensitivity](), strs(toc.AllSensitivities()))
-	add(typeOf[toc.FactorKind](), strs(toc.AllFactorKinds()))
-	add(typeOf[toc.RiskCategory](), strs(toc.AllRiskCategories()))
-	add(typeOf[toc.PathwayKind](), strs(toc.AllPathwayKinds()))
-	add(typeOf[toc.Aggregation](), strs(toc.AllAggregations()))
-	add(typeOf[toc.CompositionOp](), strs(toc.AllCompositionOps()))
-	add(typeOf[toc.MetricLayer](), strs(toc.AllMetricLayers()))
-	add(typeOf[toc.Claim](), strs(toc.AllClaims()))
-	add(typeOf[toc.Basis](), strs(toc.AllBases()))
-	add(typeOf[toc.DataAvailability](), strs(toc.AllDataAvailabilities()))
-	add(typeOf[toc.ConsultationStep](), strs(toc.AllConsultationSteps()))
-	add(typeOf[toc.Responsibility](), strs(toc.AllResponsibilities()))
-	add(typeOf[toc.CauseLevel](), strs(toc.AllCauseLevels()))
-	add(typeOf[toc.Consent](), strs(toc.AllConsents()))
-	add(typeOf[toc.CollectionMode](), strs(toc.AllCollectionModes()))
-	add(typeOf[toc.SelectionStatus](), strs(toc.AllSelectionStatuses()))
-	add(typeOf[toc.SelectionSubject](), strs(toc.AllSelectionSubjects()))
-	add(typeOf[toc.ReviewMethod](), strs(toc.AllReviewMethods()))
-	add(typeOf[toc.ReviewDecision](), strs(toc.AllReviewDecisions()))
-	add(typeOf[toc.ReviewOrigin](), strs(toc.AllReviewOrigins()))
-	add(typeOf[toc.ConsultationMethod](), strs(toc.AllConsultationMethods()))
-	add(typeOf[toc.Framework](), strs(toc.AllFrameworks()))
-	add(typeOf[toc.Relation](), strs(toc.AllRelations()))
-	add(typeOf[toc.RevisionTrigger](), strs(toc.AllRevisionTriggers()))
-	add(typeOf[toc.QualityRating](), strs(toc.AllQualityRatings()))
-	add(typeOf[toc.DecisionStatus](), strs(toc.AllDecisionStatuses()))
-	add(typeOf[toc.DataQuality](), strs(toc.AllDataQualities()))
-	add(typeOf[toc.State](), strs(toc.AllStates()))
-	add(typeOf[toc.LinkState](), strs(toc.AllLinkStates()))
-	add(typeOf[toc.RollupMethod](), strs(toc.AllRollupMethods()))
-	add(typeOf[toc.AssumptionSource](), strs(toc.AllAssumptionSources()))
-	add(typeOf[toc.ElementKind](), strs(toc.AllElementKinds()))
+	add(typeOf[impact.Level](), strs(impact.AllLevels()))
+	add(typeOf[impact.Sphere](), strs(impact.AllSpheres()))
+	add(typeOf[impact.LogicType](), strs(impact.AllLogicTypes()))
+	add(typeOf[impact.ChangeType](), strs(impact.AllChangeTypes()))
+	add(typeOf[impact.LinkType](), strs(impact.AllLinkTypes()))
+	add(typeOf[impact.Polarity](), strs(impact.AllPolarities()))
+	add(typeOf[impact.LoopType](), strs(impact.AllLoopTypes()))
+	add(typeOf[impact.InterventionType](), strs(impact.AllInterventionTypes()))
+	add(typeOf[impact.InterventionStatus](), strs(impact.AllInterventionStatuses()))
+	add(typeOf[impact.AssumptionType](), strs(impact.AllAssumptionTypes()))
+	add(typeOf[impact.AssumptionStatus](), strs(impact.AllAssumptionStatuses()))
+	add(typeOf[impact.Criticality](), strs(impact.AllCriticalities()))
+	add(typeOf[impact.Rating](), strs(impact.AllRatings()))
+	add(typeOf[impact.MeasurementType](), strs(impact.AllMeasurementTypes()))
+	add(typeOf[impact.Direction](), strs(impact.AllDirections()))
+	add(typeOf[impact.ActorType](), strs(impact.AllActorTypes()))
+	add(typeOf[impact.ActorRole](), strs(impact.AllActorRoles()))
+	add(typeOf[impact.Stance](), strs(impact.AllStances()))
+	add(typeOf[impact.PerspectiveRole](), strs(impact.AllPerspectiveRoles()))
+	add(typeOf[impact.EvidenceType](), strs(impact.AllEvidenceTypes()))
+	add(typeOf[impact.Strength](), strs(impact.AllStrengths()))
+	add(typeOf[impact.EvidenceDirection](), strs(impact.AllEvidenceDirections()))
+	add(typeOf[impact.ProcessTracingTest](), strs(impact.AllProcessTracingTests()))
+	add(typeOf[impact.Sensitivity](), strs(impact.AllSensitivities()))
+	add(typeOf[impact.FactorKind](), strs(impact.AllFactorKinds()))
+	add(typeOf[impact.RiskCategory](), strs(impact.AllRiskCategories()))
+	add(typeOf[impact.PathwayKind](), strs(impact.AllPathwayKinds()))
+	add(typeOf[impact.Aggregation](), strs(impact.AllAggregations()))
+	add(typeOf[impact.CompositionOp](), strs(impact.AllCompositionOps()))
+	add(typeOf[impact.MetricLayer](), strs(impact.AllMetricLayers()))
+	add(typeOf[impact.Claim](), strs(impact.AllClaims()))
+	add(typeOf[impact.Basis](), strs(impact.AllBases()))
+	add(typeOf[impact.DataAvailability](), strs(impact.AllDataAvailabilities()))
+	add(typeOf[impact.ConsultationStep](), strs(impact.AllConsultationSteps()))
+	add(typeOf[impact.Responsibility](), strs(impact.AllResponsibilities()))
+	add(typeOf[impact.CauseLevel](), strs(impact.AllCauseLevels()))
+	add(typeOf[impact.Consent](), strs(impact.AllConsents()))
+	add(typeOf[impact.CollectionMode](), strs(impact.AllCollectionModes()))
+	add(typeOf[impact.SelectionStatus](), strs(impact.AllSelectionStatuses()))
+	add(typeOf[impact.SelectionSubject](), strs(impact.AllSelectionSubjects()))
+	add(typeOf[impact.ReviewMethod](), strs(impact.AllReviewMethods()))
+	add(typeOf[impact.ReviewDecision](), strs(impact.AllReviewDecisions()))
+	add(typeOf[impact.ReviewOrigin](), strs(impact.AllReviewOrigins()))
+	add(typeOf[impact.ConsultationMethod](), strs(impact.AllConsultationMethods()))
+	add(typeOf[impact.Framework](), strs(impact.AllFrameworks()))
+	add(typeOf[impact.Relation](), strs(impact.AllRelations()))
+	add(typeOf[impact.RevisionTrigger](), strs(impact.AllRevisionTriggers()))
+	add(typeOf[impact.QualityRating](), strs(impact.AllQualityRatings()))
+	add(typeOf[impact.DecisionStatus](), strs(impact.AllDecisionStatuses()))
+	add(typeOf[impact.DataQuality](), strs(impact.AllDataQualities()))
+	add(typeOf[impact.State](), strs(impact.AllStates()))
+	add(typeOf[impact.LinkState](), strs(impact.AllLinkStates()))
+	add(typeOf[impact.RollupMethod](), strs(impact.AllRollupMethods()))
+	add(typeOf[impact.AssumptionSource](), strs(impact.AllAssumptionSources()))
+	add(typeOf[impact.ElementKind](), strs(impact.AllElementKinds()))
 	return m
 }
 

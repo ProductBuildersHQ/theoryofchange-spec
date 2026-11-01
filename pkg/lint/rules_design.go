@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // provEl is an element that can carry a provenance.
@@ -13,7 +13,7 @@ type provEl struct {
 	array string
 	index int
 	id    string
-	prov  *toc.Provenance
+	prov  *impact.Provenance
 	// accountable is false for an outcome the organization does not answer
 	// for; every other kind counts as accountable.
 	accountable bool
@@ -23,7 +23,7 @@ type provEl struct {
 // document order, without those that were rejected.
 func provenanceElements(c *Context) []provEl {
 	var out []provEl
-	add := func(array string, i int, id string, p *toc.Provenance, accountable bool) {
+	add := func(array string, i int, id string, p *impact.Provenance, accountable bool) {
 		if !p.IsRejected() {
 			out = append(out, provEl{array, i, id, p, accountable})
 		}
@@ -65,11 +65,11 @@ func provenanceElements(c *Context) []provEl {
 	return out
 }
 
-func activePathways(d *toc.Document) []indexed[toc.Pathway] {
-	var out []indexed[toc.Pathway]
+func activePathways(d *impact.Model) []indexed[impact.Pathway] {
+	var out []indexed[impact.Pathway]
 	for i, p := range d.Pathways {
 		if !p.Rejected() {
-			out = append(out, indexed[toc.Pathway]{i, p})
+			out = append(out, indexed[impact.Pathway]{i, p})
 		}
 	}
 	return out
@@ -77,7 +77,7 @@ func activePathways(d *toc.Document) []indexed[toc.Pathway] {
 
 func init() {
 	// ---- interventions, actors, evidence ----------------------------------
-	register("TOC-INT-002", validate.SeverityWarning, "Every intervention has an owner.", func(c *Context) []Finding {
+	register("IMP-INT-002", validate.SeverityWarning, "Every intervention has an owner.", func(c *Context) []Finding {
 		var out []Finding
 		for i, in := range c.Doc.Interventions {
 			if !in.Provenance.IsRejected() && in.OwnerID == "" {
@@ -87,20 +87,20 @@ func init() {
 		return out
 	})
 
-	register("TOC-ACT-001", validate.SeverityInfo, "Outcomes in the sphere of influence name the actors who must change.", func(c *Context) []Finding {
+	register("IMP-ACT-001", validate.SeverityInfo, "Outcomes in the sphere of influence name the actors who must change.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
-			if o.v.Sphere == toc.SphereInfluence && len(o.v.ActorIDs) == 0 {
+			if o.v.Sphere == impact.SphereInfluence && len(o.v.ActorIDs) == 0 {
 				out = append(out, Finding{Path: at("outcomes", o.i), Element: o.v.ID, Message: "this outcome depends on others changing, but no actor is named"})
 			}
 		}
 		return out
 	})
 
-	register("TOC-EVD-001", validate.SeverityInfo, "Links into impact outcomes cite evidence.", func(c *Context) []Finding {
+	register("IMP-EVD-001", validate.SeverityInfo, "Links into impact outcomes cite evidence.", func(c *Context) []Finding {
 		var out []Finding
 		for _, l := range activeLinks(c.Doc) {
-			if lv, ok := outcomeLevel(c.Doc, l.v.To); ok && lv == toc.LevelImpact && len(l.v.EvidenceIDs) == 0 {
+			if lv, ok := outcomeLevel(c.Doc, l.v.To); ok && lv == impact.LevelImpact && len(l.v.EvidenceIDs) == 0 {
 				out = append(out, Finding{Path: at("links", l.i), Element: l.v.ID, Message: "the claim that this leads to the impact cites no evidence"})
 			}
 		}
@@ -108,13 +108,13 @@ func init() {
 	})
 
 	// ---- pathways and metrics ---------------------------------------------
-	register("TOC-PTH-001", validate.SeverityWarning, "Every pathway contains an outcome that leads to impact.", func(c *Context) []Finding {
+	register("IMP-PTH-001", validate.SeverityWarning, "Every pathway contains an outcome that leads to impact.", func(c *Context) []Finding {
 		var out []Finding
 		for _, p := range activePathways(c.Doc) {
 			leads := false
 			for _, id := range p.v.OutcomeIDs {
 				lv, _ := outcomeLevel(c.Doc, id)
-				leads = leads || lv == toc.LevelImpact || c.Graph.HasPathToImpact(id)
+				leads = leads || lv == impact.LevelImpact || c.Graph.HasPathToImpact(id)
 			}
 			if !leads {
 				out = append(out, Finding{Path: at("pathways", p.i), Element: p.v.ID, Message: "no outcome in this pathway leads to an impact outcome"})
@@ -123,7 +123,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-PTH-002", validate.SeverityInfo, "Every pathway has a selected indicator.", func(c *Context) []Finding {
+	register("IMP-PTH-002", validate.SeverityInfo, "Every pathway has a selected indicator.", func(c *Context) []Finding {
 		var out []Finding
 		for _, p := range activePathways(c.Doc) {
 			found := false
@@ -137,7 +137,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-PTH-003", validate.SeverityInfo, "A pathway's outcomes agree with the pathways its indicators name.", func(c *Context) []Finding {
+	register("IMP-PTH-003", validate.SeverityInfo, "A pathway's outcomes agree with the pathways its indicators name.", func(c *Context) []Finding {
 		var out []Finding
 		for _, ind := range activeIndicators(c.Doc) {
 			if len(ind.v.PathwayIDs) == 0 {
@@ -159,14 +159,14 @@ func init() {
 		return out
 	})
 
-	register("TOC-MET-001", validate.SeverityWarning, "A common metric is measured in every pathway, or the omission is explained.", func(c *Context) []Finding {
+	register("IMP-MET-001", validate.SeverityWarning, "A common metric is measured in every pathway, or the omission is explained.", func(c *Context) []Finding {
 		var out []Finding
 		for i, m := range c.Doc.Metrics {
-			if m.Layer != toc.LayerCommon || m.Provenance.IsRejected() {
+			if m.Layer != impact.LayerCommon || m.Provenance.IsRejected() {
 				continue
 			}
 			explained := false
-			var uses []toc.Indicator
+			var uses []impact.Indicator
 			for _, ind := range activeIndicators(c.Doc) {
 				if ind.v.MetricID == m.ID {
 					uses = append(uses, ind.v)
@@ -177,7 +177,7 @@ func init() {
 				continue
 			}
 			for _, p := range activePathways(c.Doc) {
-				if !slices.ContainsFunc(uses, func(x toc.Indicator) bool { return c.Doc.IndicatorServes(x, p.v.ID) }) {
+				if !slices.ContainsFunc(uses, func(x impact.Indicator) bool { return c.Doc.IndicatorServes(x, p.v.ID) }) {
 					out = append(out, Finding{Path: at("metrics", i), Element: m.ID, Message: fmt.Sprintf("common metric is not measured in pathway %q; add an indicator, or explain the omission in an indicator's selection rationale", p.v.ID)})
 				}
 			}
@@ -185,10 +185,10 @@ func init() {
 		return out
 	})
 
-	register("TOC-MET-003", validate.SeverityWarning, "A weighted mean can be computed: its weight is measured wherever it is used.", func(c *Context) []Finding {
+	register("IMP-MET-003", validate.SeverityWarning, "A weighted mean can be computed: its weight is measured wherever it is used.", func(c *Context) []Finding {
 		var out []Finding
 		for i, m := range c.Doc.Metrics {
-			if m.Aggregation != toc.AggregationWeightedMean || m.WeightMetricID == "" || m.Provenance.IsRejected() {
+			if m.Aggregation != impact.AggregationWeightedMean || m.WeightMetricID == "" || m.Provenance.IsRejected() {
 				continue
 			}
 			for _, p := range activePathways(c.Doc) {
@@ -207,7 +207,7 @@ func init() {
 	})
 
 	// ---- audiences, causes, responsibility, equity --------------------------
-	register("TOC-AUD-001", validate.SeverityInfo, "Every audience is the target of something reported.", func(c *Context) []Finding {
+	register("IMP-AUD-001", validate.SeverityInfo, "Every audience is the target of something reported.", func(c *Context) []Finding {
 		targeted := map[string]bool{}
 		for _, ind := range activeIndicators(c.Doc) {
 			if isSelected(ind.v) {
@@ -230,40 +230,40 @@ func init() {
 		return out
 	})
 
-	register("TOC-CAU-001", validate.SeverityWarning, "Each deeper cause is addressed by an outcome or set aside with a reason.", func(c *Context) []Finding {
+	register("IMP-CAU-001", validate.SeverityWarning, "Each deeper cause is addressed by an outcome or set aside with a reason.", func(c *Context) []Finding {
 		addressed := addressedCauses(c.Doc)
 		var out []Finding
 		for i, cause := range c.Doc.Causes {
-			if cause.Level != toc.CauseImmediate && !addressed[cause.ID] && cause.OutOfScope == nil {
+			if cause.Level != impact.CauseImmediate && !addressed[cause.ID] && cause.OutOfScope == nil {
 				out = append(out, Finding{Path: at("causes", i), Element: cause.ID, Message: "no outcome addresses this cause; address it, or set it aside with a reason"})
 			}
 		}
 		return out
 	})
 
-	register("TOC-CAU-002", validate.SeverityInfo, "Outcomes address root causes, not only immediate ones.", func(c *Context) []Finding {
+	register("IMP-CAU-002", validate.SeverityInfo, "Outcomes address root causes, not only immediate ones.", func(c *Context) []Finding {
 		if len(c.Doc.Causes) == 0 {
 			return nil
 		}
 		addressed := addressedCauses(c.Doc)
 		for _, cause := range c.Doc.Causes {
-			if cause.Level != toc.CauseImmediate && addressed[cause.ID] {
+			if cause.Level != impact.CauseImmediate && addressed[cause.ID] {
 				return nil
 			}
 		}
 		return []Finding{{Path: "/causes", Message: "causes are declared but no outcome addresses an underlying or structural one"}}
 	})
 
-	register("TOC-RSP-001", validate.SeverityWarning, "Shared and partner outcomes name who delivers them.", func(c *Context) []Finding {
+	register("IMP-RSP-001", validate.SeverityWarning, "Shared and partner outcomes name who delivers them.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
 			need := 0
 			switch o.v.Responsibility {
-			case toc.ResponsibilityPartner:
+			case impact.ResponsibilityPartner:
 				need = 1
-			case toc.ResponsibilityShared:
+			case impact.ResponsibilityShared:
 				need = 2
-			case toc.ResponsibilityOwn, toc.ResponsibilityUnaddressed, "":
+			case impact.ResponsibilityOwn, impact.ResponsibilityUnaddressed, "":
 			}
 			if len(o.v.DeliveredBy) < need {
 				out = append(out, Finding{Path: at("outcomes", o.i) + "/deliveredBy", Element: o.v.ID,
@@ -273,7 +273,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-RSP-002", validate.SeverityInfo, "Partner and unaddressed outcomes on the way to impact are still measured.", func(c *Context) []Finding {
+	register("IMP-RSP-002", validate.SeverityInfo, "Partner and unaddressed outcomes on the way to impact are still measured.", func(c *Context) []Finding {
 		measured := map[string]bool{}
 		for _, ind := range activeIndicators(c.Doc) {
 			measured[ind.v.Measures] = true
@@ -284,27 +284,27 @@ func init() {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
 			r := o.v.Responsibility
-			if (r == toc.ResponsibilityPartner || r == toc.ResponsibilityUnaddressed) && !measured[o.v.ID] && (o.v.Level == toc.LevelImpact || c.Graph.HasPathToImpact(o.v.ID)) {
-				out = append(out, Finding{Path: at("outcomes", o.i), Element: o.v.ID, Message: "this outcome is not the organization's to deliver but the theory depends on it; monitor it with an indicator"})
+			if (r == impact.ResponsibilityPartner || r == impact.ResponsibilityUnaddressed) && !measured[o.v.ID] && (o.v.Level == impact.LevelImpact || c.Graph.HasPathToImpact(o.v.ID)) {
+				out = append(out, Finding{Path: at("outcomes", o.i), Element: o.v.ID, Message: "this outcome is not the organization's to deliver but the impact model depends on it; monitor it with an indicator"})
 			}
 		}
 		return out
 	})
 
-	register("TOC-EQU-001", validate.SeverityWarning, "Outcomes for target groups are measured by those groups.", func(c *Context) []Finding {
+	register("IMP-EQU-001", validate.SeverityWarning, "Outcomes for target groups are measured by those groups.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
-			var measuring []toc.Indicator
+			var measuring []impact.Indicator
 			for _, ind := range activeIndicators(c.Doc) {
 				if ind.v.Measures == o.v.ID {
 					measuring = append(measuring, ind.v)
 				}
 			}
 			if len(measuring) == 0 {
-				continue // TOC-MEA-001 reports an unmeasured outcome
+				continue // IMP-MEA-001 reports an unmeasured outcome
 			}
 			for _, g := range o.v.TargetGroupIDs {
-				if !slices.ContainsFunc(measuring, func(i toc.Indicator) bool { return slices.Contains(i.TargetGroupIDs, g) }) {
+				if !slices.ContainsFunc(measuring, func(i impact.Indicator) bool { return slices.Contains(i.TargetGroupIDs, g) }) {
 					out = append(out, Finding{Path: at("outcomes", o.i), Element: o.v.ID, Message: fmt.Sprintf("this outcome is for target group %q but no indicator breaks its result down by that group", g)})
 				}
 			}
@@ -312,17 +312,17 @@ func init() {
 		return out
 	})
 
-	register("TOC-VAL-001", validate.SeverityInfo, "The main steps of the theory have been checked with the people it concerns.", func(c *Context) []Finding {
+	register("IMP-VAL-001", validate.SeverityInfo, "The main steps of the impact model have been checked with the people it concerns.", func(c *Context) []Finding {
 		if len(c.Doc.Consultations) == 0 && len(c.Doc.Outcomes) < 3 {
 			return nil // too small a draft to need it
 		}
-		have := map[toc.ConsultationStep]bool{}
+		have := map[impact.ConsultationStep]bool{}
 		for _, k := range c.Doc.Consultations {
 			have[k.Step] = true
 		}
 		var out []Finding
-		for _, step := range []toc.ConsultationStep{toc.StepFocus, toc.StepChangeAnalysis, toc.StepAssumptionsRisks, toc.StepActors} {
-			if !have[step] && !have[toc.StepWhole] {
+		for _, step := range []impact.ConsultationStep{impact.StepFocus, impact.StepChangeAnalysis, impact.StepAssumptionsRisks, impact.StepActors} {
+			if !have[step] && !have[impact.StepWhole] {
 				out = append(out, Finding{Path: "/consultations", Message: fmt.Sprintf("no consultation records that the %s step was checked with stakeholders", step)})
 			}
 		}
@@ -330,7 +330,7 @@ func init() {
 	})
 
 	// ---- provenance ---------------------------------------------------------
-	rule := funcRule{id: "TOC-PRV-001", severity: validate.SeverityWarning, from: ProfileFull,
+	rule := funcRule{id: "IMP-PRV-001", severity: validate.SeverityWarning, from: ProfileFull,
 		desc: "Every element says where it comes from.",
 		check: func(c *Context) []Finding {
 			var out []Finding
@@ -343,10 +343,10 @@ func init() {
 		}}
 	Register(rule)
 
-	register("TOC-PRV-002", validate.SeverityWarning, "Every stated element cites a source that can be followed.", func(c *Context) []Finding {
+	register("IMP-PRV-002", validate.SeverityWarning, "Every stated element cites a source that can be followed.", func(c *Context) []Finding {
 		var out []Finding
 		for _, e := range provenanceElements(c) {
-			if e.prov == nil || e.prov.Basis != toc.BasisStated {
+			if e.prov == nil || e.prov.Basis != impact.BasisStated {
 				continue
 			}
 			followable := false
@@ -362,20 +362,20 @@ func init() {
 		return out
 	})
 
-	register("TOC-PRV-003", validate.SeverityWarning, "An approved theory has no hypotheses among what the organization answers for.", func(c *Context) []Finding {
+	register("IMP-PRV-003", validate.SeverityWarning, "An approved impact model has no hypotheses among what the organization answers for.", func(c *Context) []Finding {
 		if c.Doc.Metadata.Status != "approved" {
 			return nil
 		}
 		var out []Finding
 		for _, e := range provenanceElements(c) {
-			if e.prov != nil && e.prov.Basis == toc.BasisHypothesis && e.accountable {
-				out = append(out, Finding{Path: at(e.array, e.index) + "/provenance", Element: e.id, Message: "the theory is approved but this element is still a hypothesis; confirm it or reject it"})
+			if e.prov != nil && e.prov.Basis == impact.BasisHypothesis && e.accountable {
+				out = append(out, Finding{Path: at(e.array, e.index) + "/provenance", Element: e.id, Message: "the impact model is approved but this element is still a hypothesis; confirm it or reject it"})
 			}
 		}
 		return out
 	})
 
-	register("TOC-PRV-004", validate.SeverityInfo, "Selected indicators say whether their data is available.", func(c *Context) []Finding {
+	register("IMP-PRV-004", validate.SeverityInfo, "Selected indicators say whether their data is available.", func(c *Context) []Finding {
 		var out []Finding
 		for _, ind := range activeIndicators(c.Doc) {
 			if isSelected(ind.v) && ind.v.DataAvailability == "" {
@@ -386,13 +386,13 @@ func init() {
 	})
 }
 
-func isOutcomeID(d *toc.Document, id string) bool {
+func isOutcomeID(d *impact.Model, id string) bool {
 	_, ok := d.Outcome(id)
 	return ok
 }
 
 // addressedCauses returns the causes some active outcome addresses.
-func addressedCauses(d *toc.Document) map[string]bool {
+func addressedCauses(d *impact.Model) map[string]bool {
 	out := map[string]bool{}
 	for _, o := range activeOutcomes(d) {
 		for _, id := range o.v.AddressesCauses {

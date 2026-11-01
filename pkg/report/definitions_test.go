@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 func TestDefinitionReportsGolden(t *testing.T) {
@@ -53,7 +53,7 @@ func TestLogicModelsFallBackToTheWholeTheory(t *testing.T) {
 	whole := build(t, doc, nil, Options{})
 	out := LogicModels(whole, nil)
 	if !strings.Contains(out, "## Logic model: Open agent authorization standard adoption") {
-		t.Errorf("a theory without pathways should render one whole-theory model:\n%s", out)
+		t.Errorf("An impact model without pathways should render one whole-model view:\n%s", out)
 	}
 	if strings.Count(out, "## Logic model") != 1 {
 		t.Errorf("want exactly one logic model:\n%s", out)
@@ -61,7 +61,7 @@ func TestLogicModelsFallBackToTheWholeTheory(t *testing.T) {
 }
 
 func TestEmptyStagesShowADash(t *testing.T) {
-	var d toc.Document
+	var d impact.Model
 	fixture(t, "minimal.json", &d)
 	out := LogicModel(build(t, &d, nil, Options{}))
 	if !strings.Contains(out, "| Inputs | — |") || !strings.Contains(out, "| Activities | — |") {
@@ -89,7 +89,7 @@ func TestMetricDefinitions(t *testing.T) {
 	}
 
 	doc := fullDoc(t)
-	doc.Metrics[0].Aggregation = toc.AggregationNone
+	doc.Metrics[0].Aggregation = impact.AggregationNone
 	doc.Indicators[5].RollupFrom = nil // the roll-up needs an aggregating metric
 	out = MetricDefinitions(build(t, doc, nil, Options{}))
 	if !strings.Contains(out, "Cannot be added up: observed directly at each level") {
@@ -106,9 +106,9 @@ func TestMetricDefinitions(t *testing.T) {
 }
 
 func TestAggregationText(t *testing.T) {
-	for agg, want := range map[toc.Aggregation]string{
-		toc.AggregationSum: "Sum", toc.AggregationMean: "Mean", toc.AggregationMin: "Minimum",
-		toc.AggregationMax: "Maximum", toc.AggregationLatest: "Latest value", "": "—",
+	for agg, want := range map[impact.Aggregation]string{
+		impact.AggregationSum: "Sum", impact.AggregationMean: "Mean", impact.AggregationMin: "Minimum",
+		impact.AggregationMax: "Maximum", impact.AggregationLatest: "Latest value", "": "—",
 	} {
 		if got := AggregationText(MetricView{Aggregation: string(agg)}); got != want {
 			t.Errorf("AggregationText(%q) = %q, want %q", agg, got, want)

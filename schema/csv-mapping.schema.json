@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/csv-mapping.schema.json",
+  "$id": "https://github.com/ProductBuildersHQ/impact-model/schema/v0/csv-mapping.schema.json",
   "$ref": "#/$defs/CSVMapping",
   "$defs": {
     "CSVColumns": {
@@ -44,7 +44,7 @@
         "$schema": {
           "type": "string"
         },
-        "tocId": {
+        "modelId": {
           "type": "string"
         },
         "columns": {
@@ -72,11 +72,11 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "tocId",
+        "modelId",
         "columns"
       ]
     }
   },
-  "title": "Theory of Change CSV Mapping",
+  "title": "Impact Model CSV Mapping",
   "description": "How the columns of a spreadsheet map onto indicator observations."
 }

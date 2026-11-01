@@ -1,13 +1,45 @@
-# Theory of Change Spec
+# Impact Model
 
-An AI-native, spec-driven way to capture, measure, and report on a
-[Theory of Change](https://en.wikipedia.org/wiki/Theory_of_change): a Go-first
-data model with generated JSON Schema, plus an SDK, the `theoryofchange` CLI,
-and an MCP server.
+An AI-native, spec-driven way to model, measure, and report on impact: how a
+program, product, or organization expects to bring about change, what it does to
+get there, and what it measures along the way. It is a Go-first data model with
+generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
-## What is a Theory of Change?
+One impact model describes the change once. The
+[theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
+model, the pathway of change, the outcome map, and the logframe are different
+**views** of it, each made for a different reader, and none of them is a part of
+another.
 
-A Theory of Change explains **how and why a program expects to bring about a
+> **Status:** the latest release is v0.3.0, the first as `impact-model`; see the
+> [release notes](releases/v0.3.0.md). It renames the module, the command, the document `kind`,
+> and the schema names, so a document written for v0.2.0 needs
+> `kind: ImpactModel` and a few renamed fields. See [the decision](design/adrs/0001-rename-to-impact-model.md).
+
+## What is an impact model?
+
+An impact model is one structured description of **how and why change is
+expected to happen**. It holds:
+
+- the **outcomes** that should change, at five levels from output to impact, and
+  the **causal links** between them, each with a reason to believe it;
+- the **assumptions** that must hold for a link to work, and the **evidence** for
+  and against them;
+- what is done to bring the change about: **interventions**, and the resources
+  and outputs they need and produce;
+- how progress is **measured**: indicators, targets, and observations over time;
+- who is accountable for each change, and who needs to see what.
+
+Every element records where it came from (stated, inferred, a hypothesis, or
+confirmed), so a reader can tell what an organization has claimed from what an
+assistant has proposed.
+
+The model is a graph of causes and measures. A diagram of it is a view, and a
+single model can produce several.
+
+## What is a theory of change?
+
+A theory of change explains **how and why a program expects to bring about a
 change**. It starts from the long-term goal and works backwards: what
 conditions must exist for the goal to be reached, what must exist before each of
 those, and so on down to what the program does today. Each step is an
@@ -37,17 +69,17 @@ sources agree on five reasons:
   money on activities.
 - **Closing the "missing middle".** Show how day-to-day activities connect to a
   long-term goal, instead of asserting that they do.
-- **Evaluability.** Indicators and tests come from the theory, so you know what to
-  measure and what would count as being wrong.
+- **Evaluability.** Indicators and tests come from the causal reasoning, so you
+  know what to measure and what would count as being wrong.
 - **Communication.** Funders, partners, staff, and the people the program serves
   can see the same reasoning and argue with it.
-- **Learning.** The theory is a living framework. When evidence arrives, you revise
-  the theory instead of defending it.
+- **Learning.** The model is a living framework. When evidence arrives, you revise
+  it instead of defending it.
 
-### Pathways of change, outcome maps, and logic models
+### Views of one impact model
 
-These are different **views of one theory**. Each answers a different question for
-a different reader:
+These are different **views of one impact model**. Each answers a different
+question for a different reader:
 
 | View | Answers | What it looks like |
 |------|---------|--------------------|
@@ -56,28 +88,31 @@ a different reader:
 | **Logic model** | What goes in, what is done, and what comes out? | Stages from inputs, activities, and outputs through short-term, medium-term, and long-term outcomes to impact, one model per pathway |
 | **Logframe** | What do we promise, and how will we verify it? | A matrix of narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring |
 
-A logic model or logframe is a *flattened* picture: it shows the sequence but
-rarely why each step holds, and it cannot hold several pathways, feedback loops, or
-the actors who are not you. You can generate a logic model from a Theory of
-Change; you cannot recover the theory from a logic model. So this project keeps the
-**theory as the source of truth** and produces every other view from it:
+Each view is a projection of the model, and each leaves something out. A logic
+model shows the sequence from what goes in to what comes out, and rarely why each
+step holds. A theory of change shows why, and says less about what is delivered.
+A logframe fits the model into a matrix for contracts. None is derived from
+another. The impact model holds what they all need, so any of them can be drawn
+from it. A logic model that arrives on its own can seed a *candidate* impact
+model, but it cannot supply the reasons and assumptions it never held, so those
+stay marked as inferred until someone confirms them.
 
 ```bash
-theoryofchange report pathway theory.yaml           # the pathways of change, as diagrams
-theoryofchange report outcome-map theory.yaml       # the outcome map
-theoryofchange report logic-model theory.yaml       # a logic model for each pathway
-theoryofchange report logframe theory.yaml          # the logframe matrix
-theoryofchange report definitions theory.yaml       # all of them, plus metrics and glossary
+impact-model report pathway impact-model.yaml           # the theory of change as pathways of change, in diagrams
+impact-model report outcome-map impact-model.yaml       # the outcome map
+impact-model report logic-model impact-model.yaml       # a logic model for each pathway
+impact-model report logframe impact-model.yaml          # the logframe matrix
+impact-model report definitions impact-model.yaml       # all of them, plus metrics and glossary
 ```
 
-Change the theory once and every view changes with it, so the numbers and labels
+Change the model once and every view changes with it, so the numbers and labels
 never drift apart. (The outcome map here is the outcomes framework from the
 ActKnowledge method; it is not IDRC's *Outcome Mapping*, which tracks progress
 markers for the partners a program influences.)
 
 ### How the chain, the metrics, and what each audience sees fit together
 
-A Theory of Change is the chain from resources to impact. Metrics hang off each step
+An impact model is the chain from resources to impact. Metrics hang off each step
 of it, and different readers should see a different few. The first diagram is one
 program, shown as a pathway. The second shows how its metrics reach each audience.
 
@@ -182,19 +217,19 @@ Reading the second diagram:
   lead one list and not appear in another.
 - **Every box is something you can record and report today.** Mark an indicator as a
   program's North Star, with its guardrails, in the pathway's `focus`. Give each
-  audience an ordered, worded `headline` list. `theoryofchange report metric-tree`
+  audience an ordered, worded `headline` list. `impact-model report metric-tree`
   shows a program's North Star and every indicator from activity to impact, and
-  `theoryofchange report headline` shows what each audience is told. The amber boxes
+  `impact-model report headline` shows what each audience is told. The amber boxes
   are the choices you make: which number a program steers by, and which few each
-  audience leads with. `theoryofchange lint` checks them.
+  audience leads with. `impact-model lint` checks them.
 
 ## What this project gives you
 
 | Benefit | How |
 |---------|-----|
-| **A theory you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
+| **A model you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
 | **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
-| **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat |
+| **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat |
 | **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |
 | **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash |
 | **Review that comes back** | Send a packet or sheet to reviewers, import their answers as proposed changes you inspect, then record approval |
@@ -210,15 +245,15 @@ whether it did.
 | If you want to | Read |
 |----------------|------|
 | Install it and try it in five minutes | [Getting started](guides/getting-started.md) |
-| Write or change a theory | [Authoring a theory](guides/authoring.md) |
+| Write or change an impact model | [Authoring an impact model](guides/authoring.md) |
 | See how far a program has come | [Measuring progress](guides/measurement.md) |
 | Produce reports and decks | [Reports and decks](guides/reports-and-decks.md) |
-| Send a theory out for review | [Review round trip](guides/review-round-trip.md) |
-| Judge the quality of a theory | [Quality and judging](guides/quality-and-judging.md) |
+| Send an impact model out for review | [Review round trip](guides/review-round-trip.md) |
+| Judge the quality of an impact model | [Quality and judging](guides/quality-and-judging.md) |
 | Connect an AI agent | [MCP server and agent skills](guides/mcp-and-skills.md) |
-| Look at a complete theory | [Examples](guides/examples.md) |
+| Look at a complete impact model | [Examples](guides/examples.md) |
 
-The [release notes](releases/v0.2.0.md) list what the latest release contains, and [v0.1.0](releases/v0.1.0.md) the first.
+The [release notes](releases/v0.3.0.md) list what the latest release contains, and [v0.1.0](releases/v0.1.0.md) the first.
 
 ## Part of the PRISM ecosystem
 
@@ -229,4 +264,4 @@ reports use [structured-evaluation](https://github.com/plexusone/structured-eval
 
 ## License
 
-[MIT](https://github.com/ProductBuildersHQ/theoryofchange-spec/blob/main/LICENSE)
+[MIT](https://github.com/ProductBuildersHQ/impact-model/blob/main/LICENSE)

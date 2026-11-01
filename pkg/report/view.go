@@ -2,7 +2,7 @@
 // renders from. One model feeds every output, so a number or a label never
 // differs between a report and a deck.
 //
-// A View is derived from a Theory of Change document and its causal graph,
+// A View is derived from an impact model document and its causal graph,
 // and optionally from a computed status snapshot. Without a status it
 // supports the definition reports (diagram, logic models, metric
 // definitions, glossary) that need no data.
@@ -13,7 +13,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // ViewVersion is the version of the View model. Templates written against a
@@ -25,7 +25,7 @@ const ViewVersion = "1"
 type Options struct {
 	// Pathway restricts the view to one pathway: its outcomes and
 	// interventions plus everything downstream of them, so the route to
-	// impact stays visible. Empty means the whole theory.
+	// impact stays visible. Empty means the whole impact model.
 	Pathway string
 }
 
@@ -40,28 +40,28 @@ type View struct {
 	// the caller supplied it with WithContentHash.
 	ContentHash string `json:"contentHash,omitempty"`
 
-	Document      DocumentView       `json:"document"`
-	Pathways      []PathwayView      `json:"pathways"`
-	Outcomes      []OutcomeView      `json:"outcomes"`
-	Links         []LinkView         `json:"links"`
-	Groups        []GroupView        `json:"groups"`
-	Interventions []InterventionView `json:"interventions"`
-	Assumptions   []AssumptionView   `json:"assumptions"`
-	Indicators    []IndicatorView    `json:"indicators"`
-	Metrics       []MetricView       `json:"metrics"`
-	Actors        []ActorView        `json:"actors"`
-	Evidence      []EvidenceView     `json:"evidence"`
-	Glossary      []toc.GlossaryTerm `json:"glossary"`
+	Document      DocumentView          `json:"document"`
+	Pathways      []PathwayView         `json:"pathways"`
+	Outcomes      []OutcomeView         `json:"outcomes"`
+	Links         []LinkView            `json:"links"`
+	Groups        []GroupView           `json:"groups"`
+	Interventions []InterventionView    `json:"interventions"`
+	Assumptions   []AssumptionView      `json:"assumptions"`
+	Indicators    []IndicatorView       `json:"indicators"`
+	Metrics       []MetricView          `json:"metrics"`
+	Actors        []ActorView           `json:"actors"`
+	Evidence      []EvidenceView        `json:"evidence"`
+	Glossary      []impact.GlossaryTerm `json:"glossary"`
 	// Rejected lists elements reviewers rejected. They are kept for
 	// transparency and excluded from everything above.
 	Rejected []RejectedView `json:"rejected"`
 	// BasisCounts counts active elements by provenance basis; Unmarked
 	// counts those with none.
-	BasisCounts map[toc.Basis]int `json:"basisCounts"`
-	Unmarked    int               `json:"unmarkedCount"`
+	BasisCounts map[impact.Basis]int `json:"basisCounts"`
+	Unmarked    int                  `json:"unmarkedCount"`
 }
 
-// DocumentView is the theory's identity and context.
+// DocumentView is the impact model's identity and context.
 type DocumentView struct {
 	ID               string `json:"id"`
 	Title            string `json:"title"`
@@ -72,7 +72,7 @@ type DocumentView struct {
 	Geography        string `json:"geography,omitempty"`
 	TimeStart        string `json:"timeStart,omitempty"`
 	TimeEnd          string `json:"timeEnd,omitempty"`
-	// Perspective names the actor whose theory this is.
+	// Perspective names the actor whose impact model this is.
 	Perspective string `json:"perspective,omitempty"`
 	// Ceiling describes the ceiling of accountability in words.
 	Ceiling          string   `json:"ceiling,omitempty"`
@@ -82,7 +82,7 @@ type DocumentView struct {
 
 // BasisView is an element's provenance in display form.
 type BasisView struct {
-	Basis toc.Basis `json:"basis,omitempty"`
+	Basis impact.Basis `json:"basis,omitempty"`
 	// Marked is true for inferred and hypothesis elements, which every
 	// output must visibly mark so a draft is never read as the
 	// organization's own claim.
@@ -108,20 +108,20 @@ type PathwayView struct {
 	Owner           string    `json:"owner,omitempty"`
 	OutcomeIDs      []string  `json:"outcomeIds"`
 	InterventionIDs []string  `json:"interventionIds"`
-	ChildToc        string    `json:"childToc,omitempty"`
+	ChildModel      string    `json:"childModel,omitempty"`
 	Basis           BasisView `json:"basis"`
 }
 
 // OutcomeView is an outcome with its place in the graph and its status.
 type OutcomeView struct {
-	ID          string         `json:"id"`
-	Title       string         `json:"title"`
-	Description string         `json:"description,omitempty"`
-	Level       toc.Level      `json:"level"`
-	Sphere      toc.Sphere     `json:"sphere,omitempty"`
-	Category    string         `json:"category,omitempty"`
-	ChangeType  toc.ChangeType `json:"changeType,omitempty"`
-	Population  string         `json:"population,omitempty"`
+	ID          string            `json:"id"`
+	Title       string            `json:"title"`
+	Description string            `json:"description,omitempty"`
+	Level       impact.Level      `json:"level"`
+	Sphere      impact.Sphere     `json:"sphere,omitempty"`
+	Category    string            `json:"category,omitempty"`
+	ChangeType  impact.ChangeType `json:"changeType,omitempty"`
+	Population  string            `json:"population,omitempty"`
 	// Owned reports whether the outcome is within the ceiling of
 	// accountability.
 	Owned bool `json:"owned"`
@@ -210,30 +210,30 @@ type AssumptionView struct {
 
 // IndicatorView is an indicator with its metric and latest status.
 type IndicatorView struct {
-	ID               string      `json:"id"`
-	Name             string      `json:"name"`
-	Definition       string      `json:"definition,omitempty"`
-	Measures         string      `json:"measures"`
-	MeasuresTitle    string      `json:"measuresTitle,omitempty"`
-	Metric           string      `json:"metric,omitempty"`
-	Type             string      `json:"type,omitempty"`
-	Unit             string      `json:"unit,omitempty"`
-	Direction        string      `json:"direction,omitempty"`
-	Claim            toc.Claim   `json:"claim"`
-	Caveats          []string    `json:"caveats,omitempty"`
-	Pathways         []string    `json:"pathways,omitempty"`
-	Levels           []string    `json:"levels,omitempty"`
-	Baseline         string      `json:"baseline,omitempty"`
-	Targets          []string    `json:"targets,omitempty"`
-	DataSource       string      `json:"dataSource,omitempty"`
-	Method           string      `json:"method,omitempty"`
-	Frequency        string      `json:"frequency,omitempty"`
-	Owner            string      `json:"owner,omitempty"`
-	DataAvailability string      `json:"dataAvailability,omitempty"`
-	RollupFrom       []string    `json:"rollupFrom,omitempty"`
-	Basis            BasisView   `json:"basis"`
-	Status           *StatusView `json:"status,omitempty"`
-	Latest           string      `json:"latest,omitempty"`
+	ID               string       `json:"id"`
+	Name             string       `json:"name"`
+	Definition       string       `json:"definition,omitempty"`
+	Measures         string       `json:"measures"`
+	MeasuresTitle    string       `json:"measuresTitle,omitempty"`
+	Metric           string       `json:"metric,omitempty"`
+	Type             string       `json:"type,omitempty"`
+	Unit             string       `json:"unit,omitempty"`
+	Direction        string       `json:"direction,omitempty"`
+	Claim            impact.Claim `json:"claim"`
+	Caveats          []string     `json:"caveats,omitempty"`
+	Pathways         []string     `json:"pathways,omitempty"`
+	Levels           []string     `json:"levels,omitempty"`
+	Baseline         string       `json:"baseline,omitempty"`
+	Targets          []string     `json:"targets,omitempty"`
+	DataSource       string       `json:"dataSource,omitempty"`
+	Method           string       `json:"method,omitempty"`
+	Frequency        string       `json:"frequency,omitempty"`
+	Owner            string       `json:"owner,omitempty"`
+	DataAvailability string       `json:"dataAvailability,omitempty"`
+	RollupFrom       []string     `json:"rollupFrom,omitempty"`
+	Basis            BasisView    `json:"basis"`
+	Status           *StatusView  `json:"status,omitempty"`
+	Latest           string       `json:"latest,omitempty"`
 	// LatestNote is the note on the latest observation, such as how a rounded
 	// figure was worded at its source.
 	LatestNote string `json:"latestNote,omitempty"`
@@ -288,10 +288,10 @@ type EvidenceView struct {
 
 // RejectedView names an element reviewers rejected.
 type RejectedView struct {
-	ID    string          `json:"id"`
-	Kind  toc.ElementKind `json:"kind"`
-	Title string          `json:"title"`
-	Note  string          `json:"note,omitempty"`
+	ID    string             `json:"id"`
+	Kind  impact.ElementKind `json:"kind"`
+	Title string             `json:"title"`
+	Note  string             `json:"note,omitempty"`
 }
 
 // Label turns an enumeration value like "long_term" into "Long term".
@@ -304,37 +304,37 @@ func Label(v string) string {
 }
 
 // LevelLabel is the display name of an outcome level.
-func LevelLabel(l toc.Level) string {
+func LevelLabel(l impact.Level) string {
 	switch l {
-	case toc.LevelImpact:
+	case impact.LevelImpact:
 		return "Impact"
-	case toc.LevelLongTerm:
+	case impact.LevelLongTerm:
 		return "Long-term outcome"
-	case toc.LevelMediumTerm:
+	case impact.LevelMediumTerm:
 		return "Medium-term outcome"
-	case toc.LevelShortTerm:
+	case impact.LevelShortTerm:
 		return "Short-term outcome"
-	case toc.LevelOutput:
+	case impact.LevelOutput:
 		return "Output"
 	default:
 		return Label(string(l))
 	}
 }
 
-func logicText(l toc.Logic) string {
-	if l.Type == toc.LogicAtLeast {
+func logicText(l impact.Logic) string {
+	if l.Type == impact.LogicAtLeast {
 		return fmt.Sprintf("at least %d", l.K)
 	}
 	return string(l.Type)
 }
 
-func basisOf(p *toc.Provenance) BasisView {
+func basisOf(p *impact.Provenance) BasisView {
 	if p == nil {
 		return BasisView{}
 	}
 	return BasisView{
 		Basis:       p.Basis,
-		Marked:      p.Basis == toc.BasisInferred || p.Basis == toc.BasisHypothesis,
+		Marked:      p.Basis == impact.BasisInferred || p.Basis == impact.BasisHypothesis,
 		EvidenceIDs: slices.Clone(p.EvidenceIDs),
 		Note:        p.Note,
 	}

@@ -1,8 +1,8 @@
 ---
 title: "Open agent authorization standard adoption"
 version: "0.1"
-toc-id: "open-agent-auth"
-content-hash: "f59a711aecf7ba5c7595c35c36171958de9dc71331c018a0a1bb9bd793eb0958"
+model-id: "open-agent-auth"
+content-hash: "7f560786f0a2eb71aaa1482ee54be7386062983c34dc0b5181432c9a1a356005"
 ---
 
 # The problem
@@ -33,7 +33,7 @@ Outcomes above the ceiling are tracked but not owned: we contribute to them, we 
 
 ---
 
-# The theory on one page
+# The theory of change on one page
 
 ![Diagram](d.png)
 
@@ -156,4 +156,4 @@ Work down this list. For each: agree, change, remove, or not sure. Record what t
 
 # Export details
 
-Theory of Change open-agent-auth · version 0.1 · hash f59a711aecf7
+Impact model open-agent-auth · version 0.1 · hash 7f560786f0a2

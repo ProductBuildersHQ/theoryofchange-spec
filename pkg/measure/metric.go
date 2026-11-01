@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // RollupResult is the value an indicator takes by combining other indicators
@@ -23,13 +23,13 @@ type RollupResult struct {
 	// one, for comparison.
 	Direct bool `json:"direct,omitempty"`
 	// DirectValue is the indicator's own latest value when Direct.
-	DirectValue *float64  `json:"directValue,omitempty"`
-	State       toc.State `json:"state"`
+	DirectValue *float64     `json:"directValue,omitempty"`
+	State       impact.State `json:"state"`
 }
 
 // latestValue returns the latest numeric observation of an indicator at or
 // before asOf.
-func latestValue(id string, observations []toc.Observation, asOf time.Time) (float64, time.Time, bool) {
+func latestValue(id string, observations []impact.Observation, asOf time.Time) (float64, time.Time, bool) {
 	var (
 		best  time.Time
 		val   float64
@@ -61,15 +61,15 @@ func latestValue(id string, observations []toc.Observation, asOf time.Time) (flo
 // baseline only, since a computed value carries no targets of its own; the
 // indicator's own status, from EvaluateIndicator, uses the value as an
 // observation. It reports false when the indicator does not roll up.
-func Rollup(doc *toc.Document, ind toc.Indicator, observations []toc.Observation, asOf time.Time) (RollupResult, bool) {
+func Rollup(doc *impact.Model, ind impact.Indicator, observations []impact.Observation, asOf time.Time) (RollupResult, bool) {
 	if len(ind.RollupFrom) == 0 || ind.MetricID == "" {
 		return RollupResult{}, false
 	}
 	m, ok := doc.Metric(ind.MetricID)
-	if !ok || m.Aggregation == toc.AggregationNone {
+	if !ok || m.Aggregation == impact.AggregationNone {
 		return RollupResult{}, false
 	}
-	res := RollupResult{IndicatorID: ind.ID, State: toc.StateNoData}
+	res := RollupResult{IndicatorID: ind.ID, State: impact.StateNoData}
 	if v, _, found := latestValue(ind.ID, observations, asOf); found {
 		res.Direct, res.DirectValue = true, &v
 	}
@@ -88,7 +88,7 @@ func Rollup(doc *toc.Document, ind toc.Indicator, observations []toc.Observation
 			continue
 		}
 		src := source{id: id, value: v, at: at, weight: 1}
-		if m.Aggregation == toc.AggregationWeightedMean {
+		if m.Aggregation == impact.AggregationWeightedMean {
 			w, ok := weightFor(doc, id, m.WeightMetricID, observations, asOf)
 			if !ok {
 				res.Missing = append(res.Missing, id)
@@ -108,13 +108,13 @@ func Rollup(doc *toc.Document, ind toc.Indicator, observations []toc.Observation
 	}
 	var out float64
 	switch m.Aggregation {
-	case toc.AggregationSum:
+	case impact.AggregationSum:
 		for _, v := range vals {
 			out += v
 		}
-	case toc.AggregationMean:
+	case impact.AggregationMean:
 		out = mean(vals)
-	case toc.AggregationWeightedMean:
+	case impact.AggregationWeightedMean:
 		var sum, weights float64
 		for _, s := range sources {
 			sum += s.value * s.weight
@@ -125,15 +125,15 @@ func Rollup(doc *toc.Document, ind toc.Indicator, observations []toc.Observation
 			return res, true
 		}
 		out = sum / weights
-	case toc.AggregationMedian:
+	case impact.AggregationMedian:
 		out = median(vals)
-	case toc.AggregationMode:
+	case impact.AggregationMode:
 		out = mode(vals)
-	case toc.AggregationMin:
+	case impact.AggregationMin:
 		out = slices.Min(vals)
-	case toc.AggregationMax:
+	case impact.AggregationMax:
 		out = slices.Max(vals)
-	case toc.AggregationLatest:
+	case impact.AggregationLatest:
 		latest := sources[0]
 		for _, s := range sources[1:] {
 			if !s.at.Before(latest.at) {
@@ -141,16 +141,16 @@ func Rollup(doc *toc.Document, ind toc.Indicator, observations []toc.Observation
 			}
 		}
 		out = latest.value
-	case toc.AggregationNone:
+	case impact.AggregationNone:
 		return RollupResult{}, false
 	}
-	res.Value, res.State = &out, toc.StateBaselineOnly
+	res.Value, res.State = &out, impact.StateBaselineOnly
 	return res, true
 }
 
 // weightFor finds the latest value of the weight metric in the same pathway
 // as the source indicator.
-func weightFor(doc *toc.Document, sourceID, weightMetric string, observations []toc.Observation, asOf time.Time) (float64, bool) {
+func weightFor(doc *impact.Model, sourceID, weightMetric string, observations []impact.Observation, asOf time.Time) (float64, bool) {
 	src, ok := doc.Indicator(sourceID)
 	if !ok {
 		return 0, false

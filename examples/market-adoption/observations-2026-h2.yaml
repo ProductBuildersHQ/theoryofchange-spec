@@ -1,6 +1,6 @@
 kind: ObservationSet
 specVersion: "0.1"
-tocId: delegation-standard-adoption
+modelId: delegation-standard-adoption
 period: 2026-H2
 observations:
   - indicatorId: ind-idps-ga

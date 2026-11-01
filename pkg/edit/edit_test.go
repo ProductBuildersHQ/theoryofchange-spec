@@ -7,24 +7,24 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
-func loadFull(t *testing.T) *toc.Document {
+func loadFull(t *testing.T) *impact.Model {
 	t.Helper()
-	data, err := os.ReadFile("../toc/testdata/full.json")
+	data, err := os.ReadFile("../impact/testdata/full.json")
 	if err != nil {
 		t.Fatalf("read full.json: %v", err)
 	}
-	var d toc.Document
+	var d impact.Model
 	if err := json.Unmarshal(data, &d); err != nil {
 		t.Fatalf("decode full.json: %v", err)
 	}
 	return &d
 }
 
-func snapshot(t *testing.T, d *toc.Document) string {
+func snapshot(t *testing.T, d *impact.Model) string {
 	t.Helper()
 	b, err := json.Marshal(d)
 	if err != nil {
@@ -40,7 +40,7 @@ func must[T any](v T, err error) T {
 	return v
 }
 
-func apply(t *testing.T, d *toc.Document, ops ...Op) *Result {
+func apply(t *testing.T, d *impact.Model, ops ...Op) *Result {
 	t.Helper()
 	res, err := Apply(d, Patch(ops), Options{})
 	if err != nil {
@@ -54,44 +54,44 @@ func TestOperations(t *testing.T) {
 	tests := []struct {
 		name  string
 		ops   []Op
-		check func(t *testing.T, d *toc.Document)
+		check func(t *testing.T, d *impact.Model)
 	}{
-		{"append outcome", []Op{must(Add("/outcomes/-", newOutcome))}, func(t *testing.T, d *toc.Document) {
+		{"append outcome", []Op{must(Add("/outcomes/-", newOutcome))}, func(t *testing.T, d *impact.Model) {
 			if last := d.Outcomes[len(d.Outcomes)-1]; last.ID != "oc-new" {
 				t.Fatalf("last outcome = %q", last.ID)
 			}
 		}},
-		{"insert at index", []Op{must(Add("/outcomes/0", newOutcome))}, func(t *testing.T, d *toc.Document) {
+		{"insert at index", []Op{must(Add("/outcomes/0", newOutcome))}, func(t *testing.T, d *impact.Model) {
 			if d.Outcomes[0].ID != "oc-new" || d.Outcomes[1].ID != "oc-safer-agents" {
 				t.Fatalf("insert order wrong: %q %q", d.Outcomes[0].ID, d.Outcomes[1].ID)
 			}
 		}},
-		{"replace by id", []Op{must(Replace("/outcomes/@oc-idp-support/title", "Providers ship it"))}, func(t *testing.T, d *toc.Document) {
+		{"replace by id", []Op{must(Replace("/outcomes/@oc-idp-support/title", "Providers ship it"))}, func(t *testing.T, d *impact.Model) {
 			if o, _ := d.Outcome("oc-idp-support"); o.Title != "Providers ship it" {
 				t.Fatalf("title = %q", o.Title)
 			}
 		}},
-		{"add optional field by id", []Op{must(Add("/outcomes/@oc-spec-stable/description", "Stable means versioned and tested."))}, func(t *testing.T, d *toc.Document) {
+		{"add optional field by id", []Op{must(Add("/outcomes/@oc-spec-stable/description", "Stable means versioned and tested."))}, func(t *testing.T, d *impact.Model) {
 			if o, _ := d.Outcome("oc-spec-stable"); o.Description == "" {
 				t.Fatal("description not added")
 			}
 		}},
-		{"remove link by id", []Op{Remove("/links/@ln-require-platform-loop")}, func(t *testing.T, d *toc.Document) {
+		{"remove link by id", []Op{Remove("/links/@ln-require-platform-loop")}, func(t *testing.T, d *impact.Model) {
 			if _, ok := d.Link("ln-require-platform-loop"); ok {
 				t.Fatal("link still present")
 			}
 		}},
-		{"remove optional field", []Op{Remove("/outcomes/@oc-idp-support/tags")}, func(t *testing.T, d *toc.Document) {
+		{"remove optional field", []Op{Remove("/outcomes/@oc-idp-support/tags")}, func(t *testing.T, d *impact.Model) {
 			if o, _ := d.Outcome("oc-idp-support"); len(o.Tags) != 0 {
 				t.Fatal("tags still present")
 			}
 		}},
-		{"move within array", []Op{Move("/outcomes/@oc-reference-impl", "/outcomes/0")}, func(t *testing.T, d *toc.Document) {
+		{"move within array", []Op{Move("/outcomes/@oc-reference-impl", "/outcomes/0")}, func(t *testing.T, d *impact.Model) {
 			if d.Outcomes[0].ID != "oc-reference-impl" {
 				t.Fatalf("first outcome = %q", d.Outcomes[0].ID)
 			}
 		}},
-		{"copy value", []Op{Copy("/outcomes/@oc-idp-support/title", "/outcomes/@oc-platform-support/description")}, func(t *testing.T, d *toc.Document) {
+		{"copy value", []Op{Copy("/outcomes/@oc-idp-support/title", "/outcomes/@oc-platform-support/description")}, func(t *testing.T, d *impact.Model) {
 			if o, _ := d.Outcome("oc-platform-support"); o.Description != "Major identity providers support the standard" {
 				t.Fatalf("description = %q", o.Description)
 			}
@@ -99,17 +99,17 @@ func TestOperations(t *testing.T) {
 		{"test then replace", []Op{
 			must(Test("/outcomes/@oc-idp-support/level", "medium_term")),
 			must(Replace("/outcomes/@oc-idp-support/level", "short_term")),
-		}, func(t *testing.T, d *toc.Document) {
-			if o, _ := d.Outcome("oc-idp-support"); o.Level != toc.LevelShortTerm {
+		}, func(t *testing.T, d *impact.Model) {
+			if o, _ := d.Outcome("oc-idp-support"); o.Level != impact.LevelShortTerm {
 				t.Fatalf("level = %q", o.Level)
 			}
 		}},
-		{"nested id path", []Op{must(Replace("/indicators/@ind-idp-count/targets/1/value", 6))}, func(t *testing.T, d *toc.Document) {
+		{"nested id path", []Op{must(Replace("/indicators/@ind-idp-count/targets/1/value", 6))}, func(t *testing.T, d *impact.Model) {
 			if ind, _ := d.Indicator("ind-idp-count"); *ind.Targets[1].Value != 6 {
 				t.Fatalf("target = %v", *ind.Targets[1].Value)
 			}
 		}},
-		{"escaped key", []Op{must(Add("/context/market/attributes/"+Pointer("a/b")[1:], "x"))}, func(t *testing.T, d *toc.Document) {
+		{"escaped key", []Op{must(Add("/context/market/attributes/"+Pointer("a/b")[1:], "x"))}, func(t *testing.T, d *impact.Model) {
 			if d.Context.Market.Attributes["a/b"] != "x" {
 				t.Fatalf("attributes = %v", d.Context.Market.Attributes)
 			}

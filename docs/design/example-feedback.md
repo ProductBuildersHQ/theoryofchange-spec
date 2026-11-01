@@ -1,6 +1,6 @@
 # Model feedback from authoring the reference examples
 
-Two fictional reference theories (`examples/intermediary` and
+Two fictional reference impact models (`examples/intermediary` and
 `examples/market-adoption`) were written against the model to find what it
 could not say, or said awkwardly. This page records each finding and what was
 decided, so the reasoning outlives the conversation that produced it.
@@ -18,7 +18,7 @@ now written down), **planned** (assigned to a roadmap item), or **declined**
 | No actor type for a government office; no external-factor kind for an opportunity (risks already had one) | Added the `government` actor type and the `opportunity` factor kind |
 | What may a restricted evidence record contain, and what do renderers show? | A restricted record (or one with no sensitivity set) may carry a title, type, strength, and source. Its excerpt, summary, **and URL** are withheld by every renderer, since a URL can reveal where a confidential document lives |
 | A group's `target` is one outcome; nothing said what a nested group's target is | A nested group targets the **same outcome** as the group containing it. Validation enforces it (`VAL-GRP-004`) |
-| The coverage rule wanted an indicator on every owned outcome, which inflates indicator counts | `TOC-MEA-001` accepts coverage through another indicator's `proxyFor` |
+| The coverage rule wanted an indicator on every owned outcome, which inflates indicator counts | `IMP-MEA-001` accepts coverage through another indicator's `proxyFor` |
 
 ## Documented
 
@@ -36,9 +36,9 @@ now written down), **planned** (assigned to a roadmap item), or **declined**
 
 | Finding | Roadmap item |
 |---------|--------------|
-| A `weighted_mean` roll-up cannot be computed if the weight metric has no indicator | Lint rule `TOC-MET-003`, in `RMI-THEORYOFCHANGESPEC-014` |
-| `pathway.outcomeIds` and indicators' `pathwayIds` are two lists kept consistent by hand | Lint rule `TOC-PTH-003`, in `RMI-THEORYOFCHANGESPEC-014` |
-| A group's members should each have a link into the group's target | Already covered by `TOC-STR-007`, in `RMI-THEORYOFCHANGESPEC-013` |
+| A `weighted_mean` roll-up cannot be computed if the weight metric has no indicator | Lint rule `IMP-MET-003`, in `RMI-THEORYOFCHANGESPEC-014` |
+| `pathway.outcomeIds` and indicators' `pathwayIds` are two lists kept consistent by hand | Lint rule `IMP-PTH-003`, in `RMI-THEORYOFCHANGESPEC-014` |
+| A group's members should each have a link into the group's target | Already covered by `IMP-STR-007`, in `RMI-THEORYOFCHANGESPEC-013` |
 | Assumption `appliesTo` and a link's `assumptionIds` can disagree | A consistency lint rule, in `RMI-THEORYOFCHANGESPEC-014` |
 
 ## Declined (for now)

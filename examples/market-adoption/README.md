@@ -12,7 +12,7 @@ market-systems framing.
 
 ## Files
 
-- `theory.yaml`, `actors.yaml` (shared registry), `observations-2026-h2.yaml`
+- `impact-model.yaml`, `actors.yaml` (shared registry), `observations-2026-h2.yaml`
 
 ## Features shown
 
@@ -33,8 +33,8 @@ market-systems framing.
 Run from this directory:
 
 ```bash
-theoryofchange validate theory.yaml actors.yaml
-theoryofchange validate observations-2026-h2.yaml --toc theory.yaml
-theoryofchange graph theory.yaml
-theoryofchange fmt --check theory.yaml actors.yaml observations-2026-h2.yaml
+impact-model validate impact-model.yaml actors.yaml
+impact-model validate observations-2026-h2.yaml --model impact-model.yaml
+impact-model graph impact-model.yaml
+impact-model fmt --check impact-model.yaml actors.yaml observations-2026-h2.yaml
 ```

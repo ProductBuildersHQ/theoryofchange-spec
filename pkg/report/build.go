@@ -6,30 +6,30 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // builder holds the lookups shared by the section builders.
 type builder struct {
-	doc    *toc.Document
+	doc    *impact.Model
 	g      *graph.Graph
-	st     *toc.Status
+	st     *impact.Status
 	keep   map[string]bool // nil means keep everything
 	filter string          // the pathway the view is restricted to, if any
 	titles map[string]string
 
-	indStatus map[string]toc.IndicatorStatus
-	outStatus map[string]toc.OutcomeStatus
-	lnStatus  map[string]toc.LinkStatus
-	asmStatus map[string]toc.AssumptionState
+	indStatus map[string]impact.IndicatorStatus
+	outStatus map[string]impact.OutcomeStatus
+	lnStatus  map[string]impact.LinkStatus
+	asmStatus map[string]impact.AssumptionState
 }
 
 // BuildView derives a View from a document and its causal graph (built from
 // the document when g is nil) and, optionally, a status snapshot. Rejected
 // elements are excluded from every section and listed in Rejected. The
 // document, graph, and status are not modified.
-func BuildView(doc *toc.Document, g *graph.Graph, st *toc.Status, o Options) (*View, error) {
+func BuildView(doc *impact.Model, g *graph.Graph, st *impact.Status, o Options) (*View, error) {
 	if doc == nil {
 		return nil, fmt.Errorf("report: nil document")
 	}
@@ -52,7 +52,7 @@ func BuildView(doc *toc.Document, g *graph.Graph, st *toc.Status, o Options) (*V
 		Version:     ViewVersion,
 		Filter:      o.Pathway,
 		Document:    b.documentView(),
-		BasisCounts: map[toc.Basis]int{},
+		BasisCounts: map[impact.Basis]int{},
 	}
 	if st != nil {
 		v.AsOf = st.AsOf
@@ -69,7 +69,7 @@ func BuildView(doc *toc.Document, g *graph.Graph, st *toc.Status, o Options) (*V
 	v.Evidence = b.evidence()
 	v.Glossary = slices.Clone(doc.Glossary)
 	if v.Glossary == nil {
-		v.Glossary = []toc.GlossaryTerm{}
+		v.Glossary = []impact.GlossaryTerm{}
 	}
 	v.Rejected = b.rejected()
 	v.countBases()
@@ -101,10 +101,10 @@ func (b *builder) indexTitles() {
 }
 
 func (b *builder) indexStatus() {
-	b.indStatus = map[string]toc.IndicatorStatus{}
-	b.outStatus = map[string]toc.OutcomeStatus{}
-	b.lnStatus = map[string]toc.LinkStatus{}
-	b.asmStatus = map[string]toc.AssumptionState{}
+	b.indStatus = map[string]impact.IndicatorStatus{}
+	b.outStatus = map[string]impact.OutcomeStatus{}
+	b.lnStatus = map[string]impact.LinkStatus{}
+	b.asmStatus = map[string]impact.AssumptionState{}
 	if b.st == nil {
 		return
 	}
@@ -196,7 +196,7 @@ func (b *builder) pathways() []PathwayView {
 		}
 		pv := PathwayView{
 			ID: p.ID, Title: p.Title, Kind: string(p.Kind), Description: p.Description,
-			ChildToc: p.ChildToc, Basis: basisOf(p.Provenance),
+			ChildModel: p.ChildModel, Basis: basisOf(p.Provenance),
 			OutcomeIDs: []string{}, InterventionIDs: []string{},
 		}
 		if p.OwnerID != "" {
@@ -353,7 +353,7 @@ func (b *builder) assumptions() []AssumptionView {
 			ID: a.ID, Statement: a.Statement, Type: string(a.Type), Criticality: string(a.Criticality),
 			Plausibility: string(a.Plausibility), NeedsTesting: a.NeedsTesting, Test: a.Test,
 			AppliesTo: slices.Clone(a.AppliesTo), Indicators: slices.Clone(a.IndicatorIDs),
-			Status: string(a.Status), StatusSource: string(toc.SourceDocument), Basis: basisOf(a.Provenance),
+			Status: string(a.Status), StatusSource: string(impact.SourceDocument), Basis: basisOf(a.Provenance),
 		}
 		if a.IfThenBecause != nil {
 			av.If, av.Then, av.Because = a.IfThenBecause.If, a.IfThenBecause.Then, a.IfThenBecause.Because
@@ -415,7 +415,7 @@ func (b *builder) indicators() []IndicatorView {
 				// An estimate reads as an estimate, so a rounded or partial figure
 				// is not mistaken for a count.
 				prefix := "on "
-				if s.Latest.Quality == toc.QualityEstimated {
+				if s.Latest.Quality == impact.QualityEstimated {
 					prefix = "estimate, on "
 				}
 				iv.Latest = withDate(valueText(s.Latest.Value, s.Latest.Level, ind.Unit), s.Latest.Date, prefix)
@@ -496,7 +496,7 @@ func (b *builder) evidence() []EvidenceView {
 			Excerpt: e.Excerpt, Sensitivity: string(e.Sensitivity), AccessedAt: e.AccessedAt,
 		}
 		if ev.Sensitivity == "" {
-			ev.Sensitivity = string(toc.SensitivityRestricted) // unset is treated as restricted
+			ev.Sensitivity = string(impact.SensitivityRestricted) // unset is treated as restricted
 		}
 		if !e.Sensitivity.Renderable() {
 			ev.Withheld = e.Excerpt != "" || e.Summary != ""
@@ -510,44 +510,44 @@ func (b *builder) evidence() []EvidenceView {
 
 func (b *builder) rejected() []RejectedView {
 	out := []RejectedView{}
-	add := func(id string, kind toc.ElementKind, title string, p *toc.Provenance) {
+	add := func(id string, kind impact.ElementKind, title string, p *impact.Provenance) {
 		if p.IsRejected() {
 			out = append(out, RejectedView{ID: id, Kind: kind, Title: title, Note: p.Note})
 		}
 	}
 	d := b.doc
 	for _, v := range d.Outcomes {
-		add(v.ID, toc.ElementOutcome, v.Title, v.Provenance)
+		add(v.ID, impact.ElementOutcome, v.Title, v.Provenance)
 	}
 	for _, v := range d.Groups {
-		add(v.ID, toc.ElementGroup, "Precondition group for "+b.name(v.Target), v.Provenance)
+		add(v.ID, impact.ElementGroup, "Precondition group for "+b.name(v.Target), v.Provenance)
 	}
 	for _, v := range d.Links {
-		add(v.ID, toc.ElementLink, b.name(v.From)+" → "+b.name(v.To), v.Provenance)
+		add(v.ID, impact.ElementLink, b.name(v.From)+" → "+b.name(v.To), v.Provenance)
 	}
 	for _, v := range d.Interventions {
-		add(v.ID, toc.ElementIntervention, v.Title, v.Provenance)
+		add(v.ID, impact.ElementIntervention, v.Title, v.Provenance)
 	}
 	for _, v := range d.Assumptions {
-		add(v.ID, toc.ElementAssumption, v.Statement, v.Provenance)
+		add(v.ID, impact.ElementAssumption, v.Statement, v.Provenance)
 	}
 	for _, v := range d.Indicators {
-		add(v.ID, toc.ElementIndicator, v.Name, v.Provenance)
+		add(v.ID, impact.ElementIndicator, v.Name, v.Provenance)
 	}
 	for _, v := range d.Actors {
-		add(v.ID, toc.ElementActor, v.Name, v.Provenance)
+		add(v.ID, impact.ElementActor, v.Name, v.Provenance)
 	}
 	for _, v := range d.ExternalFactors {
-		add(v.ID, toc.ElementExternalFactor, v.Description, v.Provenance)
+		add(v.ID, impact.ElementExternalFactor, v.Description, v.Provenance)
 	}
 	for _, v := range d.Risks {
-		add(v.ID, toc.ElementRisk, v.Description, v.Provenance)
+		add(v.ID, impact.ElementRisk, v.Description, v.Provenance)
 	}
 	for _, v := range d.Metrics {
-		add(v.ID, toc.ElementMetric, v.Name, v.Provenance)
+		add(v.ID, impact.ElementMetric, v.Name, v.Provenance)
 	}
 	for _, v := range d.Pathways {
-		add(v.ID, toc.ElementPathway, v.Title, v.Provenance)
+		add(v.ID, impact.ElementPathway, v.Title, v.Provenance)
 	}
 	return out
 }

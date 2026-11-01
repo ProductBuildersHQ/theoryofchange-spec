@@ -1,4 +1,4 @@
-// Package edit is the only way a Theory of Change document is modified.
+// Package edit is the only way an impact model document is modified.
 //
 // Changes are expressed as RFC 6902 JSON Patches, extended with ID
 // addressing: a pointer segment of the form @<id> selects the array

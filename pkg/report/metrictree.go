@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // MetricTree renders the metric tree report: for each pathway, the one number
@@ -13,7 +13,7 @@ import (
 // pathway laid out from what was done to what changed, as a table and as a
 // diagram. With a pathway ID it covers that pathway only.
 func MetricTree(in StatusInput, pathwayID string) (string, error) {
-	var pws []toc.Pathway
+	var pws []impact.Pathway
 	for _, p := range in.Doc.Pathways {
 		if !p.Rejected() && (pathwayID == "" || p.ID == pathwayID) {
 			pws = append(pws, p)
@@ -30,14 +30,14 @@ func MetricTree(in StatusInput, pathwayID string) (string, error) {
 	var b strings.Builder
 	fmt.Fprintf(&b, "# %s: metric tree\n\nAs of %s.\n\n", mdText(in.View.Document.Title), in.Status.AsOf)
 	if len(pws) == 0 {
-		b.WriteString("The theory has no pathways.\n")
+		b.WriteString("The impact model has no pathways.\n")
 		return b.String(), nil
 	}
 	for _, p := range pws {
 		fmt.Fprintf(&b, "## %s\n\n", mdText(p.Title))
 		writeFocus(&b, in.Doc, p, views)
 
-		byTier := map[toc.Tier][]toc.Indicator{}
+		byTier := map[impact.Tier][]impact.Indicator{}
 		for _, ind := range in.Doc.Indicators {
 			if !ind.Rejected() && in.Doc.IndicatorServes(ind, p.ID) {
 				t := in.Doc.IndicatorTier(ind)
@@ -49,7 +49,7 @@ func MetricTree(in StatusInput, pathwayID string) (string, error) {
 			continue
 		}
 		b.WriteString("| Tier | Indicator | Latest | Target | Status |\n|------|-----------|--------|--------|--------|\n")
-		for _, t := range toc.AllTiers() {
+		for _, t := range impact.AllTiers() {
 			for _, ind := range byTier[t] {
 				v := views[ind.ID]
 				fmt.Fprintf(&b, "| %s | %s%s | %s | %s | %s |\n", t, MDCell(ind.Name), roleMark(p, ind.ID),
@@ -71,7 +71,7 @@ func stateOf(v IndicatorView) string {
 
 // roleMark tags the indicator that is the pathway's North Star, one metric
 // that matters, or a guardrail.
-func roleMark(p toc.Pathway, indicatorID string) string {
+func roleMark(p impact.Pathway, indicatorID string) string {
 	if p.Focus == nil {
 		return ""
 	}
@@ -91,7 +91,7 @@ func roleMark(p toc.Pathway, indicatorID string) string {
 	return " (" + strings.Join(roles, ", ") + ")"
 }
 
-func writeFocus(b *strings.Builder, doc *toc.Document, p toc.Pathway, views map[string]IndicatorView) {
+func writeFocus(b *strings.Builder, doc *impact.Model, p impact.Pathway, views map[string]IndicatorView) {
 	f := p.Focus
 	if f == nil || (f.NorthStarID == "" && f.OneMetricID == "" && len(f.GuardrailIDs) == 0) {
 		b.WriteString("No North Star is chosen for this pathway.\n\n")
@@ -122,12 +122,12 @@ func writeFocus(b *strings.Builder, doc *toc.Document, p toc.Pathway, views map[
 }
 
 // treeDiagram draws the pathway's indicators in their tiers, left to right.
-func treeDiagram(p toc.Pathway, byTier map[toc.Tier][]toc.Indicator) string {
+func treeDiagram(p impact.Pathway, byTier map[impact.Tier][]impact.Indicator) string {
 	var b strings.Builder
 	b.WriteString("```mermaid\nflowchart LR\n")
 	var prev string
 	var starred, guards []string
-	for _, t := range toc.AllTiers() {
+	for _, t := range impact.AllTiers() {
 		inds := byTier[t]
 		if len(inds) == 0 {
 			continue

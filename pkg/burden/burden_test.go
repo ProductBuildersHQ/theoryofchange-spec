@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 func near(a, b float64) bool { return math.Abs(a-b) < 1e-6 }
@@ -31,27 +31,27 @@ func TestCollectionsPerYear(t *testing.T) {
 	}
 }
 
-func ind(id string, status toc.SelectionStatus, c *toc.Collection, pathways ...string) toc.Indicator {
-	return toc.Indicator{
+func ind(id string, status impact.SelectionStatus, c *impact.Collection, pathways ...string) impact.Indicator {
+	return impact.Indicator{
 		ID: id, Measures: "oc", Name: id, PathwayIDs: pathways, Collection: c,
-		Selection: &toc.Selection{Status: status},
+		Selection: &impact.Selection{Status: status},
 	}
 }
 
-func doc() *toc.Document {
-	return &toc.Document{
-		Pathways: []toc.Pathway{{ID: "pw-a"}, {ID: "pw-b"}},
-		Indicators: []toc.Indicator{
+func doc() *impact.Model {
+	return &impact.Model{
+		Pathways: []impact.Pathway{{ID: "pw-a"}, {ID: "pw-b"}},
+		Indicators: []impact.Indicator{
 			// 30 min monthly = 360/yr = 6.923 min/week; 5 questions x 12 x half = 30
-			ind("i-survey", toc.SelectionSelected, &toc.Collection{Mode: toc.ModeSurvey, MinutesPerPeriod: 30, Period: "P1M", QuestionsPerRespondent: 5, SampleRate: 0.5}, "pw-a"),
+			ind("i-survey", impact.SelectionSelected, &impact.Collection{Mode: impact.ModeSurvey, MinutesPerPeriod: 30, Period: "P1M", QuestionsPerRespondent: 5, SampleRate: 0.5}, "pw-a"),
 			// weekly 10 min = 10 min/week, serves two pathways
-			ind("i-manual", toc.SelectionSelected, &toc.Collection{Mode: toc.ModeManual, MinutesPerPeriod: 10, Period: "P1W"}, "pw-a", "pw-b"),
+			ind("i-manual", impact.SelectionSelected, &impact.Collection{Mode: impact.ModeManual, MinutesPerPeriod: 10, Period: "P1W"}, "pw-a", "pw-b"),
 			// yearly 120 min = 120/52 min/week; 6 questions per year; no pathway
-			ind("i-form", toc.SelectionSelected, &toc.Collection{Mode: toc.ModeForm, MinutesPerPeriod: 120, Period: "P1Y", QuestionsPerRespondent: 6}),
-			ind("i-uncosted", toc.SelectionSelected, nil, "pw-b"),
-			ind("i-candidate", toc.SelectionCandidate, &toc.Collection{Mode: toc.ModeManual, MinutesPerPeriod: 999, Period: "P1W"}),
-			ind("i-retired", toc.SelectionRetired, &toc.Collection{Mode: toc.ModeManual, MinutesPerPeriod: 999, Period: "P1W"}),
-			{ID: "i-unselected", Measures: "oc", Name: "x", Collection: &toc.Collection{Mode: toc.ModeManual, MinutesPerPeriod: 999, Period: "P1W"}},
+			ind("i-form", impact.SelectionSelected, &impact.Collection{Mode: impact.ModeForm, MinutesPerPeriod: 120, Period: "P1Y", QuestionsPerRespondent: 6}),
+			ind("i-uncosted", impact.SelectionSelected, nil, "pw-b"),
+			ind("i-candidate", impact.SelectionCandidate, &impact.Collection{Mode: impact.ModeManual, MinutesPerPeriod: 999, Period: "P1W"}),
+			ind("i-retired", impact.SelectionRetired, &impact.Collection{Mode: impact.ModeManual, MinutesPerPeriod: 999, Period: "P1W"}),
+			{ID: "i-unselected", Measures: "oc", Name: "x", Collection: &impact.Collection{Mode: impact.ModeManual, MinutesPerPeriod: 999, Period: "P1W"}},
 		},
 	}
 }
@@ -90,15 +90,15 @@ func TestCompute(t *testing.T) {
 		t.Errorf("mode order = %v", got)
 	}
 	if r.Budget != nil {
-		t.Error("a theory with no budget got a budget check")
+		t.Error("An impact model with no budget got a budget check")
 	}
 }
 
 func TestBudgetComparison(t *testing.T) {
 	d := doc()
-	d.Budget = &toc.MeasurementBudget{
+	d.Budget = &impact.MeasurementBudget{
 		StaffMinutesPerWeek: 15, MaxQuestionsPerRespondentPerYear: 40,
-		TargetSelectedMetrics: &toc.Range{Min: 5, Max: 8},
+		TargetSelectedMetrics: &impact.Range{Min: 5, Max: 8},
 	}
 	r, _ := Compute(d)
 	b := r.Budget
@@ -112,7 +112,7 @@ func TestBudgetComparison(t *testing.T) {
 		t.Errorf("selected = %+v", sm)
 	}
 
-	d.Budget = &toc.MeasurementBudget{StaffMinutesPerWeek: 60}
+	d.Budget = &impact.MeasurementBudget{StaffMinutesPerWeek: 60}
 	r, _ = Compute(d)
 	if r.Budget.StaffMinutesPerWeek.Over || r.Budget.QuestionsPerYear.Declared || !r.Budget.SelectedMetrics.Within {
 		t.Errorf("budget = %+v", r.Budget)
@@ -129,7 +129,7 @@ func TestBadPeriodIsReported(t *testing.T) {
 
 func TestRejectedIndicatorsAreNotCounted(t *testing.T) {
 	d := doc()
-	d.Indicators[1].Provenance = &toc.Provenance{Basis: toc.BasisRejected}
+	d.Indicators[1].Provenance = &impact.Provenance{Basis: impact.BasisRejected}
 	r, _ := Compute(d)
 	if r.Overall.Indicators != 3 {
 		t.Errorf("overall = %+v", r.Overall)

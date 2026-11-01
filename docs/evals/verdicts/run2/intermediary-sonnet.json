@@ -20,22 +20,22 @@
     {
       "category": "logic_flow",
       "score": "pass",
-      "reasoning": "Every link carries a rationale (ln-* links, TOC-LOG-001/002 GO). Preconditions grp-capable (all), grp-collab (at_least 2) and grp-voice state combination logic with sufficiency reasoning. Minor: ln-briefings-know names no assumption (below intermediate level, so not linted), and ln-capable-access/ln-collab-access/ln-sustain-access share one broad assumption asm-members-deliver."
+      "reasoning": "Every link carries a rationale (ln-* links, IMP-LOG-001/002 GO). Preconditions grp-capable (all), grp-collab (at_least 2) and grp-voice state combination logic with sufficiency reasoning. Minor: ln-briefings-know names no assumption (below intermediate level, so not linted), and ln-capable-access/ln-collab-access/ln-sustain-access share one broad assumption asm-members-deliver."
     },
     {
       "category": "root_causes",
       "score": "pass",
-      "reasoning": "context.rootCauses and the causes tree (cause-no-standing-voice structural -\u003e cause-isolation underlying -\u003e cause-no-peer-exchange/cause-high-overhead immediate) are addressed by outcomes; cause-funding-volatility is set aside with a reason (outOfScope), counted as addressed. TOC-CAU-001 GO."
+      "reasoning": "context.rootCauses and the causes tree (cause-no-standing-voice structural -\u003e cause-isolation underlying -\u003e cause-no-peer-exchange/cause-high-overhead immediate) are addressed by outcomes; cause-funding-volatility is set aside with a reason (outOfScope), counted as addressed. IMP-CAU-001 GO."
     },
     {
       "category": "assumptions_risks",
       "score": "pass",
-      "reasoning": "12 assumptions with type and criticality; both critical ones (asm-skills-applied, asm-members-deliver) and the high ones have tests (TOC-ASM-001/002/004 GO). Risks rsk-large-dominate, rsk-funder-shift, rsk-time-burden, rsk-vendor-lockin mirror assumptions with mitigations. Context and partner assumptions present (asm-officials-receptive, asm-vendor-terms, asm-funders-fit). Several medium assumptions lack tests but are not critical."
+      "reasoning": "12 assumptions with type and criticality; both critical ones (asm-skills-applied, asm-members-deliver) and the high ones have tests (IMP-ASM-001/002/004 GO). Risks rsk-large-dominate, rsk-funder-shift, rsk-time-burden, rsk-vendor-lockin mirror assumptions with mitigations. Context and partner assumptions present (asm-officials-receptive, asm-vendor-terms, asm-funders-fit). Several medium assumptions lack tests but are not critical."
     },
     {
       "category": "actors",
       "score": "pass",
-      "reasoning": "All 11 interventions have an owner (TOC-INT-002 GO); pathways have owners; 11 actors with roles, stance, influence, interest including partners (act-county-office, act-regional-funder, act-library, act-large members) and acknowledged uncertain stance (act-city-council unknown). act-training-partner and act-residents lack provenance; minor."
+      "reasoning": "All 11 interventions have an owner (IMP-INT-002 GO); pathways have owners; 11 actors with roles, stance, influence, interest including partners (act-county-office, act-regional-funder, act-library, act-large members) and acknowledged uncertain stance (act-city-council unknown). act-training-partner and act-residents lack provenance; minor."
     },
     {
       "category": "evidence",
@@ -45,7 +45,7 @@
     {
       "category": "targeting",
       "score": "pass",
-      "reasoning": "Target groups tg-small-members and tg-low-access-residents are named; outcome oc-resident-access and causes affectedGroupIds tie to them; TOC-EQU-001 GO says outcomes for target groups are measured by those groups. Minor: only a few indicators carry disaggregation (e.g. ind-residents-served, ind-residents-voice)."
+      "reasoning": "Target groups tg-small-members and tg-low-access-residents are named; outcome oc-resident-access and causes affectedGroupIds tie to them; IMP-EQU-001 GO says outcomes for target groups are measured by those groups. Minor: only a few indicators carry disaggregation (e.g. ind-residents-served, ind-residents-voice)."
     },
     {
       "category": "presentation",
@@ -55,17 +55,17 @@
     {
       "category": "plausible",
       "score": "partial",
-      "reasoning": "Most chains are believable (cohorts plus coaching supported by ev-peer-learning; pooled purchasing by ev-pooled-purchasing). Stretched: an 8-staff network running three pathways within 3 years (rsk-staff-capacity), joint positions among competing members (asm-positions-hold hypothesis, staff doubt in con-staff-workshop), and long-term collective voice with a county that cannot commit to every process (con-county-staff). Timing is lint-consistent (TOC-MEA-004/005 GO) but ambitious."
+      "reasoning": "Most chains are believable (cohorts plus coaching supported by ev-peer-learning; pooled purchasing by ev-pooled-purchasing). Stretched: an 8-staff network running three pathways within 3 years (rsk-staff-capacity), joint positions among competing members (asm-positions-hold hypothesis, staff doubt in con-staff-workshop), and long-term collective voice with a county that cannot commit to every process (con-county-staff). Timing is lint-consistent (IMP-MEA-004/005 GO) but ambitious."
     },
     {
       "category": "feasible",
       "score": "pass",
-      "reasoning": "Ceiling of accountability set at long_term with rationale; resident-level impacts tracked not owned (TOC-ACC-001/002 GO, TOC-CLM-001 GO contribution claims). Interventions list resources (e.g. int-peer-cohorts: two staff, donated library space); priority scoring uses crit-feasibility; measurement budget fits (TOC-BUD-001/002 GO); staff capacity risk rsk-staff-capacity is acknowledged with staging mitigation."
+      "reasoning": "Ceiling of accountability set at long_term with rationale; resident-level impacts tracked not owned (IMP-ACC-001/002 GO, IMP-CLM-001 GO contribution claims). Interventions list resources (e.g. int-peer-cohorts: two staff, donated library space); priority scoring uses crit-feasibility; measurement budget fits (IMP-BUD-001/002 GO); staff capacity risk rsk-staff-capacity is acknowledged with staging mitigation."
     },
     {
       "category": "testable",
       "score": "pass",
-      "reasoning": "TOC-MEA-001 to 005 GO: every outcome within the ceiling is measured or has a proxy; every indicator has baseline, target, source, and frequency, units and directions; 27 indicators fit staff-time and question budgets (TOC-BUD-001/002). Critical assumptions have tests."
+      "reasoning": "IMP-MEA-001 to 005 GO: every outcome within the ceiling is measured or has a proxy; every indicator has baseline, target, source, and frequency, units and directions; 27 indicators fit staff-time and question budgets (IMP-BUD-001/002). Critical assumptions have tests."
     },
     {
       "category": "structural_integrity",

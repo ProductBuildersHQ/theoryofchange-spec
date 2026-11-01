@@ -9,15 +9,15 @@ import (
 
 	"github.com/grokify/structured-goals/okr"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
 )
 
-func example(t *testing.T) (*toc.Document, *toc.Status) {
+func example(t *testing.T) (*impact.Model, *impact.Status) {
 	t.Helper()
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,12 +25,12 @@ func example(t *testing.T) (*toc.Document, *toc.Status) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	sets, err := tocio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
+	sets, err := impactio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
 	asOf, _ := time.Parse(time.DateOnly, "2026-09-30")
-	st, err := measure.Evaluate(doc, g, sets, asOf, toc.DefaultStatusOptions())
+	st, err := measure.Evaluate(doc, g, sets, asOf, impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func example(t *testing.T) (*toc.Document, *toc.Status) {
 
 func TestOKRExportValidates(t *testing.T) {
 	doc, st := example(t)
-	for name, status := range map[string]*toc.Status{"with status": st, "without": nil} {
+	for name, status := range map[string]*impact.Status{"with status": st, "without": nil} {
 		out, err := ToOKR(doc, status)
 		if err != nil {
 			t.Fatalf("%s: %v", name, err)
@@ -138,7 +138,7 @@ func TestOutcomeJourneys(t *testing.T) {
 	if j.CurrentState.Value != 4880 && j.CurrentState.MeasuredAt != "2026-09-30" {
 		t.Errorf("current = %+v", j.CurrentState)
 	}
-	if len(j.TargetStates) != 3 || j.TargetStates[0].PeriodID != "2026-12-31" || j.Metadata["tocId"] != doc.ID {
+	if len(j.TargetStates) != 3 || j.TargetStates[0].PeriodID != "2026-12-31" || j.Metadata["modelId"] != doc.ID {
 		t.Errorf("journey = %+v", j)
 	}
 	// Without a status the journey starts from the baseline.
@@ -177,7 +177,7 @@ func TestOnlyThisPackageImportsThePRISMFamily(t *testing.T) {
 	}
 	forbidden := []string{"github.com/grokify/prism-roadmap", "github.com/grokify/structured-goals"}
 	allowed := map[string]bool{
-		"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/prismx": true,
+		"github.com/ProductBuildersHQ/impact-model/pkg/prismx": true,
 	}
 	checked := 0
 	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {

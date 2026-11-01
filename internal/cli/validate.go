@@ -5,47 +5,47 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 func newValidateCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "validate <file>...",
 		Short: "Check documents against the schema and for structural problems",
-		Long: `Validate Theory of Change documents, observation sets, status snapshots, and
+		Long: `Validate impact model documents, observation sets, status snapshots, and
 actor registries. The kind is read from each file.
 
-A Theory of Change is checked against its schema and for structural problems
+An impact model is checked against its schema and for structural problems
 (duplicate IDs, unresolved references, invalid enumerations, bad dates).
-Pass --toc to also check observation sets against the theory they measure.
-Pass --parent to also check that the given theories are children of a parent
-theory and that their contributesTo references resolve there.
+Pass --model to also check observation sets against the impact model they measure.
+Pass --parent to also check that the given impact models are children of a parent
+Impact model and that their contributesTo references resolve there.
 Pass --registry to resolve actors that live in a shared actor registry.
-Pass --futures to check that the given theories, which describe competing
+Pass --futures to check that the given impact models, which describe competing
 futures of one market, share one registry, name their futures and
 perspectives, do not both speak for the same actor in the same future, and
 refer to each other's elements correctly.
 
 Exit code 1 means at least one file has errors.`,
-		Example: `  theoryofchange validate theory.yaml
-  theoryofchange validate observations-2026-q4.yaml --toc theory.yaml
-  theoryofchange validate program-a.yaml program-b.yaml --parent organization.yaml
-  theoryofchange validate future-a.yaml future-b.yaml future-c.yaml --registry actors.yaml --futures
-  theoryofchange validate --format json theory.json`,
+		Example: `  impact-model validate impact-model.yaml
+  impact-model validate observations-2026-q4.yaml --model impact-model.yaml
+  impact-model validate program-a.yaml program-b.yaml --parent organization.yaml
+  impact-model validate future-a.yaml future-b.yaml future-c.yaml --registry actors.yaml --futures
+  impact-model validate --format json impact-model.json`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			format, err := outputFormat(cmd)
 			if err != nil {
 				return err
 			}
-			var against *toc.Document
-			if p := flagString(cmd, "toc"); p != "" {
-				against, err = tocio.LoadDocument(p)
+			var against *impact.Model
+			if p := flagString(cmd, "model"); p != "" {
+				against, err = impactio.LoadDocument(p)
 				if err != nil {
-					return usageErr("--toc: %v", err)
+					return usageErr("--model: %v", err)
 				}
 			}
 			var opts []validate.Option
@@ -82,10 +82,10 @@ Exit code 1 means at least one file has errors.`,
 			return e.printReports(cmd, format, reports)
 		},
 	}
-	cmd.Flags().String("toc", "", "Theory of Change file to check observation sets against")
+	cmd.Flags().String("model", "", "impact model file to check observation sets against")
 	cmd.Flags().String("registry", "", "shared actor registry that actor references resolve against")
-	cmd.Flags().Bool("futures", false, "also check the given theories against each other as competing futures of one market")
-	cmd.Flags().String("parent", "", "parent Theory of Change; also checks that the given files are its child theories")
+	cmd.Flags().Bool("futures", false, "also check the given impact models against each other as competing futures of one market")
+	cmd.Flags().String("parent", "", "parent impact model; also checks that the given files are its child impact models")
 	return cmd
 }
 

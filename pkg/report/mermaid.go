@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // MermaidOptions configures the pathway diagram.
@@ -112,7 +112,7 @@ func (r *mermaidRenderer) splitByCeiling() (owned, above []OutcomeView) {
 
 // levels writes one subgraph per outcome level, highest first.
 func (r *mermaidRenderer) levels(indent int, outcomes []OutcomeView) {
-	for _, level := range toc.AllLevels() {
+	for _, level := range impact.AllLevels() {
 		var members []OutcomeView
 		for _, o := range outcomes {
 			if o.Level == level {
@@ -228,7 +228,7 @@ func (r *mermaidRenderer) linkLine(l LinkView) string {
 		label = l.LoopType + " loop"
 	case l.Feedback:
 		label = "feedback"
-	case l.Polarity == string(toc.PolarityNegative):
+	case l.Polarity == string(impact.PolarityNegative):
 		label = "reduces"
 	}
 	arrow := "-->"

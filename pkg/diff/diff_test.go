@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 var update = flag.Bool("update", false, "rewrite golden files")
@@ -38,9 +38,9 @@ func golden(t *testing.T, name, got string) {
 	}
 }
 
-func load(t *testing.T) *toc.Document {
+func load(t *testing.T) *impact.Model {
 	t.Helper()
-	d, err := tocio.LoadDocument("../toc/testdata/full.json")
+	d, err := impactio.LoadDocument("../impact/testdata/full.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,17 +48,17 @@ func load(t *testing.T) *toc.Document {
 }
 
 // edited returns the full fixture changed in every way the diff reports.
-func edited(t *testing.T) *toc.Document {
+func edited(t *testing.T) *impact.Model {
 	t.Helper()
 	d := load(t)
 	d.Metadata.Version = "0.2"
 	d.Context.ProblemStatement += " It is getting worse."
 	d.Ceiling.Rationale = "Moved after review."
-	d.Outcomes[2].Title = "Major identity providers ship support"                                                 // changed
-	d.Outcomes[2].Provenance = &toc.Provenance{Basis: toc.BasisConfirmed}                                         // set
-	d.Links[0].Provenance = &toc.Provenance{Basis: toc.BasisRejected}                                             // rejected
-	d.Outcomes = append(d.Outcomes, toc.Outcome{ID: "oc-new", Title: "A new outcome", Level: toc.LevelShortTerm}) // added
-	d.Indicators = slices.Delete(d.Indicators, len(d.Indicators)-1, len(d.Indicators))                            // removed
+	d.Outcomes[2].Title = "Major identity providers ship support"                                                       // changed
+	d.Outcomes[2].Provenance = &impact.Provenance{Basis: impact.BasisConfirmed}                                         // set
+	d.Links[0].Provenance = &impact.Provenance{Basis: impact.BasisRejected}                                             // rejected
+	d.Outcomes = append(d.Outcomes, impact.Outcome{ID: "oc-new", Title: "A new outcome", Level: impact.LevelShortTerm}) // added
+	d.Indicators = slices.Delete(d.Indicators, len(d.Indicators)-1, len(d.Indicators))                                  // removed
 	return d
 }
 
@@ -106,9 +106,9 @@ func TestIdenticalAndReformattedTheoriesDoNotDiffer(t *testing.T) {
 	if !strings.Contains(res.Markdown(), "Nothing changed.") {
 		t.Error("an empty diff should say so")
 	}
-	// The same theory read from YAML and from JSON is the same theory.
-	canon, _ := tocio.Canonical(load(t), tocio.FormatYAML)
-	fromYAML, err := tocio.ParseDocument(canon, tocio.FormatYAML)
+	// The same impact model read from YAML and from JSON is the same impact model.
+	canon, _ := impactio.Canonical(load(t), impactio.FormatYAML)
+	fromYAML, err := impactio.ParseDocument(canon, impactio.FormatYAML)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -119,9 +119,9 @@ func TestIdenticalAndReformattedTheoriesDoNotDiffer(t *testing.T) {
 
 func TestRevisionLogIsNotPartOfTheDiff(t *testing.T) {
 	cur := load(t)
-	cur.Revisions = append(cur.Revisions, toc.Revision{Version: "9", Date: "2026-01-01", Summary: "x"})
+	cur.Revisions = append(cur.Revisions, impact.Revision{Version: "9", Date: "2026-01-01", Summary: "x"})
 	if res, _ := Compare(load(t), cur); !res.Empty() {
-		t.Errorf("a new log entry is not a change to the theory: %+v", res)
+		t.Errorf("a new log entry is not a change to the impact model: %+v", res)
 	}
 }
 
@@ -138,8 +138,8 @@ func TestDeterministic(t *testing.T) {
 func TestDraftRevisionListsEveryChangedIDAndApplies(t *testing.T) {
 	old, cur := load(t), edited(t)
 	res, _ := Compare(old, cur)
-	rev := res.DraftRevision("0.2", "2026-03-01", toc.TriggerLearning)
-	if rev.Version != "0.2" || rev.Trigger != toc.TriggerLearning || !strings.Contains(rev.Summary, "1 element(s) added, 2 changed, 1 removed") {
+	rev := res.DraftRevision("0.2", "2026-03-01", impact.TriggerLearning)
+	if rev.Version != "0.2" || rev.Trigger != impact.TriggerLearning || !strings.Contains(rev.Summary, "1 element(s) added, 2 changed, 1 removed") {
 		t.Errorf("revision = %+v", rev)
 	}
 	for _, id := range []string{"oc-new", "oc-idp-support", "ln-spec-idp", "ind-adoption-stories"} {
@@ -158,7 +158,7 @@ func TestDraftRevisionListsEveryChangedIDAndApplies(t *testing.T) {
 	if got := applied.Document.Revisions; len(got) != len(cur.Revisions)+1 || got[len(got)-1].Version != "0.2" {
 		t.Errorf("revisions = %+v", got)
 	}
-	// A theory with no revision log gets one.
+	// An impact model with no revision log gets one.
 	bare := load(t)
 	bare.Revisions = nil
 	p2, _ := RevisionPatch(rev, false)

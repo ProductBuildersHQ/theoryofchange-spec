@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
-func fullView(t *testing.T, mutate func(*toc.Document)) *report.View {
+func fullView(t *testing.T, mutate func(*impact.Model)) *report.View {
 	t.Helper()
 	doc := fullDoc(t)
 	if mutate != nil {
@@ -80,9 +80,9 @@ func TestSheetAndPacketListTheSameIDs(t *testing.T) {
 
 func TestRejectedElementsAreNotPutToReviewers(t *testing.T) {
 	var rejected string
-	v := fullView(t, func(d *toc.Document) {
+	v := fullView(t, func(d *impact.Model) {
 		rejected = d.Interventions[0].ID
-		d.Interventions[0].Provenance = &toc.Provenance{Basis: toc.BasisRejected}
+		d.Interventions[0].Provenance = &impact.Provenance{Basis: impact.BasisRejected}
 	})
 	if rejected == "" {
 		t.Fatal("no element to reject")
@@ -95,12 +95,12 @@ func TestRejectedElementsAreNotPutToReviewers(t *testing.T) {
 }
 
 func TestRestrictedEvidenceNeverLeaksIntoAPacket(t *testing.T) {
-	v := fullView(t, func(d *toc.Document) {
-		d.Evidence = append(d.Evidence, toc.Evidence{
+	v := fullView(t, func(d *impact.Model) {
+		d.Evidence = append(d.Evidence, impact.Evidence{
 			ID: "ev-private", Title: "Interview notes", URL: "https://example.org/secret-drive",
-			Excerpt: "SECRET-EXCERPT", Summary: "SECRET-SUMMARY", Sensitivity: toc.SensitivityRestricted,
+			Excerpt: "SECRET-EXCERPT", Summary: "SECRET-SUMMARY", Sensitivity: impact.SensitivityRestricted,
 		})
-		d.Outcomes[1].Provenance = &toc.Provenance{Basis: toc.BasisStated, EvidenceIDs: []string{"ev-private"}}
+		d.Outcomes[1].Provenance = &impact.Provenance{Basis: impact.BasisStated, EvidenceIDs: []string{"ev-private"}}
 	})
 	sheet, err := ReviewSheet(v)
 	if err != nil {
@@ -118,7 +118,7 @@ func TestRestrictedEvidenceNeverLeaksIntoAPacket(t *testing.T) {
 }
 
 func TestPacketEscapesPipes(t *testing.T) {
-	v := fullView(t, func(d *toc.Document) { d.Interventions[0].Title = "Run A | B events" })
+	v := fullView(t, func(d *impact.Model) { d.Interventions[0].Title = "Run A | B events" })
 	if !strings.Contains(ReviewPacket(v), `Run A \| B events`) {
 		t.Error("a pipe in a statement would break the table")
 	}

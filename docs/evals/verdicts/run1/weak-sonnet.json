@@ -20,7 +20,7 @@
     {
       "category": "logic_flow",
       "score": "fail",
-      "reasoning": "Links ln-awareness-better and ln-events-awareness have no rationale (TOC-LOG-001) and no assumption (TOC-LOG-002); the chain jumps from awareness (short_term) straight to oc-better-community (impact), skipping intermediate and long-term levels. No precondition or combination logic."
+      "reasoning": "Links ln-awareness-better and ln-events-awareness have no rationale (IMP-LOG-001) and no assumption (IMP-LOG-002); the chain jumps from awareness (short_term) straight to oc-better-community (impact), skipping intermediate and long-term levels. No precondition or combination logic."
     },
     {
       "category": "root_causes",
@@ -35,7 +35,7 @@
     {
       "category": "actors",
       "score": "fail",
-      "reasoning": "int-events has no owner (TOC-INT-002); no partners or stances are identified."
+      "reasoning": "int-events has no owner (IMP-INT-002); no partners or stances are identified."
     },
     {
       "category": "evidence",
@@ -60,17 +60,17 @@
     {
       "category": "feasible",
       "score": "partial",
-      "reasoning": "int-events looks modest, but no resources, owner (TOC-INT-002) or ceiling of accountability (TOC-ACC-001) are examined, so feasibility cannot be confirmed."
+      "reasoning": "int-events looks modest, but no resources, owner (IMP-INT-002) or ceiling of accountability (IMP-ACC-001) are examined, so feasibility cannot be confirmed."
     },
     {
       "category": "testable",
       "score": "fail",
-      "reasoning": "oc-better-community and oc-awareness have no indicator; ind-events lacks baseline, target, source, frequency (TOC-MEA-002) and unit/direction (TOC-MEA-003). Outcomes cannot be measured as stated."
+      "reasoning": "oc-better-community and oc-awareness have no indicator; ind-events lacks baseline, target, source, frequency (IMP-MEA-002) and unit/direction (IMP-MEA-003). Outcomes cannot be measured as stated."
     },
     {
       "category": "structural_integrity",
       "score": "partial",
-      "reasoning": "Lint overall is WARN with six unexplained warnings: TOC-ACC-001, TOC-INT-002, TOC-LOG-001, TOC-LOG-002, TOC-MEA-002, TOC-MEA-003; no errors reported."
+      "reasoning": "Lint overall is WARN with six unexplained warnings: IMP-ACC-001, IMP-INT-002, IMP-LOG-001, IMP-LOG-002, IMP-MEA-002, IMP-MEA-003; no errors reported."
     }
   ],
   "findings": [
@@ -111,7 +111,7 @@
       "category": "actors",
       "severity": "medium",
       "title": "No owner for int-events",
-      "description": "TOC-INT-002; no partners.",
+      "description": "IMP-INT-002; no partners.",
       "recommendation": "Name an owner and key partners."
     },
     {
@@ -143,7 +143,7 @@
       "category": "structural_integrity",
       "severity": "medium",
       "title": "No ceiling of accountability",
-      "description": "TOC-ACC-001.",
+      "description": "IMP-ACC-001.",
       "recommendation": "Declare the ceiling of accountability."
     }
   ],

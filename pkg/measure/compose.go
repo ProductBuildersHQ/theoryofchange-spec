@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // ComposeResult is the value of a composed indicator.
@@ -14,7 +14,7 @@ type ComposeResult struct {
 	// Missing names the parts with no value at the date.
 	Missing []string
 	// Quality is estimated when any part is, and reported otherwise.
-	Quality toc.DataQuality
+	Quality impact.DataQuality
 	// Direct is true when the indicator has an observation of its own, which
 	// takes precedence over the composition.
 	Direct bool
@@ -25,7 +25,7 @@ type ComposeResult struct {
 // result has no value and names the missing parts, so a partial figure is
 // never passed off as complete. A ratio whose divisor is zero has no value.
 // It reports false when the indicator is not composed.
-func Compose(ind toc.Indicator, observations []toc.Observation, asOf time.Time) (ComposeResult, bool) {
+func Compose(ind impact.Indicator, observations []impact.Observation, asOf time.Time) (ComposeResult, bool) {
 	c := ind.ComposedOf
 	if c == nil || len(c.IndicatorIDs) == 0 {
 		return ComposeResult{}, false
@@ -36,7 +36,7 @@ func Compose(ind toc.Indicator, observations []toc.Observation, asOf time.Time) 
 		return res, true
 	}
 	vals := make([]float64, 0, len(c.IndicatorIDs))
-	res.Quality = toc.QualityReported
+	res.Quality = impact.QualityReported
 	for _, id := range c.IndicatorIDs {
 		v, _, found := latestValue(id, observations, asOf)
 		if !found {
@@ -44,8 +44,8 @@ func Compose(ind toc.Indicator, observations []toc.Observation, asOf time.Time) 
 			continue
 		}
 		vals = append(vals, v)
-		if q, ok := latestQuality(id, observations, asOf); ok && q == toc.QualityEstimated {
-			res.Quality = toc.QualityEstimated
+		if q, ok := latestQuality(id, observations, asOf); ok && q == impact.QualityEstimated {
+			res.Quality = impact.QualityEstimated
 		}
 	}
 	if len(res.Missing) > 0 {
@@ -53,21 +53,21 @@ func Compose(ind toc.Indicator, observations []toc.Observation, asOf time.Time) 
 	}
 	out := vals[0]
 	switch c.Op {
-	case toc.CompositionRatio:
+	case impact.CompositionRatio:
 		if len(vals) != 2 || vals[1] == 0 {
 			return res, true
 		}
 		out = vals[0] / vals[1]
-	case toc.CompositionDifference:
+	case impact.CompositionDifference:
 		if len(vals) != 2 {
 			return res, true
 		}
 		out = vals[0] - vals[1]
-	case toc.CompositionProduct:
+	case impact.CompositionProduct:
 		for _, v := range vals[1:] {
 			out *= v
 		}
-	case toc.CompositionSum:
+	case impact.CompositionSum:
 		for _, v := range vals[1:] {
 			out += v
 		}
@@ -83,10 +83,10 @@ func Compose(ind toc.Indicator, observations []toc.Observation, asOf time.Time) 
 
 // latestQuality returns the quality of the latest numeric observation of an
 // indicator at or before asOf.
-func latestQuality(id string, observations []toc.Observation, asOf time.Time) (toc.DataQuality, bool) {
+func latestQuality(id string, observations []impact.Observation, asOf time.Time) (impact.DataQuality, bool) {
 	var (
 		best  time.Time
-		q     toc.DataQuality
+		q     impact.DataQuality
 		found bool
 	)
 	for _, ob := range observations {

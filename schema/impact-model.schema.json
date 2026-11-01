@@ -1,0 +1,2184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ProductBuildersHQ/impact-model/schema/v0/impact-model.schema.json",
+  "$ref": "#/$defs/Model",
+  "$defs": {
+    "Actor": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "organization",
+            "person",
+            "group",
+            "community",
+            "customer_segment",
+            "government",
+            "standards_body",
+            "regulator",
+            "vendor",
+            "platform",
+            "investor",
+            "other"
+          ]
+        },
+        "roles": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "implementer",
+              "beneficiary",
+              "boundary_partner",
+              "funder",
+              "champion",
+              "influencer",
+              "competitor",
+              "adopter",
+              "gatekeeper"
+            ]
+          },
+          "type": "array"
+        },
+        "stance": {
+          "type": "string",
+          "enum": [
+            "champion",
+            "supporter",
+            "neutral",
+            "skeptic",
+            "opponent",
+            "unknown"
+          ]
+        },
+        "influence": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "interest": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "contact": {
+          "$ref": "#/$defs/Person"
+        },
+        "externalRefs": {
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Alignment": {
+      "properties": {
+        "elementId": {
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/$defs/ExternalRef"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "elementId",
+        "target"
+      ]
+    },
+    "Approver": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "comments": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Assumption": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "ifThenBecause": {
+          "$ref": "#/$defs/IfThenBecause"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "causal",
+            "contextual",
+            "implementation",
+            "behavioral",
+            "external",
+            "partnership"
+          ]
+        },
+        "appliesTo": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "criticality": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "plausibility": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "explainsFully": {
+          "type": "boolean"
+        },
+        "needsTesting": {
+          "type": "boolean"
+        },
+        "test": {
+          "type": "string"
+        },
+        "indicatorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "untested",
+            "holding",
+            "at_risk",
+            "invalidated",
+            "validated"
+          ]
+        },
+        "ownerActorId": {
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "statement"
+      ]
+    },
+    "Audience": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "needs": {
+          "type": "string"
+        },
+        "channels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "headline": {
+          "items": {
+            "$ref": "#/$defs/HeadlineMetric"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Baseline": {
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "level": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CapabilityRef": {
+      "properties": {
+        "capabilityId": {
+          "type": "string"
+        },
+        "relation": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CausalLink": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "causes",
+            "enables",
+            "contributes_to",
+            "necessary_condition"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "assumptionIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "interventionIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "polarity": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative"
+          ]
+        },
+        "feedback": {
+          "type": "boolean"
+        },
+        "loopType": {
+          "type": "string",
+          "enum": [
+            "reinforcing",
+            "balancing"
+          ]
+        },
+        "lag": {
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "from",
+        "to"
+      ]
+    },
+    "Cause": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "immediate",
+            "underlying",
+            "structural"
+          ]
+        },
+        "parent": {
+          "type": "string"
+        },
+        "affectedGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outOfScope": {
+          "$ref": "#/$defs/OutOfScope"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "statement",
+        "level"
+      ]
+    },
+    "Ceiling": {
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": [
+            "impact",
+            "long_term",
+            "medium_term",
+            "short_term",
+            "output"
+          ]
+        },
+        "outcomeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Collection": {
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "passive",
+            "form",
+            "survey",
+            "interview",
+            "manual",
+            "derived"
+          ]
+        },
+        "system": {
+          "type": "string"
+        },
+        "minutesPerPeriod": {
+          "type": "number",
+          "minimum": 0
+        },
+        "period": {
+          "type": "string"
+        },
+        "questionsPerRespondent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "respondentsPerYear": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sampleRate": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "mode"
+      ]
+    },
+    "Composition": {
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "ratio",
+            "product",
+            "sum",
+            "difference"
+          ]
+        },
+        "indicatorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "op",
+        "indicatorIds"
+      ]
+    },
+    "Consultation": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "step": {
+          "type": "string",
+          "enum": [
+            "focus",
+            "change_analysis",
+            "assumptions_risks",
+            "actors",
+            "measurement",
+            "whole"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "workshop",
+            "interview",
+            "survey",
+            "document_review",
+            "evidence_review",
+            "meeting"
+          ]
+        },
+        "stakeholderGroups": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "findings": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "changedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "step"
+      ]
+    },
+    "Context": {
+      "properties": {
+        "problemStatement": {
+          "type": "string"
+        },
+        "rootCauses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "targetPopulation": {
+          "type": "string"
+        },
+        "market": {
+          "$ref": "#/$defs/ExternalRef"
+        },
+        "geography": {
+          "type": "string"
+        },
+        "timeHorizon": {
+          "$ref": "#/$defs/TimeHorizon"
+        },
+        "mission": {
+          "type": "string"
+        },
+        "vision": {
+          "type": "string"
+        },
+        "narrative": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "problemStatement"
+      ]
+    },
+    "CriterionScore": {
+      "properties": {
+        "criterionId": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer",
+          "maximum": 5,
+          "minimum": 1
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "criterionId",
+        "score"
+      ]
+    },
+    "Decision": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "ownerActorId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "decided",
+            "deferred"
+          ]
+        },
+        "relatedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "question"
+      ]
+    },
+    "Evidence": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "research",
+            "evaluation",
+            "monitoring_data",
+            "expert_opinion",
+            "stakeholder_testimony",
+            "case_study",
+            "internal_metric",
+            "market_signal",
+            "outcome_harvest",
+            "anecdote"
+          ]
+        },
+        "strength": {
+          "type": "string",
+          "enum": [
+            "strong",
+            "moderate",
+            "weak",
+            "anecdotal"
+          ]
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "contradicts"
+          ]
+        },
+        "processTracingTest": {
+          "type": "string",
+          "enum": [
+            "straw_in_the_wind",
+            "hoop",
+            "smoking_gun",
+            "doubly_decisive"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "excerpt": {
+          "type": "string"
+        },
+        "sensitivity": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "restricted"
+          ]
+        },
+        "accessedAt": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ]
+    },
+    "ExternalFactor": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "enabler",
+            "opportunity",
+            "constraint",
+            "trend",
+            "shock"
+          ]
+        },
+        "affects": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "likelihood": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "trend": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "flat",
+            "unknown"
+          ]
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "description"
+      ]
+    },
+    "ExternalRef": {
+      "properties": {
+        "framework": {
+          "type": "string",
+          "enum": [
+            "okr",
+            "bsc",
+            "v2mom",
+            "capability",
+            "maturity_sli",
+            "market_spec",
+            "usm",
+            "ufm",
+            "sdg",
+            "vsem",
+            "visionstudio",
+            "custom"
+          ]
+        },
+        "ref": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "measures",
+            "implements",
+            "contributes_to",
+            "same_as"
+          ]
+        },
+        "attributes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "framework",
+        "ref"
+      ]
+    },
+    "Focus": {
+      "properties": {
+        "northStarId": {
+          "type": "string"
+        },
+        "oneMetricId": {
+          "type": "string"
+        },
+        "guardrailIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "GlossaryTerm": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "term": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "examples": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "relatedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "term",
+        "definition"
+      ]
+    },
+    "HeadlineMetric": {
+      "properties": {
+        "indicatorId": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "indicatorId"
+      ]
+    },
+    "IfThenBecause": {
+      "properties": {
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "type": "string"
+        },
+        "because": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "if",
+        "then"
+      ]
+    },
+    "Indicator": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "measures": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "measurementType": {
+          "type": "string",
+          "enum": [
+            "quantitative",
+            "qualitative",
+            "hybrid",
+            "theme_count"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "increase",
+            "decrease",
+            "maintain"
+          ]
+        },
+        "tolerance": {
+          "type": "number"
+        },
+        "levels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "baseline": {
+          "$ref": "#/$defs/Baseline"
+        },
+        "targets": {
+          "items": {
+            "$ref": "#/$defs/Target"
+          },
+          "type": "array"
+        },
+        "population": {
+          "$ref": "#/$defs/Population"
+        },
+        "disaggregation": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dataSource": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "frequency": {
+          "type": "string"
+        },
+        "ownerActorId": {
+          "type": "string"
+        },
+        "proxyFor": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "externalRefs": {
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        },
+        "metricId": {
+          "type": "string"
+        },
+        "pathwayIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "claim": {
+          "type": "string",
+          "enum": [
+            "attribution",
+            "contribution"
+          ]
+        },
+        "caveats": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rollupFrom": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "composedOf": {
+          "$ref": "#/$defs/Composition"
+        },
+        "dataAvailability": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal_existing",
+            "internal_new",
+            "partner_held",
+            "unknown"
+          ]
+        },
+        "targetGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "audienceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "themeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "collection": {
+          "$ref": "#/$defs/Collection"
+        },
+        "selection": {
+          "$ref": "#/$defs/Selection"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "measures",
+        "name"
+      ]
+    },
+    "Intervention": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "program",
+            "product",
+            "policy",
+            "advocacy",
+            "partnership",
+            "standardization",
+            "investment",
+            "communication",
+            "research",
+            "other"
+          ]
+        },
+        "targets": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 1
+        },
+        "outputs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ownerActorId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "planned",
+            "in_progress",
+            "completed",
+            "paused",
+            "cancelled"
+          ]
+        },
+        "capabilities": {
+          "items": {
+            "$ref": "#/$defs/CapabilityRef"
+          },
+          "type": "array"
+        },
+        "initiativeRefs": {
+          "items": {
+            "$ref": "#/$defs/ExternalRef"
+          },
+          "type": "array"
+        },
+        "resources": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/$defs/Priority"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "targets"
+      ]
+    },
+    "Logic": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "all",
+            "any",
+            "at_least"
+          ]
+        },
+        "k": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type"
+      ]
+    },
+    "MeasurementBudget": {
+      "properties": {
+        "staffMinutesPerWeek": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxQuestionsPerRespondentPerYear": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "targetSelectedMetrics": {
+          "$ref": "#/$defs/Range"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Metadata": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "team": {
+          "type": "string"
+        },
+        "authors": {
+          "items": {
+            "$ref": "#/$defs/Person"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Metric": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "increase",
+            "decrease",
+            "maintain"
+          ]
+        },
+        "aggregation": {
+          "type": "string",
+          "enum": [
+            "sum",
+            "mean",
+            "weighted_mean",
+            "median",
+            "mode",
+            "min",
+            "max",
+            "latest",
+            "none"
+          ]
+        },
+        "weightMetricId": {
+          "type": "string"
+        },
+        "layer": {
+          "type": "string",
+          "enum": [
+            "common",
+            "pathway"
+          ]
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "definition",
+        "formula"
+      ]
+    },
+    "Model": {
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ImpactModel"
+          ]
+        },
+        "specVersion": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/Metadata"
+        },
+        "perspective": {
+          "$ref": "#/$defs/Perspective"
+        },
+        "context": {
+          "$ref": "#/$defs/Context"
+        },
+        "ceilingOfAccountability": {
+          "$ref": "#/$defs/Ceiling"
+        },
+        "outcomes": {
+          "items": {
+            "$ref": "#/$defs/Outcome"
+          },
+          "type": "array",
+          "minItems": 1
+        },
+        "preconditionGroups": {
+          "items": {
+            "$ref": "#/$defs/PreconditionGroup"
+          },
+          "type": "array"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/CausalLink"
+          },
+          "type": "array"
+        },
+        "interventions": {
+          "items": {
+            "$ref": "#/$defs/Intervention"
+          },
+          "type": "array"
+        },
+        "assumptions": {
+          "items": {
+            "$ref": "#/$defs/Assumption"
+          },
+          "type": "array"
+        },
+        "indicators": {
+          "items": {
+            "$ref": "#/$defs/Indicator"
+          },
+          "type": "array"
+        },
+        "actors": {
+          "items": {
+            "$ref": "#/$defs/Actor"
+          },
+          "type": "array"
+        },
+        "actorRegistry": {
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "type": "array"
+        },
+        "externalFactors": {
+          "items": {
+            "$ref": "#/$defs/ExternalFactor"
+          },
+          "type": "array"
+        },
+        "risks": {
+          "items": {
+            "$ref": "#/$defs/Risk"
+          },
+          "type": "array"
+        },
+        "alignments": {
+          "items": {
+            "$ref": "#/$defs/Alignment"
+          },
+          "type": "array"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/Decision"
+          },
+          "type": "array"
+        },
+        "revisions": {
+          "items": {
+            "$ref": "#/$defs/Revision"
+          },
+          "type": "array"
+        },
+        "parent": {
+          "type": "string",
+          "pattern": "^model:[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "pathways": {
+          "items": {
+            "$ref": "#/$defs/Pathway"
+          },
+          "type": "array"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "#/$defs/Metric"
+          },
+          "type": "array"
+        },
+        "glossary": {
+          "items": {
+            "$ref": "#/$defs/GlossaryTerm"
+          },
+          "type": "array"
+        },
+        "causes": {
+          "items": {
+            "$ref": "#/$defs/Cause"
+          },
+          "type": "array"
+        },
+        "targetGroups": {
+          "items": {
+            "$ref": "#/$defs/TargetGroup"
+          },
+          "type": "array"
+        },
+        "audiences": {
+          "items": {
+            "$ref": "#/$defs/Audience"
+          },
+          "type": "array"
+        },
+        "themes": {
+          "items": {
+            "$ref": "#/$defs/Theme"
+          },
+          "type": "array"
+        },
+        "selectionCriteria": {
+          "items": {
+            "$ref": "#/$defs/SelectionCriterion"
+          },
+          "type": "array"
+        },
+        "measurementBudget": {
+          "$ref": "#/$defs/MeasurementBudget"
+        },
+        "consultations": {
+          "items": {
+            "$ref": "#/$defs/Consultation"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "specVersion",
+        "id",
+        "context",
+        "outcomes"
+      ]
+    },
+    "OutOfScope": {
+      "properties": {
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "reason"
+      ]
+    },
+    "Outcome": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "impact",
+            "long_term",
+            "medium_term",
+            "short_term",
+            "output"
+          ]
+        },
+        "sphere": {
+          "type": "string",
+          "enum": [
+            "control",
+            "influence",
+            "interest"
+          ]
+        },
+        "logic": {
+          "$ref": "#/$defs/Logic"
+        },
+        "category": {
+          "type": "string"
+        },
+        "changeType": {
+          "type": "string",
+          "enum": [
+            "knowledge",
+            "attitude",
+            "skill",
+            "behavior",
+            "practice",
+            "policy",
+            "norm",
+            "condition",
+            "investment",
+            "adoption"
+          ]
+        },
+        "population": {
+          "type": "string"
+        },
+        "actorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "responsibility": {
+          "type": "string",
+          "enum": [
+            "own",
+            "shared",
+            "partner",
+            "unaddressed"
+          ]
+        },
+        "deliveredBy": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "addressesCauses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "targetGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "priority": {
+          "$ref": "#/$defs/Priority"
+        },
+        "audienceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "contributesTo": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "level"
+      ]
+    },
+    "Pathway": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "program",
+            "product",
+            "strategy",
+            "theme",
+            "geography",
+            "segment"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "ownerActorId": {
+          "type": "string"
+        },
+        "outcomeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "interventionIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "childModel": {
+          "type": "string",
+          "pattern": "^model:[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "focus": {
+          "$ref": "#/$defs/Focus"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ]
+    },
+    "Person": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Perspective": {
+      "properties": {
+        "actorId": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "proponent",
+            "funder",
+            "implementer",
+            "observer"
+          ]
+        },
+        "futureRef": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "actorId"
+      ]
+    },
+    "Population": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "actorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "size": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "description"
+      ]
+    },
+    "PreconditionGroup": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 2
+        },
+        "logic": {
+          "$ref": "#/$defs/Logic"
+        },
+        "sufficiency": {
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "target",
+        "members",
+        "logic"
+      ]
+    },
+    "Priority": {
+      "properties": {
+        "scores": {
+          "items": {
+            "$ref": "#/$defs/CriterionScore"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "basis": {
+          "type": "string",
+          "enum": [
+            "stated",
+            "inferred",
+            "hypothesis",
+            "confirmed",
+            "rejected"
+          ]
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "note": {
+          "type": "string"
+        },
+        "decidedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "decidedBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "basis"
+      ]
+    },
+    "QualityReview": {
+      "properties": {
+        "plausible": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "partial",
+            "fail"
+          ]
+        },
+        "feasible": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "partial",
+            "fail"
+          ]
+        },
+        "testable": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "partial",
+            "fail"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Range": {
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Revision": {
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string",
+          "enum": [
+            "learning",
+            "evidence",
+            "context_change",
+            "strategy_change",
+            "review"
+          ]
+        },
+        "changedIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "triggerEvidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "qualityReview": {
+          "$ref": "#/$defs/QualityReview"
+        },
+        "approvers": {
+          "items": {
+            "$ref": "#/$defs/Approver"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "version",
+        "date",
+        "summary"
+      ]
+    },
+    "Risk": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "probability": {
+          "type": "string"
+        },
+        "mitigation": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "appliesTo": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "environmental_political",
+            "opportunity",
+            "design",
+            "partnership",
+            "market",
+            "technical",
+            "operational"
+          ]
+        },
+        "relatedAssumptionIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Selection": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "candidate",
+            "selected",
+            "retired"
+          ]
+        },
+        "scores": {
+          "items": {
+            "$ref": "#/$defs/CriterionScore"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "status"
+      ]
+    },
+    "SelectionCriterion": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "appliesTo": {
+          "type": "string",
+          "enum": [
+            "indicator",
+            "outcome",
+            "intervention"
+          ]
+        },
+        "inverted": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "appliesTo"
+      ]
+    },
+    "Target": {
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "level": {
+          "type": "string"
+        },
+        "threshold": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "label": {
+          "type": "string"
+        },
+        "milestone": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "date"
+      ]
+    },
+    "TargetGroup": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "actorIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Theme": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        },
+        "includes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "excludes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "examples": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outcomeIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "definition"
+      ]
+    },
+    "TimeHorizon": {
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ]
+    }
+  },
+  "title": "Impact Model",
+  "description": "An impact model document: context, outcomes, causal links, interventions, assumptions, indicators, actors, and evidence."
+}

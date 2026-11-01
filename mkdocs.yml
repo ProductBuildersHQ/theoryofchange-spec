@@ -1,8 +1,8 @@
-site_name: Theory of Change Spec
-site_description: An AI-native, spec-driven way to capture, measure, and report on a Theory of Change
-site_url: https://productbuildershq.com/theoryofchange-spec
-repo_url: https://github.com/ProductBuildersHQ/theoryofchange-spec
-repo_name: ProductBuildersHQ/theoryofchange-spec
+site_name: Impact Model
+site_description: "An AI-native, spec-driven way to model, measure, and report on impact: the theory of change, logic model, and related views of one model"
+site_url: https://productbuildershq.com/impact-model
+repo_url: https://github.com/ProductBuildersHQ/impact-model
+repo_name: ProductBuildersHQ/impact-model
 
 # docs/guides/ holds the user guides and docs/releases/ the release notes.
 docs_dir: docs
@@ -66,7 +66,7 @@ nav:
   - Guides:
       - Overview: guides/index.md
       - Getting Started: guides/getting-started.md
-      - Authoring a Theory: guides/authoring.md
+      - Authoring an Impact Model: guides/authoring.md
       - Measuring Progress: guides/measurement.md
       - Reports and Decks: guides/reports-and-decks.md
       - Review Round Trip: guides/review-round-trip.md
@@ -81,12 +81,15 @@ nav:
       - Judge Rubric Evaluation: evals/rubric-discrimination.md
       - USM and UFM Integration Contract: integration/usm-ufm-contract.md
       - Credits: credits.md
+  - Decisions:
+      - 'ADR 0001: Rename to impact-model': design/adrs/0001-rename-to-impact-model.md
   - Specifications:
       - PRD: specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PRD.md
       - TRD: specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD.md
       - Plan: specs/initiatives/INIT-THEORYOFCHANGESPEC-001/PLAN.md
       - Roadmap: specs/initiatives/INIT-THEORYOFCHANGESPEC-001/ROADMAP.md
   - Releases:
+      - v0.3.0: releases/v0.3.0.md
       - v0.2.0: releases/v0.2.0.md
       - v0.1.0: releases/v0.1.0.md
       - Changelog: releases/changelog.md
@@ -94,4 +97,4 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/ProductBuildersHQ/theoryofchange-spec
+      link: https://github.com/ProductBuildersHQ/impact-model

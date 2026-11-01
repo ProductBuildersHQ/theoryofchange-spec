@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/burden"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
 )
 
 func TestCustomTemplate(t *testing.T) {
@@ -77,17 +77,17 @@ func withRestrictedEvidence(t *testing.T) StatusInput {
 	in := exampleInput(t)
 	doc := in.Doc
 	doc.Evidence = append(doc.Evidence,
-		toc.Evidence{ID: "ev-secret", Title: "Board minutes", Excerpt: "SECRET-EXCERPT", Summary: "SECRET-SUMMARY", URL: "https://example.org/SECRET-URL", Sensitivity: toc.SensitivityRestricted},
-		toc.Evidence{ID: "ev-unset", Title: "Interview notes", Excerpt: "UNSET-EXCERPT", Summary: "UNSET-SUMMARY"},
+		impact.Evidence{ID: "ev-secret", Title: "Board minutes", Excerpt: "SECRET-EXCERPT", Summary: "SECRET-SUMMARY", URL: "https://example.org/SECRET-URL", Sensitivity: impact.SensitivityRestricted},
+		impact.Evidence{ID: "ev-unset", Title: "Interview notes", Excerpt: "UNSET-EXCERPT", Summary: "UNSET-SUMMARY"},
 	)
 	doc.Links[0].EvidenceIDs = append(doc.Links[0].EvidenceIDs, "ev-secret", "ev-unset")
 	doc.Assumptions[0].EvidenceIDs = append(doc.Assumptions[0].EvidenceIDs, "ev-secret")
-	doc.Outcomes[0].Provenance = &toc.Provenance{Basis: toc.BasisStated, EvidenceIDs: []string{"ev-secret", "ev-unset"}}
+	doc.Outcomes[0].Provenance = &impact.Provenance{Basis: impact.BasisStated, EvidenceIDs: []string{"ev-secret", "ev-unset"}}
 	g, err := graph.Build(doc)
 	if err != nil {
 		t.Fatal(err)
 	}
-	st, err := measure.Evaluate(doc, g, exampleSets(t), mustDate(t, "2026-09-30"), toc.DefaultStatusOptions())
+	st, err := measure.Evaluate(doc, g, exampleSets(t), mustDate(t, "2026-09-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -9,17 +9,17 @@ import (
 
 	sdk "github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/diff"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/judge"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/lint"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/schema"
+	"github.com/ProductBuildersHQ/impact-model/pkg/diff"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/judge"
+	"github.com/ProductBuildersHQ/impact-model/pkg/lint"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/slides"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/schema"
 )
 
 // Version is the server's reported version.
@@ -41,17 +41,17 @@ func New(root string) (*Server, error) {
 
 // MCP returns the MCP server with every tool registered.
 func (s *Server) MCP() *sdk.Server {
-	srv := sdk.NewServer(&sdk.Implementation{Name: "theoryofchange", Version: Version}, nil)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_schema", Description: "List the embedded JSON Schemas, or return one by name."}, s.schemaTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_validate", Description: "Validate a theory against its schema and structurally. Returns whether it is valid and every issue found."}, s.validateTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_lint", Description: "Check the quality of a theory with the lint rules. Returns a structured-evaluation summary report."}, s.lintTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_graph", Description: "Query the causal graph: summary, upstream, downstream, paths, cycles, levels, orphans, dead-ends, or a Mermaid diagram."}, s.graphTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_status", Description: "Compute a status snapshot of a theory from observation sets as of a date."}, s.statusTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_report", Description: "Render a report as Markdown: a definition report, or a status report such as exec or story."}, s.reportTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_patch", Description: "Apply an RFC 6902 JSON Patch to a theory atomically. Elements may be addressed by id: /outcomes/@oc-skills/title. A patch that adds validation errors is rejected."}, s.patchTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_deck", Description: "Generate a slide deck as Marp Markdown: workshop, exec, learning-review, or story. Nothing is rendered to PDF."}, s.deckTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_judge_bundle", Description: "Build the bundle a judge reads to review a theory against the rubric. Makes no model calls."}, s.judgeTool)
-	sdk.AddTool(srv, &sdk.Tool{Name: "toc_diff", Description: "Compare two versions of a theory by element id."}, s.diffTool)
+	srv := sdk.NewServer(&sdk.Implementation{Name: "impact-model", Version: Version}, nil)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_schema", Description: "List the embedded JSON Schemas, or return one by name."}, s.schemaTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_validate", Description: "Validate an impact model against its schema and structurally. Returns whether it is valid and every issue found."}, s.validateTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_lint", Description: "Check the quality of an impact model with the lint rules. Returns a structured-evaluation summary report."}, s.lintTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_graph", Description: "Query the causal graph: summary, upstream, downstream, paths, cycles, levels, orphans, dead-ends, or a Mermaid diagram."}, s.graphTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_status", Description: "Compute a status snapshot of an impact model from observation sets as of a date."}, s.statusTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_report", Description: "Render a report as Markdown: a definition report, or a status report such as exec or story."}, s.reportTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_patch", Description: "Apply an RFC 6902 JSON Patch to an impact model atomically. Elements may be addressed by id: /outcomes/@oc-skills/title. A patch that adds validation errors is rejected."}, s.patchTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_deck", Description: "Generate a slide deck as Marp Markdown: workshop, exec, learning-review, or story. Nothing is rendered to PDF."}, s.deckTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_judge_bundle", Description: "Build the bundle a judge reads to review an impact model against the rubric. Makes no model calls."}, s.judgeTool)
+	sdk.AddTool(srv, &sdk.Tool{Name: "impact_diff", Description: "Compare two versions of an impact model by element id."}, s.diffTool)
 	return srv
 }
 
@@ -60,7 +60,7 @@ func (s *Server) Run(ctx context.Context) error {
 	return s.MCP().Run(ctx, &sdk.StdioTransport{})
 }
 
-// ---- toc_schema -------------------------------------------------------------
+// ---- impact_schema -------------------------------------------------------------
 
 type schemaIn struct {
 	Name string `json:"name,omitempty" jsonschema:"the schema to return; omit to list the names"`
@@ -81,7 +81,7 @@ func (s *Server) schemaTool(_ context.Context, _ *sdk.CallToolRequest, in schema
 	return nil, v, nil
 }
 
-// ---- toc_validate -----------------------------------------------------------
+// ---- impact_validate -----------------------------------------------------------
 
 type validateIn struct {
 	Source
@@ -97,7 +97,7 @@ type validateOut struct {
 func (s *Server) validateTool(_ context.Context, _ *sdk.CallToolRequest, in validateIn) (*sdk.CallToolResult, validateOut, error) {
 	var (
 		data []byte
-		f    tocio.Format
+		f    impactio.Format
 		err  error
 	)
 	switch {
@@ -121,7 +121,7 @@ func (s *Server) validateTool(_ context.Context, _ *sdk.CallToolRequest, in vali
 	return nil, validateOut{Valid: rep.Valid(), Kind: string(rep.Kind), Issues: rep.Issues}, nil
 }
 
-// ---- toc_lint ---------------------------------------------------------------
+// ---- impact_lint ---------------------------------------------------------------
 
 type lintIn struct {
 	Source
@@ -145,7 +145,7 @@ func (s *Server) lintTool(_ context.Context, _ *sdk.CallToolRequest, in lintIn) 
 	return nil, res.SummaryReport(doc.ID, doc.Metadata.Version, time.Time{}), nil
 }
 
-// ---- toc_graph --------------------------------------------------------------
+// ---- impact_graph --------------------------------------------------------------
 
 type graphIn struct {
 	Source
@@ -177,7 +177,7 @@ func (s *Server) graphTool(_ context.Context, _ *sdk.CallToolRequest, in graphIn
 	return nil, map[string]any{"query": in.Query, "result": out}, nil
 }
 
-// ---- toc_status -------------------------------------------------------------
+// ---- impact_status -------------------------------------------------------------
 
 type statusIn struct {
 	Source
@@ -201,14 +201,14 @@ func (s *Server) statusTool(_ context.Context, _ *sdk.CallToolRequest, in status
 	if issues := validate.Observations(doc, sets...); validate.HasErrors(issues) {
 		return nil, nil, fmt.Errorf("the observations are invalid: %s: %s", issues[0].Code, issues[0].Message)
 	}
-	input, err := service.StatusInputFor(doc, sets, asOf, toc.DefaultStatusOptions(), nil)
+	input, err := service.StatusInputFor(doc, sets, asOf, impact.DefaultStatusOptions(), nil)
 	if err != nil {
 		return nil, nil, err
 	}
 	return nil, input.Status, nil
 }
 
-// ---- toc_report -------------------------------------------------------------
+// ---- impact_report -------------------------------------------------------------
 
 type reportIn struct {
 	Source
@@ -243,9 +243,9 @@ func (s *Server) reportTool(_ context.Context, _ *sdk.CallToolRequest, in report
 	return nil, textOut{Format: "markdown", Content: text}, err
 }
 
-// statusInput evaluates the theory for a status report or deck. A narrative,
+// statusInput evaluates the impact model for a status report or deck. A narrative,
 // actors, or custom report with no observations and no date has no status.
-func (s *Server) statusInput(doc *toc.Document, obs Observations, asOf, kind string) (report.StatusInput, []*toc.ObservationSet, bool, error) {
+func (s *Server) statusInput(doc *impact.Model, obs Observations, asOf, kind string) (report.StatusInput, []*impact.ObservationSet, bool, error) {
 	sets, err := s.loadObservations(obs)
 	if err != nil {
 		return report.StatusInput{}, nil, false, err
@@ -261,11 +261,11 @@ func (s *Server) statusInput(doc *toc.Document, obs Observations, asOf, kind str
 	if issues := validate.Observations(doc, sets...); validate.HasErrors(issues) {
 		return report.StatusInput{}, nil, false, fmt.Errorf("the observations are invalid: %s: %s", issues[0].Code, issues[0].Message)
 	}
-	in, err := service.StatusInputFor(doc, sets, at, toc.DefaultStatusOptions(), nil)
+	in, err := service.StatusInputFor(doc, sets, at, impact.DefaultStatusOptions(), nil)
 	return in, sets, true, err
 }
 
-// ---- toc_patch --------------------------------------------------------------
+// ---- impact_patch --------------------------------------------------------------
 
 // PatchOp is one RFC 6902 operation.
 type PatchOp struct {
@@ -304,7 +304,7 @@ func (s *Server) patchTool(_ context.Context, _ *sdk.CallToolRequest, in patchIn
 	if err != nil {
 		return nil, patchOut{}, err
 	}
-	// A theory given by path is written back unless this is a dry run.
+	// An impact model given by path is written back unless this is a dry run.
 	if path != "" && !in.DryRun {
 		res, err := service.PatchFile(path, patch, service.PatchOptions{AllowErrors: in.AllowErrors})
 		if err != nil {
@@ -318,7 +318,7 @@ func (s *Server) patchTool(_ context.Context, _ *sdk.CallToolRequest, in patchIn
 	}
 	out := patchOut{Applied: res.Applied, Reason: res.Reason, IssuesIntroduced: nonNil(res.IssuesIntroduced), IssuesResolved: nonNil(res.IssuesResolved)}
 	if res.Applied {
-		canon, err := tocio.Canonical(res.Document, tocio.FormatJSON)
+		canon, err := impactio.Canonical(res.Document, impactio.FormatJSON)
 		if err != nil {
 			return nil, patchOut{}, err
 		}
@@ -338,7 +338,7 @@ func nonNil(i []validate.Issue) []validate.Issue {
 	return i
 }
 
-// ---- toc_deck ---------------------------------------------------------------
+// ---- impact_deck ---------------------------------------------------------------
 
 type deckIn struct {
 	Source
@@ -385,7 +385,7 @@ func (s *Server) deckTool(_ context.Context, _ *sdk.CallToolRequest, in deckIn) 
 	return nil, textOut{Format: "marp", Content: md}, nil
 }
 
-// ---- toc_judge_bundle -------------------------------------------------------
+// ---- impact_judge_bundle -------------------------------------------------------
 
 type judgeIn struct {
 	Source
@@ -408,7 +408,7 @@ func (s *Server) judgeTool(_ context.Context, _ *sdk.CallToolRequest, in judgeIn
 	return nil, b, nil
 }
 
-// ---- toc_diff ---------------------------------------------------------------
+// ---- impact_diff ---------------------------------------------------------------
 
 type diffIn struct {
 	Old Source `json:"old" jsonschema:"the earlier version"`

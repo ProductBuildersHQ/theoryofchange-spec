@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // answeredSheet exports the review sheet of a copy of the full fixture and
@@ -33,7 +33,7 @@ func answeredSheet(t *testing.T, theory string, answers map[string]string) strin
 }
 
 func TestImportReviewFromSheet(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	before, err := os.ReadFile(theory)
 	if err != nil {
 		t.Fatal(err)
@@ -53,7 +53,7 @@ func TestImportReviewFromSheet(t *testing.T) {
 		t.Fatal(err)
 	}
 	if string(before) != string(after) {
-		t.Error("the theory was modified")
+		t.Error("the impact model was modified")
 	}
 	data, err := os.ReadFile(patchOut)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestImportReviewFromSheet(t *testing.T) {
 	if err := json.Unmarshal(data, &patch); err != nil || len(patch) == 0 {
 		t.Fatalf("patch %q: %v", data, err)
 	}
-	var c toc.Consultation
+	var c impact.Consultation
 	data, err = os.ReadFile(consultOut)
 	if err != nil {
 		t.Fatal(err)
@@ -77,7 +77,7 @@ func TestImportReviewFromSheet(t *testing.T) {
 }
 
 func TestImportReviewFlagsRowsAndStaleness(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	sheet := answeredSheet(t, theory, map[string]string{"oc-spec-stable": ",,,Why this?"})
 	r := run(t, "", "import", "review", theory, "--from-csv", sheet, "--reviewer", "program staff", "--date", "2026-03-01")
 	wantCode(t, r, ExitInvalid)
@@ -85,7 +85,7 @@ func TestImportReviewFlagsRowsAndStaleness(t *testing.T) {
 		t.Errorf("stdout = %q", r.stdout)
 	}
 
-	// Changing the theory after export makes the sheet's hash stale.
+	// Changing the impact model after export makes the sheet's hash stale.
 	wantCode(t, run(t, "", "outcome", "set", theory, "oc-spec-stable", "--set", "title=Changed after export"), ExitOK)
 	sheet = answeredSheet(t, theory, nil)
 	stale := strings.Replace(mustRead(t, sheet), "hash:", "hash:0", 1)
@@ -101,11 +101,11 @@ func TestImportReviewFlagsRowsAndStaleness(t *testing.T) {
 }
 
 func TestImportReviewFromJSON(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	resp := run(t, "", "export", "review-sheet", theory)
 	wantCode(t, resp, ExitOK)
 	hash := strings.TrimSpace(strings.SplitN(strings.SplitN(resp.stdout, "hash:", 2)[1], "\r\n", 2)[0])
-	body := `{"kind":"ReviewResponse","specVersion":"0.1","tocId":"open-agent-auth","contentHash":"` + hash + `",
+	body := `{"kind":"ReviewResponse","specVersion":"0.1","modelId":"open-agent-auth","contentHash":"` + hash + `",
 	"reviewers":["program staff"],"method":"workshop","date":"2026-03-01",
 	"rows":[{"elementId":"oc-spec-stable","decision":"remove","origin":"table"}]}`
 	path := theory + ".response.json"
@@ -116,7 +116,7 @@ func TestImportReviewFromJSON(t *testing.T) {
 }
 
 func TestImportReviewUsageErrors(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	for name, args := range map[string][]string{
 		"no source":           {"import", "review", theory},
 		"csv without who":     {"import", "review", theory, "--from-csv", theory},

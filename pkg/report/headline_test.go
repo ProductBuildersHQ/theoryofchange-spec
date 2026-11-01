@@ -4,26 +4,26 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // numbersDoc reports three indicators to one audience, and one to nobody.
-func numbersDoc() *toc.Document {
-	return &toc.Document{
-		Audiences: []toc.Audience{
+func numbersDoc() *impact.Model {
+	return &impact.Model{
+		Audiences: []impact.Audience{
 			{ID: "aud-a", Name: "A"},
-			{ID: "aud-b", Name: "B", Headline: []toc.HeadlineMetric{
+			{ID: "aud-b", Name: "B", Headline: []impact.HeadlineMetric{
 				{IndicatorID: "ind-3", Label: "Third, first", Note: "why B cares"},
 				{IndicatorID: "ind-gone"},
 				{IndicatorID: "ind-missing"},
 				{IndicatorID: "ind-1"},
 			}},
 		},
-		Indicators: []toc.Indicator{
+		Indicators: []impact.Indicator{
 			{ID: "ind-1", Name: "One", AudienceIDs: []string{"aud-a", "aud-b"}},
 			{ID: "ind-2", Name: "Two", AudienceIDs: []string{"aud-a"}},
 			{ID: "ind-3", Name: "Three", AudienceIDs: []string{"aud-a", "aud-b"}},
-			{ID: "ind-gone", Name: "Gone", AudienceIDs: []string{"aud-a"}, Provenance: &toc.Provenance{Basis: toc.BasisRejected}},
+			{ID: "ind-gone", Name: "Gone", AudienceIDs: []string{"aud-a"}, Provenance: &impact.Provenance{Basis: impact.BasisRejected}},
 			{ID: "ind-none", Name: "None"},
 		},
 	}
@@ -71,7 +71,7 @@ func TestAudienceNumbersOfUnknownAudience(t *testing.T) {
 // order the headline list gives, and not every indicator reported to it.
 func TestStoryReportUsesTheHeadlineList(t *testing.T) {
 	in := exampleInput(t)
-	var aud *toc.Audience
+	var aud *impact.Audience
 	for i := range in.Doc.Audiences {
 		if in.Doc.Audiences[i].ID == "aud-funders" {
 			aud = &in.Doc.Audiences[i]
@@ -92,7 +92,7 @@ func TestStoryReportUsesTheHeadlineList(t *testing.T) {
 		t.Fatalf("need at least two indicators reported to funders, have %v", reported)
 	}
 	last := reported[len(reported)-1]
-	aud.Headline = []toc.HeadlineMetric{{IndicatorID: last, Label: "THE ONE NUMBER FUNDERS GET"}}
+	aud.Headline = []impact.HeadlineMetric{{IndicatorID: last, Label: "THE ONE NUMBER FUNDERS GET"}}
 
 	out, err := Story(in, exampleSets(t), "aud-funders")
 	if err != nil {
@@ -130,7 +130,7 @@ func TestHeadlineReportFollowsTheList(t *testing.T) {
 	in := exampleInput(t)
 	for i := range in.Doc.Audiences {
 		if in.Doc.Audiences[i].ID == "aud-funders" {
-			in.Doc.Audiences[i].Headline = []toc.HeadlineMetric{{IndicatorID: in.Doc.Indicators[0].ID, Label: "LEAD NUMBER", Note: "FUNDERS FUND THIS"}}
+			in.Doc.Audiences[i].Headline = []impact.HeadlineMetric{{IndicatorID: in.Doc.Indicators[0].ID, Label: "LEAD NUMBER", Note: "FUNDERS FUND THIS"}}
 		}
 	}
 	out, err := Headline(in, "aud-funders")

@@ -8,7 +8,7 @@ import (
 )
 
 func TestDeckWorkshopPrintsMarp(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	r := run(t, "", "deck", "workshop", path)
 	if r.code != ExitOK {
 		t.Fatalf("code = %d, stderr = %s", r.code, r.err)
@@ -19,7 +19,7 @@ func TestDeckWorkshopPrintsMarp(t *testing.T) {
 }
 
 func TestDeckWorkshopWritesOutputFile(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	out := path + ".md"
 	r := run(t, "", "deck", "workshop", path, "--out", out, "--theme", "gaia")
 	if r.code != ExitOK || r.stdout != "" {
@@ -35,7 +35,7 @@ func TestDeckWorkshopWritesOutputFile(t *testing.T) {
 }
 
 func TestDeckExportNeedsATool(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	t.Setenv("PATH", t.TempDir())
 	r := run(t, "", "deck", "workshop", path, "--export", path+".pdf")
 	if r.code != ExitToolMissing || !strings.Contains(r.err, "marp") {
@@ -44,7 +44,7 @@ func TestDeckExportNeedsATool(t *testing.T) {
 }
 
 func TestDeckExportRejectsUnknownExtension(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	r := run(t, "", "deck", "workshop", path, "--export", path+".docx")
 	if r.code != ExitUsageErr {
 		t.Errorf("code = %d, want %d", r.code, ExitUsageErr)
@@ -52,7 +52,7 @@ func TestDeckExportRejectsUnknownExtension(t *testing.T) {
 }
 
 func TestDeckWorkshopMissingFile(t *testing.T) {
-	if r := run(t, "", "deck", "workshop", "/nonexistent/theory.yaml"); r.code != ExitUsageErr {
+	if r := run(t, "", "deck", "workshop", "/nonexistent/impact-model.yaml"); r.code != ExitUsageErr {
 		t.Errorf("code = %d, want %d", r.code, ExitUsageErr)
 	}
 }

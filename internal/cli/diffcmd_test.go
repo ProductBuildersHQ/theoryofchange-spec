@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/diff"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/diff"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 // twoVersions copies the full fixture twice and edits the second with the
@@ -57,7 +57,7 @@ func TestDiffRevisionPatchAppliesWithThePatchCommand(t *testing.T) {
 	r := run(t, "", "diff", oldPath, newPath, "--revision", "--version", "0.9", "--date", "2026-03-01", "--trigger", "review", "-o", patchFile)
 	wantCode(t, r, ExitOK)
 	wantCode(t, run(t, "", "patch", newPath, patchFile), ExitOK)
-	doc, err := tocio.LoadDocument(newPath)
+	doc, err := impactio.LoadDocument(newPath)
 	if err != nil {
 		t.Fatal(err)
 	}

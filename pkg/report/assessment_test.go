@@ -4,12 +4,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 func TestAssessmentGoldenOverTheIntermediaryExample(t *testing.T) {
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func TestAssessmentFullFixture(t *testing.T) {
 func TestAssessmentListsEqualTheCounts(t *testing.T) {
 	doc := fullDoc(t)
 	v := build(t, doc, nil, Options{})
-	got := map[toc.Basis]int{}
+	got := map[impact.Basis]int{}
 	unmarked := 0
 	for _, e := range taggedElements(v) {
 		if e.basis.Basis == "" {
@@ -59,7 +59,7 @@ func TestAssessmentListsEqualTheCounts(t *testing.T) {
 
 func TestAssessmentFlagsStatedWithoutCitation(t *testing.T) {
 	doc := fullDoc(t)
-	doc.Outcomes[0].Provenance = &toc.Provenance{Basis: toc.BasisStated}
+	doc.Outcomes[0].Provenance = &impact.Provenance{Basis: impact.BasisStated}
 	out := Assessment(build(t, doc, nil, Options{}), doc)
 	if !strings.Contains(out, "stated element(s) cite no source") {
 		t.Errorf("a stated element with no evidence should be flagged:\n%s", out)
@@ -68,8 +68,8 @@ func TestAssessmentFlagsStatedWithoutCitation(t *testing.T) {
 
 func TestAssessmentGapsAndDecisions(t *testing.T) {
 	doc := fullDoc(t)
-	doc.Decisions = []toc.Decision{{ID: "dec-scope", Question: "Which region first?", Options: []string{"North", "South"}, Status: toc.DecisionOpen}}
-	doc.Indicators[0].DataAvailability = toc.DataUnknown
+	doc.Decisions = []impact.Decision{{ID: "dec-scope", Question: "Which region first?", Options: []string{"North", "South"}, Status: impact.DecisionOpen}}
+	doc.Indicators[0].DataAvailability = impact.DataUnknown
 	out := Assessment(build(t, doc, nil, Options{}), doc)
 	for _, want := range []string{
 		"Which region first? (`dec-scope`). Options: North; South",

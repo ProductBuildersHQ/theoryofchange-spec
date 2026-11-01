@@ -1,6 +1,6 @@
-// Package review turns what reviewers said about a theory into proposals.
+// Package review turns what reviewers said about an impact model into proposals.
 //
-// Importing a ReviewResponse never changes the theory. It produces a patch a
+// Importing a ReviewResponse never changes the impact model. It produces a patch a
 // human can apply, notes for the rows that need a human decision, and a
 // consultation record. Nothing here reads files or the clock.
 package review
@@ -11,8 +11,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // Candidate is an element a quoted text may refer to: its ID and the
@@ -30,7 +30,7 @@ type Options struct {
 	// Candidates resolve rows that carry quoted text but no element ID.
 	Candidates []Candidate
 	// Step is the consultation step recorded; the default is "whole".
-	Step toc.ConsultationStep
+	Step impact.ConsultationStep
 }
 
 // Flag is a row that needs a human decision, or a caution about a row that
@@ -56,13 +56,13 @@ type Result struct {
 	// Flags are the rows that need a human decision.
 	Flags []Flag `json:"flags"`
 	// Stale is true when the response was written against a different
-	// version of the theory. Every row is then flagged, and operations are
+	// version of the impact model. Every row is then flagged, and operations are
 	// still proposed against current IDs.
 	Stale bool `json:"stale"`
 	// Mapped is the number of rows that became operations.
 	Mapped int `json:"mapped"`
-	// Consultation records the review in the theory's own terms.
-	Consultation toc.Consultation `json:"consultation"`
+	// Consultation records the review in the impact model's own terms.
+	Consultation impact.Consultation `json:"consultation"`
 }
 
 // NeedsHuman reports whether anything in the result requires a person to
@@ -70,12 +70,12 @@ type Result struct {
 func (r *Result) NeedsHuman() bool { return r.Stale || len(r.Flags) > 0 }
 
 // Import maps the rows of resp onto doc. doc is never modified.
-func Import(doc *toc.Document, resp *toc.ReviewResponse, o Options) (*Result, error) {
+func Import(doc *impact.Model, resp *impact.ReviewResponse, o Options) (*Result, error) {
 	if doc == nil || resp == nil {
 		return nil, fmt.Errorf("review: nil document or response")
 	}
-	if resp.TocID != "" && doc.ID != "" && resp.TocID != doc.ID {
-		return nil, fmt.Errorf("review: response is for theory %q, not %q", resp.TocID, doc.ID)
+	if resp.ModelID != "" && doc.ID != "" && resp.ModelID != doc.ID {
+		return nil, fmt.Errorf("review: response is for impact model %q, not %q", resp.ModelID, doc.ID)
 	}
 	res := &Result{
 		Patch: edit.Patch{},
@@ -117,7 +117,7 @@ func Import(doc *toc.Document, resp *toc.ReviewResponse, o Options) (*Result, er
 		res.Patch = append(res.Patch, patch...)
 		res.Mapped++
 		if res.Stale {
-			flag("the theory has changed since this was reviewed")
+			flag("the impact model has changed since this was reviewed")
 		}
 	}
 	res.Consultation = consultation(doc, resp, o.Step)
@@ -127,15 +127,15 @@ func Import(doc *toc.Document, resp *toc.ReviewResponse, o Options) (*Result, er
 // resolve returns the element a row is about. A row with an ID must name an
 // element that exists; a row with only quoted text must match exactly one
 // candidate statement.
-func resolve(doc *toc.Document, row toc.ReviewItem, candidates []Candidate) (id, reason string) {
+func resolve(doc *impact.Model, row impact.ReviewItem, candidates []Candidate) (id, reason string) {
 	if row.ElementID != "" {
 		if _, ok := doc.Element(row.ElementID); !ok {
-			return "", fmt.Sprintf("no element %q in the theory", row.ElementID)
+			return "", fmt.Sprintf("no element %q in the impact model", row.ElementID)
 		}
 		return row.ElementID, ""
 	}
 	if strings.TrimSpace(row.QuotedText) == "" {
-		return "", "no element id and no quoted text; a comment about the whole theory"
+		return "", "no element id and no quoted text; a comment about the whole impact model"
 	}
 	want := normalize(row.QuotedText)
 	var found []string
@@ -157,17 +157,17 @@ func resolve(doc *toc.Document, row toc.ReviewItem, candidates []Candidate) (id,
 func normalize(s string) string { return strings.Join(strings.Fields(s), " ") }
 
 // kindOf maps a document element kind onto the patch engine's.
-var kindOf = map[toc.ElementKind]string{
-	toc.ElementOutcome: "outcome", toc.ElementGroup: "group", toc.ElementLink: "link",
-	toc.ElementIntervention: "intervention", toc.ElementAssumption: "assumption",
-	toc.ElementIndicator: "indicator", toc.ElementActor: "actor", toc.ElementEvidence: "evidence",
-	toc.ElementExternalFactor: "factor", toc.ElementRisk: "risk", toc.ElementDecision: "decision",
-	toc.ElementPathway: "pathway", toc.ElementMetric: "metric", toc.ElementTerm: "term",
-	toc.ElementConsultation: "consultation",
+var kindOf = map[impact.ElementKind]string{
+	impact.ElementOutcome: "outcome", impact.ElementGroup: "group", impact.ElementLink: "link",
+	impact.ElementIntervention: "intervention", impact.ElementAssumption: "assumption",
+	impact.ElementIndicator: "indicator", impact.ElementActor: "actor", impact.ElementEvidence: "evidence",
+	impact.ElementExternalFactor: "factor", impact.ElementRisk: "risk", impact.ElementDecision: "decision",
+	impact.ElementPathway: "pathway", impact.ElementMetric: "metric", impact.ElementTerm: "term",
+	impact.ElementConsultation: "consultation",
 }
 
 // propose turns one resolved row into a patch, or says why it cannot.
-func propose(doc *toc.Document, row toc.ReviewItem, resp *toc.ReviewResponse) (edit.Patch, string) {
+func propose(doc *impact.Model, row impact.ReviewItem, resp *impact.ReviewResponse) (edit.Patch, string) {
 	ref, _ := doc.Element(row.ElementID)
 	kind, ok := edit.KindByName(kindOf[ref.Kind])
 	if !ok {
@@ -178,19 +178,19 @@ func propose(doc *toc.Document, row toc.ReviewItem, resp *toc.ReviewResponse) (e
 		"provenance.decidedBy": strings.Join(resp.Reviewers, "; "),
 	}
 	switch row.Decision {
-	case toc.DecisionAgree:
-		decided["provenance.basis"] = string(toc.BasisConfirmed)
+	case impact.DecisionAgree:
+		decided["provenance.basis"] = string(impact.BasisConfirmed)
 		return setFields(doc, kind, row.ElementID, decided)
-	case toc.DecisionRemove:
-		decided["provenance.basis"] = string(toc.BasisRejected)
+	case impact.DecisionRemove:
+		decided["provenance.basis"] = string(impact.BasisRejected)
 		return setFields(doc, kind, row.ElementID, decided)
-	case toc.DecisionChange:
+	case impact.DecisionChange:
 		fields, ok := parseChange(row.SuggestedChange)
 		if !ok {
 			return nil, "the suggested change is free text; a person must decide how to apply it"
 		}
 		return setFields(doc, kind, row.ElementID, fields)
-	case toc.DecisionUnsure:
+	case impact.DecisionUnsure:
 		return nil, "the reviewer is unsure"
 	case "":
 		return nil, "a comment with no decision"
@@ -199,7 +199,7 @@ func propose(doc *toc.Document, row toc.ReviewItem, resp *toc.ReviewResponse) (e
 	}
 }
 
-func setFields(doc *toc.Document, k edit.ElementKind, id string, fields map[string]any) (edit.Patch, string) {
+func setFields(doc *impact.Model, k edit.ElementKind, id string, fields map[string]any) (edit.Patch, string) {
 	p, err := edit.SetFields(doc, k, id, fields, nil)
 	if err != nil {
 		return nil, "the proposed change cannot be built: " + err.Error()
@@ -228,16 +228,16 @@ func parseChange(s string) (map[string]any, bool) {
 }
 
 // consultation builds the record of the review. Its ID avoids the IDs the
-// theory already uses.
-func consultation(doc *toc.Document, resp *toc.ReviewResponse, step toc.ConsultationStep) toc.Consultation {
+// Impact model already uses.
+func consultation(doc *impact.Model, resp *impact.ReviewResponse, step impact.ConsultationStep) impact.Consultation {
 	if step == "" {
-		step = toc.StepWhole
+		step = impact.StepWhole
 	}
-	method := toc.MethodDocumentReview
-	if resp.Method == toc.ReviewWorkshop {
-		method = toc.MethodWorkshop
+	method := impact.MethodDocumentReview
+	if resp.Method == impact.ReviewWorkshop {
+		method = impact.MethodWorkshop
 	}
-	counts := map[toc.ReviewDecision]int{}
+	counts := map[impact.ReviewDecision]int{}
 	other := 0
 	for _, r := range resp.Rows {
 		if r.Decision == "" {
@@ -247,7 +247,7 @@ func consultation(doc *toc.Document, resp *toc.ReviewResponse, step toc.Consulta
 		counts[r.Decision]++
 	}
 	var findings []string
-	for _, d := range toc.AllReviewDecisions() {
+	for _, d := range impact.AllReviewDecisions() {
 		if counts[d] > 0 {
 			findings = append(findings, fmt.Sprintf("%s: %d", d, counts[d]))
 		}
@@ -255,7 +255,7 @@ func consultation(doc *toc.Document, resp *toc.ReviewResponse, step toc.Consulta
 	if other > 0 {
 		findings = append(findings, fmt.Sprintf("comment only: %d", other))
 	}
-	return toc.Consultation{
+	return impact.Consultation{
 		ID:                consultationID(doc, resp.Date),
 		Date:              resp.Date,
 		Step:              step,
@@ -265,7 +265,7 @@ func consultation(doc *toc.Document, resp *toc.ReviewResponse, step toc.Consulta
 	}
 }
 
-func consultationID(doc *toc.Document, date string) string {
+func consultationID(doc *impact.Model, date string) string {
 	used := map[string]bool{}
 	for _, c := range doc.Consultations {
 		used[c.ID] = true

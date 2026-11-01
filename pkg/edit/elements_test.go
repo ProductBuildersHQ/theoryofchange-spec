@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 func TestKindsAreUnique(t *testing.T) {
@@ -25,7 +25,7 @@ func TestKindsAreUnique(t *testing.T) {
 	if _, ok := KindByName("nonsense"); ok {
 		t.Error("KindByName accepted an unknown kind")
 	}
-	// Every kind must correspond to a toc.Elements() kind with that array.
+	// Every kind must correspond to a impact.Elements() kind with that array.
 	doc := loadFull(t)
 	have := map[string]bool{}
 	for _, e := range doc.Elements() {
@@ -137,7 +137,7 @@ func TestSetFields(t *testing.T) {
 	if !res.Applied {
 		t.Fatalf("not applied: %s %v", res.Reason, res.IssuesIntroduced)
 	}
-	if o, _ := res.Document.Outcome("oc-idp-support"); o.Logic == nil || o.Logic.Type != toc.LogicAny {
+	if o, _ := res.Document.Outcome("oc-idp-support"); o.Logic == nil || o.Logic.Type != impact.LogicAny {
 		t.Fatalf("logic not created: %+v", o.Logic)
 	}
 }
@@ -157,7 +157,7 @@ func TestSetFieldsCreatesProvenance(t *testing.T) {
 		t.Fatalf("not applied: %s", res.Reason)
 	}
 	o, _ := res.Document.Outcome("oc-reference-impl")
-	if o.Provenance == nil || o.Provenance.Basis != toc.BasisStated || len(o.Provenance.EvidenceIDs) != 1 {
+	if o.Provenance == nil || o.Provenance.Basis != impact.BasisStated || len(o.Provenance.EvidenceIDs) != 1 {
 		t.Fatalf("provenance = %+v", o.Provenance)
 	}
 
@@ -203,7 +203,7 @@ func TestSetFieldsErrors(t *testing.T) {
 	}
 }
 
-func kindOf(t *testing.T, doc *toc.Document, id string) ElementKind {
+func kindOf(t *testing.T, doc *impact.Model, id string) ElementKind {
 	t.Helper()
 	e, ok := doc.Element(id)
 	if !ok {
@@ -389,7 +389,7 @@ func TestCascadeConsequences(t *testing.T) {
 	}
 
 	withCeiling := loadFull(t)
-	withCeiling.Ceiling = &toc.Ceiling{OutcomeIDs: []string{"oc-enterprise-require"}}
+	withCeiling.Ceiling = &impact.Ceiling{OutcomeIDs: []string{"oc-enterprise-require"}}
 	k = kindOf(t, withCeiling, "oc-enterprise-require")
 	p, err = RemoveElement(withCeiling, k, "oc-enterprise-require", true)
 	if err != nil {

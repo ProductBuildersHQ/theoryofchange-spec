@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 // selectors maps each query flag to its query.
@@ -29,18 +29,18 @@ var selectors = []struct {
 
 func newGraphCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "graph <toc-file>",
-		Short: "Analyze the causal graph of a Theory of Change",
+		Use:   "graph <model-file>",
+		Short: "Analyze the causal graph of an impact model",
 		Long: `Summarize or query the causal graph: outcomes and interventions joined by
 causal links. Feedback links are excluded from every structural query.
 
 With no query flag, prints a summary. With --format dot, prints the whole
 graph in Graphviz DOT.`,
-		Example: `  theoryofchange graph theory.yaml
-  theoryofchange graph theory.yaml --upstream --from oc-enterprise-require
-  theoryofchange graph theory.yaml --paths --from oc-spec-stable
-  theoryofchange graph theory.yaml --cycles --format json
-  theoryofchange graph theory.yaml --format dot | dot -Tsvg > graph.svg`,
+		Example: `  impact-model graph impact-model.yaml
+  impact-model graph impact-model.yaml --upstream --from oc-enterprise-require
+  impact-model graph impact-model.yaml --paths --from oc-spec-stable
+  impact-model graph impact-model.yaml --cycles --format json
+  impact-model graph impact-model.yaml --format dot | dot -Tsvg > graph.svg`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			format := flagString(cmd, "format")
@@ -59,7 +59,7 @@ graph in Graphviz DOT.`,
 				return usageErr("--%s needs --from <id>", query)
 			}
 
-			doc, err := tocio.LoadDocument(args[0])
+			doc, err := impactio.LoadDocument(args[0])
 			if err != nil {
 				return &ExitError{Code: ExitUsageErr, Err: err}
 			}

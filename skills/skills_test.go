@@ -11,11 +11,11 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/internal/cli"
+	"github.com/ProductBuildersHQ/impact-model/internal/cli"
 )
 
 const (
-	theory  = "../examples/intermediary/theory.yaml"
+	theory  = "../examples/intermediary/impact-model.yaml"
 	obs     = "../examples/intermediary/observations-2026-q3.yaml"
 	mapping = "../examples/intermediary/csv/mapping.yaml"
 	sheet   = "../examples/intermediary/csv/monthly-q4.csv"
@@ -37,7 +37,7 @@ func skillDirs(t *testing.T) []string {
 }
 
 func TestEverySkillIsWellFormed(t *testing.T) {
-	want := []string{"toc-audience-story", "toc-author", "toc-draft-from-sources", "toc-learning-review", "toc-status-refresh"}
+	want := []string{"impact-audience-story", "impact-author", "impact-draft-from-sources", "impact-learning-review", "impact-status-refresh"}
 	got := skillDirs(t)
 	if strings.Join(got, ",") != strings.Join(want, ",") {
 		t.Fatalf("skills = %v, want %v", got, want)
@@ -71,7 +71,7 @@ func TestEverySkillIsWellFormed(t *testing.T) {
 // trailing backslash.
 var fence = regexp.MustCompile("(?s)```bash\n(.*?)```")
 
-// commands extracts every `theoryofchange ...` command from a skill.
+// commands extracts every `impact-model ...` command from a skill.
 func commands(t *testing.T, skill string) [][]string {
 	t.Helper()
 	data, err := os.ReadFile(filepath.Join(skill, "SKILL.md"))
@@ -83,7 +83,7 @@ func commands(t *testing.T, skill string) [][]string {
 		joined := strings.ReplaceAll(block[1], "\\\n", " ")
 		for _, line := range strings.Split(joined, "\n") {
 			fields := strings.Fields(line)
-			if len(fields) > 1 && fields[0] == "theoryofchange" {
+			if len(fields) > 1 && fields[0] == "impact-model" {
 				out = append(out, fields[1:])
 			}
 		}
@@ -167,9 +167,9 @@ func (s *session) run(wantCodes []int, args ...string) string {
 		ok = ok || c == code
 	}
 	if !ok {
-		s.t.Fatalf("theoryofchange %s: exit %d, want one of %v\n%s%s", strings.Join(args, " "), code, wantCodes, out.String(), errOut.String())
+		s.t.Fatalf("impact-model %s: exit %d, want one of %v\n%s%s", strings.Join(args, " "), code, wantCodes, out.String(), errOut.String())
 	}
-	s.log.WriteString("$ theoryofchange " + strings.ReplaceAll(strings.Join(args, " "), s.dir, "$DIR") + "\n")
+	s.log.WriteString("$ impact-model " + strings.ReplaceAll(strings.Join(args, " "), s.dir, "$DIR") + "\n")
 	s.log.WriteString(strings.ReplaceAll(out.String()+errOut.String(), s.dir, "$DIR"))
 	return out.String()
 }
@@ -206,38 +206,38 @@ func repeatable(t *testing.T, sequence func(t *testing.T) (transcript string, ou
 
 func TestAuthorSequenceIsRepeatable(t *testing.T) {
 	repeatable(t, func(t *testing.T) (string, map[string]string) {
-		s := newSession(t, map[string]string{"theory.yaml": theory, "previous.yaml": theory})
-		f := s.path("theory.yaml")
+		s := newSession(t, map[string]string{"impact-model.yaml": theory, "previous.yaml": theory})
+		f := s.path("impact-model.yaml")
 		s.ok("validate", f)
 		// A preview changes nothing; the edit then does.
-		before := s.file("theory.yaml")
+		before := s.file("impact-model.yaml")
 		s.ok("outcome", "set", f, "oc-st-leader-skills", "--title", "Leaders gain coaching skills", "--dry-run")
-		if s.file("theory.yaml") != before {
+		if s.file("impact-model.yaml") != before {
 			t.Fatal("--dry-run wrote the file")
 		}
 		s.ok("outcome", "set", f, "oc-st-leader-skills", "--title", "Leaders gain coaching skills")
 		s.ok("assumption", "add", f, "--id", "asm-new", "--statement", "Leaders have time to attend.", "--applies-to", "ln-cohorts-skills")
 		// An edit that would leave a dangling reference is refused and writes nothing.
-		kept := s.file("theory.yaml")
+		kept := s.file("impact-model.yaml")
 		s.run([]int{cli.ExitInvalid}, "link", "set", f, "ln-cohorts-skills", "--to", "oc-ghost")
-		if s.file("theory.yaml") != kept {
+		if s.file("impact-model.yaml") != kept {
 			t.Fatal("a rejected edit changed the file")
 		}
 		s.ok("validate", f)
 		s.run([]int{cli.ExitOK, cli.ExitInvalid}, "lint", f)
 		s.ok("diff", s.path("previous.yaml"), f)
-		return s.log.String(), map[string]string{"theory.yaml": s.file("theory.yaml")}
+		return s.log.String(), map[string]string{"impact-model.yaml": s.file("impact-model.yaml")}
 	})
 }
 
 func TestStatusRefreshSequenceIsRepeatable(t *testing.T) {
 	repeatable(t, func(t *testing.T) (string, map[string]string) {
-		s := newSession(t, map[string]string{"theory.yaml": theory, "q3.yaml": obs, "period.csv": sheet, "mapping.yaml": mapping})
-		f := s.path("theory.yaml")
+		s := newSession(t, map[string]string{"impact-model.yaml": theory, "q3.yaml": obs, "period.csv": sheet, "mapping.yaml": mapping})
+		f := s.path("impact-model.yaml")
 		s.ok("status", f, "-O", s.path("q3.yaml"), "--as-of", "2026-09-30", "--out", s.path("status-prev.json"))
-		s.ok("import", "observations", "--csv", s.path("period.csv"), "--map", s.path("mapping.yaml"), "--toc", f,
+		s.ok("import", "observations", "--csv", s.path("period.csv"), "--map", s.path("mapping.yaml"), "--model", f,
 			"--out", s.path("observations.yaml"), "--unmatched", s.path("unmatched.csv"))
-		s.ok("validate", s.path("observations.yaml"), "--toc", f)
+		s.ok("validate", s.path("observations.yaml"), "--model", f)
 		s.ok("status", f, "-O", s.path("q3.yaml"), "-O", s.path("observations.yaml"), "--prev", s.path("status-prev.json"), "--out", s.path("status.json"))
 		s.ok("report", "exec", f, "-O", s.path("q3.yaml"), "-O", s.path("observations.yaml"), "--prev", s.path("status-prev.json"), "--out", s.path("exec.md"))
 		return s.log.String(), map[string]string{
@@ -247,13 +247,13 @@ func TestStatusRefreshSequenceIsRepeatable(t *testing.T) {
 }
 
 func TestStatusRefreshReportsUnmatchedRows(t *testing.T) {
-	s := newSession(t, map[string]string{"theory.yaml": theory, "mapping.yaml": mapping})
+	s := newSession(t, map[string]string{"impact-model.yaml": theory, "mapping.yaml": mapping})
 	bad := "Measure,Month end,Value,Program,Quality,Source\r\nNo such measure,31/10/2026,1,,,\r\n"
 	if err := os.WriteFile(s.path("period.csv"), []byte(bad), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	s.run([]int{cli.ExitInvalid}, "import", "observations", "--csv", s.path("period.csv"), "--map", s.path("mapping.yaml"),
-		"--toc", s.path("theory.yaml"), "--out", s.path("observations.yaml"), "--unmatched", s.path("unmatched.csv"))
+		"--model", s.path("impact-model.yaml"), "--out", s.path("observations.yaml"), "--unmatched", s.path("unmatched.csv"))
 	if !strings.Contains(s.file("unmatched.csv"), "unknown indicator") {
 		t.Errorf("the unmatched sheet should give the reason:\n%s", s.file("unmatched.csv"))
 	}
@@ -261,21 +261,21 @@ func TestStatusRefreshReportsUnmatchedRows(t *testing.T) {
 
 func TestLearningReviewSequenceIsRepeatable(t *testing.T) {
 	repeatable(t, func(t *testing.T) (string, map[string]string) {
-		s := newSession(t, map[string]string{"theory.yaml": theory, "observations.yaml": obs})
-		f, o := s.path("theory.yaml"), s.path("observations.yaml")
+		s := newSession(t, map[string]string{"impact-model.yaml": theory, "observations.yaml": obs})
+		f, o := s.path("impact-model.yaml"), s.path("observations.yaml")
 		s.ok("status", f, "-O", o, "--as-of", "2026-06-30", "--out", s.path("status-prev.json"))
 		s.ok("status", f, "-O", o, "--prev", s.path("status-prev.json"))
 		s.ok("report", "learning-review", f, "-O", o, "--prev", s.path("status-prev.json"), "--period", "2026-Q3", "--out", s.path("review.md"))
 		s.ok("deck", "learning-review", f, "-O", o, "--prev", s.path("status-prev.json"), "--period", "2026-Q3", "--out", s.path("review-deck.md"))
-		s.ok("validate", o, "--toc", f)
+		s.ok("validate", o, "--model", f)
 		return s.log.String(), map[string]string{"review.md": s.file("review.md"), "review-deck.md": s.file("review-deck.md")}
 	})
 }
 
 func TestAudienceStorySequenceIsRepeatable(t *testing.T) {
 	repeatable(t, func(t *testing.T) (string, map[string]string) {
-		s := newSession(t, map[string]string{"theory.yaml": theory, "observations.yaml": obs})
-		f, o := s.path("theory.yaml"), s.path("observations.yaml")
+		s := newSession(t, map[string]string{"impact-model.yaml": theory, "observations.yaml": obs})
+		f, o := s.path("impact-model.yaml"), s.path("observations.yaml")
 		s.ok("report", "story", f, "-O", o, "--audience", "aud-funders", "--out", s.path("scaffold.md"))
 		s.ok("deck", "story", f, "-O", o, "--audience", "aud-funders", "--out", s.path("story-deck.md"))
 		return s.log.String(), map[string]string{"scaffold.md": s.file("scaffold.md"), "story-deck.md": s.file("story-deck.md")}
@@ -307,8 +307,8 @@ func unsupported(scaffold, draft string) []string {
 }
 
 func TestAudienceStoryDraftCheck(t *testing.T) {
-	s := newSession(t, map[string]string{"theory.yaml": theory, "observations.yaml": obs})
-	scaffold := s.ok("report", "story", s.path("theory.yaml"), "-O", s.path("observations.yaml"), "--audience", "aud-funders", "--no-stamp")
+	s := newSession(t, map[string]string{"impact-model.yaml": theory, "observations.yaml": obs})
+	scaffold := s.ok("report", "story", s.path("impact-model.yaml"), "-O", s.path("observations.yaml"), "--audience", "aud-funders", "--no-stamp")
 
 	faithful := "The network reached 84 member organizations this year, and as one director put it, " +
 		"“I would have spent a month on that alone.”"
@@ -324,7 +324,7 @@ func TestAudienceStoryDraftCheck(t *testing.T) {
 	if strings.Contains(scaffold, "dreading month end") || strings.Contains(scaffold, "closes its monthly books") {
 		t.Error("a story without consent is in the scaffold")
 	}
-	if _, err := os.Stat("toc-audience-story/templates/story-draft.md"); err != nil {
+	if _, err := os.Stat("impact-audience-story/templates/story-draft.md"); err != nil {
 		t.Errorf("the draft template is missing: %v", err)
 	}
 }

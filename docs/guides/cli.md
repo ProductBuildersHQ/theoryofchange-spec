@@ -1,6 +1,6 @@
 # CLI Reference
 
-`theoryofchange <command> --help` prints the full help for any command. This page
+`impact-model <command> --help` prints the full help for any command. This page
 is the map.
 
 ## Conventions
@@ -15,7 +15,7 @@ is the map.
 - **Quiet.** `-q` / `--quiet` prints only problems.
 - **Dry run.** Commands that change a file take `--dry-run`, which prints the
   result and writes nothing.
-- **Both formats.** A theory can be YAML or JSON, chosen by extension. Edits keep
+- **Both formats.** An impact model can be YAML or JSON, chosen by extension. Edits keep
   the file's own format.
 
 ## Exit codes
@@ -33,7 +33,7 @@ is the map.
 
 | Command | What it does |
 |---------|--------------|
-| `init` | Write a starter theory that already passes validation |
+| `init` | Write a starter impact model that already passes validation |
 | `fmt` | Rewrite documents in canonical form (`--check`, `--sort`) |
 | `schema` | List the seven embedded JSON Schemas or print one |
 
@@ -48,16 +48,16 @@ is the map.
 The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 `consultation`, `criterion`, `decision`, `evidence`, `factor`, `group`,
 `indicator`, `intervention`, `link`, `metric`, `outcome`, `pathway`, `risk`,
-`target-group`, `term`, and `theme`. See [Authoring a theory](authoring.md).
+`target-group`, `term`, and `theme`. See [Authoring an impact model](authoring.md).
 
 ### Check
 
 | Command | What it does |
 |---------|--------------|
-| `validate` | Schema and structure (`--toc`, `--parent`, `--registry`, `--futures`) |
+| `validate` | Schema and structure (`--model`, `--parent`, `--registry`, `--futures`) |
 | `lint` | 66 deterministic rules in three profiles (`--profile`, `--disable`, `--list`) |
 | `graph` | Summarize or query the causal graph (`--upstream`, `--downstream`, `--paths`, `--cycles`, `--orphans`, `--dead-ends`, `--levels`) |
-| `judge show`, `record`, `summary` | Prepare a theory for a judge and combine the verdicts |
+| `judge show`, `record`, `summary` | Prepare an impact model for a judge and combine the verdicts |
 
 ### Measure
 
@@ -80,7 +80,7 @@ The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 
 | Command | What it does |
 |---------|--------------|
-| `export review-packet`, `export review-sheet` | Send a theory out for review |
+| `export review-packet`, `export review-sheet` | Send an impact model out for review |
 | `import review` | Turn reviewers' answers into a patch, flagged rows, and a consultation record |
 | `approve` | Record approval, with approvers, a version, and a date |
 
@@ -92,4 +92,4 @@ The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 
 ## Shell completion
 
-`theoryofchange completion bash|zsh|fish|powershell` prints a completion script.
+`impact-model completion bash|zsh|fish|powershell` prints a completion script.

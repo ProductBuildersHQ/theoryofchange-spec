@@ -6,17 +6,17 @@ import (
 	"sort"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // EffectiveAssumptions returns each assumption's status at asOf: the latest
 // assessment at or before that date in any observation set, else the status
 // written in the document (untested when it has none). The result follows
 // document order.
-func EffectiveAssumptions(doc *toc.Document, sets []*toc.ObservationSet, asOf time.Time) []toc.AssumptionState {
+func EffectiveAssumptions(doc *impact.Model, sets []*impact.ObservationSet, asOf time.Time) []impact.AssumptionState {
 	type assessed struct {
-		status toc.AssumptionStatus
+		status impact.AssumptionStatus
 		date   string
 	}
 	latest := map[string]assessed{}
@@ -31,17 +31,17 @@ func EffectiveAssumptions(doc *toc.Document, sets []*toc.ObservationSet, asOf ti
 			}
 		}
 	}
-	out := make([]toc.AssumptionState, 0, len(doc.Assumptions))
+	out := make([]impact.AssumptionState, 0, len(doc.Assumptions))
 	for _, a := range doc.Assumptions {
 		if a.Provenance.IsRejected() {
 			continue
 		}
-		s := toc.AssumptionState{AssumptionID: a.ID, Status: a.Status, Source: toc.SourceDocument}
+		s := impact.AssumptionState{AssumptionID: a.ID, Status: a.Status, Source: impact.SourceDocument}
 		if s.Status == "" {
-			s.Status = toc.AssumptionUntested
+			s.Status = impact.AssumptionUntested
 		}
 		if as, ok := latest[a.ID]; ok {
-			s.Status, s.Source, s.AssessedAt = as.status, toc.SourceAssessment, as.date
+			s.Status, s.Source, s.AssessedAt = as.status, impact.SourceAssessment, as.date
 		}
 		out = append(out, s)
 	}
@@ -50,12 +50,12 @@ func EffectiveAssumptions(doc *toc.Document, sets []*toc.ObservationSet, asOf ti
 
 // Weights for the parts of link confidence, as in the specification.
 var (
-	strengthScore = map[toc.Strength]float64{
-		toc.StrengthStrong: 1, toc.StrengthModerate: 0.7, toc.StrengthWeak: 0.4, toc.StrengthAnecdotal: 0.2,
+	strengthScore = map[impact.Strength]float64{
+		impact.StrengthStrong: 1, impact.StrengthModerate: 0.7, impact.StrengthWeak: 0.4, impact.StrengthAnecdotal: 0.2,
 	}
-	assumptionScore = map[toc.AssumptionStatus]float64{
-		toc.AssumptionValidated: 1, toc.AssumptionHolding: 0.8, toc.AssumptionUntested: 0.5,
-		toc.AssumptionAtRisk: 0.25, toc.AssumptionInvalidated: 0,
+	assumptionScore = map[impact.AssumptionStatus]float64{
+		impact.AssumptionValidated: 1, impact.AssumptionHolding: 0.8, impact.AssumptionUntested: 0.5,
+		impact.AssumptionAtRisk: 0.25, impact.AssumptionInvalidated: 0,
 	}
 )
 
@@ -65,7 +65,7 @@ const noAssumptionScore = 0.5
 
 // underpinning returns the assumptions that bear on a link: those it names,
 // and those that name it in appliesTo.
-func underpinning(doc *toc.Document, link toc.CausalLink) []string {
+func underpinning(doc *impact.Model, link impact.CausalLink) []string {
 	ids := slices.Clone(link.AssumptionIDs)
 	for _, a := range doc.Assumptions {
 		if !a.Provenance.IsRejected() && slices.Contains(a.AppliesTo, link.ID) && !slices.Contains(ids, a.ID) {
@@ -86,17 +86,17 @@ func underpinning(doc *toc.Document, link toc.CausalLink) []string {
 // lowest score among the link's assumptions (validated 1, holding 0.8,
 // untested 0.5, at risk 0.25, invalidated 0; 0.5 if it names none), and
 // rationale is 1 if the link gives one and 0 if not.
-func LinkStatuses(doc *toc.Document, assumptions []toc.AssumptionState, w toc.ConfidenceWeights) []toc.LinkStatus {
-	status := map[string]toc.AssumptionStatus{}
+func LinkStatuses(doc *impact.Model, assumptions []impact.AssumptionState, w impact.ConfidenceWeights) []impact.LinkStatus {
+	status := map[string]impact.AssumptionStatus{}
 	for _, a := range assumptions {
 		status[a.AssumptionID] = a.Status
 	}
-	out := make([]toc.LinkStatus, 0, len(doc.Links))
+	out := make([]impact.LinkStatus, 0, len(doc.Links))
 	for _, l := range doc.Links {
 		if l.Rejected() {
 			continue
 		}
-		state := toc.LinkStateOK
+		state := impact.LinkStateOK
 		aScore := noAssumptionScore
 		first := true
 		for _, id := range underpinning(doc, l) {
@@ -105,13 +105,13 @@ func LinkStatuses(doc *toc.Document, assumptions []toc.AssumptionState, w toc.Co
 				continue // rejected or unknown
 			}
 			switch s {
-			case toc.AssumptionInvalidated:
-				state = toc.LinkStateBroken
-			case toc.AssumptionAtRisk:
-				if state != toc.LinkStateBroken {
-					state = toc.LinkStateAtRisk
+			case impact.AssumptionInvalidated:
+				state = impact.LinkStateBroken
+			case impact.AssumptionAtRisk:
+				if state != impact.LinkStateBroken {
+					state = impact.LinkStateAtRisk
 				}
-			case toc.AssumptionUntested, toc.AssumptionHolding, toc.AssumptionValidated:
+			case impact.AssumptionUntested, impact.AssumptionHolding, impact.AssumptionValidated:
 			}
 			if sc := assumptionScore[s]; first || sc < aScore {
 				aScore, first = sc, false
@@ -122,12 +122,12 @@ func LinkStatuses(doc *toc.Document, assumptions []toc.AssumptionState, w toc.Co
 			rationale = 1
 		}
 		conf := w.Evidence*evidenceScore(doc, l.EvidenceIDs) + w.Assumptions*aScore + w.Rationale*rationale
-		out = append(out, toc.LinkStatus{LinkID: l.ID, State: state, Confidence: round6(math.Min(math.Max(conf, 0), 1))})
+		out = append(out, impact.LinkStatus{LinkID: l.ID, State: state, Confidence: round6(math.Min(math.Max(conf, 0), 1))})
 	}
 	return out
 }
 
-func evidenceScore(doc *toc.Document, ids []string) float64 {
+func evidenceScore(doc *impact.Model, ids []string) float64 {
 	var support, against float64
 	for _, id := range ids {
 		e, ok := doc.EvidenceRecord(id)
@@ -135,7 +135,7 @@ func evidenceScore(doc *toc.Document, ids []string) float64 {
 			continue
 		}
 		s := strengthScore[e.Strength]
-		if e.Direction == toc.EvidenceContradicts {
+		if e.Direction == impact.EvidenceContradicts {
 			against = math.Max(against, s)
 		} else {
 			support = math.Max(support, s)
@@ -154,15 +154,15 @@ type Propagation struct {
 	// Cap is the best pathway state an outcome may have: at risk for an
 	// outcome with a flagged assumption, off track when the assumption is
 	// critical and invalidated. Outcomes with no flag have no entry.
-	Cap map[string]toc.State
+	Cap map[string]impact.State
 }
 
 // Propagate marks the outcomes affected by assumptions that are invalidated
 // or at risk. An assumption bears on what it applies to: a link, an
 // outcome, or an intervention (through the outcomes it targets). It flags
 // those outcomes and everything downstream of them.
-func Propagate(doc *toc.Document, g *graph.Graph, assumptions []toc.AssumptionState) Propagation {
-	status := map[string]toc.AssumptionStatus{}
+func Propagate(doc *impact.Model, g *graph.Graph, assumptions []impact.AssumptionState) Propagation {
+	status := map[string]impact.AssumptionStatus{}
 	for _, a := range assumptions {
 		status[a.AssumptionID] = a.Status
 	}
@@ -175,7 +175,7 @@ func Propagate(doc *toc.Document, g *graph.Graph, assumptions []toc.AssumptionSt
 		direct[outcome][assumption] = true
 	}
 	for _, a := range doc.Assumptions {
-		if s := status[a.ID]; s != toc.AssumptionInvalidated && s != toc.AssumptionAtRisk {
+		if s := status[a.ID]; s != impact.AssumptionInvalidated && s != impact.AssumptionAtRisk {
 			continue
 		}
 		targets := map[string]bool{}
@@ -203,16 +203,16 @@ func Propagate(doc *toc.Document, g *graph.Graph, assumptions []toc.AssumptionSt
 
 	critical := map[string]bool{}
 	for _, a := range doc.Assumptions {
-		critical[a.ID] = a.Criticality == toc.CriticalityCritical
+		critical[a.ID] = a.Criticality == impact.CriticalityCritical
 	}
-	p := Propagation{Broken: map[string][]string{}, Cap: map[string]toc.State{}}
+	p := Propagation{Broken: map[string][]string{}, Cap: map[string]impact.State{}}
 	add := func(outcome, assumption string) {
 		if !slices.Contains(p.Broken[outcome], assumption) {
 			p.Broken[outcome] = append(p.Broken[outcome], assumption)
 		}
-		limit := toc.StateAtRisk
-		if critical[assumption] && status[assumption] == toc.AssumptionInvalidated {
-			limit = toc.StateOffTrack
+		limit := impact.StateAtRisk
+		if critical[assumption] && status[assumption] == impact.AssumptionInvalidated {
+			limit = impact.StateOffTrack
 		}
 		if cur, ok := p.Cap[outcome]; ok {
 			limit = Worse(cur, limit)
@@ -236,11 +236,11 @@ func Propagate(doc *toc.Document, g *graph.Graph, assumptions []toc.AssumptionSt
 }
 
 // Apply lowers each pathway state, in place, to the best its flags allow.
-func (p Propagation) Apply(pathway map[string]toc.State) {
+func (p Propagation) Apply(pathway map[string]impact.State) {
 	for id, limit := range p.Cap {
 		cur, ok := pathway[id]
 		if !ok || cur == "" {
-			cur = toc.StateUnmeasured
+			cur = impact.StateUnmeasured
 		}
 		pathway[id] = Worse(cur, limit)
 	}
@@ -256,7 +256,7 @@ func (p Propagation) Apply(pathway map[string]toc.State) {
 // highest outcome confidence among the outcomes that start a chain, that is,
 // that no causal link leads into, counting only paths that end at that
 // impact.
-func Confidence(doc *toc.Document, g *graph.Graph, links []toc.LinkStatus) (outcomes map[string]float64, impacts map[string]float64) {
+func Confidence(doc *impact.Model, g *graph.Graph, links []impact.LinkStatus) (outcomes map[string]float64, impacts map[string]float64) {
 	byPair := map[[2]string]float64{}
 	for _, l := range doc.Links {
 		if l.Rejected() || l.Feedback {
@@ -303,7 +303,7 @@ func Confidence(doc *toc.Document, g *graph.Graph, links []toc.LinkStatus) (outc
 		}
 	}
 	for _, o := range doc.Outcomes {
-		if o.Rejected() || o.Level != toc.LevelImpact {
+		if o.Rejected() || o.Level != impact.LevelImpact {
 			continue
 		}
 		best, found := 0.0, false

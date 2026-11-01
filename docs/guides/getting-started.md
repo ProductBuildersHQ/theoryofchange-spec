@@ -3,8 +3,8 @@
 ## Install
 
 ```bash
-go install github.com/ProductBuildersHQ/theoryofchange-spec/cmd/theoryofchange@latest
-theoryofchange --version
+go install github.com/ProductBuildersHQ/impact-model/cmd/impact-model@latest
+impact-model --version
 ```
 
 The tool is a single Go binary. Three optional programs add output formats; the
@@ -18,30 +18,30 @@ without writing anything:
 | [Pandoc](https://pandoc.org) (`pandoc`) | Word and PowerPoint export |
 
 Markdown reports, CSV tables, Marp Markdown, and everything that checks or
-measures a theory need none of them.
+measures an impact model need none of them.
 
-## Create a theory
+## Create an impact model
 
 ```bash
-theoryofchange init --id my-program --name "My program" --out theory.yaml
+impact-model init --id my-program --name "My program" --out impact-model.yaml
 ```
 
-This writes a small starter theory that already passes validation, with `TODO`
-placeholders to replace. A theory is a YAML or JSON file; the format follows the
+This writes a small starter impact model that already passes validation, with `TODO`
+placeholders to replace. An impact model is a YAML or JSON file; the format follows the
 file extension. Open it in any editor, or change it through the commands in
-[Authoring a theory](authoring.md).
+[Authoring an impact model](authoring.md).
 
 ## Check it
 
 ```bash
-theoryofchange validate theory.yaml   # schema and structure
-theoryofchange lint theory.yaml       # is the theory sound?
-theoryofchange fmt theory.yaml        # write it in canonical form
+impact-model validate impact-model.yaml   # schema and structure
+impact-model lint impact-model.yaml       # is the impact model sound?
+impact-model fmt impact-model.yaml        # write it in canonical form
 ```
 
 `validate` says the document is well formed: the schema, duplicate IDs,
 references that do not resolve, invalid values, bad dates. `lint` says whether
-the theory is sound. A new theory is GO under `--profile draft`; the default
+the impact model is sound. A new impact model is GO under `--profile draft`; the default
 `standard` profile also reports warnings.
 
 `fmt` rewrites a file in canonical form: a stable field order, two-space
@@ -52,17 +52,17 @@ canonical; put notes in `description` and `narrative` fields.
 ## Ask questions of the causal graph
 
 ```bash
-theoryofchange graph theory.yaml                      # a summary
-theoryofchange graph theory.yaml --orphans            # outcomes nothing leads to
-theoryofchange graph theory.yaml --dead-ends          # outcomes that lead nowhere
-theoryofchange graph theory.yaml --upstream --from oc-adoption
-theoryofchange graph theory.yaml --format dot | dot -Tsvg > graph.svg
+impact-model graph impact-model.yaml                      # a summary
+impact-model graph impact-model.yaml --orphans            # outcomes nothing leads to
+impact-model graph impact-model.yaml --dead-ends          # outcomes that lead nowhere
+impact-model graph impact-model.yaml --upstream --from oc-adoption
+impact-model graph impact-model.yaml --format dot | dot -Tsvg > graph.svg
 ```
 
 ## Get a first report
 
 ```bash
-theoryofchange report definitions theory.yaml --out definitions.md
+impact-model report definitions impact-model.yaml --out definitions.md
 ```
 
 This renders the pathways, logic models, metric definitions, and glossary as one
@@ -72,18 +72,18 @@ any data exists.
 ## Measure progress
 
 Once you have numbers, put them in an observation set (see
-[Measuring progress](measurement.md)) and ask how far the theory has come:
+[Measuring progress](measurement.md)) and ask how far the impact model has come:
 
 ```bash
-theoryofchange status theory.yaml -O observations.yaml
-theoryofchange report exec theory.yaml -O observations.yaml -o exec.md
+impact-model status impact-model.yaml -O observations.yaml
+impact-model report exec impact-model.yaml -O observations.yaml -o exec.md
 ```
 
 ## Working in a Git repository
 
 Specifications are meant to be diffed and reviewed. Two habits help:
 
-- Run `theoryofchange fmt --check *.yaml` in CI. It exits with code 1 if any
+- Run `impact-model fmt --check *.yaml` in CI. It exits with code 1 if any
   file is not in canonical form.
 - Add a `.gitattributes` line so Windows checkouts keep LF line endings. The
   canonical form is byte-exact LF, and a checkout that converts to CRLF will
@@ -108,5 +108,5 @@ Specifications are meant to be diffed and reviewed. Two habits help:
 
 ## Next
 
-Read [Authoring a theory](authoring.md), or open a complete theory in
+Read [Authoring an impact model](authoring.md), or open a complete impact model in
 [Examples](examples.md).

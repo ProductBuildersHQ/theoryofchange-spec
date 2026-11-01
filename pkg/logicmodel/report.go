@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
 // Format is how a diagram is written.
@@ -17,7 +17,7 @@ const (
 )
 
 // Diagrams renders the layered logic model diagram of each pathway, or of the
-// whole theory when it has no pathways, each under a heading and in a fenced
+// whole impact model when it has no pathways, each under a heading and in a fenced
 // block that names its format.
 func Diagrams(whole *report.View, pathways []*report.View, f Format) (string, error) {
 	views := pathways

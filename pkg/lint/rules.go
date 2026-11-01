@@ -5,8 +5,8 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // funcRule is a rule written as a function.
@@ -46,31 +46,31 @@ func at(array string, i int) string { return "/" + array + "/" + strconv.Itoa(i)
 
 // activeOutcomes returns the outcomes that were not rejected, with their
 // index in the document.
-func activeOutcomes(d *toc.Document) []indexed[toc.Outcome] {
-	var out []indexed[toc.Outcome]
+func activeOutcomes(d *impact.Model) []indexed[impact.Outcome] {
+	var out []indexed[impact.Outcome]
 	for i, o := range d.Outcomes {
 		if !o.Rejected() {
-			out = append(out, indexed[toc.Outcome]{i, o})
+			out = append(out, indexed[impact.Outcome]{i, o})
 		}
 	}
 	return out
 }
 
-func activeLinks(d *toc.Document) []indexed[toc.CausalLink] {
-	var out []indexed[toc.CausalLink]
+func activeLinks(d *impact.Model) []indexed[impact.CausalLink] {
+	var out []indexed[impact.CausalLink]
 	for i, l := range d.Links {
 		if !l.Rejected() {
-			out = append(out, indexed[toc.CausalLink]{i, l})
+			out = append(out, indexed[impact.CausalLink]{i, l})
 		}
 	}
 	return out
 }
 
-func activeGroups(d *toc.Document) []indexed[toc.PreconditionGroup] {
-	var out []indexed[toc.PreconditionGroup]
+func activeGroups(d *impact.Model) []indexed[impact.PreconditionGroup] {
+	var out []indexed[impact.PreconditionGroup]
 	for i, g := range d.Groups {
 		if !g.Rejected() {
-			out = append(out, indexed[toc.PreconditionGroup]{i, g})
+			out = append(out, indexed[impact.PreconditionGroup]{i, g})
 		}
 	}
 	return out
@@ -82,7 +82,7 @@ type indexed[T any] struct {
 }
 
 // outcomeLevel returns the level of an outcome ID, or false for any other ID.
-func outcomeLevel(d *toc.Document, id string) (toc.Level, bool) {
+func outcomeLevel(d *impact.Model, id string) (impact.Level, bool) {
 	o, ok := d.Outcome(id)
 	if !ok {
 		return "", false
@@ -93,16 +93,16 @@ func outcomeLevel(d *toc.Document, id string) (toc.Level, bool) {
 // ---- structure -------------------------------------------------------------
 
 func init() {
-	register("TOC-STR-001", validate.SeverityError, "The theory has at least one impact outcome.", func(c *Context) []Finding {
+	register("IMP-STR-001", validate.SeverityError, "The impact model has at least one impact outcome.", func(c *Context) []Finding {
 		for _, o := range activeOutcomes(c.Doc) {
-			if o.v.Level == toc.LevelImpact {
+			if o.v.Level == impact.LevelImpact {
 				return nil
 			}
 		}
 		return []Finding{{Path: "/outcomes", Message: "no outcome has level impact; say what the change is ultimately for"}}
 	})
 
-	register("TOC-STR-002", validate.SeverityError, "Causal links contain no cycle, unless marked as feedback.", func(c *Context) []Finding {
+	register("IMP-STR-002", validate.SeverityError, "Causal links contain no cycle, unless marked as feedback.", func(c *Context) []Finding {
 		var out []Finding
 		for _, cyc := range c.Graph.Cycles() {
 			out = append(out, Finding{Element: cyc[0], Message: fmt.Sprintf("these elements cause each other in a loop: %v; mark the link that closes the loop as feedback, or remove it", cyc)})
@@ -110,9 +110,9 @@ func init() {
 		return out
 	})
 
-	register("TOC-STR-003", validate.SeverityError, "Every outcome below impact leads to an impact outcome.", func(c *Context) []Finding {
+	register("IMP-STR-003", validate.SeverityError, "Every outcome below impact leads to an impact outcome.", func(c *Context) []Finding {
 		if !hasImpact(c.Doc) {
-			return nil // TOC-STR-001 reports the missing impact
+			return nil // IMP-STR-001 reports the missing impact
 		}
 		dead := map[string]bool{}
 		for _, id := range c.Graph.DeadEnds() {
@@ -127,7 +127,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-STR-004", validate.SeverityWarning, "Every outcome has a precondition or an intervention that targets it.", func(c *Context) []Finding {
+	register("IMP-STR-004", validate.SeverityWarning, "Every outcome has a precondition or an intervention that targets it.", func(c *Context) []Finding {
 		orphan := map[string]bool{}
 		for _, id := range c.Graph.Orphans() {
 			orphan[id] = true
@@ -141,10 +141,10 @@ func init() {
 		return out
 	})
 
-	register("TOC-STR-005", validate.SeverityWarning, "An at_least rule on an outcome asks for between one and all of its preconditions.", func(c *Context) []Finding {
+	register("IMP-STR-005", validate.SeverityWarning, "An at_least rule on an outcome asks for between one and all of its preconditions.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
-			if o.v.Logic == nil || o.v.Logic.Type != toc.LogicAtLeast {
+			if o.v.Logic == nil || o.v.Logic.Type != impact.LogicAtLeast {
 				continue
 			}
 			if n := preconditionCount(c, o.v.ID); o.v.Logic.K < 1 || o.v.Logic.K > n {
@@ -155,7 +155,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-STR-006", validate.SeverityWarning, "Links run from lower levels to higher ones, unless they are feedback.", func(c *Context) []Finding {
+	register("IMP-STR-006", validate.SeverityWarning, "Links run from lower levels to higher ones, unless they are feedback.", func(c *Context) []Finding {
 		var out []Finding
 		for _, l := range activeLinks(c.Doc) {
 			from, ok1 := outcomeLevel(c.Doc, l.v.From)
@@ -169,12 +169,12 @@ func init() {
 		return out
 	})
 
-	register("TOC-STR-007", validate.SeverityWarning, "Precondition groups are complete: each member leads into the group's target, and groups do not contain each other in a loop.", checkGroups)
+	register("IMP-STR-007", validate.SeverityWarning, "Precondition groups are complete: each member leads into the group's target, and groups do not contain each other in a loop.", checkGroups)
 }
 
-func hasImpact(d *toc.Document) bool {
+func hasImpact(d *impact.Model) bool {
 	for _, o := range activeOutcomes(d) {
-		if o.v.Level == toc.LevelImpact {
+		if o.v.Level == impact.LevelImpact {
 			return true
 		}
 	}
@@ -184,7 +184,7 @@ func hasImpact(d *toc.Document) bool {
 // incomingSources returns the distinct sources of the active, non-feedback
 // causal links into an outcome. Interventions that target the outcome are
 // not counted: they bring it about, but outcomes do not combine them.
-func incomingSources(d *toc.Document, id string) []string {
+func incomingSources(d *impact.Model, id string) []string {
 	var out []string
 	for _, l := range activeLinks(d) {
 		if l.v.To == id && !l.v.Feedback && !slices.Contains(out, l.v.From) {
@@ -215,7 +215,7 @@ func preconditionCount(c *Context, id string) int {
 
 func checkGroups(c *Context) []Finding {
 	var out []Finding
-	active := map[string]toc.PreconditionGroup{}
+	active := map[string]impact.PreconditionGroup{}
 	for _, g := range activeGroups(c.Doc) {
 		active[g.v.ID] = g.v
 	}
@@ -245,7 +245,7 @@ func checkGroups(c *Context) []Finding {
 }
 
 // groupLoops reports whether following group members from id returns to id.
-func groupLoops(groups map[string]toc.PreconditionGroup, id string) bool {
+func groupLoops(groups map[string]impact.PreconditionGroup, id string) bool {
 	seen := map[string]bool{}
 	var walk func(string) bool
 	walk = func(cur string) bool {
@@ -272,8 +272,8 @@ func groupLoops(groups map[string]toc.PreconditionGroup, id string) bool {
 // ---- causal logic ----------------------------------------------------------
 
 func init() {
-	aboveShortTerm := func(l toc.Level) bool { return l.Rank() > toc.LevelShortTerm.Rank() }
-	linkRule := func(id, desc, msg string, ok func(toc.CausalLink) bool) {
+	aboveShortTerm := func(l impact.Level) bool { return l.Rank() > impact.LevelShortTerm.Rank() }
+	linkRule := func(id, desc, msg string, ok func(impact.CausalLink) bool) {
 		register(id, validate.SeverityWarning, desc, func(c *Context) []Finding {
 			var out []Finding
 			for _, l := range activeLinks(c.Doc) {
@@ -284,24 +284,24 @@ func init() {
 			return out
 		})
 	}
-	linkRule("TOC-LOG-001", "Every link into a medium-term, long-term, or impact outcome says why it holds.",
+	linkRule("IMP-LOG-001", "Every link into a medium-term, long-term, or impact outcome says why it holds.",
 		"this link has no rationale; say why the first outcome makes the second more likely",
-		func(l toc.CausalLink) bool { return l.Rationale != "" })
-	linkRule("TOC-LOG-002", "Every link into a medium-term, long-term, or impact outcome names an assumption.",
+		func(l impact.CausalLink) bool { return l.Rationale != "" })
+	linkRule("IMP-LOG-002", "Every link into a medium-term, long-term, or impact outcome names an assumption.",
 		"this link has no assumption; say what must be true for it to hold",
-		func(l toc.CausalLink) bool { return len(l.AssumptionIDs) > 0 })
+		func(l impact.CausalLink) bool { return len(l.AssumptionIDs) > 0 })
 
-	register("TOC-LOG-003", validate.SeverityInfo, "Impact outcomes have at least two preconditions.", func(c *Context) []Finding {
+	register("IMP-LOG-003", validate.SeverityInfo, "Impact outcomes have at least two preconditions.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
-			if o.v.Level == toc.LevelImpact && len(incomingSources(c.Doc, o.v.ID)) < 2 {
-				out = append(out, Finding{Path: at("outcomes", o.i), Element: o.v.ID, Message: "a single chain leads to this impact; theories with one chain are usually incomplete"})
+			if o.v.Level == impact.LevelImpact && len(incomingSources(c.Doc, o.v.ID)) < 2 {
+				out = append(out, Finding{Path: at("outcomes", o.i), Element: o.v.ID, Message: "a single chain leads to this impact; impact models with one chain are usually incomplete"})
 			}
 		}
 		return out
 	})
 
-	register("TOC-LOG-004", validate.SeverityInfo, "Outcomes with several incoming links say whether all, any, or some are needed.", func(c *Context) []Finding {
+	register("IMP-LOG-004", validate.SeverityInfo, "Outcomes with several incoming links say whether all, any, or some are needed.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {
 			if len(incomingSources(c.Doc, o.v.ID)) < 2 || o.v.Logic != nil || len(c.Graph.GroupsFor(o.v.ID)) > 0 {
