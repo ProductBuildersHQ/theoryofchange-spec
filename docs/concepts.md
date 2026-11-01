@@ -18,6 +18,7 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Metadata, owners, status | `Document.Metadata` (`prism-core` `Metadata`) | 004 |
 | Whose theory it is (perspective) | `Document.Perspective` (`actorId`, `role`, `futureRef`) | 004 |
 | Problem statement, target population, time horizon, narrative | `Document.Context` | 004 |
+| Purpose: why the organization exists and what it works toward (a statement, not a causal element) | `Context.Mission`, `Context.Vision` | 064 |
 | Ceiling of accountability (ActKnowledge) | `Document.Ceiling` | 004 |
 | Revision / adaptive management, quality review (plausible, feasible, testable) | `Document.Revisions[]` (`Revision`, `QualityReview`) | 004 |
 | Decisions requested | `Document.Decisions[]` | 004 |
@@ -41,7 +42,7 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Polarity, lag, feedback loops (reinforcing / balancing) | `CausalLink.Polarity`, `Lag`, `Feedback`, `LoopType` | 004 |
 | Intervention, strategy, activity, outputs | `Intervention` (`Targets`, `Outputs`, `Status`, `Resources`) | 004 |
 | Capability links (PRISM) | `Intervention.Capabilities` (`prism-core` `CapabilityRef`) | 004 |
-| Pathways / program areas | `Document.Pathways[]` (`Pathway`) | 032 |
+| Pathways / program areas / products | `Document.Pathways[]` (`Pathway`, kind `program` or `product`) | 032, 064 |
 | Nested ToCs (overarching vs outcome-level, UNDG) | `Document.Parent`, `Pathway.ChildToc` | 032 |
 
 ## Assumptions, risks, context, evidence
@@ -79,6 +80,10 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Indicator subject: outcome, output, or assumption | `Indicator.Measures` | 004 |
 | Shared metric definitions with formulas | `Document.Metrics[]` (`Metric`); `Indicator.MetricID`, `RollupFrom` | 033 |
 | Attribution vs contribution | `Indicator.Claim`, `Caveats` | 033 |
+| Metric tier: activity, output, outcome, impact (input, output, and driver metrics) | `Document.IndicatorTier` (derived from what the indicator measures; never stored) | 063 |
+| North Star, one metric that matters, guardrails, for a program or product | `Pathway.Focus` (`NorthStarID`, `OneMetricID`, `GuardrailIDs`, `Rationale`) | 064 |
+| Headline metrics: the few numbers an audience leads with, in its order and wording | `Audience.Headline[]` (`HeadlineMetric`: `IndicatorID`, `Label`, `Note`) | 064 |
+| A metric worked out from others, such as cost per outcome | `Indicator.ComposedOf` (`Composition`: `Op` ratio, product, sum, or difference, and `IndicatorIDs`) | 067 |
 | Data availability | `Indicator.DataAvailability` | 052 |
 | Metric selection, collection burden, budget | `SelectionCriterion`, `Indicator.Selection`, `Indicator.Collection`, `MeasurementBudget` | 034 |
 | Observations (time series, data quality) | `ObservationSet.Observations[]` (`Observation`) | 005 |
