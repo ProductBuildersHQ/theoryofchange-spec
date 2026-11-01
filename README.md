@@ -22,8 +22,9 @@ An AI-native, spec-driven way to capture, measure, and report on a
 a Go-first data model with generated JSON Schema, plus an SDK, the
 `theoryofchange` CLI, and an MCP server.
 
-> **Status:** the first release, v0.1.0, is prepared; see the
-> [release notes](docs/releases/v0.1.0.md).
+> **Status:** the latest release is v0.2.0; see the
+> [release notes](docs/releases/v0.2.0.md). It renames the `intermediate` outcome
+> level to `medium_term`, so a theory written for v0.1.0 needs that one change.
 
 ## What is a Theory of Change?
 

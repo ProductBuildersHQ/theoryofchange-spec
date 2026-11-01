@@ -18,7 +18,9 @@ It shows two impact layers (member change and resident change) with the ceiling
 of accountability between them; 23 outcomes across all five levels with
 `all`, `any`, and `at_least` precondition logic; a metric library; measurement
 design with weighted selection criteria and a collection budget; a problem tree
-and target groups; audiences and a story codebook; and a spreadsheet import with
+and target groups; audiences and a story codebook; a mission and vision, a North
+Star with a guardrail for each program area, and headline lists that lead the
+board, funders, and members with different numbers; and a spreadsheet import with
 its column mapping. The folder holds the theory, a quarter of observations with
 stories and a learning review, and a monthly CSV with its `mapping.yaml`.
 
