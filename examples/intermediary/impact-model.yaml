@@ -26,6 +26,13 @@ context:
     end: "2028-12-31"
   mission: Strengthen the nonprofits of Riverbend County so that residents get timely, good-quality services.
   vision: A county where every resident can count on a strong local nonprofit when they need one.
+  values:
+    - name: Members first
+      description: Every program answers to what member nonprofits need, not to what is easy to offer.
+    - name: Stronger together
+      description: Shared services and a shared voice do more than each organization can alone.
+    - name: Candor about results
+      description: Report what the evidence shows, including when it disappoints, and change course.
   narrative: Riverbend Nonprofit Network is a membership network with about 8 staff. It works through three program areas, each a pathway in this theory. Learning Exchange builds leadership and peer ties, Shared Services lowers overhead and widens the grant pipeline, and Civic Voice helps members take joint positions and be heard by local government and funders. The three pathways converge on shared long-term outcomes about member collaboration, then on resident-level impact. Layer 1 is change in member nonprofits, which the network influences and measures directly. Layer 2 is change for residents, which the network tracks and contributes to but does not own.
 ceilingOfAccountability:
   level: long_term
