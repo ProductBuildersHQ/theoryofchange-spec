@@ -254,6 +254,25 @@ func init() {
 		return []Finding{{Path: "/causes", Message: "causes are declared but no outcome addresses an underlying or structural one"}}
 	})
 
+	register("IMP-CAU-003", validate.SeverityWarning, "A cause contributes only to causes at its own level or nearer the problem.", func(c *Context) []Finding {
+		depth := map[impact.CauseLevel]int{impact.CauseImmediate: 1, impact.CauseUnderlying: 2, impact.CauseStructural: 3}
+		var out []Finding
+		for i, cause := range c.Doc.Causes {
+			if cause.Rejected() {
+				continue
+			}
+			for _, id := range cause.Parents {
+				p, ok := c.Doc.Cause(id)
+				if !ok || p.Rejected() || depth[p.Level] <= depth[cause.Level] {
+					continue
+				}
+				out = append(out, Finding{Path: at("causes", i) + "/parents", Element: cause.ID,
+					Message: fmt.Sprintf("this %s cause contributes to %q, which is %s and so further from the problem; parents point from deeper causes toward the problem, so the link may be reversed", cause.Level, id, p.Level)})
+			}
+		}
+		return out
+	})
+
 	register("IMP-RSP-001", validate.SeverityWarning, "Shared and partner outcomes name who delivers them.", func(c *Context) []Finding {
 		var out []Finding
 		for _, o := range activeOutcomes(c.Doc) {

@@ -31,6 +31,16 @@ func TestProblemTreeRulesFindSeededDefectsAndAcceptRepairs(t *testing.T) {
 		{"IMP-EFF-001", "eff-1", func(d *impact.Model) {},
 			func(d *impact.Model) { d.Effects[0].OutOfScope = &impact.OutOfScope{Reason: "Others handle it."} }},
 		{"IMP-EFF-002", "", func(d *impact.Model) { relieve(d, "oc-s1") }, func(d *impact.Model) { relieve(d, "oc-impact") }},
+		// An immediate cause listing a structural one as its parent is backwards.
+		{"IMP-CAU-003", "cause-near", func(d *impact.Model) {
+			d.Causes = []impact.Cause{
+				{ID: "cause-deep", Statement: "No public transport", Level: impact.CauseStructural},
+				{ID: "cause-near", Statement: "People miss buses", Level: impact.CauseImmediate, Parents: []string{"cause-deep"}},
+			}
+		}, func(d *impact.Model) {
+			d.Causes[1].Parents = nil
+			d.Causes[0].Parents = []string{"cause-near"}
+		}},
 	}
 	for i, tt := range tests {
 		t.Run(fmt.Sprintf("%s/%d", tt.rule, i), func(t *testing.T) {
