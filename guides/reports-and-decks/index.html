@@ -614,10 +614,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next" class="md-nav__link">
+  <a href="#the-layered-logic-model-diagram" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next
+        The layered logic model diagram
       
     </span>
   </a>
@@ -625,10 +625,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-layered-logic-model-diagram" class="md-nav__link">
+  <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The layered logic model diagram
+        Next
       
     </span>
   </a>
@@ -1716,10 +1716,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next" class="md-nav__link">
+  <a href="#the-layered-logic-model-diagram" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next
+        The layered logic model diagram
       
     </span>
   </a>
@@ -1727,10 +1727,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-layered-logic-model-diagram" class="md-nav__link">
+  <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The layered logic model diagram
+        Next
       
     </span>
   </a>
@@ -1833,7 +1833,7 @@ them before any data exists.</p>
 </tr>
 <tr>
 <td><code>definitions</code></td>
-<td>All of the above as one document</td>
+<td>One document for a workshop: the problem tree (when the model records causes or effects), the causal pathways, logic models, outcome maps, logframes, metric definitions, and glossary</td>
 </tr>
 </tbody>
 </table>
@@ -1981,9 +1981,8 @@ current value, score, status, and confidence. <code>export journey</code> writes
 journeys. <code>export v2mom</code> writes a V2MOM with one method per pathway; the
 <a href="../v2mom/">V2MOM guide</a> maps each part. <code>export dmaic</code> writes a DMAIC metrics
 document for the pathways marked for DMAIC; the <a href="../dmaic/">DMAIC guide</a> maps
-each part. All four are JSON for the PRISM tools.</p>
-<h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
-<p><a href="../review-round-trip/">Review round trip</a></p>
+each part. All four are JSON for the PRISM tools, and an agent gets the same
+exports from the MCP server's <code>impact_export</code> tool.</p>
 <h2 id="the-layered-logic-model-diagram">The layered logic model diagram<a class="headerlink" href="#the-layered-logic-model-diagram" title="Permanent link">&para;</a></h2>
 <p><code>logic-model --diagram</code> draws each stage as a group and joins the groups, which
 says only that one stage follows another. The layered diagram draws the real
@@ -2001,6 +2000,8 @@ it would cut across the boxes between, and listed under it.</p>
 by <code>pkg/logicmodel</code>, which builds a layered graph from the impact model and writes it
 through <a href="https://github.com/grokify/d2vision">d2vision</a>'s diagram spec, the same
 spec that writes the D2 and the Mermaid.</p>
+<h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
+<p><a href="../review-round-trip/">Review round trip</a></p>
 
 
 

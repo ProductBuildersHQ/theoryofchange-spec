@@ -3445,6 +3445,16 @@ require a DAG), <code>ErrUnsupportedFormat</code>. Callers use <code>errors.Is</
 <td><code>{ format: "marp", content }</code> (no export)</td>
 </tr>
 <tr>
+<td><code>impact_export</code></td>
+<td><code>{ document \| path, observations…, kind: "okr"\|"journey"\|"v2mom"\|"dmaic", asOf? }</code></td>
+<td><code>{ kind, document, omissions?[] }</code>; a model the format cannot be drawn from is refused with an error naming what to add</td>
+</tr>
+<tr>
+<td><code>impact_diff</code></td>
+<td><code>{ old: { document \| path }, new: { document \| path } }</code></td>
+<td>the structural diff</td>
+</tr>
+<tr>
 <td><code>impact_judge_bundle</code></td>
 <td><code>{ document \| path, profile? }</code></td>
 <td>judge bundle JSON</td>
@@ -3974,7 +3984,7 @@ assumptions, and pathways, ordered per INV-3.</p>
 </tr>
 <tr>
 <td><code>definitions</code></td>
-<td>All definition reports in one document (the workshop pack)</td>
+<td>The workshop pack, in this order: the problem tree (Mermaid, only when the model has a live cause or effect), causal pathways, logic models, outcome maps, logframes, metric definitions, glossary; each section is the matching report verbatim</td>
 </tr>
 </tbody>
 </table>

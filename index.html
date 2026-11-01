@@ -1741,7 +1741,7 @@ program, product, or organization expects to bring about change. It is a
 interventions should change which outcomes, why each step should lead to the
 next, and how to measure whether it did. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the <code>impact-model</code> CLI, and an MCP server.</p>
-<p>You describe the change once, in one impact model. The
+<p>You describe the change once, in one impact model. The problem tree, the
 <a href="https://en.wikipedia.org/wiki/Theory_of_change">theory of change</a>, the logic
 model, the outcome map, the logframe, strategy formats such as OKRs and V2MOM,
 and improvement formats such as DMAIC are <strong>projections</strong> of it. Each draws the
@@ -1751,9 +1751,9 @@ a part of another.</p>
   classDef model fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
   classDef method fill:#eef7ee,stroke:#2e7d32,color:#111
   classDef strategy fill:#e8eefc,stroke:#3f51b5,color:#111
-  classDef planned fill:#f3f3f3,stroke:#757575,stroke-dasharray:4 3,color:#111
 
-  im["Impact model&lt;br/&gt;outcomes, causal links, assumptions, evidence,&lt;br/&gt;interventions, indicators, audiences"]:::model
+  im["Impact model&lt;br/&gt;problem, causes, effects, outcomes, causal links,&lt;br/&gt;assumptions, evidence, interventions, indicators, audiences"]:::model
+  im --&gt; pt["Problem tree"]:::method
   im --&gt; toc["Theory of change"]:::method
   im --&gt; lm["Logic model"]:::method
   im --&gt; om["Outcome map"]:::method
@@ -1765,6 +1765,8 @@ a part of another.</p>
 <p>An impact model is one structured description of <strong>how and why change is
 expected to happen</strong>. It holds:</p>
 <ul>
+<li>the <strong>problem</strong> it responds to, the <strong>causes</strong> that produce it, and the
+  <strong>effects</strong> it leads to;</li>
 <li>the <strong>outcomes</strong> that should change, at five levels from output to impact, and
   the <strong>causal links</strong> between them, each with a reason to believe it;</li>
 <li>the <strong>assumptions</strong> that must hold for a link to work, and the <strong>evidence</strong> for
@@ -1837,7 +1839,9 @@ projection, and one model can produce many.</p>
 </tr>
 </tbody>
 </table>
-<p>Each projection leaves something out. A logic model shows the sequence from what
+<p>Each projection leaves something out. A problem tree shows the problem, what
+causes it, and what it leads to, but not the steps by which a program changes
+it. A logic model shows the sequence from what
 goes in to what comes out, and rarely why each step holds. A theory of change
 shows why, and says less about what is delivered. A logframe fits the model into
 a matrix for contracts, and OKRs keep only what a team commits to for a period.
@@ -1845,22 +1849,27 @@ None is derived from another. The impact model holds what they all need, so any
 of them can be drawn from it. A logic model that arrives on its own can seed a
 <em>candidate</em> impact model, but it cannot supply the reasons and assumptions it
 never held, so those stay marked as inferred until someone confirms them.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>impact-model<span class="w"> </span>report<span class="w"> </span>pathway<span class="w"> </span>impact-model.yaml<span class="w">           </span><span class="c1"># the theory of change, as pathways of change</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>impact-model<span class="w"> </span>report<span class="w"> </span>outcome-map<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># the outcome map</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logic-model<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># a logic model for each pathway</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logframe<span class="w"> </span>impact-model.yaml<span class="w">          </span><span class="c1"># the logframe matrix</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>impact-model<span class="w"> </span>report<span class="w"> </span>definitions<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># all of them, plus metrics and glossary</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>okr<span class="w"> </span>impact-model.yaml<span class="w">               </span><span class="c1"># OKRs for the PRISM tools</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>impact-model<span class="w"> </span>report<span class="w"> </span>problem-tree<span class="w"> </span>impact-model.yaml<span class="w">      </span><span class="c1"># the problem tree: causes, core problem, effects</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>impact-model<span class="w"> </span>report<span class="w"> </span>pathway<span class="w"> </span>impact-model.yaml<span class="w">           </span><span class="c1"># the theory of change, as pathways of change</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>impact-model<span class="w"> </span>report<span class="w"> </span>outcome-map<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># the outcome map</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logic-model<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># a logic model for each pathway</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logframe<span class="w"> </span>impact-model.yaml<span class="w">          </span><span class="c1"># the logframe matrix</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>impact-model<span class="w"> </span>report<span class="w"> </span>definitions<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># all of them, plus metrics and glossary</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>okr<span class="w"> </span>impact-model.yaml<span class="w">               </span><span class="c1"># OKRs for the PRISM tools</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>journey<span class="w"> </span>impact-model.yaml<span class="w">           </span><span class="c1"># outcome journeys for the PRISM tools</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>v2mom<span class="w"> </span>impact-model.yaml<span class="w">             </span><span class="c1"># a V2MOM</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>dmaic<span class="w"> </span>impact-model.yaml<span class="w">             </span><span class="c1"># DMAIC improvement efforts</span>
 </code></pre></div>
 <p>Change the model once and every projection changes with it, so the numbers and
 labels never drift apart. (The outcome map here is the outcomes framework from the
 ActKnowledge method; it is not IDRC's <em>Outcome Mapping</em>, which tracks progress
 markers for the partners a program influences.)</p>
 <h2 id="the-theory-of-change">The theory of change<a class="headerlink" href="#the-theory-of-change" title="Permanent link">&para;</a></h2>
-<p>The theory of change is the projection most programs start from. It explains <strong>how and why a program expects to bring about a
-change</strong>. It starts from the long-term goal and works backwards: what
-conditions must exist for the goal to be reached, what must exist before each of
-those, and so on down to what the program does today. Each step is an
+<p>The theory of change is the projection most programs start from. It explains
+<strong>how and why a program expects to bring about a change</strong>. It starts from the
+long-term goal and works backwards: what conditions must exist for the goal to
+be reached, what must exist before each of those, and so on down to what the
+program does today. Each step is an
 <strong>outcome</strong>; each arrow between outcomes is a <strong>causal link</strong> with a reason for
 believing it holds; and each belief that has to be true for a link to work is an
 <strong>assumption</strong> that can be tested.</p>
@@ -2020,7 +2029,7 @@ program, shown as a pathway. The second shows how its metrics reach each audienc
 </tr>
 <tr>
 <td><strong>Artifacts for each audience</strong></td>
-<td>Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash</td>
+<td>Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR, V2MOM, and DMAIC exports, all from one source and stamped with the version and hash</td>
 </tr>
 <tr>
 <td><strong>Review that comes back</strong></td>
@@ -2032,7 +2041,7 @@ program, shown as a pathway. The second shows how its metrics reach each audienc
 </tr>
 <tr>
 <td><strong>Ready for AI agents</strong></td>
-<td>An MCP server with ten tools and five skills lets an agent draft, edit, measure, and report, under the same rules as a person</td>
+<td>An MCP server and agent skills let an agent draft, edit, measure, report, and export, under the same rules as a person</td>
 </tr>
 </tbody>
 </table>
@@ -2096,9 +2105,10 @@ whether it did.</p>
 </table>
 <p>The <a href="releases/v0.5.0/">release notes</a> list what the latest release contains, and <a href="releases/v0.1.0/">v0.1.0</a> the first.</p>
 <h2 id="part-of-the-prism-ecosystem">Part of the PRISM ecosystem<a class="headerlink" href="#part-of-the-prism-ecosystem" title="Permanent link">&para;</a></h2>
-<p>Shared primitives come from <a href="https://github.com/grokify/prism-core">prism-core</a>;
-OKR and outcome-journey exports target
-<a href="https://github.com/grokify/prism-roadmap">prism-roadmap</a>; rubrics and GO/NO-GO
+<p>Shared primitives come from
+<a href="https://github.com/grokify/prism-core">prism-core</a>. The OKR, outcome-journey,
+V2MOM, and DMAIC exports target the goals packages of
+<a href="https://github.com/grokify/prism-roadmap">prism-roadmap</a>. Rubrics and GO/NO-GO
 reports use <a href="https://github.com/plexusone/structured-evaluation">structured-evaluation</a>.</p>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/ProductBuildersHQ/impact-model/blob/main/LICENSE">MIT</a></p>

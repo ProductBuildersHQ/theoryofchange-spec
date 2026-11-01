@@ -1476,6 +1476,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-23-exports-for-agents-and-an-overview-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 23 — Exports for Agents and an Overview Refresh
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1989,6 +2000,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-23-exports-for-agents-and-an-overview-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 23 — Exports for Agents and an Overview Refresh
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2012,7 +2034,7 @@
 <h1 id="roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting">ROADMAP — Impact Model Specification — Go-first model, JSON Schema, measurement, and leadership reporting<a class="headerlink" href="#roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-THEORYOFCHANGESPEC-001</code>
 <strong>Repository:</strong> <code>github.com/ProductBuildersHQ/impact-model</code>
-<strong>Status:</strong> In progress — 19 of 22 phases completed</p>
+<strong>Status:</strong> In progress — 20 of 23 phases completed</p>
 <blockquote>
 <p>RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, <code>Refs: &lt;RMI-ID&gt;</code>. Items from before the rename to impact-model are <code>RMI-THEORYOFCHANGESPEC-001</code> to <code>-076</code>; later items are <code>RMI-IMPACTMODEL-&lt;NNN&gt;</code>. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI <code>0NN</code> corresponds to PLAN step <code>P-NN</code>; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each <code>Satisfies</code> line are defined in PRD.md and TRD.md.</p>
 </blockquote>
@@ -2603,6 +2625,28 @@
 <li>[x] <code>RMI-IMPACTMODEL-013</code> Prepare v0.5.0: changelog, release notes, guide updates, and the parent to parents migration</li>
 <li>Type: capability · Status: completed</li>
 <li>Acceptance: CHANGELOG.json has v0.5.0 and CHANGELOG.md is generated from it; docs/releases/v0.5.0.md covers problem trees and the migration from parent to parents; the user guides cover effects; mkdocs build --strict passes</li>
+</ul>
+<h2 id="phase-23-exports-for-agents-and-an-overview-refresh">Phase 23 — Exports for Agents and an Overview Refresh<a class="headerlink" href="#phase-23-exports-for-agents-and-an-overview-refresh" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> The PRISM exports through the service layer and the MCP server, the problem tree in the definitions pack, and an overview, credits, and guides that cover every projection
+<strong>Status:</strong> Completed — 3 of 3 items completed</p>
+<ul>
+<li>[x] <code>RMI-IMPACTMODEL-014</code> Export through the service layer and from the MCP server</li>
+<li>Type: capability · Status: completed</li>
+<li>
+<p>Acceptance: service.ExportPRISM draws the OKR, journey, V2MOM, and DMAIC exports for the command line and the MCP server; the impact_export tool takes observations and a status date and refuses a model the format cannot be drawn from; tests for both</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-015</code> Include the problem tree in the definitions pack</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>
+<p>Acceptance: definitions pack opens with the problem tree when the model records causes or effects; goldens updated</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-016</code> Refresh the overview, credits, and guides for V2MOM, DMAIC, and problem trees</p>
+</li>
+<li>Type: documentation · Status: completed</li>
+<li>Acceptance: README and docs/index.md list every projection and export; credits name V2MOM, DMAIC, and problem-tree sources; a test keeps README and docs/index.md in step</li>
 </ul>
 
 
