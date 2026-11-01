@@ -16,7 +16,7 @@
         <link rel="prev" href="../PLAN/">
       
       
-        <link rel="next" href="../../../../releases/v0.3.0/">
+        <link rel="next" href="../../../../releases/v0.4.0/">
       
       
         
@@ -1415,6 +1415,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-20-release-v040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 20 — Release v0.4.0
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1484,6 +1495,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../releases/v0.4.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.4.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1839,6 +1878,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-20-release-v040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 20 — Release v0.4.0
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1862,7 +1912,7 @@
 <h1 id="roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting">ROADMAP — Impact Model Specification — Go-first model, JSON Schema, measurement, and leadership reporting<a class="headerlink" href="#roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-THEORYOFCHANGESPEC-001</code>
 <strong>Repository:</strong> <code>github.com/ProductBuildersHQ/impact-model</code>
-<strong>Status:</strong> In progress — 16 of 19 phases completed</p>
+<strong>Status:</strong> In progress — 17 of 20 phases completed</p>
 <blockquote>
 <p>RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, <code>Refs: &lt;RMI-ID&gt;</code>. Items from before the rename to impact-model are <code>RMI-THEORYOFCHANGESPEC-001</code> to <code>-076</code>; later items are <code>RMI-IMPACTMODEL-&lt;NNN&gt;</code>. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI <code>0NN</code> corresponds to PLAN step <code>P-NN</code>; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each <code>Satisfies</code> line are defined in PRD.md and TRD.md.</p>
 </blockquote>
@@ -2402,6 +2452,14 @@
 </li>
 <li>Type: chore · Status: proposed</li>
 <li>Acceptance: prism-roadmap's goals/dmaic exports its minimum points and responses; a prismx test fails if impact.DMAICMinPoints or impact.DMAICMinResponsesPerPoint differ</li>
+</ul>
+<h2 id="phase-20-release-v040">Phase 20 — Release v0.4.0<a class="headerlink" href="#phase-20-release-v040" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Prepare the release with the V2MOM and DMAIC projections: changelog, release notes, and the upgrade note for the OKR types
+<strong>Status:</strong> Completed — 1 of 1 items completed</p>
+<ul>
+<li>[x] <code>RMI-IMPACTMODEL-008</code> Prepare v0.4.0: changelog, release notes, and the upgrade note for ToOKR</li>
+<li>Type: capability · Status: completed</li>
+<li>Acceptance: CHANGELOG.json has v0.4.0 and CHANGELOG.md is generated from it; docs/releases/v0.4.0.md covers V2MOM, DMAIC, the model additions, and the Go upgrade for prismx.ToOKR; mkdocs build --strict passes</li>
 </ul>
 
 
