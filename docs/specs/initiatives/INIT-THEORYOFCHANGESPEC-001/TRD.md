@@ -65,7 +65,7 @@ no persistence, no statistical inference).
 | TRD-011 | Renderers MUST NOT emit `restricted` evidence excerpts | PRD-FR-503 | Test with restricted evidence asserts absence |
 | TRD-012 | `spec/` MUST embed `toc.md` template and `toc.rubric.yaml` that parses into `rubric.RubricSet` and passes its `Validate()` | PRD-FR-601 | `spec_test.go` |
 | TRD-013 | `pkg/mcp` MUST expose the six tools in §6.3 over stdio with the official Go SDK | PRD-FR-602 | In-memory transport integration test |
-| TRD-014 | `pkg/prismx` MUST export OKR documents, outcome journeys, and V2MOM documents (one method per pathway; refused without a vision, values, or a pathway); no package under `pkg/impact`, `pkg/graph`, `pkg/validate`, `pkg/lint`, `pkg/measure` MAY import `prism-roadmap` | PRD-FR-603 | `go list -deps` import-boundary test |
+| TRD-014 | `pkg/prismx` MUST export OKR documents, outcome journeys, V2MOM documents (one method per pathway; refused without a vision, values, or a pathway), and DMAIC metrics documents (one category per pathway marked `dmaic`; control limits only from ≥ 20 observations; refused when nothing is marked or nothing is numeric); no package under `pkg/impact`, `pkg/graph`, `pkg/validate`, `pkg/lint`, `pkg/measure` MAY import `prism-roadmap` | PRD-FR-603 | `go list -deps` import-boundary test |
 | TRD-015 | `pkg/ref` MUST parse and format the reference grammar in §6.7 | PRD-FR-604 | Parse/format round-trip and invalid-input tests |
 | TRD-016 | Core types MUST reuse `prism-core` `Person`, `Risk`, `CapabilityRef`, health and trend constants instead of redefining them | PRD G-7 | Code review; grep test for duplicate type names |
 | TRD-017 | `pkg/impact` MUST define `Pathway`, `Metric`, `Audience`, `GlossaryTerm`, `Theme`, `SelectionCriterion`, `MeasurementBudget`, and the indicator extensions in §7.1 | PRD-FR-112…117 | Round-trip tests; schema lint |
@@ -171,7 +171,7 @@ no persistence, no statistical inference).
 | `pkg/lint` | Quality rules | Rule registry, §6.4 rules, options (disable / severity override), SummaryReport output. |
 | `pkg/measure` | Measurement | §6.5 algorithms; produces `impact.Status`; `Diff(prev, cur)`. |
 | `pkg/report` | Rendering | View model, standard templates (embedded), Mermaid builder, user templates. |
-| `pkg/prismx` | PRISM adapters | `ToOKR`, `ToOutcomeJourneys`, `ToV2MOM`; prism-roadmap import is confined here. |
+| `pkg/prismx` | PRISM adapters | `ToOKR`, `ToOutcomeJourneys`, `ToV2MOM`, `ToDMAIC`; prism-roadmap import is confined here. |
 | `pkg/service` | Service layer | One function per user operation (Validate, Lint, Graph, Status, Report, Export, Schema) used by CLI and MCP. |
 | `pkg/mcp` | MCP server | Tool registration and JSON I/O over `pkg/service`. |
 | `spec/` | Spec content | `toc.md` template, `toc.rubric.yaml`, judge instructions; embedded. |
@@ -231,7 +231,7 @@ no persistence, no statistical inference).
 | `impact-model report <kind> <toc> [-O <obs>...] [--as-of] [--pathway ID] [--audience ID] [--template file] [--out file]` | `kind` (status): `exec`, `results`, `assumptions`, `interventions`, `evidence-gaps`, `story`, `learning-review`, `portfolio`, `narrative`, `actors`, `full`, `custom`; `kind` (definition, no observations needed): `pathway`, `logic-model`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `definitions` (all definition reports) | 0; 2 |
 | `impact-model import observations --csv <file> --map <mapping.yaml> --model <toc> [--out obs.yaml]` | CSV → ObservationSet; unmatched rows to stderr and `--unmatched file` | 0 all rows imported; 1 some rows unmatched; 2 error |
 | `impact-model export csv <table> <toc> [-O obs...]` | `table`: `indicators`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `results`, `themes` | 0; 2 |
-| `impact-model export okr\|journey\|v2mom <model> [-O obs...]` | PRISM exports | 0; 2 |
+| `impact-model export okr\|journey\|v2mom\|dmaic <model> [-O obs...]` | PRISM exports | 0; 2 |
 | `impact-model schema [name]` | List or print embedded schemas | 0; 2 |
 | `impact-model init [--template program\|market]` | Write a starter document | 0; 2 |
 | `impact-model mcp` | Start MCP server on stdio | 0 on clean shutdown |
@@ -304,6 +304,7 @@ func Mermaid(doc *impact.Document, st *impact.Status, opts MermaidOptions) strin
 func ToOKR(doc *impact.Document, st *impact.Status) (*okr.OKRDocument, error)
 func ToOutcomeJourneys(doc *impact.Document, st *impact.Status) ([]journey.OutcomeJourney, error)
 func ToV2MOM(doc *impact.Model, st *impact.Status) (*v2mom.V2MOM, error) // wraps ErrNotV2MOMReady
+func ToDMAIC(doc *impact.Model, st *impact.Status, sets []*impact.ObservationSet) (*dmaic.DMAICDocument, []Omission, error) // wraps ErrNotDMAICReady
 ```
 
 Errors: functions return wrapped sentinel errors —
@@ -384,6 +385,9 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | IMP-PRV-002 | warning | Every `stated` element cites ≥ 1 evidence record with a URL or document reference |
 | IMP-PRV-003 | warning | An `approved` document has no `hypothesis` elements at accountable levels (responsibility `own` or `shared`) |
 | IMP-PRV-004 | info | Selected indicators declare `dataAvailability` |
+| IMP-DMA-001 | warning | An indicator of a pathway marked `projections: [dmaic]` declares a `frequency` and a data source (`dataSource` or `collection.system`) |
+| IMP-DMA-002 | warning | An indicator of a DMAIC pathway is measured ≥ 20 times a year, so control limits can be set within about a year |
+| IMP-DMA-003 | warning | A survey indicator of a DMAIC pathway gets ≥ 30 responses per measurement (`collection.respondentsPerYear` × `sampleRate` ÷ measurements per year), and states `respondentsPerYear` |
 
 Rule IDs are permanent. Retired rules keep their ID reserved.
 
@@ -800,7 +804,7 @@ type Document struct {
 | `Intervention` | `id`, `title` (req), `type` (`program`, `product`, `policy`, `advocacy`, `partnership`, `standardization`, `investment`, `communication`, `research`, `other`), `targets[]` (req), `outputs[]`, `ownerActorId`, `status`, `capabilities[]` (`core.CapabilityRef`), `initiativeRefs[]` (ExternalRef, e.g. visionstudio `INIT-…`), `resources` | Strategy / activity. |
 | `Assumption` | `id`, `statement` (req), `ifThenBecause?` {`if`, `then`, `because`}, `type` (`causal`, `contextual`, `implementation`, `behavioral`, `external`, `partnership`), `appliesTo[]` (link/outcome/intervention IDs), `criticality` (`low`, `medium`, `high`, `critical`), `plausibility` (`low`, `medium`, `high`), `explainsFully?` (bool; UNDG question 1), `needsTesting` (bool; UNDG question 3), `test` (how: monitoring indicator, evaluation, research), `indicatorIds[]` (assumption-monitoring indicators), `evidenceIds[]`, `status`, `ownerActorId` | Static status is the default; observation sets override. `confidence` from v0.1 drafts is replaced by `plausibility` (UNDG question 2). |
 | `Indicator` | `id`, `measures` (req; outcome ID, or intervention ID for output indicators, or assumption ID for assumption-monitoring indicators, or pathway ID for pathway-level and roll-up indicators that have no single outcome), `name` (req), `definition`, `measurementType` (`quantitative`, `qualitative`, `hybrid`), `unit`, `direction` (`increase`, `decrease`, `maintain`), `tolerance`, `levels[]` (ordered qualitative levels; Outcome Mapping progress markers use `expect`/`like`/`love`), `baseline {value, level, date, source}`, `targets[] {value, level, threshold, date, label, milestone bool}`, `population {description, actorIds[], size}`, `disaggregation[]`, `dataSource`, `method`, `frequency` (ISO 8601 duration), `ownerActorId`, `proxyFor[]` (outcome IDs this indicator stands in for), `externalRefs[]` (e.g. maturity SLI, OKR KR) | ActKnowledge's four components — population, target, threshold, timeline — map to `population`, `targets[].value`, `targets[].threshold`, `targets[].date`. Framework-design extensions: `metricId` (instantiates a shared `Metric`), `pathwayIds[]`, `claim` (`attribution` or `contribution`; contribution when omitted, so a report never overclaims), `caveats[]`, `collection {mode, system, minutesPerPeriod, period, questionsPerRespondent, respondentsPerYear, sampleRate}`, `selection {status: candidate/selected/retired, scores[] {criterionId, score 1–5, note}, rationale}`, `audienceIds[]`, `rollupFrom[]` (indicator IDs whose values roll up into this one via the metric's rule), `themeIds[]` (for `theme_count` indicators derived from stories). `measurementType` gains `theme_count` together with the story codebook (RMI-035). |
-| `Pathway` | `id`, `title` (req), `kind` (`program`, `strategy`, `theme`, `geography`, `segment`), `description`, `ownerActorId`, `outcomeIds[]`, `interventionIds[]`, `childModel?` (ref to a program-level ToC document) | Program area / strategy grouping. Indicators join via `pathwayIds`. A pathway may delegate detail to a child ToC whose `parent` points back. |
+| `Pathway` | `id`, `title` (req), `kind` (`program`, `strategy`, `theme`, `geography`, `segment`), `description`, `ownerActorId`, `outcomeIds[]`, `interventionIds[]`, `childModel?` (ref to a program-level ToC document), `focus?`, `projections[]` (`dmaic`; unique, VAL-PTH-007) | Program area / strategy grouping. `projections: [dmaic]` subjects the pathway's indicators to the IMP-DMA rules and includes it in `export dmaic`. Indicators join via `pathwayIds`. A pathway may delegate detail to a child ToC whose `parent` points back. |
 | `Metric` | `id`, `name` (req), `definition` (req), `formula` (req; exact computation in words, e.g. "sum over sessions of attendees × session hours"), `unit`, `direction`, `aggregation` (`sum`, `mean`, `weighted_mean`, `median`, `mode`, `min`, `max`, `latest`, `none`; `median` and `mode` are the honest choices for ordinal levels), `weightMetricId?`, `layer` (`common`, `pathway`) | Shared definition so a metric is computed identically across pathways. `none` means values cannot be combined (e.g. distinct counts across overlapping populations) and org-level values must be observed directly. |
 | `SelectionCriterion` | `id`, `name`, `question`, `weight`, `appliesTo` (req: `indicator`, `outcome`, `intervention`) | Indicator criteria: decision value, audience value, cost to collect (inverted), consistency, credibility. Outcome / intervention (focus and solution) criteria: equity, comparative advantage, feasibility, evidence of what works. Scores live on the subject (`selection.scores` for indicators, `priority.scores` for outcomes and interventions). |
 | `MeasurementBudget` | `staffMinutesPerWeek`, `maxQuestionsPerRespondentPerYear`, `targetSelectedMetrics {min, max}` | Declared sustainability constraints. |

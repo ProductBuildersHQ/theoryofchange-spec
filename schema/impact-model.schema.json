@@ -1697,6 +1697,15 @@
         "focus": {
           "$ref": "#/$defs/Focus"
         },
+        "projections": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "dmaic"
+            ]
+          },
+          "type": "array"
+        },
         "provenance": {
           "$ref": "#/$defs/Provenance"
         }

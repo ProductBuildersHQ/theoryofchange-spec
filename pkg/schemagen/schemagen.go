@@ -129,6 +129,7 @@ func EnumValues() map[reflect.Type][]string {
 	add(typeOf[impact.FactorKind](), strs(impact.AllFactorKinds()))
 	add(typeOf[impact.RiskCategory](), strs(impact.AllRiskCategories()))
 	add(typeOf[impact.PathwayKind](), strs(impact.AllPathwayKinds()))
+	add(typeOf[impact.Projection](), strs(impact.AllProjections()))
 	add(typeOf[impact.Aggregation](), strs(impact.AllAggregations()))
 	add(typeOf[impact.CompositionOp](), strs(impact.AllCompositionOps()))
 	add(typeOf[impact.MetricLayer](), strs(impact.AllMetricLayers()))

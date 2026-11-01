@@ -18,8 +18,9 @@ projections of it, drawn by the `report` command:
 
 OKRs and outcome journeys are projections too, written by `export okr` and
 `export journey` for the PRISM planning tools, and so is a V2MOM, written by
-`export v2mom` (see the [V2MOM guide](guides/v2mom.md)). A DMAIC projection is
-planned.
+`export v2mom` (see the [V2MOM guide](guides/v2mom.md)), and a DMAIC metrics
+document for pathways marked `projections: [dmaic]`, written by `export dmaic`
+(see the [DMAIC guide](guides/dmaic.md)).
 
 **Delivered by** names the roadmap item (`RMI-THEORYOFCHANGESPEC-NNN`, shown
 as `NNN`) that adds the type or field. Concepts not in v0 are listed under

@@ -38,6 +38,24 @@ Measures):
 With observations (-O), the measures carry current values, progress, and
 status. A model without a vision, values, or a pathway is refused, with a
 message naming what to add.`
+	case "dmaic":
+		short, long = "Export DMAIC pathways as a DMAIC metrics document", `Export the pathways marked projections: [dmaic] as a DMAIC (Define, Measure,
+Analyze, Improve, Control) metrics document:
+
+  Category     one per marked pathway
+  Metric       each of its indicators with a numeric baseline and target;
+               others are listed as notes on standard error
+  Data points  the indicator's observations (-O), without disaggregated slices
+  Limits       an individuals chart, only from 20 or more observations
+  Root causes  the causes the measured outcome addresses
+  Initiatives  the pathway's interventions aimed at the measured outcome
+  Phase        Control once achieved; Measure until there are enough points
+               for limits; Improve while an intervention is in progress;
+               otherwise Analyze
+
+Process capability is not filled: it needs specification limits, which an
+impact model does not record. A model with no marked pathway, or none with a
+numeric indicator, is refused.`
 	}
 	cmd := &cobra.Command{
 		Use:     kind + " <model-file>",
@@ -61,12 +79,13 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 		return err
 	}
 	var st *impact.Status
+	var sets []*impact.ObservationSet
 	if len(observationPaths(cmd)) > 0 || flagString(cmd, "as-of") != "" {
-		in, _, err := loadStatus(e, cmd, path)
+		in, loaded, err := loadStatus(e, cmd, path)
 		if err != nil {
 			return err
 		}
-		st = in.Status
+		st, sets = in.Status, loaded
 	}
 	var v any
 	switch kind {
@@ -74,10 +93,16 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 		v, err = prismx.ToOKR(doc, st)
 	case "v2mom":
 		v, err = prismx.ToV2MOM(doc, st)
+	case "dmaic":
+		var omissions []prismx.Omission
+		v, omissions, err = prismx.ToDMAIC(doc, st, sets)
+		for _, o := range omissions {
+			fmt.Fprintf(e.errOut, "note: %s is left out: %s\n", o.IndicatorID, o.Reason)
+		}
 	default:
 		v, err = prismx.ToOutcomeJourneys(doc, st)
 	}
-	if errors.Is(err, prismx.ErrNotV2MOMReady) {
+	if errors.Is(err, prismx.ErrNotV2MOMReady) || errors.Is(err, prismx.ErrNotDMAICReady) {
 		return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", path, err)}
 	}
 	if err != nil {

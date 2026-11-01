@@ -29,7 +29,7 @@ flowchart LR
   im --> lf["Logframe"]:::method
   im --> okr["OKRs"]:::strategy
   im --> v2["V2MOM"]:::strategy
-  im -.-> dm["DMAIC (planned)"]:::planned
+  im --> dm["DMAIC"]:::strategy
 ```
 
 ## What is an impact model?
@@ -66,7 +66,7 @@ Each projection answers a different question for a different reader:
 | **Metric tree and headline metrics** | What does each program steer by, and what is each audience told? | `report metric-tree`, `report headline` |
 | **OKRs and outcome journeys** | What will a team commit to this quarter, and how does a person move through the outcomes? For the [PRISM](#part-of-the-prism-ecosystem) planning tools | `export okr`, `export journey` |
 | **V2MOM** | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision and values from the context, one method per pathway with its interventions as projects, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions. See [the mapping](guides/v2mom.md) | `export v2mom` |
-| **DMAIC** *(planned)* | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them | — |
+| **DMAIC** | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? One category per pathway marked `projections: [dmaic]`, its numeric indicators as metrics with observations as data points, control limits once there are enough, root causes from the problem tree, and interventions as improvement initiatives. Lint first checks that those pathways are measured often enough. See [the mapping](guides/dmaic.md) | `export dmaic` |
 
 Each projection leaves something out. A logic model shows the sequence from what
 goes in to what comes out, and rarely why each step holds. A theory of change
@@ -250,7 +250,7 @@ Reading the second diagram:
 |---------|-----|
 | **A model you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the model is established and how much is our reading |
 | **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
-| **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat |
+| **Quality you can check** | A schema, structural validation, 69 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat |
 | **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |
 | **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash |
 | **Review that comes back** | Send a packet or sheet to reviewers, import their answers as proposed changes you inspect, then record approval |
@@ -270,6 +270,7 @@ whether it did.
 | See how far a program has come | [Measuring progress](guides/measurement.md) |
 | Produce reports and decks | [Reports and decks](guides/reports-and-decks.md) |
 | Export a V2MOM, and see how it maps | [V2MOM](guides/v2mom.md) |
+| Run a program with DMAIC, and see how it maps | [DMAIC](guides/dmaic.md) |
 | Send an impact model out for review | [Review round trip](guides/review-round-trip.md) |
 | Judge the quality of an impact model | [Quality and judging](guides/quality-and-judging.md) |
 | Connect an AI agent | [MCP server and agent skills](guides/mcp-and-skills.md) |

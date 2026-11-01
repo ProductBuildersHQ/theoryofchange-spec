@@ -80,7 +80,7 @@
 ## Phase 3 — Pathways, Metric Library, Provenance, and Reference Examples
 
 **Theme:** Program pathways, shared metric definitions, a glossary, and provenance on every element, proven on fictional reference examples
-**Status:** Completed — 4 of 4 items completed
+**Status:** In progress — 4 of 5 items completed
 
 - [x] `RMI-THEORYOFCHANGESPEC-032` Pathways (program areas) and parent / child ToC references, with element commands
   - Type: capability · Status: completed
@@ -494,16 +494,25 @@
 ## Phase 19 — Strategy Projections
 
 **Theme:** Draw strategy and improvement formats such as V2MOM and DMAIC from the impact model, on prism-roadmap's goal types, linked by ID and kept as separate documents
-**Status:** In progress — 2 of 3 items completed
+**Status:** In progress — 4 of 5 items completed
 
 - [x] `RMI-IMPACTMODEL-003` Export a V2MOM projection of an impact model
   - Type: capability · Status: completed
   - Acceptance: context.values added; export v2mom writes vision, values, methods, obstacles, and measures from the model, linked by ID; the V2MOM document stays separate
 
-- [ ] `RMI-IMPACTMODEL-005` Export a DMAIC projection of an impact model
-  - Type: capability · Status: proposed
+- [x] `RMI-IMPACTMODEL-005` Export a DMAIC projection of an impact model
+  - Type: capability · Status: completed
   - Acceptance: export dmaic writes a prism-roadmap goals/dmaic document: categories from pathways, metrics from indicators with baseline, current, target, direction, status, and data points from observations, root causes from the problem tree, and initiatives from interventions; control limits and process capability only where observations support them, never invented
 
 - [x] `RMI-IMPACTMODEL-004` Export OKRs through prism-roadmap's goals/okr instead of structured-goals
   - Type: chore · Status: completed
   - Acceptance: pkg/prismx imports prism-roadmap/goals/okr; structured-goals is gone from go.mod; the OKR export's golden output is unchanged
+
+- [x] `RMI-IMPACTMODEL-006` Mark pathways for DMAIC and lint their measurement cadence and sample size
+  - Type: capability · Status: completed
+  - Acceptance: pathway.projections accepts dmaic; lint checks that the indicators of a dmaic pathway declare a frequency and collection system, are measured at least 20 times a year, and survey indicators get at least 30 responses per measurement; thresholds match prism-roadmap's DMAIC code
+  - Note: done except the threshold cross-check, which moves to `RMI-IMPACTMODEL-007`; prism-roadmap does not export DMAIC thresholds yet, so they live in `pkg/impact`
+
+- [ ] `RMI-IMPACTMODEL-007` Cross-check the DMAIC thresholds with prism-roadmap once it exports them
+  - Type: chore · Status: proposed
+  - Acceptance: prism-roadmap's goals/dmaic exports its minimum points and responses; a prismx test fails if impact.DMAICMinPoints or impact.DMAICMinResponsesPerPoint differ

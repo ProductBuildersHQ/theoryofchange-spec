@@ -55,7 +55,7 @@ The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 | Command | What it does |
 |---------|--------------|
 | `validate` | Schema and structure (`--model`, `--parent`, `--registry`, `--futures`) |
-| `lint` | 66 deterministic rules in three profiles (`--profile`, `--disable`, `--list`) |
+| `lint` | 69 deterministic rules in three profiles (`--profile`, `--disable`, `--list`) |
 | `graph` | Summarize or query the causal graph (`--upstream`, `--downstream`, `--paths`, `--cycles`, `--orphans`, `--dead-ends`, `--levels`) |
 | `judge show`, `record`, `summary` | Prepare an impact model for a judge and combine the verdicts |
 
@@ -74,7 +74,7 @@ The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 | `deck workshop`, `exec`, `learning-review`, `story` | Marp slide decks (`--export` renders with `marp`) |
 | `export csv <table>` | `indicators`, `metrics`, `glossary`, `metric-selection`, `collection-plan` |
 | `export docx`, `export pptx` | Word and PowerPoint through `mmdc` and `pandoc` |
-| `export okr`, `export journey`, `export v2mom` | JSON for the PRISM tools; see the [V2MOM guide](v2mom.md) for how a V2MOM maps |
+| `export okr`, `export journey`, `export v2mom`, `export dmaic` | JSON for the PRISM tools; the [V2MOM](v2mom.md) and [DMAIC](dmaic.md) guides say how each maps |
 
 ### Review
 

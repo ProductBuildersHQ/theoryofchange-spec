@@ -562,6 +562,23 @@ func AllPathwayKinds() []PathwayKind {
 // Valid reports whether v is a known PathwayKind.
 func (v PathwayKind) Valid() bool { return slices.Contains(AllPathwayKinds(), v) }
 
+// Projection names a projection a pathway is meant to be drawn as, beyond the
+// ones every pathway gets.
+type Projection string
+
+const (
+	// ProjectionDMAIC marks a pathway whose metrics are measured often enough,
+	// and from enough people, to improve them with DMAIC (Define, Measure,
+	// Analyze, Improve, Control).
+	ProjectionDMAIC Projection = "dmaic"
+)
+
+// AllProjections returns all projections a pathway can be marked for.
+func AllProjections() []Projection { return []Projection{ProjectionDMAIC} }
+
+// Valid reports whether v is a known Projection.
+func (v Projection) Valid() bool { return slices.Contains(AllProjections(), v) }
+
 // Aggregation is how indicator values of one metric combine across
 // pathways.
 type Aggregation string

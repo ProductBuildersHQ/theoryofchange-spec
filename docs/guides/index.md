@@ -8,11 +8,11 @@ are new.
 2. [Authoring an impact model](authoring.md): the model, and how to change it safely.
 3. [Measuring progress](measurement.md): observations, status, and what changed.
 4. [Reports and decks](reports-and-decks.md): the artifacts for each audience.
-   The [V2MOM guide](v2mom.md) maps each part of a V2MOM to the model.
+   The [V2MOM](v2mom.md) and [DMAIC](dmaic.md) guides map those formats to the model.
 5. [Review round trip](review-round-trip.md): ask reviewers, bring answers back.
 6. [Quality and judging](quality-and-judging.md): lint, rubrics, and judges.
 7. [MCP server and agent skills](mcp-and-skills.md): working with an AI agent.
-8. [Examples](examples.md): three fictional, complete impact models.
+8. [Examples](examples.md): four fictional, complete examples.
 9. [CLI reference](cli.md): every command, flag convention, and exit code.
 
 For the concepts behind the model, see the

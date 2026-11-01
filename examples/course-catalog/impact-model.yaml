@@ -1,0 +1,500 @@
+kind: ImpactModel
+specVersion: "0.1"
+id: lanternwood-catalog
+metadata:
+  name: Lanternwood Learning Commons course catalog (fictional example)
+  description: A fictional impact model for a free catalog of on-demand certificate courses for nonprofit staff, measured weekly and improved with DMAIC. Every organization, number, and URL is invented.
+  status: draft
+  owner: Lanternwood Learning Commons
+  tags:
+    - online-learning
+    - dmaic
+    - fictional
+context:
+  problemStatement: Staff at small nonprofits rarely get training in management, fundraising, or data skills, because their organizations cannot pay for it and they cannot leave their work to attend it.
+  rootCauses:
+    - Small nonprofits have no training budget.
+    - Staff cannot take days away from service delivery to attend courses.
+  targetPopulation: Staff and volunteers of small nonprofits who take the courses, and through them the people those nonprofits serve.
+  geography: Online (a fictional provider)
+  timeHorizon:
+    start: "2026-01-01"
+    end: "2027-12-31"
+  mission: Give every nonprofit worker free, practical training they can fit around their work.
+  vision: Every small nonprofit has staff with the skills to run it well.
+  values:
+    - name: Free to every learner
+      description: No fee, no paywall, and no certificate charge, so cost never decides who learns.
+    - name: Practical over theoretical
+      description: Every course ends with something the learner can use at work the next day.
+  narrative: Lanternwood Learning Commons publishes short certificate courses that staff take on their own schedule. Starting a course is easy; finishing one is not, so the catalog program is run as a DMAIC effort on its weekly completion rate, with learner satisfaction as the guardrail. Staff who finish and apply what they learned recommend the catalog to colleagues, which brings in new learners.
+ceilingOfAccountability:
+  level: long_term
+  rationale: The Commons can make courses good and finishable, and can check that graduates apply what they learned, but how well a nonprofit serves its community depends on much more than its staff's training.
+outcomes:
+  - id: oc-better-services
+    title: Small nonprofits serve their communities better
+    description: Programs run more reliably and reach more people because staff have the skills to run them.
+    level: impact
+    sphere: interest
+    provenance:
+      basis: hypothesis
+  - id: oc-lt-skills-applied
+    title: Graduates apply what they learned in their daily work
+    level: long_term
+    sphere: influence
+    responsibility: own
+    provenance:
+      basis: inferred
+  - id: oc-mt-certified
+    title: Learners complete certificate courses
+    level: medium_term
+    sphere: control
+    responsibility: own
+    addressesCauses:
+      - cause-no-time
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-platform-logs
+  - id: oc-st-enrolled
+    title: Staff start courses that fit their role
+    level: short_term
+    sphere: control
+    responsibility: own
+    addressesCauses:
+      - cause-no-budget
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-01-15"
+      decidedBy: Lanternwood program committee
+  - id: oc-st-satisfied
+    title: Learners find the courses worth their time
+    level: short_term
+    sphere: control
+    responsibility: own
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-learner-survey
+  - id: oc-out-catalog
+    title: A catalog of free on-demand certificate courses is available
+    level: output
+    sphere: control
+    responsibility: own
+  - id: oc-out-help
+    title: Learners get answers to course questions within a day
+    level: output
+    sphere: control
+    responsibility: shared
+    deliveredBy:
+      - act-commons
+      - act-forum-host
+links:
+  - id: ln-catalog-enrolled
+    from: oc-out-catalog
+    to: oc-st-enrolled
+    type: causes
+    rationale: Free courses that fit around work remove both reasons staff give for not training.
+    polarity: positive
+    lag: P1M
+  - id: ln-help-satisfied
+    from: oc-out-help
+    to: oc-st-satisfied
+    type: causes
+    rationale: Learners who get unstuck quickly rate the course higher than those left waiting.
+    polarity: positive
+    lag: P1W
+  - id: ln-enrolled-certified
+    from: oc-st-enrolled
+    to: oc-mt-certified
+    type: causes
+    rationale: Of the staff who start a course, those with time to finish it earn the certificate.
+    assumptionIds:
+      - asm-time-to-finish
+    evidenceIds:
+      - ev-platform-logs
+    interventionIds:
+      - int-course-redesign
+    polarity: positive
+    lag: P1M
+  - id: ln-satisfied-certified
+    from: oc-st-satisfied
+    to: oc-mt-certified
+    type: enables
+    rationale: Learners who find a course worth their time keep going when it gets hard.
+    assumptionIds:
+      - asm-time-to-finish
+    polarity: positive
+    lag: P1M
+  - id: ln-certified-applied
+    from: oc-mt-certified
+    to: oc-lt-skills-applied
+    type: causes
+    rationale: Each course ends with a work task, so finishing it means having used the skill once already.
+    assumptionIds:
+      - asm-skills-transfer
+    polarity: positive
+    lag: P3M
+  - id: ln-applied-services
+    from: oc-lt-skills-applied
+    to: oc-better-services
+    type: contributes_to
+    rationale: Staff who manage, fundraise, and use data well run more reliable programs.
+    assumptionIds:
+      - asm-skills-transfer
+    polarity: positive
+    lag: P6M
+  - id: ln-applied-enrolled
+    from: oc-lt-skills-applied
+    to: oc-st-enrolled
+    type: enables
+    rationale: Graduates who use what they learned recommend the catalog to colleagues, who then start courses themselves.
+    polarity: positive
+    feedback: true
+interventions:
+  - id: int-course-library
+    title: Publish and maintain on-demand certificate courses
+    description: Short self-paced courses in management, fundraising, and data, each ending with a work task.
+    type: program
+    targets:
+      - oc-out-catalog
+    outputs:
+      - oc-out-catalog
+    ownerActorId: act-commons
+    status: in_progress
+    resources: Two instructional designers and the learning platform
+  - id: int-learner-help
+    title: Answer learner questions in a moderated forum
+    description: Course staff and volunteer mentors answer questions in a forum the partner hosts.
+    type: other
+    targets:
+      - oc-out-help
+    ownerActorId: act-forum-host
+    status: in_progress
+    resources: Volunteer mentors and one forum moderator
+  - id: int-course-redesign
+    title: Shorten modules and add practice checkpoints
+    description: Split long modules into ten-minute lessons and add a checkpoint the learner can finish in one sitting.
+    type: program
+    targets:
+      - oc-mt-certified
+    ownerActorId: act-commons
+    status: in_progress
+    initiativeRefs:
+      - framework: visionstudio
+        ref: RMI-LANTERNWOOD-007
+        url: https://example.org/lanternwood/roadmap/redesign
+    resources: One instructional designer for two quarters
+  - id: int-sms-reminders
+    title: Text learners a reminder each week
+    description: Considered and set aside because most learners did not want text messages.
+    type: communication
+    targets:
+      - oc-mt-certified
+    ownerActorId: act-commons
+    status: cancelled
+    provenance:
+      basis: rejected
+assumptions:
+  - id: asm-time-to-finish
+    statement: Staff who start a course can find the hours to finish it within a month.
+    type: implementation
+    appliesTo:
+      - ln-enrolled-certified
+      - ln-satisfied-certified
+    criticality: high
+    plausibility: medium
+    needsTesting: true
+    test: Compare completion of ten-minute lessons with the old hour-long modules over the same weeks.
+    indicatorIds:
+      - ind-completion-rate
+    status: untested
+    ownerActorId: act-commons
+  - id: asm-skills-transfer
+    statement: Graduates have the authority at work to use what they learned.
+    type: causal
+    appliesTo:
+      - ln-certified-applied
+      - ln-applied-services
+    criticality: critical
+    plausibility: medium
+    needsTesting: true
+    test: Ask graduates six months later whether they used the skill and what stopped them if not.
+    indicatorIds:
+      - ind-skills-applied
+    status: at_risk
+    ownerActorId: act-commons
+indicators:
+  - id: ind-completion-rate
+    measures: oc-mt-certified
+    name: Course completion rate
+    definition: Share of courses started in a week that end in a certificate within thirty days.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 38
+      date: "2025-12-29"
+      source: Learning platform records for 2025
+    targets:
+      - value: 45
+        date: "2026-12-31"
+      - value: 50
+        date: "2027-12-31"
+    dataSource: Learning platform
+    frequency: P1W
+    ownerActorId: act-commons
+    claim: attribution
+    dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Learning platform
+    provenance:
+      basis: stated
+      evidenceIds:
+        - ev-platform-logs
+  - id: ind-nps
+    measures: oc-st-satisfied
+    name: Learner Net Promoter Score
+    definition: Net Promoter Score from the one-question survey shown when a learner finishes or leaves a course.
+    measurementType: quantitative
+    unit: NPS points
+    direction: increase
+    baseline:
+      value: 41
+      date: "2025-12-29"
+      source: Course survey for 2025
+    targets:
+      - value: 50
+        date: "2026-12-31"
+      - value: 55
+        date: "2027-12-31"
+    dataSource: Course survey tool
+    frequency: P1W
+    ownerActorId: act-commons
+    claim: attribution
+    dataAvailability: internal_new
+    collection:
+      mode: survey
+      system: Course survey tool
+      period: P1W
+      questionsPerRespondent: 1
+      respondentsPerYear: 6500
+    provenance:
+      basis: inferred
+  - id: ind-enrollments
+    measures: oc-st-enrolled
+    name: Courses started
+    definition: Courses started in the week, counting one per learner per course.
+    measurementType: quantitative
+    unit: courses
+    direction: increase
+    baseline:
+      value: 900
+      date: "2025-12-29"
+      source: Learning platform records for 2025
+    targets:
+      - value: 1200
+        date: "2027-12-31"
+    dataSource: Learning platform
+    frequency: P1W
+    ownerActorId: act-commons
+    claim: attribution
+    dataAvailability: internal_existing
+    collection:
+      mode: passive
+      system: Learning platform
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-01-15"
+      decidedBy: Lanternwood program committee
+  - id: ind-answer-hours
+    measures: oc-out-help
+    name: Median hours to first answer
+    definition: Median hours from a learner's forum question to the first answer from staff or a mentor.
+    measurementType: quantitative
+    unit: hours
+    direction: decrease
+    baseline:
+      value: 30
+      date: "2025-12-29"
+      source: Forum records for 2025
+    targets:
+      - value: 12
+        date: "2026-12-31"
+    dataSource: Partner forum
+    frequency: P1W
+    ownerActorId: act-forum-host
+    claim: contribution
+    dataAvailability: partner_held
+    collection:
+      mode: passive
+      system: Partner forum
+  - id: ind-public-courses
+    measures: oc-out-catalog
+    name: Courses in the public catalog
+    definition: Certificate courses listed in the public catalog at month end.
+    measurementType: quantitative
+    unit: courses
+    direction: increase
+    baseline:
+      value: 40
+      date: "2025-12-31"
+      source: Public catalog
+    targets:
+      - value: 60
+        date: "2027-12-31"
+    dataSource: Public catalog page
+    frequency: P1M
+    ownerActorId: act-commons
+    claim: attribution
+    dataAvailability: public
+    collection:
+      mode: passive
+      system: Public catalog page
+  - id: ind-skills-applied
+    measures: oc-lt-skills-applied
+    name: Graduates applying a skill
+    definition: Share of graduates who say, six months after finishing, that they used the course skill at work.
+    measurementType: quantitative
+    unit: percent
+    direction: increase
+    baseline:
+      value: 52
+      date: "2025-12-31"
+      source: Graduate follow-up survey for 2025
+    targets:
+      - value: 65
+        date: "2027-12-31"
+    dataSource: Graduate follow-up survey
+    frequency: P1Y
+    ownerActorId: act-commons
+    claim: contribution
+    dataAvailability: internal_new
+    collection:
+      mode: survey
+      system: Course survey tool
+      period: P1Y
+      questionsPerRespondent: 3
+      respondentsPerYear: 400
+    provenance:
+      basis: hypothesis
+  - id: ind-service-quality
+    measures: oc-better-services
+    name: Program reliability at graduates' nonprofits
+    definition: How reliably graduates' nonprofits run their main program, on a three-step scale from a sample of site visits.
+    measurementType: qualitative
+    direction: increase
+    levels:
+      - Unreliable
+      - Mostly reliable
+      - Reliable
+    frequency: P1Y
+    claim: contribution
+    dataAvailability: unknown
+actors:
+  - id: act-commons
+    name: Lanternwood Learning Commons
+    type: organization
+    roles:
+      - implementer
+    stance: champion
+    influence: medium
+    interest: high
+    description: A small nonprofit that publishes free on-demand courses for nonprofit staff. The author of this model.
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-01-15"
+      decidedBy: Lanternwood program committee
+  - id: act-forum-host
+    name: Brookfield Volunteer Network
+    type: organization
+    roles:
+      - boundary_partner
+    stance: supporter
+    influence: low
+    interest: medium
+    description: A volunteer network that hosts and moderates the learner forum.
+evidence:
+  - id: ev-platform-logs
+    title: Lanternwood learning platform records, 2025
+    type: internal_metric
+    strength: strong
+    direction: supports
+    source: Lanternwood Learning Commons
+    url: https://example.org/lanternwood/platform-2025
+    summary: In 2025, 38 percent of courses started ended in a certificate; most drop-outs left during the first hour-long module.
+    sensitivity: internal
+    accessedAt: "2026-01-10"
+  - id: ev-learner-survey
+    title: Lanternwood course survey, 2025
+    type: monitoring_data
+    strength: moderate
+    direction: supports
+    source: Lanternwood Learning Commons
+    url: https://example.org/lanternwood/survey-2025
+    summary: Learners who rated a course highly were twice as likely to finish it.
+    sensitivity: internal
+    accessedAt: "2026-01-10"
+risks:
+  - id: rsk-platform-cost
+    description: The learning platform raises its price beyond what grants cover.
+    impact: high
+    probability: low
+    mitigation: Keep course content exportable and price an alternative platform each year.
+    status: open
+    owner: Lanternwood director
+    appliesTo:
+      - oc-out-catalog
+    category: operational
+pathways:
+  - id: pw-catalog
+    title: Course catalog
+    kind: program
+    description: Free on-demand certificate courses, with a learner forum, run as a DMAIC effort on completion.
+    ownerActorId: act-commons
+    outcomeIds:
+      - oc-out-catalog
+      - oc-out-help
+      - oc-st-enrolled
+      - oc-st-satisfied
+      - oc-mt-certified
+      - oc-lt-skills-applied
+      - oc-better-services
+    interventionIds:
+      - int-course-library
+      - int-learner-help
+      - int-course-redesign
+    focus:
+      northStarId: ind-completion-rate
+      guardrailIds:
+        - ind-nps
+      rationale: Completion is where learners are lost; satisfaction watches that shorter lessons do not make courses worse.
+    projections:
+      - dmaic
+    provenance:
+      basis: confirmed
+      decidedAt: "2026-01-15"
+      decidedBy: Lanternwood program committee
+  - id: pw-paid-cohorts
+    title: Paid live cohorts
+    kind: program
+    description: Instructor-led cohorts for a fee, considered and set aside because a fee would exclude the staff the Commons serves.
+    ownerActorId: act-commons
+    outcomeIds:
+      - oc-st-enrolled
+    provenance:
+      basis: rejected
+causes:
+  - id: cause-no-budget
+    statement: Small nonprofits have no training budget.
+    level: structural
+    evidenceIds:
+      - ev-learner-survey
+  - id: cause-no-time
+    statement: Staff cannot set aside an hour at a time for a course.
+    level: immediate
+    parent: cause-no-budget
+    evidenceIds:
+      - ev-platform-logs
