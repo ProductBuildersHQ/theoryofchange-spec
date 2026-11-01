@@ -384,6 +384,9 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | IMP-PRV-002 | warning | Every `stated` element cites ≥ 1 evidence record with a URL or document reference |
 | IMP-PRV-003 | warning | An `approved` document has no `hypothesis` elements at accountable levels (responsibility `own` or `shared`) |
 | IMP-PRV-004 | info | Selected indicators declare `dataAvailability` |
+| IMP-DMA-001 | warning | An indicator of a pathway marked `projections: [dmaic]` declares a `frequency` and a data source (`dataSource` or `collection.system`) |
+| IMP-DMA-002 | warning | An indicator of a DMAIC pathway is measured ≥ 20 times a year, so control limits can be set within about a year |
+| IMP-DMA-003 | warning | A survey indicator of a DMAIC pathway gets ≥ 30 responses per measurement (`collection.respondentsPerYear` × `sampleRate` ÷ measurements per year), and states `respondentsPerYear` |
 
 Rule IDs are permanent. Retired rules keep their ID reserved.
 

@@ -29,7 +29,7 @@ impact-model lint --list
 ```
 
 Validation says a document is well formed; lint says whether the impact model is
-sound. There are 66 deterministic rules, each with an ID such as `IMP-LOG-001`,
+sound. There are 69 deterministic rules, each with an ID such as `IMP-LOG-001`,
 grouped by what they look at:
 
 | Area | What the rules look for |
@@ -45,6 +45,7 @@ grouped by what they look at:
 | Provenance and evidence (`PRV`, `EVD`) | Every element says where it comes from; stated elements cite a source; an approved impact model has no hypotheses among what the organization answers for |
 | Equity, causes, audiences (`EQU`, `CAU`, `AUD`) | Outcomes for target groups are measured by those groups; each deeper cause is addressed or set aside with a reason; every audience is the target of something reported |
 | Pathways and validation (`PTH`, `VAL`) | Every pathway reaches impact and has a selected indicator; the main steps have been checked with the people the impact model concerns |
+| DMAIC readiness (`DMA`) | For a pathway marked `projections: [dmaic]`: every indicator says how often it is measured and where the data comes from, is measured at least 20 times a year, and, for a survey, gets at least 30 responses per measurement. Pathways not marked are not checked |
 
 Profiles choose how much is reported:
 
