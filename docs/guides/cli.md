@@ -55,7 +55,7 @@ The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 | Command | What it does |
 |---------|--------------|
 | `validate` | Schema and structure (`--model`, `--parent`, `--registry`, `--futures`) |
-| `lint` | 71 deterministic rules in three profiles (`--profile`, `--disable`, `--list`) |
+| `lint` | 72 deterministic rules in three profiles (`--profile`, `--disable`, `--list`) |
 | `graph` | Summarize or query the causal graph (`--upstream`, `--downstream`, `--paths`, `--cycles`, `--orphans`, `--dead-ends`, `--levels`) |
 | `judge show`, `record`, `summary` | Prepare an impact model for a judge and combine the verdicts |
 
