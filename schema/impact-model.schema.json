@@ -380,8 +380,11 @@
             "structural"
           ]
         },
-        "parent": {
-          "type": "string"
+        "parents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "affectedGroupIds": {
           "items": {
@@ -397,6 +400,9 @@
         },
         "outOfScope": {
           "$ref": "#/$defs/OutOfScope"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
         }
       },
       "additionalProperties": false,
@@ -668,6 +674,46 @@
       "required": [
         "id",
         "question"
+      ]
+    },
+    "Effect": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statement": {
+          "type": "string"
+        },
+        "parents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "affectedGroupIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "evidenceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "outOfScope": {
+          "$ref": "#/$defs/OutOfScope"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "statement"
       ]
     },
     "Evidence": {
@@ -1478,6 +1524,12 @@
           },
           "type": "array"
         },
+        "effects": {
+          "items": {
+            "$ref": "#/$defs/Effect"
+          },
+          "type": "array"
+        },
         "targetGroups": {
           "items": {
             "$ref": "#/$defs/TargetGroup"
@@ -1609,6 +1661,12 @@
           "type": "array"
         },
         "addressesCauses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "addressesEffects": {
           "items": {
             "type": "string"
           },

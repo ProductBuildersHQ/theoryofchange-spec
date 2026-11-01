@@ -61,6 +61,7 @@ var elementFlags = map[string][]elementFlag{
 		s("responsibility", "responsibility", "own (default), shared, partner, or unaddressed"),
 		ss("delivered-by", "deliveredBy", "actor IDs who deliver the outcome"),
 		ss("addresses", "addressesCauses", "cause IDs the outcome answers"),
+		ss("relieves", "addressesEffects", "effect IDs the outcome relieves"),
 		ss("target-groups", "targetGroupIds", "target group IDs the outcome is for"),
 		ss("audiences", "audienceIds", "audience IDs who need to see the outcome reported"),
 	},
@@ -192,10 +193,17 @@ var elementFlags = map[string][]elementFlag{
 	"cause": {
 		sr("statement", "statement", "the cause, as a condition"),
 		sr("level", "level", "immediate, underlying, or structural"),
-		s("parent", "parent", "the cause this one contributes to"),
+		ss("parents", "parents", "cause IDs this one contributes to; none for a direct cause of the core problem"),
 		ss("affected", "affectedGroupIds", "target group IDs affected"),
 		ss("evidence", "evidenceIds", "evidence IDs behind the cause"),
 		s("out-of-scope", "outOfScope.reason", "why the cause is left alone"),
+	},
+	"effect": {
+		sr("statement", "statement", "the effect, as a condition"),
+		ss("parents", "parents", "effect IDs this one follows from; none for a direct effect of the core problem"),
+		ss("affected", "affectedGroupIds", "target group IDs affected"),
+		ss("evidence", "evidenceIds", "evidence IDs behind the effect"),
+		s("out-of-scope", "outOfScope.reason", "why the effect is left alone"),
 	},
 	"target-group": {
 		sr("name", "name", "group name"),
@@ -529,6 +537,8 @@ func shortPrefix(kind string) string {
 		return "crit"
 	case "cause":
 		return "cause"
+	case "effect":
+		return "eff"
 	case "target-group":
 		return "tg"
 	case "audience":

@@ -32,6 +32,9 @@ type Outcome struct {
 	// AddressesCauses are the causes in the problem tree the outcome
 	// answers.
 	AddressesCauses []string `json:"addressesCauses,omitempty"`
+	// AddressesEffects are the effects in the problem tree the outcome
+	// relieves.
+	AddressesEffects []string `json:"addressesEffects,omitempty"`
 	// TargetGroupIDs are the priority populations the outcome is for.
 	TargetGroupIDs []string `json:"targetGroupIds,omitempty"`
 	// Priority records how the outcome scored against the prioritization
@@ -323,22 +326,42 @@ type Priority struct {
 	Rationale string           `json:"rationale,omitempty"`
 }
 
-// Cause is a node of the problem tree. Outcomes name the causes they
-// address, so the solution can be checked against the problem at every level.
+// Cause is a root of the problem tree: a condition that leads to the core
+// problem (context.problemStatement), directly or through other causes.
+// Outcomes name the causes they address, so the solution can be checked
+// against the problem at every level.
 type Cause struct {
 	ID        string     `json:"id" jsonschema:"required"`
 	Statement string     `json:"statement" jsonschema:"required"`
 	Level     CauseLevel `json:"level" jsonschema:"required"`
-	// Parent is the cause this one contributes to; omitted for a cause that
-	// leads straight to the problem.
-	Parent           string   `json:"parent,omitempty"`
+	// Parents are the causes this one contributes to; empty for a cause that
+	// leads straight to the core problem. Causes form a network, and a tree
+	// is the case of at most one parent each.
+	Parents          []string `json:"parents,omitempty"`
 	AffectedGroupIDs []string `json:"affectedGroupIds,omitempty"`
 	EvidenceIDs      []string `json:"evidenceIds,omitempty"`
 	// OutOfScope records that the cause is real but not addressed here.
 	OutOfScope *OutOfScope `json:"outOfScope,omitempty"`
+	Provenance *Provenance `json:"provenance,omitempty"`
 }
 
-// OutOfScope says why a cause is left alone.
+// Effect is a branch of the problem tree: a consequence of the core problem,
+// directly or through other effects. Outcomes name the effects they relieve,
+// so the impact model can be checked against the harm it is meant to reduce.
+type Effect struct {
+	ID        string `json:"id" jsonschema:"required"`
+	Statement string `json:"statement" jsonschema:"required"`
+	// Parents are the effects this one follows from; empty for an effect of
+	// the core problem itself. Effects form a network, as causes do.
+	Parents          []string `json:"parents,omitempty"`
+	AffectedGroupIDs []string `json:"affectedGroupIds,omitempty"`
+	EvidenceIDs      []string `json:"evidenceIds,omitempty"`
+	// OutOfScope records that the effect is real but not relieved here.
+	OutOfScope *OutOfScope `json:"outOfScope,omitempty"`
+	Provenance *Provenance `json:"provenance,omitempty"`
+}
+
+// OutOfScope says why a cause or an effect is left alone.
 type OutOfScope struct {
 	Reason string `json:"reason" jsonschema:"required"`
 }
@@ -521,6 +544,12 @@ func (f ExternalFactor) Rejected() bool { return f.Provenance.IsRejected() }
 
 // Rejected reports whether the risk was rejected.
 func (r Risk) Rejected() bool { return r.Provenance.IsRejected() }
+
+// Rejected reports whether the cause was rejected in review.
+func (c Cause) Rejected() bool { return c.Provenance.IsRejected() }
+
+// Rejected reports whether the effect was rejected in review.
+func (e Effect) Rejected() bool { return e.Provenance.IsRejected() }
 
 // Rejected reports whether the metric was rejected.
 func (m Metric) Rejected() bool { return m.Provenance.IsRejected() }

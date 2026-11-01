@@ -495,6 +495,7 @@ causes:
   - id: cause-no-time
     statement: Staff cannot set aside an hour at a time for a course.
     level: immediate
-    parent: cause-no-budget
+    parents:
+      - cause-no-budget
     evidenceIds:
       - ev-platform-logs

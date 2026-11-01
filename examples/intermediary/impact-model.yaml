@@ -2933,11 +2933,13 @@ causes:
   - id: cause-isolation
     statement: Each organization works alone, so effort and costs are duplicated.
     level: underlying
-    parent: cause-no-standing-voice
+    parents:
+      - cause-no-standing-voice
   - id: cause-no-peer-exchange
     statement: Leaders get little management support or peer exchange.
     level: immediate
-    parent: cause-isolation
+    parents:
+      - cause-isolation
     affectedGroupIds:
       - tg-small-members
     evidenceIds:
@@ -2945,7 +2947,8 @@ causes:
   - id: cause-high-overhead
     statement: Back-office work takes scarce staff time.
     level: immediate
-    parent: cause-isolation
+    parents:
+      - cause-isolation
     affectedGroupIds:
       - tg-small-members
   - id: cause-funding-volatility
