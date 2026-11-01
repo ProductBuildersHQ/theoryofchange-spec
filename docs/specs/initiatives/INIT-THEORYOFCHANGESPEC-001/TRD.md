@@ -65,7 +65,7 @@ no persistence, no statistical inference).
 | TRD-011 | Renderers MUST NOT emit `restricted` evidence excerpts | PRD-FR-503 | Test with restricted evidence asserts absence |
 | TRD-012 | `spec/` MUST embed `toc.md` template and `toc.rubric.yaml` that parses into `rubric.RubricSet` and passes its `Validate()` | PRD-FR-601 | `spec_test.go` |
 | TRD-013 | `pkg/mcp` MUST expose the six tools in §6.3 over stdio with the official Go SDK | PRD-FR-602 | In-memory transport integration test |
-| TRD-014 | `pkg/prismx` MUST export OKR documents and outcome journeys; no package under `pkg/impact`, `pkg/graph`, `pkg/validate`, `pkg/lint`, `pkg/measure` MAY import `prism-roadmap` | PRD-FR-603 | `go list -deps` import-boundary test |
+| TRD-014 | `pkg/prismx` MUST export OKR documents, outcome journeys, and V2MOM documents (one method per pathway; refused without a vision, values, or a pathway); no package under `pkg/impact`, `pkg/graph`, `pkg/validate`, `pkg/lint`, `pkg/measure` MAY import `prism-roadmap` | PRD-FR-603 | `go list -deps` import-boundary test |
 | TRD-015 | `pkg/ref` MUST parse and format the reference grammar in §6.7 | PRD-FR-604 | Parse/format round-trip and invalid-input tests |
 | TRD-016 | Core types MUST reuse `prism-core` `Person`, `Risk`, `CapabilityRef`, health and trend constants instead of redefining them | PRD G-7 | Code review; grep test for duplicate type names |
 | TRD-017 | `pkg/impact` MUST define `Pathway`, `Metric`, `Audience`, `GlossaryTerm`, `Theme`, `SelectionCriterion`, `MeasurementBudget`, and the indicator extensions in §7.1 | PRD-FR-112…117 | Round-trip tests; schema lint |
@@ -171,7 +171,7 @@ no persistence, no statistical inference).
 | `pkg/lint` | Quality rules | Rule registry, §6.4 rules, options (disable / severity override), SummaryReport output. |
 | `pkg/measure` | Measurement | §6.5 algorithms; produces `impact.Status`; `Diff(prev, cur)`. |
 | `pkg/report` | Rendering | View model, standard templates (embedded), Mermaid builder, user templates. |
-| `pkg/prismx` | PRISM adapters | `ToOKR`, `ToOutcomeJourneys`; prism-roadmap import is confined here. |
+| `pkg/prismx` | PRISM adapters | `ToOKR`, `ToOutcomeJourneys`, `ToV2MOM`; prism-roadmap import is confined here. |
 | `pkg/service` | Service layer | One function per user operation (Validate, Lint, Graph, Status, Report, Export, Schema) used by CLI and MCP. |
 | `pkg/mcp` | MCP server | Tool registration and JSON I/O over `pkg/service`. |
 | `spec/` | Spec content | `toc.md` template, `toc.rubric.yaml`, judge instructions; embedded. |
@@ -231,7 +231,7 @@ no persistence, no statistical inference).
 | `impact-model report <kind> <toc> [-O <obs>...] [--as-of] [--pathway ID] [--audience ID] [--template file] [--out file]` | `kind` (status): `exec`, `results`, `assumptions`, `interventions`, `evidence-gaps`, `story`, `learning-review`, `portfolio`, `narrative`, `actors`, `full`, `custom`; `kind` (definition, no observations needed): `pathway`, `logic-model`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `definitions` (all definition reports) | 0; 2 |
 | `impact-model import observations --csv <file> --map <mapping.yaml> --model <toc> [--out obs.yaml]` | CSV → ObservationSet; unmatched rows to stderr and `--unmatched file` | 0 all rows imported; 1 some rows unmatched; 2 error |
 | `impact-model export csv <table> <toc> [-O obs...]` | `table`: `indicators`, `metrics`, `metric-selection`, `collection-plan`, `glossary`, `results`, `themes` | 0; 2 |
-| `impact-model export okr\|journey <toc> [-O obs...]` | PRISM exports | 0; 2 |
+| `impact-model export okr\|journey\|v2mom <model> [-O obs...]` | PRISM exports | 0; 2 |
 | `impact-model schema [name]` | List or print embedded schemas | 0; 2 |
 | `impact-model init [--template program\|market]` | Write a starter document | 0; 2 |
 | `impact-model mcp` | Start MCP server on stdio | 0 on clean shutdown |
@@ -303,6 +303,7 @@ func Mermaid(doc *impact.Document, st *impact.Status, opts MermaidOptions) strin
 // pkg/prismx
 func ToOKR(doc *impact.Document, st *impact.Status) (*okr.OKRDocument, error)
 func ToOutcomeJourneys(doc *impact.Document, st *impact.Status) ([]journey.OutcomeJourney, error)
+func ToV2MOM(doc *impact.Model, st *impact.Status) (*v2mom.V2MOM, error) // wraps ErrNotV2MOMReady
 ```
 
 Errors: functions return wrapped sentinel errors —
@@ -788,7 +789,7 @@ type Document struct {
 | Type | Key fields | Notes |
 |------|-----------|-------|
 | `Perspective` | `actorId`, `role` (`proponent`, `funder`, `implementer`, `observer`), `futureRef?` | Whose theory this is. USM uses the actor; UFM uses `futureRef` to group a ToC under a competing future. |
-| `Context` | `problemStatement` (req), `rootCauses[]`, `targetPopulation`, `market?` (ExternalRef), `geography?`, `timeHorizon {start,end}` (optional, keeping the minimal document small; date-range lint rules apply only when set), `narrative` | Problem analysis / problem tree inputs. |
+| `Context` | `problemStatement` (req), `rootCauses[]`, `targetPopulation`, `market?` (ExternalRef), `geography?`, `timeHorizon {start,end}` (optional, keeping the minimal document small; date-range lint rules apply only when set), `mission`, `vision`, `values[] {name (req), description}` (ordered, most important first; a value needs a name and names are unique: VAL-DOC-006, VAL-DOC-007), `narrative` | Problem analysis / problem tree inputs. Mission, vision, and values frame the model and are not outcomes; the V2MOM export needs the vision and at least one value. |
 | `Ceiling` | `level` (outcome level) or `outcomeIds[]`, `rationale` | Ceiling of accountability; outcomes above it are tracked but not owned. |
 | `Outcome` | `id`, `title` (req; a positive condition, not an activity), `description`, `level` (req: `impact`, `long_term`, `medium_term`, `short_term`, `output`), `sphere` (`control`, `influence`, `interest`), `logic` {`type`: `all`/`any`/`at_least`, `k`} over ungrouped incoming links (default `all`), `category` (open string; recommended vocabularies: ORS `impact`/`influence`/`leverage`/`capacity`, COM-B `reach`/`capability`/`opportunity`/`motivation`/`behavior`/`direct_benefit`/`wellbeing`, MSD AAER `adopt`/`adapt`/`expand`/`respond`), `changeType` (`knowledge`, `attitude`, `skill`, `behavior`, `practice`, `policy`, `norm`, `condition`, `investment`, `adoption`), `population`, `actorIds[]` (who changes / co-owners — supports collective outcomes), `contributesTo[]` (outcomes in a parent theory, as `model:<doc>#<outcome>` references; resolved by `validate --parent` / `validate.Family`), `responsibility` (`own` default, `shared`, `partner`, `unaddressed`), `deliveredBy[]` (actor IDs), `addressesCauses[]` (cause IDs), `targetGroupIds[]`, `priority?` {`scores[]` {criterionId, score 1–5, note}, `rationale`}, `tags[]` | Graph node. Indicators reference outcomes, not vice versa. `partner` / `unaddressed` outcomes stay in the graph and are monitored (UNDG: monitor the whole solution tree) but are excluded from accountability counts. |
 | `Cause` | `id`, `statement` (req), `level` (req: `immediate`, `underlying`, `structural`), `parent?` (cause ID it contributes to), `affectedGroupIds[]`, `evidenceIds[]`, `outOfScope?` {reason} | Problem tree; outcomes map to causes via `addressesCauses`. |
