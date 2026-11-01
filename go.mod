@@ -4,7 +4,7 @@ go 1.26.5
 
 require (
 	github.com/grokify/d2vision v0.5.0
-	github.com/grokify/oscompat v0.11.0
+	github.com/grokify/oscompat v0.12.0
 	github.com/grokify/prism-core v0.5.0
 	github.com/grokify/prism-roadmap v0.21.0
 	github.com/grokify/structured-goals v0.2.0
