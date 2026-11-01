@@ -31,7 +31,7 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 
 | Concept | Go type / field | Delivered by |
 |---------|-----------------|--------------|
-| Long-term goal, impact, outcome, precondition | `Outcome` with `Level` (`impact`, `long_term`, `intermediate`, `short_term`, `output`) | 004 |
+| Long-term goal, impact, outcome, precondition | `Outcome` with `Level` (`impact`, `long_term`, `medium_term`, `short_term`, `output`) | 004 |
 | Sphere of control / influence / interest (Outcome Mapping, RBM) | `Outcome.Sphere` | 004 |
 | AND / OR / k-of-n preconditions, ActKnowledge "cluster" | `Outcome.Logic` (`Logic{Type, K}`) and `PreconditionGroup` | 004 |
 | Outcome category taxonomies (ORS, COM-B, MSD AAER) | `Outcome.Category` (open string), `Outcome.ChangeType` | 004 |

@@ -7,7 +7,7 @@ elements, how they refer to each other, and the ways to change them.
 
 | Element | What it is |
 |---------|------------|
-| **Outcome** | A change that should happen, at one of five levels: `output`, `short_term`, `intermediate`, `long_term`, or `impact` |
+| **Outcome** | A change that should happen, at one of five levels: `output`, `short_term`, `medium_term`, `long_term`, or `impact` |
 | **Link** | A causal arrow from one outcome to another, with a rationale and a polarity. A feedback link marks a loop |
 | **Group** | Preconditions for an outcome: all of them, any of them, or at least *k* of *n*. Groups can nest |
 | **Intervention** | Something the program does to bring about outcomes |
