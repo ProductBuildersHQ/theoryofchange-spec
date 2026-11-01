@@ -17,8 +17,9 @@ Learning Exchange, Shared Services, and Civic Voice.
 It shows two impact layers (member change and resident change) with the ceiling
 of accountability between them; 23 outcomes across all five levels with
 `all`, `any`, and `at_least` precondition logic; a metric library; measurement
-design with weighted selection criteria and a collection budget; a problem tree
-and target groups; audiences and a story codebook; a mission and vision, a North
+design with weighted selection criteria and a collection budget; a problem tree,
+with causes that feed one another and the effects of the core problem, and
+target groups; audiences and a story codebook; a mission and vision, a North
 Star with a guardrail for each program area, and headline lists that lead the
 board, funders, and members with different numbers; and a spreadsheet import with
 its column mapping. The folder holds the impact model, a quarter of observations with
@@ -58,7 +59,9 @@ certificate courses for staff of other nonprofits. Its one program is marked
 hours to a first forum answer, and a post-course Net Promoter Score from a survey
 large enough for weekly scores. Twenty-four weeks of observations give each of
 those enough points for control limits. A monthly catalog count and a yearly
-graduate survey are flagged by the DMAIC lint rules on purpose.
+graduate survey are flagged by the DMAIC lint rules on purpose. Its problem tree
+has two causes, a missing training budget that leaves staff no time, and two
+effects, untrained leadership and weaker programs.
 
 ```bash
 impact-model lint examples/course-catalog/impact-model.yaml

@@ -278,7 +278,7 @@ whether it did.
 | Connect an AI agent | [MCP server and agent skills](guides/mcp-and-skills.md) |
 | Look at a complete impact model | [Examples](guides/examples.md) |
 
-The [release notes](releases/v0.4.0.md) list what the latest release contains, and [v0.1.0](releases/v0.1.0.md) the first.
+The [release notes](releases/v0.5.0.md) list what the latest release contains, and [v0.1.0](releases/v0.1.0.md) the first.
 
 ## Part of the PRISM ecosystem
 

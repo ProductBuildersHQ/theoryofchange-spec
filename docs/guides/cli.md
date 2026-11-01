@@ -45,8 +45,8 @@ is the map.
 | `patch` | Apply an RFC 6902 JSON Patch atomically, with `@id` pointers |
 | `diff` | Compare two versions by element ID, or print a draft revision patch |
 
-The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
-`consultation`, `criterion`, `decision`, `evidence`, `factor`, `group`,
+The twenty-one element kinds are `actor`, `assumption`, `audience`, `cause`,
+`consultation`, `criterion`, `decision`, `effect`, `evidence`, `factor`, `group`,
 `indicator`, `intervention`, `link`, `metric`, `outcome`, `pathway`, `risk`,
 `target-group`, `term`, and `theme`. See [Authoring an impact model](authoring.md).
 
