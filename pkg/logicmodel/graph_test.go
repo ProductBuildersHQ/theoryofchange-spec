@@ -80,6 +80,27 @@ func TestEveryKindOfEdgeComesFromTheTheory(t *testing.T) {
 	}
 }
 
+// A link back to an earlier stage is feedback. It is kept out of the edges so
+// it is not drawn across the boxes in between.
+func TestFeedbackIsKeptApart(t *testing.T) {
+	v := view()
+	v.Links = append(v.Links, report.LinkView{ID: "loop", From: "oc-strong", To: "oc-skills", Feedback: true})
+	g := Build(v)
+	if hasEdge(g, "oc-strong", "oc-skills") {
+		t.Error("a feedback link was drawn as an edge")
+	}
+	if !slices.Contains(g.Feedback, Edge{"oc-strong", "oc-skills"}) || len(g.Feedback) != 1 {
+		t.Errorf("feedback = %v", g.Feedback)
+	}
+	note := feedbackNote(g)
+	if !strings.Contains(note, "Members are strong leads back to Skills gained") {
+		t.Errorf("note:\n%s", note)
+	}
+	if feedbackNote(Build(view())) != "" {
+		t.Error("a theory with no feedback gets no note")
+	}
+}
+
 func TestEdgesToNowhereAndToSelfAreDropped(t *testing.T) {
 	g := Build(view())
 	for _, e := range g.Edges {
