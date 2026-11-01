@@ -516,6 +516,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../guides/dmaic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMAIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../guides/review-round-trip/" class="md-nav__link">
         
   
@@ -2650,7 +2678,7 @@ no persistence, no statistical inference).</p>
 </tr>
 <tr>
 <td>TRD-014</td>
-<td><code>pkg/prismx</code> MUST export OKR documents, outcome journeys, and V2MOM documents (one method per pathway; refused without a vision, values, or a pathway); no package under <code>pkg/impact</code>, <code>pkg/graph</code>, <code>pkg/validate</code>, <code>pkg/lint</code>, <code>pkg/measure</code> MAY import <code>prism-roadmap</code></td>
+<td><code>pkg/prismx</code> MUST export OKR documents, outcome journeys, V2MOM documents (one method per pathway; refused without a vision, values, or a pathway), and DMAIC metrics documents (one category per pathway marked <code>dmaic</code>; control limits only from ≥ 20 observations; refused when nothing is marked or nothing is numeric); no package under <code>pkg/impact</code>, <code>pkg/graph</code>, <code>pkg/validate</code>, <code>pkg/lint</code>, <code>pkg/measure</code> MAY import <code>prism-roadmap</code></td>
 <td>PRD-FR-603</td>
 <td><code>go list -deps</code> import-boundary test</td>
 </tr>
@@ -2945,7 +2973,7 @@ no persistence, no statistical inference).</p>
 <tr>
 <td><code>pkg/prismx</code></td>
 <td>PRISM adapters</td>
-<td><code>ToOKR</code>, <code>ToOutcomeJourneys</code>, <code>ToV2MOM</code>; prism-roadmap import is confined here.</td>
+<td><code>ToOKR</code>, <code>ToOutcomeJourneys</code>, <code>ToV2MOM</code>, <code>ToDMAIC</code>; prism-roadmap import is confined here.</td>
 </tr>
 <tr>
 <td><code>pkg/service</code></td>
@@ -3129,7 +3157,7 @@ no persistence, no statistical inference).</p>
 <td>0; 2</td>
 </tr>
 <tr>
-<td><code>impact-model export okr\|journey\|v2mom &lt;model&gt; [-O obs...]</code></td>
+<td><code>impact-model export okr\|journey\|v2mom\|dmaic &lt;model&gt; [-O obs...]</code></td>
 <td>PRISM exports</td>
 <td>0; 2</td>
 </tr>
@@ -3271,6 +3299,7 @@ no persistence, no statistical inference).</p>
 <a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToOKR</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Document</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">okr</span><span class="p">.</span><span class="nx">OKRDocument</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 <a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToOutcomeJourneys</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Document</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="nx">journey</span><span class="p">.</span><span class="nx">OutcomeJourney</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 <a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToV2MOM</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Model</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">v2mom</span><span class="p">.</span><span class="nx">V2MOM</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="c1">// wraps ErrNotV2MOMReady</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="kd">func</span><span class="w"> </span><span class="nx">ToDMAIC</span><span class="p">(</span><span class="nx">doc</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Model</span><span class="p">,</span><span class="w"> </span><span class="nx">st</span><span class="w"> </span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">Status</span><span class="p">,</span><span class="w"> </span><span class="nx">sets</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">impact</span><span class="p">.</span><span class="nx">ObservationSet</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">dmaic</span><span class="p">.</span><span class="nx">DMAICDocument</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nx">Omission</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="c1">// wraps ErrNotDMAICReady</span>
 </code></pre></div>
 <p>Errors: functions return wrapped sentinel errors —
 <code>ErrInvalidDocument</code>, <code>ErrUnknownReference</code>, <code>ErrCycle</code> (only from APIs that
@@ -3595,6 +3624,21 @@ reject <code>..</code> escapes and symlinks leaving the root.</p>
 <td>IMP-PRV-004</td>
 <td>info</td>
 <td>Selected indicators declare <code>dataAvailability</code></td>
+</tr>
+<tr>
+<td>IMP-DMA-001</td>
+<td>warning</td>
+<td>An indicator of a pathway marked <code>projections: [dmaic]</code> declares a <code>frequency</code> and a data source (<code>dataSource</code> or <code>collection.system</code>)</td>
+</tr>
+<tr>
+<td>IMP-DMA-002</td>
+<td>warning</td>
+<td>An indicator of a DMAIC pathway is measured ≥ 20 times a year, so control limits can be set within about a year</td>
+</tr>
+<tr>
+<td>IMP-DMA-003</td>
+<td>warning</td>
+<td>A survey indicator of a DMAIC pathway gets ≥ 30 responses per measurement (<code>collection.respondentsPerYear</code> × <code>sampleRate</code> ÷ measurements per year), and states <code>respondentsPerYear</code></td>
 </tr>
 </tbody>
 </table>
@@ -4230,8 +4274,8 @@ unless marked required.</p>
 </tr>
 <tr>
 <td><code>Pathway</code></td>
-<td><code>id</code>, <code>title</code> (req), <code>kind</code> (<code>program</code>, <code>strategy</code>, <code>theme</code>, <code>geography</code>, <code>segment</code>), <code>description</code>, <code>ownerActorId</code>, <code>outcomeIds[]</code>, <code>interventionIds[]</code>, <code>childModel?</code> (ref to a program-level ToC document)</td>
-<td>Program area / strategy grouping. Indicators join via <code>pathwayIds</code>. A pathway may delegate detail to a child ToC whose <code>parent</code> points back.</td>
+<td><code>id</code>, <code>title</code> (req), <code>kind</code> (<code>program</code>, <code>strategy</code>, <code>theme</code>, <code>geography</code>, <code>segment</code>), <code>description</code>, <code>ownerActorId</code>, <code>outcomeIds[]</code>, <code>interventionIds[]</code>, <code>childModel?</code> (ref to a program-level ToC document), <code>focus?</code>, <code>projections[]</code> (<code>dmaic</code>; unique, VAL-PTH-007)</td>
+<td>Program area / strategy grouping. <code>projections: [dmaic]</code> subjects the pathway's indicators to the IMP-DMA rules and includes it in <code>export dmaic</code>. Indicators join via <code>pathwayIds</code>. A pathway may delegate detail to a child ToC whose <code>parent</code> points back.</td>
 </tr>
 <tr>
 <td><code>Metric</code></td>

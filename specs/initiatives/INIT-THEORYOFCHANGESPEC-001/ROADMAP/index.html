@@ -516,6 +516,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../guides/dmaic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMAIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../guides/review-round-trip/" class="md-nav__link">
         
   
@@ -1909,7 +1937,7 @@
 </ul>
 <h2 id="phase-3-pathways-metric-library-provenance-and-reference-examples">Phase 3 — Pathways, Metric Library, Provenance, and Reference Examples<a class="headerlink" href="#phase-3-pathways-metric-library-provenance-and-reference-examples" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Program pathways, shared metric definitions, a glossary, and provenance on every element, proven on fictional reference examples
-<strong>Status:</strong> Completed — 4 of 4 items completed</p>
+<strong>Status:</strong> In progress — 4 of 5 items completed</p>
 <ul>
 <li>[x] <code>RMI-THEORYOFCHANGESPEC-032</code> Pathways (program areas) and parent / child ToC references, with element commands</li>
 <li>Type: capability · Status: completed</li>
@@ -2340,7 +2368,7 @@
 </ul>
 <h2 id="phase-19-strategy-projections">Phase 19 — Strategy Projections<a class="headerlink" href="#phase-19-strategy-projections" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Draw strategy and improvement formats such as V2MOM and DMAIC from the impact model, on prism-roadmap's goal types, linked by ID and kept as separate documents
-<strong>Status:</strong> In progress — 2 of 3 items completed</p>
+<strong>Status:</strong> In progress — 4 of 5 items completed</p>
 <ul>
 <li>[x] <code>RMI-IMPACTMODEL-003</code> Export a V2MOM projection of an impact model</li>
 <li>Type: capability · Status: completed</li>
@@ -2348,9 +2376,9 @@
 <p>Acceptance: context.values added; export v2mom writes vision, values, methods, obstacles, and measures from the model, linked by ID; the V2MOM document stays separate</p>
 </li>
 <li>
-<p>[ ] <code>RMI-IMPACTMODEL-005</code> Export a DMAIC projection of an impact model</p>
+<p>[x] <code>RMI-IMPACTMODEL-005</code> Export a DMAIC projection of an impact model</p>
 </li>
-<li>Type: capability · Status: proposed</li>
+<li>Type: capability · Status: completed</li>
 <li>
 <p>Acceptance: export dmaic writes a prism-roadmap goals/dmaic document: categories from pathways, metrics from indicators with baseline, current, target, direction, status, and data points from observations, root causes from the problem tree, and initiatives from interventions; control limits and process capability only where observations support them, never invented</p>
 </li>
@@ -2358,7 +2386,22 @@
 <p>[x] <code>RMI-IMPACTMODEL-004</code> Export OKRs through prism-roadmap's goals/okr instead of structured-goals</p>
 </li>
 <li>Type: chore · Status: completed</li>
-<li>Acceptance: pkg/prismx imports prism-roadmap/goals/okr; structured-goals is gone from go.mod; the OKR export's golden output is unchanged</li>
+<li>
+<p>Acceptance: pkg/prismx imports prism-roadmap/goals/okr; structured-goals is gone from go.mod; the OKR export's golden output is unchanged</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-006</code> Mark pathways for DMAIC and lint their measurement cadence and sample size</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Acceptance: pathway.projections accepts dmaic; lint checks that the indicators of a dmaic pathway declare a frequency and collection system, are measured at least 20 times a year, and survey indicators get at least 30 responses per measurement; thresholds match prism-roadmap's DMAIC code</li>
+<li>
+<p>Note: done except the threshold cross-check, which moves to <code>RMI-IMPACTMODEL-007</code>; prism-roadmap does not export DMAIC thresholds yet, so they live in <code>pkg/impact</code></p>
+</li>
+<li>
+<p>[ ] <code>RMI-IMPACTMODEL-007</code> Cross-check the DMAIC thresholds with prism-roadmap once it exports them</p>
+</li>
+<li>Type: chore · Status: proposed</li>
+<li>Acceptance: prism-roadmap's goals/dmaic exports its minimum points and responses; a prismx test fails if impact.DMAICMinPoints or impact.DMAICMinResponsesPerPoint differ</li>
 </ul>
 
 

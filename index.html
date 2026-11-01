@@ -666,6 +666,34 @@
   
   
     <li class="md-nav__item">
+      <a href="guides/dmaic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMAIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="guides/review-round-trip/" class="md-nav__link">
         
   
@@ -1648,7 +1676,7 @@ a part of another.</p>
   im --&gt; lf["Logframe"]:::method
   im --&gt; okr["OKRs"]:::strategy
   im --&gt; v2["V2MOM"]:::strategy
-  im -.-&gt; dm["DMAIC (planned)"]:::planned</code></pre>
+  im --&gt; dm["DMAIC"]:::strategy</code></pre>
 <h2 id="what-is-an-impact-model">What is an impact model?<a class="headerlink" href="#what-is-an-impact-model" title="Permanent link">&para;</a></h2>
 <p>An impact model is one structured description of <strong>how and why change is
 expected to happen</strong>. It holds:</p>
@@ -1714,9 +1742,9 @@ projection, and one model can produce many.</p>
 <td><code>export v2mom</code></td>
 </tr>
 <tr>
-<td><strong>DMAIC</strong> <em>(planned)</em></td>
-<td>Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them</td>
-<td>—</td>
+<td><strong>DMAIC</strong></td>
+<td>Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? One category per pathway marked <code>projections: [dmaic]</code>, its numeric indicators as metrics with observations as data points, control limits once there are enough, root causes from the problem tree, and interventions as improvement initiatives. Lint first checks that those pathways are measured often enough. See <a href="guides/dmaic/">the mapping</a></td>
+<td><code>export dmaic</code></td>
 </tr>
 </tbody>
 </table>
@@ -1895,7 +1923,7 @@ program, shown as a pathway. The second shows how its metrics reach each audienc
 </tr>
 <tr>
 <td><strong>Quality you can check</strong></td>
-<td>A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat</td>
+<td>A schema, structural validation, 69 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat</td>
 </tr>
 <tr>
 <td><strong>Progress you can measure</strong></td>
@@ -1950,6 +1978,10 @@ whether it did.</p>
 <tr>
 <td>Export a V2MOM, and see how it maps</td>
 <td><a href="guides/v2mom/">V2MOM</a></td>
+</tr>
+<tr>
+<td>Run a program with DMAIC, and see how it maps</td>
+<td><a href="guides/dmaic/">DMAIC</a></td>
 </tr>
 <tr>
 <td>Send an impact model out for review</td>

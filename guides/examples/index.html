@@ -516,6 +516,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../dmaic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMAIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../review-round-trip/" class="md-nav__link">
         
   
@@ -686,6 +714,17 @@
     <span class="md-ellipsis">
       
         Competing futures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#course-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course catalog
       
     </span>
   </a>
@@ -1471,6 +1510,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#course-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Course catalog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1502,7 +1552,7 @@
 
 
 <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h1>
-<p>Three complete examples are in the repository's
+<p>Four complete examples are in the repository's
 <a href="https://github.com/ProductBuildersHQ/impact-model/tree/main/examples"><code>examples/</code></a>
 directory. <strong>Everything in them is fictional</strong>: the organizations, people,
 numbers, and URLs (all under <code>example.org</code>) are invented for illustration.</p>
@@ -1539,6 +1589,19 @@ one market and share one registry of actors. Validate them together:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>impact-model<span class="w"> </span>validate<span class="w"> </span>examples/competing-futures/future-*.yaml<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--registry<span class="w"> </span>examples/competing-futures/actors.yaml<span class="w"> </span>--futures
 </code></pre></div>
+<h2 id="course-catalog">Course catalog<a class="headerlink" href="#course-catalog" title="Permanent link">&para;</a></h2>
+<p><code>examples/course-catalog</code>: a fictional small nonprofit's free, on-demand
+certificate courses for staff of other nonprofits. Its one program is marked
+<code>projections: [dmaic]</code> and is measured weekly: completion rate, courses started,
+hours to a first forum answer, and a post-course Net Promoter Score from a survey
+large enough for weekly scores. Twenty-four weeks of observations give each of
+those enough points for control limits. A monthly catalog count and a yearly
+graduate survey are flagged by the DMAIC lint rules on purpose.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>impact-model<span class="w"> </span>lint<span class="w"> </span>examples/course-catalog/impact-model.yaml
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>dmaic<span class="w"> </span>examples/course-catalog/impact-model.yaml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-O<span class="w"> </span>examples/course-catalog/observations-2026-h1.yaml
+</code></pre></div>
+<p>See the <a href="../dmaic/">DMAIC guide</a>.</p>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
 <p><a href="../cli/">CLI reference</a></p>
 

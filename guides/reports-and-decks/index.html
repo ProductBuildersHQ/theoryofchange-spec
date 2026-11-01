@@ -679,6 +679,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../dmaic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMAIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../review-round-trip/" class="md-nav__link">
         
   
@@ -1849,12 +1877,15 @@ can tell that a PDF, a Word file, and a spreadsheet came from the same version.
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>okr<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-o<span class="w"> </span>okr.json
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>journey<span class="w"> </span>impact-model.yaml<span class="w"> </span>-o<span class="w"> </span>journeys.json
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>v2mom<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-o<span class="w"> </span>v2mom.json
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>dmaic<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>obs-q3.yaml<span class="w"> </span>-o<span class="w"> </span>dmaic.json
 </code></pre></div>
 <p><code>export okr</code> turns each owned outcome that has measured indicators into an
 objective, with each indicator as a key result carrying baseline, target,
 current value, score, status, and confidence. <code>export journey</code> writes outcome
 journeys. <code>export v2mom</code> writes a V2MOM with one method per pathway; the
-<a href="../v2mom/">V2MOM guide</a> maps each part. All three are JSON for the PRISM tools.</p>
+<a href="../v2mom/">V2MOM guide</a> maps each part. <code>export dmaic</code> writes a DMAIC metrics
+document for the pathways marked for DMAIC; the <a href="../dmaic/">DMAIC guide</a> maps
+each part. All four are JSON for the PRISM tools.</p>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">&para;</a></h2>
 <p><a href="../review-round-trip/">Review round trip</a></p>
 <h2 id="the-layered-logic-model-diagram">The layered logic model diagram<a class="headerlink" href="#the-layered-logic-model-diagram" title="Permanent link">&para;</a></h2>

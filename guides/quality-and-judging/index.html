@@ -516,6 +516,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../dmaic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMAIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../review-round-trip/" class="md-nav__link">
         
   
@@ -1547,7 +1575,7 @@ at least one file has errors.</p>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>impact-model<span class="w"> </span>lint<span class="w"> </span>--list
 </code></pre></div>
 <p>Validation says a document is well formed; lint says whether the impact model is
-sound. There are 66 deterministic rules, each with an ID such as <code>IMP-LOG-001</code>,
+sound. There are 69 deterministic rules, each with an ID such as <code>IMP-LOG-001</code>,
 grouped by what they look at:</p>
 <table>
 <thead>
@@ -1600,6 +1628,10 @@ grouped by what they look at:</p>
 <tr>
 <td>Pathways and validation (<code>PTH</code>, <code>VAL</code>)</td>
 <td>Every pathway reaches impact and has a selected indicator; the main steps have been checked with the people the impact model concerns</td>
+</tr>
+<tr>
+<td>DMAIC readiness (<code>DMA</code>)</td>
+<td>For a pathway marked <code>projections: [dmaic]</code>: every indicator says how often it is measured and where the data comes from, is measured at least 20 times a year, and, for a survey, gets at least 30 responses per measurement. Pathways not marked are not checked</td>
 </tr>
 </tbody>
 </table>
