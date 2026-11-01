@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/impact-model`
-**Status:** In progress — 18 of 21 phases completed
+**Status:** In progress — 19 of 22 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, `Refs: <RMI-ID>`. Items from before the rename to impact-model are `RMI-THEORYOFCHANGESPEC-001` to `-076`; later items are `RMI-IMPACTMODEL-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -552,3 +552,12 @@
   - Type: capability · Status: completed
   - Depends on: `RMI-IMPACTMODEL-010`, `RMI-IMPACTMODEL-011`
   - Acceptance: a problem tree guide with the mapping to the diagram; the examples have effects and outcomes that address them; README, concepts, CLI reference, changelog, and roadmap updated
+
+## Phase 22 — Release v0.5.0
+
+**Theme:** Prepare the release with problem trees: changelog, release notes, guide updates, and the migration from parent to parents
+**Status:** Completed — 1 of 1 items completed
+
+- [x] `RMI-IMPACTMODEL-013` Prepare v0.5.0: changelog, release notes, guide updates, and the parent to parents migration
+  - Type: capability · Status: completed
+  - Acceptance: CHANGELOG.json has v0.5.0 and CHANGELOG.md is generated from it; docs/releases/v0.5.0.md covers problem trees and the migration from parent to parents; the user guides cover effects; mkdocs build --strict passes
