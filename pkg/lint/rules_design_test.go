@@ -280,6 +280,7 @@ func TestEveryDocumentedRuleIsRegisteredOnce(t *testing.T) {
 		"IMP-AUD-002", "IMP-HLN-001", "IMP-HLN-002", "IMP-HLN-003", "IMP-HLN-004",
 		"IMP-NSM-001", "IMP-NSM-002", "IMP-NSM-003", "IMP-NSM-004", "IMP-NSM-005", "IMP-NSM-006", "IMP-NSM-007",
 		"IMP-CTX-001",
+		"IMP-DMA-001", "IMP-DMA-002", "IMP-DMA-003",
 	}
 	slices.Sort(want)
 	var got []string
