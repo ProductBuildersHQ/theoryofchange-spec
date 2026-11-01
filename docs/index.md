@@ -2,15 +2,18 @@
 
 **Impact Model** is an AI-native format from
 [ProductBuildersHQ](https://github.com/ProductBuildersHQ) for describing how a
-program, product, or organization expects to bring about change: what it does,
-why that should work, and how it will know. It is a Go-first data model with
+program, product, or organization expects to bring about change. It is a
+[causal model](https://en.wikipedia.org/wiki/Causal_model): it states which
+interventions should change which outcomes, why each step should lead to the
+next, and how to measure whether it did. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
 You describe the change once, in one impact model. The
 [theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
 model, the outcome map, the logframe, strategy formats such as OKRs and V2MOM,
-and improvement formats such as DMAIC are **projections** of it. Each draws the same model for a different reader and
-leaves something out, and none of them is a part of another.
+and improvement formats such as DMAIC are **projections** of it. Each draws the
+same model for a different reader and leaves something out, and none of them is
+a part of another.
 
 ```mermaid
 flowchart LR
