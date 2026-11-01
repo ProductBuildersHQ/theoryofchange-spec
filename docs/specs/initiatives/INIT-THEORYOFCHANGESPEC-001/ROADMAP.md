@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/theoryofchange-spec`
-**Status:** In progress — 13 of 15 phases completed
+**Status:** In progress — 14 of 16 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry the trailer `Refs: RMI-THEORYOFCHANGESPEC-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -448,4 +448,13 @@
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-071`
   - Acceptance: the deck has the layered diagram as a slide and the existing table and diagram remain; docs describe both and how they differ
+
+## Phase 16 — Release v0.2.0
+
+**Theme:** Prepare the second release: changelog, release notes, and guides
+**Status:** Completed — 1 of 1 items completed
+
+- [x] `RMI-THEORYOFCHANGESPEC-073` Prepare v0.2.0: changelog, release notes, and guide updates
+  - Type: capability · Status: completed
+  - Acceptance: CHANGELOG.json has v0.2.0 and CHANGELOG.md is generated from it; docs/releases/v0.2.0.md exists; the guides cover headline metrics, composed indicators, and the layered diagram; mkdocs build --strict passes
 
