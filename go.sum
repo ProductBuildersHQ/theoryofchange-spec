@@ -38,8 +38,6 @@ github.com/grokify/prism-core v0.5.0 h1:pn+qSji72iJCUOuZISKGdxjxouGSEISuYCSo7MZ5
 github.com/grokify/prism-core v0.5.0/go.mod h1:MGwhaaZdFW8WShYx3lqzGkcx8f07xFDbwd+u+4uBAT0=
 github.com/grokify/prism-roadmap v0.21.0 h1:tFX5FCS1upjr79Zx3e25JkNLSOXWhjZ6Rn8KRFxll/I=
 github.com/grokify/prism-roadmap v0.21.0/go.mod h1:mqQUA8bz8QS7Q91NnJLpmBk6P2mzG0tuuAtHnPB2r0U=
-github.com/grokify/structured-goals v0.2.0 h1:DOBYKNKUjdS8g8x2RyvIGbt/lPbfxSJGOfg5HM0kX1M=
-github.com/grokify/structured-goals v0.2.0/go.mod h1:Eb9cMBa8oVztoFBE46qOgQo+SJ6aRkfwu/x9gryhz0A=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/invopop/jsonschema v0.14.0 h1:MHQqLhvpNUZfw+hM3AZDYK7jxO8FZoQeQM77g8iyZjg=

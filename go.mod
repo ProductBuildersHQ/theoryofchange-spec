@@ -7,7 +7,6 @@ require (
 	github.com/grokify/oscompat v0.13.0
 	github.com/grokify/prism-core v0.5.0
 	github.com/grokify/prism-roadmap v0.21.0
-	github.com/grokify/structured-goals v0.2.0
 	github.com/invopop/jsonschema v0.14.0
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/plexusone/structured-evaluation v0.15.0

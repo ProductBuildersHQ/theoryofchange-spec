@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/grokify/structured-goals/okr"
+	"github.com/grokify/prism-roadmap/goals/okr"
 )
 
 func TestExportOKRAndJourneys(t *testing.T) {
