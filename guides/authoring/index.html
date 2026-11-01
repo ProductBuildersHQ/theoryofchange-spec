@@ -475,6 +475,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#what-a-program-steers-by-and-what-each-audience-is-told" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a program steers by, and what each audience is told
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#provenance-stated-inferred-or-confirmed" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1226,6 +1237,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../releases/v0.1.0/" class="md-nav__link">
         
   
@@ -1313,6 +1352,17 @@
     <span class="md-ellipsis">
       
         The elements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-program-steers-by-and-what-each-audience-is-told" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a program steers by, and what each audience is told
       
     </span>
   </a>
@@ -1450,7 +1500,7 @@ elements, how they refer to each other, and the ways to change them.</p>
 </tr>
 <tr>
 <td><strong>Indicator</strong></td>
-<td>How an outcome or assumption is measured, with a baseline, targets, and a frequency</td>
+<td>How an outcome, activity, or assumption is measured, with a baseline, targets, and a frequency. It can also be worked out from other indicators, such as a cost per outcome</td>
 </tr>
 <tr>
 <td><strong>Actor</strong></td>
@@ -1462,7 +1512,7 @@ elements, how they refer to each other, and the ways to change them.</p>
 </tr>
 <tr>
 <td><strong>Pathway</strong></td>
-<td>A named route through the theory, such as one program's contribution</td>
+<td>A named route through the theory, such as one program's or product's contribution, with the North Star it steers by</td>
 </tr>
 <tr>
 <td><strong>Cause</strong>, <strong>target group</strong></td>
@@ -1470,7 +1520,7 @@ elements, how they refer to each other, and the ways to change them.</p>
 </tr>
 <tr>
 <td><strong>Audience</strong>, <strong>theme</strong></td>
-<td>Who needs to see what reported, and the codebook for coding stories</td>
+<td>Who needs to see what reported, the short list of numbers each is told, and the codebook for coding stories</td>
 </tr>
 <tr>
 <td><strong>Metric</strong>, <strong>term</strong></td>
@@ -1488,6 +1538,47 @@ what it only monitors. The document names a <strong>ceiling of accountability</s
 the level above which outcomes are tracked but not claimed.</p>
 <p>Every ID is a lowercase kebab-case slug, unique across the document, and
 references are by ID.</p>
+<h2 id="what-a-program-steers-by-and-what-each-audience-is-told">What a program steers by, and what each audience is told<a class="headerlink" href="#what-a-program-steers-by-and-what-each-audience-is-told" title="Permanent link">&para;</a></h2>
+<p>Three choices sit on top of the chain from activities to impact. They are
+different things, and a theory can make all three.</p>
+<ul>
+<li><strong>A North Star</strong> is the one number a program or product steers by. It is set on
+  the pathway, with an optional <em>one metric that matters</em> and the guardrails that
+  watch what chasing it could harm. It should measure an outcome at or below the
+  ceiling of accountability, never an output or an activity.</li>
+<li><strong>A headline list</strong> is what an audience is told: a short, ordered list on the
+  audience, each entry an indicator with an optional label and note worded for
+  that reader. The board, funders, and members can each lead with different
+  numbers drawn from the same indicators, and every audience sees the same figure
+  for an indicator.</li>
+<li><strong>Purpose</strong> is <code>context.mission</code> and <code>context.vision</code>: plain statements of why
+  the organization exists and what it works toward. They are not part of the
+  causal chain.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># A pathway&#39;s North Star, and what watches it</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>theoryofchange<span class="w"> </span>pathway<span class="w"> </span><span class="nb">set</span><span class="w"> </span>theory.yaml<span class="w"> </span>pw-learning<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--north-star<span class="w"> </span>ind-practice-maturity<span class="w"> </span>--guardrails<span class="w"> </span>ind-retention-learning
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># What the board is told, in order</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>theoryofchange<span class="w"> </span>audience<span class="w"> </span><span class="nb">set</span><span class="w"> </span>theory.yaml<span class="w"> </span>aud-board<span class="w"> </span>--set<span class="w"> </span><span class="s1">&#39;headline=[</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">  {&quot;indicatorId&quot;:&quot;ind-practice-maturity&quot;,&quot;label&quot;:&quot;Leadership practice across members&quot;},</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">  {&quot;indicatorId&quot;:&quot;ind-reach-network&quot;}]&#39;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Why the organization exists</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>theoryofchange<span class="w"> </span>patch<span class="w"> </span>theory.yaml<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s">[{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/context/mission&quot;,&quot;value&quot;:&quot;Strengthen local nonprofits.&quot;}]</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s">EOF</span>
+</code></pre></div>
+<p>Some of the numbers people ask for are arithmetic on others, such as the cost
+per applied change. Give that indicator a <code>composedOf</code>, and its value is worked
+out from the latest value of each part when it has none of its own:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>theoryofchange<span class="w"> </span>indicator<span class="w"> </span><span class="nb">set</span><span class="w"> </span>theory.yaml<span class="w"> </span>ind-cost-per-change<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--composed-op<span class="w"> </span>ratio<span class="w"> </span>--composed-of<span class="w"> </span>ind-cost,ind-changes-applied
+</code></pre></div>
+<p>A ratio and a difference take exactly two indicators, in order. A composition is
+arithmetic and not a causal link. See <a href="../measurement/">Measuring progress</a> for
+how the value is worked out and what is withheld, and
+<a href="../quality-and-judging/">Quality and judging</a> for the rules that check all of it.</p>
 <h2 id="provenance-stated-inferred-or-confirmed">Provenance: stated, inferred, or confirmed<a class="headerlink" href="#provenance-stated-inferred-or-confirmed" title="Permanent link">&para;</a></h2>
 <p>Each element carries a <strong>basis</strong> that says why it is in the theory:</p>
 <table>
@@ -1524,10 +1615,10 @@ references are by ID.</p>
 <strong>group or role</strong>, not a personal name, and when with <code>--decided-at</code>.</p>
 <h2 id="change-a-theory-with-commands">Change a theory with commands<a class="headerlink" href="#change-a-theory-with-commands" title="Permanent link">&para;</a></h2>
 <p>Every element kind has <code>add</code>, <code>set</code>, and <code>rm</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>theoryofchange<span class="w"> </span>outcome<span class="w"> </span>add<span class="w"> </span>theory.yaml<span class="w"> </span>--id<span class="w"> </span>oc-skills<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;Staff write strong applications&quot;</span><span class="w"> </span>--level<span class="w"> </span>short_term
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>theoryofchange<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>theory.yaml<span class="w"> </span>--id<span class="w"> </span>ln-skills-adoption<span class="w"> </span>--from<span class="w"> </span>oc-skills<span class="w"> </span>--to<span class="w"> </span>oc-adoption<span class="w"> </span>--rationale<span class="w"> </span><span class="s2">&quot;Skilled staff apply more often&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>theoryofchange<span class="w"> </span>outcome<span class="w"> </span><span class="nb">set</span><span class="w"> </span>theory.yaml<span class="w"> </span>oc-skills<span class="w"> </span>--basis<span class="w"> </span>confirmed<span class="w"> </span>--decided-by<span class="w"> </span><span class="s2">&quot;Program board&quot;</span><span class="w"> </span>--decided-at<span class="w"> </span><span class="m">2026</span>-04-01
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>theoryofchange<span class="w"> </span>outcome<span class="w"> </span>rm<span class="w"> </span>theory.yaml<span class="w"> </span>oc-skills<span class="w"> </span>--cascade
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>theoryofchange<span class="w"> </span>outcome<span class="w"> </span>add<span class="w"> </span>theory.yaml<span class="w"> </span>--id<span class="w"> </span>oc-skills<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;Staff write strong applications&quot;</span><span class="w"> </span>--level<span class="w"> </span>short_term
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>theoryofchange<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>theory.yaml<span class="w"> </span>--id<span class="w"> </span>ln-skills-adoption<span class="w"> </span>--from<span class="w"> </span>oc-skills<span class="w"> </span>--to<span class="w"> </span>oc-adoption<span class="w"> </span>--rationale<span class="w"> </span><span class="s2">&quot;Skilled staff apply more often&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>theoryofchange<span class="w"> </span>outcome<span class="w"> </span><span class="nb">set</span><span class="w"> </span>theory.yaml<span class="w"> </span>oc-skills<span class="w"> </span>--basis<span class="w"> </span>confirmed<span class="w"> </span>--decided-by<span class="w"> </span><span class="s2">&quot;Program board&quot;</span><span class="w"> </span>--decided-at<span class="w"> </span><span class="m">2026</span>-04-01
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>theoryofchange<span class="w"> </span>outcome<span class="w"> </span>rm<span class="w"> </span>theory.yaml<span class="w"> </span>oc-skills<span class="w"> </span>--cascade
 </code></pre></div>
 <p>Run <code>theoryofchange &lt;element&gt; add --help</code> to see every field as a flag.</p>
 <p>Each command is compiled to a JSON Patch and applied through the same validated
@@ -1545,8 +1636,8 @@ path, which has these guarantees:</p>
 <h2 id="change-a-theory-with-a-patch">Change a theory with a patch<a class="headerlink" href="#change-a-theory-with-a-patch" title="Permanent link">&para;</a></h2>
 <p>For many changes at once, or from a script or an agent, apply an
 <a href="https://www.rfc-editor.org/rfc/rfc6902">RFC 6902</a> JSON Patch:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;[{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/outcomes/@oc-skills/title&quot;,&quot;value&quot;:&quot;Staff write strong applications&quot;}]&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>theoryofchange<span class="w"> </span>patch<span class="w"> </span>theory.yaml<span class="w"> </span>-
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;[{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/outcomes/@oc-skills/title&quot;,&quot;value&quot;:&quot;Staff write strong applications&quot;}]&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>theoryofchange<span class="w"> </span>patch<span class="w"> </span>theory.yaml<span class="w"> </span>-
 </code></pre></div>
 <p>Pointers can address an array element by ID: <code>/outcomes/@oc-skills/title</code>
 selects the outcome with ID <code>oc-skills</code>, and <code>/outcomes/-</code> appends. The patch is
@@ -1555,10 +1646,10 @@ applied to a copy, and all of the guarantees above apply.</p>
 <p>When a theory changes after review, record why. <code>theoryofchange diff</code> compares
 two versions by element ID, so a retitled outcome is one changed element, and
 the same theory in YAML and JSON has no differences:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>theoryofchange<span class="w"> </span>diff<span class="w"> </span>theory-v1.yaml<span class="w"> </span>theory-v2.yaml
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>theoryofchange<span class="w"> </span>diff<span class="w"> </span>theory-v1.yaml<span class="w"> </span>theory-v2.yaml<span class="w"> </span>--revision<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.2<span class="w"> </span>--date<span class="w"> </span><span class="m">2026</span>-03-01<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>&gt;<span class="w"> </span>revision.patch.json
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>theoryofchange<span class="w"> </span>patch<span class="w"> </span>theory-v2.yaml<span class="w"> </span>revision.patch.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>theoryofchange<span class="w"> </span>diff<span class="w"> </span>theory-v1.yaml<span class="w"> </span>theory-v2.yaml
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>theoryofchange<span class="w"> </span>diff<span class="w"> </span>theory-v1.yaml<span class="w"> </span>theory-v2.yaml<span class="w"> </span>--revision<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.2<span class="w"> </span>--date<span class="w"> </span><span class="m">2026</span>-03-01<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>&gt;<span class="w"> </span>revision.patch.json
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>theoryofchange<span class="w"> </span>patch<span class="w"> </span>theory-v2.yaml<span class="w"> </span>revision.patch.json
 </code></pre></div>
 <p><code>--revision</code> prints a patch that appends a draft revision listing every changed
 element ID. Review it, then apply it.</p>
@@ -1575,8 +1666,8 @@ element ID. Review it, then apply it.</p>
 </ul>
 <h2 id="schemas-for-editors-and-agents">Schemas for editors and agents<a class="headerlink" href="#schemas-for-editors-and-agents" title="Permanent link">&para;</a></h2>
 <p>The JSON Schemas are generated from the Go types and embedded in the binary:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>theoryofchange<span class="w"> </span>schema<span class="w">                                   </span><span class="c1"># list them</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>theoryofchange<span class="w"> </span>schema<span class="w"> </span>theory-of-change<span class="w"> </span>&gt;<span class="w"> </span>theory-of-change.schema.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>theoryofchange<span class="w"> </span>schema<span class="w">                                   </span><span class="c1"># list them</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>theoryofchange<span class="w"> </span>schema<span class="w"> </span>theory-of-change<span class="w"> </span>&gt;<span class="w"> </span>theory-of-change.schema.json
 </code></pre></div>
 <p>Seven schemas are available: <code>theory-of-change</code>, <code>observation-set</code>,
 <code>theory-of-change-status</code>, <code>status-diff</code>, <code>actor-registry</code>, <code>review-response</code>,
