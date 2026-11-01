@@ -29,7 +29,7 @@ What an indicator measures decides its **tier**, which is never stored:
 |------|------------------------|-------------|
 | `activity` | an intervention | hours delivered, dollars spent |
 | `output` | an output-level outcome | people reached |
-| `outcome` | a short-term, intermediate, or long-term outcome | skills gained, practice applied. These are the *driver* metrics |
+| `outcome` | a short-term, medium-term, or long-term outcome | skills gained, practice applied. These are the *driver* metrics |
 | `impact` | an impact outcome | residents served, reported as a contribution |
 
 Resources are measured as activity-tier indicators with a unit such as hours or

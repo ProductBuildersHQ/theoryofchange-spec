@@ -9,15 +9,15 @@ import (
 )
 
 // clean returns a small theory that breaks none of the structure or logic
-// rules: one impact reached by two intermediate outcomes, each reached from a
+// rules: one impact reached by two medium-term outcomes, each reached from a
 // short-term outcome that an intervention brings about.
 func clean() *toc.Document {
 	d := toc.NewDocument("lint-base", "People cannot reach services.")
 	all := &toc.Logic{Type: toc.LogicAll}
 	d.Outcomes = []toc.Outcome{
 		{ID: "oc-impact", Title: "Services are reachable", Level: toc.LevelImpact, Logic: all},
-		{ID: "oc-a", Title: "Providers share rides", Level: toc.LevelIntermediate},
-		{ID: "oc-b", Title: "Providers share schedules", Level: toc.LevelIntermediate},
+		{ID: "oc-a", Title: "Providers share rides", Level: toc.LevelMediumTerm},
+		{ID: "oc-b", Title: "Providers share schedules", Level: toc.LevelMediumTerm},
 		{ID: "oc-s1", Title: "Providers know each other", Level: toc.LevelShortTerm},
 		{ID: "oc-s2", Title: "Providers meet monthly", Level: toc.LevelShortTerm},
 	}

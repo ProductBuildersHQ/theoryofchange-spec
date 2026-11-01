@@ -22,7 +22,7 @@ func TestMermaidStructure(t *testing.T) {
 		`subgraph above["Above the ceiling of accountability: tracked, not owned"]`,
 		`subgraph within["Within accountability: Long-term outcome and below"]`,
 		`subgraph lv_impact["Impacts"]`,
-		`subgraph lv_intermediate["Intermediate outcomes"]`,
+		`subgraph lv_medium_term["Medium-term outcomes"]`,
 		// A group is a logic node wired member -> group -> target.
 		`n_grp_supply{"AND"}`,
 		"n_oc_idp_support --> n_grp_supply\n",

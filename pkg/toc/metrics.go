@@ -15,7 +15,7 @@ const (
 	TierActivity Tier = "activity"
 	// TierOutput is a metric on an output-level outcome, such as reach.
 	TierOutput Tier = "output"
-	// TierOutcome is a metric on a short-term, intermediate, or long-term
+	// TierOutcome is a metric on a short-term, medium-term, or long-term
 	// outcome. These are the drivers of the change the program is for.
 	TierOutcome Tier = "outcome"
 	// TierImpact is a metric on an impact outcome, usually above the ceiling

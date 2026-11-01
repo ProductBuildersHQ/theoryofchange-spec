@@ -17,7 +17,7 @@ flowchart LR
   subgraph stage3["Short-term outcomes"]
     n7["A stable, interoperable specification exists"]
   end
-  subgraph stage4["Intermediate outcomes"]
+  subgraph stage4["Medium-term outcomes"]
     n8["Major identity providers support the standard _(inferred)_"]
     n9["Agent platforms support the standard"]
   end

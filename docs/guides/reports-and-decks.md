@@ -18,6 +18,8 @@ theoryofchange report definitions theory.yaml --out definitions.md
 |------|---------------|
 | `pathway` | The causal pathways, as diagrams |
 | `logic-model` | Inputs, activities, outputs, and outcomes for each pathway. `--diagram` draws it left to right (also `logic-model-diagram`) |
+| `logic-model-layered` | The logic model as columns, from inputs to impact, with a box for each item and an arrow wherever the theory says one leads to another. Written as Mermaid |
+| `logic-model-d2` | The same layered diagram as [D2](https://d2lang.com), where a grid keeps every stage in its own column. Render it with `d2 diagram.d2 diagram.svg` |
 | `outcome-map` | The outcomes framework, marking what is monitored but not owned |
 | `logframe` | A results-framework matrix with indicators, means of verification, and assumptions |
 | `metrics` | Metric definitions and how they combine across pathways |
@@ -127,3 +129,23 @@ journeys. Both are JSON for the PRISM tools.
 ## Next
 
 [Review round trip](review-round-trip.md)
+
+## The layered logic model diagram
+
+`logic-model --diagram` draws each stage as a group and joins the groups, which
+says only that one stage follows another. The layered diagram draws the real
+relationships:
+
+- an **input** leads to the activities that use it, and one input can feed several;
+- an **activity** leads to the outputs it lists, which lead on to the outcomes it targets;
+- an **outcome** leads to the outcomes its causal links point to, so one box can lead to
+  several, and several can lead to one.
+
+The order within a column is chosen to keep arrows from crossing. A link that
+runs back to an earlier stage is feedback. It is left out of the diagram, where
+it would cut across the boxes between, and listed under it.
+
+Both diagrams are available, so you can compare them. The layered one is made
+by `pkg/logicmodel`, which builds a layered graph from the theory and writes it
+through [d2vision](https://github.com/grokify/d2vision)'s diagram spec, the same
+spec that writes the D2 and the Mermaid.

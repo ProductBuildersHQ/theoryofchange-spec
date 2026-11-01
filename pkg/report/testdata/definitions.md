@@ -23,7 +23,7 @@ flowchart BT
     subgraph lv_long_term["Long-term outcomes"]
       n_oc_enterprise_require["Enterprises require the standard in procurement<br/><i>«hypothesis»</i>"]
     end
-    subgraph lv_intermediate["Intermediate outcomes"]
+    subgraph lv_medium_term["Medium-term outcomes"]
       n_oc_idp_support["Major identity providers support the standard<br/><i>«inferred»</i>"]
       n_oc_platform_support["Agent platforms support the standard"]
     end
@@ -76,7 +76,7 @@ flowchart BT
     subgraph lv_long_term["Long-term outcomes"]
       n_oc_enterprise_require["Enterprises require the standard in procurement<br/><i>«hypothesis»</i>"]
     end
-    subgraph lv_intermediate["Intermediate outcomes"]
+    subgraph lv_medium_term["Medium-term outcomes"]
       n_oc_idp_support["Major identity providers support the standard<br/><i>«inferred»</i>"]
       n_oc_platform_support["Agent platforms support the standard"]
     end
@@ -118,7 +118,7 @@ Getting identity providers and agent platforms to ship the standard.
 | Activities | Run interoperability events; Publish reference implementations |
 | Outputs | Interop test suite; Event reports; Open reference implementations are available |
 | Short-term outcomes | A stable, interoperable specification exists |
-| Intermediate outcomes | Major identity providers support the standard _(inferred)_; Agent platforms support the standard |
+| Medium-term outcomes | Major identity providers support the standard _(inferred)_; Agent platforms support the standard |
 | Long-term outcomes | Enterprises require the standard in procurement _(hypothesis)_ |
 | Impact | Agent access across the market is scoped and auditable |
 
@@ -138,7 +138,7 @@ _This is a view of the causal model. It flattens the links between outcomes; the
 |---------|--------|----------|--------|----------------|--------------|-----------|-------------|
 | Enterprises require the standard in procurement (`oc-enterprise-require`) _(hypothesis)_ | Influence | expand | Policy | Own | — | — | — |
 
-### Intermediate outcome
+### Medium-term outcome
 
 | Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
 |---------|--------|----------|--------|----------------|--------------|-----------|-------------|

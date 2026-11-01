@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/theoryofchange-spec`
-**Status:** In progress — 11 of 13 phases completed
+**Status:** In progress — 13 of 15 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry the trailer `Refs: RMI-THEORYOFCHANGESPEC-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -420,3 +420,32 @@
   - Type: capability · Status: completed
   - Depends on: `RMI-THEORYOFCHANGESPEC-066`, `RMI-THEORYOFCHANGESPEC-067`
   - Acceptance: The Riverbend example uses the new fields; a guide explains tiers, North Star, and headline; the diagram's planned boxes become solid
+
+## Phase 14 — Vocabulary
+
+**Theme:** Make the terms consistent and easy to learn
+**Status:** Completed — 1 of 1 items completed
+
+- [x] `RMI-THEORYOFCHANGESPEC-069` Rename the intermediate outcome level to medium_term so short, medium, and long form one series
+  - Type: capability · Status: completed
+  - Acceptance: the level is medium_term in the model, schema, reports, examples, and docs; every test passes; no alias is kept
+
+## Phase 15 — Layered Logic Model Diagram
+
+**Theme:** Draw the logic model as stage columns with real edges, from one shared diagram spec
+**Status:** Completed — 3 of 3 items completed
+
+- [x] `RMI-THEORYOFCHANGESPEC-070` Derive a layered logic model graph (stages, nodes, edges) from a view
+  - Type: capability · Status: completed
+  - Acceptance: inputs, activities, outputs, and outcomes by level are columns; edges come from resources, interventions, and links; order is deterministic and reduces crossings; tests cover each edge kind
+
+- [x] `RMI-THEORYOFCHANGESPEC-071` Emit the logic model graph as D2 and Mermaid through d2vision and add report kinds
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-070`
+  - Acceptance: logic-model-layered and logic-model-d2 reports; the existing logic-model diagram is unchanged; the D2 compiles and keeps every label; stage columns align
+
+- [x] `RMI-THEORYOFCHANGESPEC-072` Use the layered logic model diagram in the workshop deck beside the existing slide
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-071`
+  - Acceptance: the deck has the layered diagram as a slide and the existing table and diagram remain; docs describe both and how they differ
+

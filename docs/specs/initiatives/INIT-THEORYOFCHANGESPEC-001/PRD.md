@@ -369,7 +369,7 @@ named version, so that both teams work from the same agreed theory.
   (problem statement, root causes, target population or market, time horizon),
   one or more impact-level goals, and a ceiling of accountability.
 - **PRD-FR-102** The model MUST represent outcomes as graph nodes with a level
-  (`impact`, `long_term`, `intermediate`, `short_term`, `output`), a sphere
+  (`impact`, `long_term`, `medium_term`, `short_term`, `output`), a sphere
   (`control`, `influence`, `interest`), an open category taxonomy (e.g. ORS
   impact / influence / leverage, COM-B, market-systems Adopt–Adapt–Expand–
   Respond), and a precondition logic (`all`, `any`, or `at_least` k-of-n) over

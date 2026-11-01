@@ -14,7 +14,7 @@ _This is a view of the causal model. It flattens the links between outcomes; the
 |---------|--------|----------|--------|----------------|--------------|-----------|-------------|
 | Enterprises require the standard in procurement (`oc-enterprise-require`) _(hypothesis)_ | Influence | expand | Policy | Own | — | — | — |
 
-### Intermediate outcome
+### Medium-term outcome
 
 | Outcome | Sphere | Category | Change | Responsibility | Delivered by | Addresses | Measured by |
 |---------|--------|----------|--------|----------------|--------------|-----------|-------------|

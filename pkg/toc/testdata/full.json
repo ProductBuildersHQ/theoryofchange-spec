@@ -83,7 +83,7 @@
     {
       "id": "oc-idp-support",
       "title": "Major identity providers support the standard",
-      "level": "intermediate",
+      "level": "medium_term",
       "sphere": "influence",
       "category": "adopt",
       "changeType": "adoption",
@@ -129,7 +129,7 @@
     {
       "id": "oc-platform-support",
       "title": "Agent platforms support the standard",
-      "level": "intermediate",
+      "level": "medium_term",
       "sphere": "influence",
       "category": "adapt",
       "changeType": "adoption",

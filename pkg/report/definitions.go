@@ -74,7 +74,7 @@ func LogicModelStages(v *View) []Stage {
 		{"Activities", activities},
 		{"Outputs", outputs},
 		{"Short-term outcomes", byLevel[toc.LevelShortTerm]},
-		{"Intermediate outcomes", byLevel[toc.LevelIntermediate]},
+		{"Medium-term outcomes", byLevel[toc.LevelMediumTerm]},
 		{"Long-term outcomes", byLevel[toc.LevelLongTerm]},
 		{"Impact", byLevel[toc.LevelImpact]},
 	}

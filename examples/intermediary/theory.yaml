@@ -152,7 +152,7 @@ outcomes:
       note: Depends on officials accepting a coordinated channel.
   - id: oc-im-leaders-practice
     title: Member leaders apply improved management practices
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: capability
     changeType: practice
@@ -167,7 +167,7 @@ outcomes:
       note: The review reports that peer cohorts with coaching change leadership practice.
   - id: oc-im-peer-network
     title: Members turn to each other for advice and joint work
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: collaboration
     changeType: behavior
@@ -194,7 +194,7 @@ outcomes:
         - ev-peer-learning
   - id: oc-im-lower-overhead
     title: Members spend less staff time and money on back-office work
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: capability
     changeType: condition
@@ -221,7 +221,7 @@ outcomes:
       note: Members named back-office load as their largest drag on program time.
   - id: oc-im-grant-pipeline
     title: Members apply for more grants that fit their mission
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: sustainability
     changeType: behavior
@@ -235,7 +235,7 @@ outcomes:
         - ev-member-survey
   - id: oc-im-joint-positions
     title: Members adopt and share joint positions on local issues
-    level: intermediate
+    level: medium_term
     sphere: influence
     logic:
       type: all
@@ -249,7 +249,7 @@ outcomes:
       basis: hypothesis
   - id: oc-im-officials-engage
     title: Local officials and funders engage members in planning
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: voice
     changeType: adoption

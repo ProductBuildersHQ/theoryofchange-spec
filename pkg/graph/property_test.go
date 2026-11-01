@@ -15,7 +15,7 @@ import (
 func randomDAG(r *rand.Rand) *toc.Document {
 	n := 50 + r.IntN(151)
 	s := newSpec()
-	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelIntermediate, toc.LevelLongTerm}
+	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelMediumTerm, toc.LevelLongTerm}
 	for i := range n {
 		l := levels[r.IntN(len(levels))]
 		if r.IntN(10) == 0 {
@@ -188,7 +188,7 @@ func TestRandomGraphsWithCycles(t *testing.T) {
 		n := 60
 		s := newSpec()
 		for i := range n {
-			l := toc.LevelIntermediate
+			l := toc.LevelMediumTerm
 			if i%11 == 0 {
 				l = toc.LevelImpact
 			}
@@ -252,7 +252,7 @@ func BenchmarkQueries1000(b *testing.B) {
 	r := newRand(1, 2)
 	s := newSpec()
 	const n = 1000
-	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelIntermediate, toc.LevelLongTerm}
+	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelMediumTerm, toc.LevelLongTerm}
 	for i := range n {
 		l := levels[r.IntN(len(levels))]
 		if i < 5 {

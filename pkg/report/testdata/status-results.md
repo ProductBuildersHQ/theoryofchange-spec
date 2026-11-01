@@ -34,7 +34,7 @@ Pathway status: At risk. Own indicators: ind-voice-level.
 |-----------|----------|---------|--------|--------|---------|
 | Level of members' voice with local government and funders | Not heard (as of 2026-01-01) | Heard (by 2026-12-31); Consulted (by 2027-12-31); Co-designing (by 2028-12-31) | Heard (on 2026-09-30) | On track | 33% of the way to target; 25% expected by 2026-09-30 |
 
-### Intermediate outcome
+### Medium-term outcome
 
 #### Member leaders apply improved management practices
 
@@ -172,7 +172,7 @@ Pathway status: At risk. Own indicators: ind-residents-voice.
 |-----------|----------|---------|--------|--------|---------|
 | Residents who say local organizations help them be heard | 31 percent (as of 2026-01-01) | 34 percent (by 2026-12-31); 38 percent (by 2027-12-31); 42 percent (by 2028-12-31) | — | Not started | no observation yet; the first target is still ahead |
 
-### Intermediate outcome
+### Medium-term outcome
 
 #### Local officials and funders engage members in planning
 

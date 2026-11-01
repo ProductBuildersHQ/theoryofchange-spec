@@ -23,7 +23,7 @@ edit is checked before it is written, and every edit is small enough to read.
 - Outcomes are states, not activities: "Leaders gain coaching skills", not
   "Run coaching". Interventions are the activities.
 - Give every link a reason (`--rationale`) and name the assumptions it rests
-  on. A link into an intermediate, long-term, or impact outcome without one
+  on. A link into a medium-term, long-term, or impact outcome without one
   is a lint warning.
 - Do not mark an element `confirmed` or `rejected` unless the people it
   concerns said so. Use `--basis stated|inferred|hypothesis`, and say why in

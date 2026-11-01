@@ -266,7 +266,7 @@ func TestAccessors(t *testing.T) {
 		t.Fatal("Element found a missing ID")
 	}
 
-	if o, ok := doc.Outcome("oc-idp-support"); !ok || o.Level != LevelIntermediate {
+	if o, ok := doc.Outcome("oc-idp-support"); !ok || o.Level != LevelMediumTerm {
 		t.Fatalf("Outcome lookup failed: %+v %v", o, ok)
 	}
 	if _, ok := doc.Group("grp-supply"); !ok {

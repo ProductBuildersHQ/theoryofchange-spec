@@ -13,7 +13,7 @@ As of 2026-09-30.
 |-------|----------|----------------|
 | Impact | 2 | 2 at risk |
 | Long-term outcome | 4 | 3 at risk · 1 not started |
-| Intermediate outcome | 6 | 3 at risk · 2 not started · 1 on track |
+| Medium-term outcome | 6 | 3 at risk · 2 not started · 1 on track |
 | Short-term outcome | 6 | 1 at risk · 2 not started · 1 unmeasured · 2 on track |
 | Output | 4 | 3 not started · 1 on track |
 

@@ -35,7 +35,7 @@ grouped by what they look at:
 | Area | What the rules look for |
 |------|-------------------------|
 | Structure (`STR`) | At least one impact outcome; no cycles unless marked as feedback; every outcome leads to impact and has a precondition or an intervention; links run from lower levels to higher ones; precondition groups are complete |
-| Logic (`LOG`) | Links into intermediate and higher outcomes say why they hold and name an assumption; impact outcomes have at least two preconditions; several incoming links say whether all, any, or some are needed |
+| Logic (`LOG`) | Links into medium-term and higher outcomes say why they hold and name an assumption; impact outcomes have at least two preconditions; several incoming links say whether all, any, or some are needed |
 | Assumptions and risks (`ASM`, `RSK`) | High and critical assumptions say how they will be tested, cite evidence, and have a related risk with a mitigation |
 | Measurement (`MEA`, `MET`, `CLM`) | Every outcome within the ceiling is measured; every indicator has a baseline, target, source, and frequency; targets fall inside the time horizon; claims above the ceiling are contribution, not attribution; common metrics are measured in every pathway |
 | Collection budget (`BUD`) | Selected indicators fit the staff-time and question budgets and say how data is collected |

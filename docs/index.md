@@ -53,7 +53,7 @@ a different reader:
 |------|---------|--------------------|
 | **Pathway of change** | In what order must outcomes happen to reach the goal? | The chains of outcomes, from the earliest at the bottom to the long-term goal at the top. A program usually has several; together they are the *outcomes framework* |
 | **Outcome map** | What changes, who is responsible for each change, and how is it measured? | The outcomes grouped by level, each with its sphere, whether the organization owns it or only monitors it, who delivers it, the cause it addresses, and the indicators that measure it |
-| **Logic model** | What goes in, what is done, and what comes out? | Stages from inputs, activities, and outputs through short-term, intermediate, and long-term outcomes to impact, one model per pathway |
+| **Logic model** | What goes in, what is done, and what comes out? | Stages from inputs, activities, and outputs through short-term, medium-term, and long-term outcomes to impact, one model per pathway |
 | **Logframe** | What do we promise, and how will we verify it? | A matrix of narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring |
 
 A logic model or logframe is a *flattened* picture: it shows the sequence but
@@ -92,7 +92,7 @@ flowchart LR
     res["Resources<br/>inputs"]:::step --> act["Activities<br/>interventions"]:::step
     act --> outp["Outputs"]:::step
     outp --> st["Short-term<br/>outcomes"]:::step
-    st --> mid["Intermediate<br/>outcomes"]:::step
+    st --> mid["Medium-term<br/>outcomes"]:::step
     mid --> lt["Long-term<br/>outcomes"]:::step
   end
   subgraph above["Above the ceiling of accountability: tracked, not owned"]

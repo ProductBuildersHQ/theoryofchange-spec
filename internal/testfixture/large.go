@@ -19,7 +19,7 @@ func Large() (*toc.Document, []*toc.ObservationSet) {
 		perLayer   = 40 // five layers of 40
 	)
 	d := toc.NewDocument("large", "A large theory.")
-	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelIntermediate, toc.LevelLongTerm, toc.LevelImpact}
+	levels := []toc.Level{toc.LevelOutput, toc.LevelShortTerm, toc.LevelMediumTerm, toc.LevelLongTerm, toc.LevelImpact}
 	for i := 0; i < outcomes; i++ {
 		d.Outcomes = append(d.Outcomes, toc.Outcome{ID: fmt.Sprintf("oc-%03d", i), Title: fmt.Sprintf("Outcome %d", i), Level: levels[i/perLayer]})
 	}

@@ -35,8 +35,8 @@ func mixed(t *testing.T) (*toc.Document, *View) {
 	}
 	d.Outcomes = []toc.Outcome{
 		{ID: "oc-impact", Title: "Services reachable", Level: toc.LevelImpact},
-		{ID: "oc-own", Title: "We run rides", Level: toc.LevelIntermediate, AddressesCauses: []string{"c-under"}},
-		{ID: "oc-shared", Title: "Providers share rides", Level: toc.LevelIntermediate, Responsibility: toc.ResponsibilityShared, DeliveredBy: []string{"act-us", "act-them"}},
+		{ID: "oc-own", Title: "We run rides", Level: toc.LevelMediumTerm, AddressesCauses: []string{"c-under"}},
+		{ID: "oc-shared", Title: "Providers share rides", Level: toc.LevelMediumTerm, Responsibility: toc.ResponsibilityShared, DeliveredBy: []string{"act-us", "act-them"}},
 		{ID: "oc-partner", Title: "The county funds buses", Level: toc.LevelShortTerm, Responsibility: toc.ResponsibilityPartner, DeliveredBy: []string{"act-them"}},
 		{ID: "oc-nobody", Title: "Someone maps routes", Level: toc.LevelShortTerm, Responsibility: toc.ResponsibilityUnaddressed},
 		{ID: "oc-orphan", Title: "We train drivers", Level: toc.LevelShortTerm},
