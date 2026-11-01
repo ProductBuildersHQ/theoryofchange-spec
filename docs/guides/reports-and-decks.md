@@ -75,7 +75,7 @@ theoryofchange deck exec theory.yaml -O obs-q3.yaml --export exec.pdf
 
 | Deck | Contents |
 |------|----------|
-| `workshop` | The problem, the goal and ceiling, a diagram and logic model per pathway, key assumptions, metric definitions, the glossary, and what is still our reading. Needs no observations |
+| `workshop` | The problem, the goal and ceiling, a diagram, a logic model table, and the logic model drawn as columns with arrows per pathway, key assumptions, metric definitions, the glossary, and what is still our reading. Needs no observations |
 | `exec` | Where we stand, and what changed since the last snapshot (`--prev`) |
 | `learning-review` | Behind plan, what we decided, and questions for discussion (`--period`) |
 | `story` | One audience's deck: what you told us you need, the numbers, what we ask of you (`--audience`) |

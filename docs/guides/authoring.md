@@ -12,12 +12,12 @@ elements, how they refer to each other, and the ways to change them.
 | **Group** | Preconditions for an outcome: all of them, any of them, or at least *k* of *n*. Groups can nest |
 | **Intervention** | Something the program does to bring about outcomes |
 | **Assumption** | Something that must hold for a link or outcome to work, with a criticality and a status |
-| **Indicator** | How an outcome or assumption is measured, with a baseline, targets, and a frequency |
+| **Indicator** | How an outcome, activity, or assumption is measured, with a baseline, targets, and a frequency. It can also be worked out from other indicators, such as a cost per outcome |
 | **Actor** | A person or organization who changes, delivers, or co-owns an outcome |
 | **Evidence** | A source that supports or contradicts an element, with a sensitivity |
-| **Pathway** | A named route through the theory, such as one program's contribution |
+| **Pathway** | A named route through the theory, such as one program's or product's contribution, with the North Star it steers by |
 | **Cause**, **target group** | The problem tree and the groups affected, for equity and root-cause analysis |
-| **Audience**, **theme** | Who needs to see what reported, and the codebook for coding stories |
+| **Audience**, **theme** | Who needs to see what reported, the short list of numbers each is told, and the codebook for coding stories |
 | **Metric**, **term** | A shared metric library, and a glossary of the words the theory uses |
 | **Risk**, **decision**, **factor**, **consultation** | What could go wrong, what is awaiting a decision, external factors, and the review trail |
 
@@ -28,6 +28,54 @@ the level above which outcomes are tracked but not claimed.
 
 Every ID is a lowercase kebab-case slug, unique across the document, and
 references are by ID.
+
+## What a program steers by, and what each audience is told
+
+Three choices sit on top of the chain from activities to impact. They are
+different things, and a theory can make all three.
+
+- **A North Star** is the one number a program or product steers by. It is set on
+  the pathway, with an optional *one metric that matters* and the guardrails that
+  watch what chasing it could harm. It should measure an outcome at or below the
+  ceiling of accountability, never an output or an activity.
+- **A headline list** is what an audience is told: a short, ordered list on the
+  audience, each entry an indicator with an optional label and note worded for
+  that reader. The board, funders, and members can each lead with different
+  numbers drawn from the same indicators, and every audience sees the same figure
+  for an indicator.
+- **Purpose** is `context.mission` and `context.vision`: plain statements of why
+  the organization exists and what it works toward. They are not part of the
+  causal chain.
+
+```bash
+# A pathway's North Star, and what watches it
+theoryofchange pathway set theory.yaml pw-learning \
+  --north-star ind-practice-maturity --guardrails ind-retention-learning
+
+# What the board is told, in order
+theoryofchange audience set theory.yaml aud-board --set 'headline=[
+  {"indicatorId":"ind-practice-maturity","label":"Leadership practice across members"},
+  {"indicatorId":"ind-reach-network"}]'
+
+# Why the organization exists
+theoryofchange patch theory.yaml - <<'EOF'
+[{"op":"add","path":"/context/mission","value":"Strengthen local nonprofits."}]
+EOF
+```
+
+Some of the numbers people ask for are arithmetic on others, such as the cost
+per applied change. Give that indicator a `composedOf`, and its value is worked
+out from the latest value of each part when it has none of its own:
+
+```bash
+theoryofchange indicator set theory.yaml ind-cost-per-change \
+  --composed-op ratio --composed-of ind-cost,ind-changes-applied
+```
+
+A ratio and a difference take exactly two indicators, in order. A composition is
+arithmetic and not a causal link. See [Measuring progress](measurement.md) for
+how the value is worked out and what is withheld, and
+[Quality and judging](quality-and-judging.md) for the rules that check all of it.
 
 ## Provenance: stated, inferred, or confirmed
 
