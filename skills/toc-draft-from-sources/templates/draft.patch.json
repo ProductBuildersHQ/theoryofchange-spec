@@ -6,7 +6,7 @@
      "provenance": {"basis": "inferred", "note": "Restates the stated belief as a condition"}},
     {"id": "oc-meetups", "title": "Member groups meet regularly", "level": "short_term",
      "provenance": {"basis": "stated", "evidenceIds": ["ev-about-the-alliance"]}},
-    {"id": "oc-joint", "title": "Member groups run joint events", "level": "intermediate",
+    {"id": "oc-joint", "title": "Member groups run joint events", "level": "medium_term",
      "provenance": {"basis": "stated", "evidenceIds": ["ev-annual-report"]}}
   ]},
   {"op": "replace", "path": "/links", "value": [

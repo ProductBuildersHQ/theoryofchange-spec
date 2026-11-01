@@ -310,8 +310,8 @@ func LevelLabel(l toc.Level) string {
 		return "Impact"
 	case toc.LevelLongTerm:
 		return "Long-term outcome"
-	case toc.LevelIntermediate:
-		return "Intermediate outcome"
+	case toc.LevelMediumTerm:
+		return "Medium-term outcome"
 	case toc.LevelShortTerm:
 		return "Short-term outcome"
 	case toc.LevelOutput:

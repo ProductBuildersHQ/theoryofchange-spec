@@ -284,10 +284,10 @@ func init() {
 			return out
 		})
 	}
-	linkRule("TOC-LOG-001", "Every link into an intermediate, long-term, or impact outcome says why it holds.",
+	linkRule("TOC-LOG-001", "Every link into a medium-term, long-term, or impact outcome says why it holds.",
 		"this link has no rationale; say why the first outcome makes the second more likely",
 		func(l toc.CausalLink) bool { return l.Rationale != "" })
-	linkRule("TOC-LOG-002", "Every link into an intermediate, long-term, or impact outcome names an assumption.",
+	linkRule("TOC-LOG-002", "Every link into a medium-term, long-term, or impact outcome names an assumption.",
 		"this link has no assumption; say what must be true for it to hold",
 		func(l toc.CausalLink) bool { return len(l.AssumptionIDs) > 0 })
 

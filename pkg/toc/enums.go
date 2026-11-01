@@ -10,16 +10,16 @@ import "slices"
 type Level string
 
 const (
-	LevelImpact       Level = "impact"
-	LevelLongTerm     Level = "long_term"
-	LevelIntermediate Level = "intermediate"
-	LevelShortTerm    Level = "short_term"
-	LevelOutput       Level = "output"
+	LevelImpact     Level = "impact"
+	LevelLongTerm   Level = "long_term"
+	LevelMediumTerm Level = "medium_term"
+	LevelShortTerm  Level = "short_term"
+	LevelOutput     Level = "output"
 )
 
 // AllLevels returns levels from highest to lowest.
 func AllLevels() []Level {
-	return []Level{LevelImpact, LevelLongTerm, LevelIntermediate, LevelShortTerm, LevelOutput}
+	return []Level{LevelImpact, LevelLongTerm, LevelMediumTerm, LevelShortTerm, LevelOutput}
 }
 
 // Valid reports whether v is a known Level.

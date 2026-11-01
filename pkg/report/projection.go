@@ -90,7 +90,7 @@ func Logframes(whole *View, pathways []*View) string {
 }
 
 // Logframe renders one view as a logical framework matrix. The rows are the
-// goal (impact outcomes), the purpose (long-term and intermediate
+// goal (impact outcomes), the purpose (long-term and medium-term
 // outcomes), the outputs (short-term and output outcomes), and the
 // activities (interventions). The columns are the narrative, the
 // indicators with their targets, how each indicator is verified, and the
@@ -125,7 +125,7 @@ func Logframe(v *View) string {
 		levels []toc.Level
 	}{
 		{"Goal", []toc.Level{toc.LevelImpact}},
-		{"Purpose", []toc.Level{toc.LevelLongTerm, toc.LevelIntermediate}},
+		{"Purpose", []toc.Level{toc.LevelLongTerm, toc.LevelMediumTerm}},
 		{"Outputs", []toc.Level{toc.LevelShortTerm, toc.LevelOutput}},
 	}
 	for _, r := range rows {

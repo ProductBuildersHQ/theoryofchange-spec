@@ -41,7 +41,7 @@ outcomes:
       - act-buyers
   - id: oc-default-on
     title: Agent platforms switch the bundled scheme on by default
-    level: intermediate
+    level: medium_term
     sphere: influence
     actorIds:
       - act-platforms

@@ -35,7 +35,7 @@ outcomes:
       - act-buyers
   - id: oc-idps-ship-extension
     title: Identity providers ship the extension in their next release
-    level: intermediate
+    level: medium_term
     sphere: influence
     actorIds:
       - act-idps

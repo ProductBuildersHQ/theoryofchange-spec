@@ -112,7 +112,7 @@ outcomes:
       basis: hypothesis
   - id: oc-idp-ship
     title: Large identity providers ship the standard in general availability
-    level: intermediate
+    level: medium_term
     sphere: influence
     logic:
       type: all
@@ -130,7 +130,7 @@ outcomes:
   - id: oc-regional-idp-ship
     title: Regional identity providers adopt on their own investment
     description: Smaller providers integrate using open libraries and pilot results, without direct support from the working group.
-    level: intermediate
+    level: medium_term
     sphere: influence
     logic:
       type: any
@@ -146,7 +146,7 @@ outcomes:
         - ev-oss-downloads
   - id: oc-platform-adopt
     title: Agent platforms emit receipts for delegated actions
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: adopt
     changeType: adoption
@@ -161,7 +161,7 @@ outcomes:
   - id: oc-buyer-demand
     title: Regulated enterprise buyers ask for receipts in RFPs
     description: Positive links count as preconditions; the negative link from rival momentum dampens demand but is not a precondition.
-    level: intermediate
+    level: medium_term
     sphere: influence
     logic:
       type: any
@@ -178,7 +178,7 @@ outcomes:
         - ev-buyer-survey
   - id: oc-auditor-method
     title: Auditors accept receipts as audit evidence
-    level: intermediate
+    level: medium_term
     sphere: influence
     logic:
       type: all
@@ -192,7 +192,7 @@ outcomes:
         - ev-auditor-interviews
   - id: oc-regulator-guidance
     title: The regulator publishes guidance that names receipt-style records
-    level: intermediate
+    level: medium_term
     sphere: interest
     category: respond
     changeType: policy
@@ -205,7 +205,7 @@ outcomes:
   - id: oc-rival-momentum
     title: The proprietary scheme gains momentum through bundling
     description: A competitive response to visible adoption, tracked because it reduces adopter intent.
-    level: intermediate
+    level: medium_term
     sphere: interest
     category: respond
     changeType: practice
@@ -220,7 +220,7 @@ outcomes:
   - id: oc-oss-libs
     title: Open-source libraries add receipt support
     description: Maintainers add support because it is cheap, not because the working group asks.
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: expand
     changeType: adoption
@@ -232,7 +232,7 @@ outcomes:
         - ev-oss-downloads
   - id: oc-competitor-bridge
     title: Competing approaches publish mappings to the standard
-    level: intermediate
+    level: medium_term
     sphere: influence
     category: expand
     changeType: practice
@@ -243,7 +243,7 @@ outcomes:
   - id: oc-central-registry
     title: A central registry of delegation issuers is operated
     description: Considered as a way to speed trust between providers and rejected, because it would add a single point of control and slow adoption.
-    level: intermediate
+    level: medium_term
     sphere: control
     category: adopt
     changeType: condition

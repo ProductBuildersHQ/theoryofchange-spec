@@ -414,7 +414,7 @@
           "enum": [
             "impact",
             "long_term",
-            "intermediate",
+            "medium_term",
             "short_term",
             "output"
           ]
@@ -1544,7 +1544,7 @@
           "enum": [
             "impact",
             "long_term",
-            "intermediate",
+            "medium_term",
             "short_term",
             "output"
           ]

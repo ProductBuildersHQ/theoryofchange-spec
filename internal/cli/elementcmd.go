@@ -51,7 +51,7 @@ func n(name, field, help string) elementFlag { return elementFlag{name, field, t
 var elementFlags = map[string][]elementFlag{
 	"outcome": {
 		sr("title", "title", "short title (a state, not an activity)"),
-		sr("level", "level", "impact, long_term, intermediate, short_term, or output"),
+		sr("level", "level", "impact, long_term, medium_term, short_term, or output"),
 		s("description", "description", "longer description"),
 		s("sphere", "sphere", "control, influence, or interest"),
 		s("category", "category", "taxonomy category"),
