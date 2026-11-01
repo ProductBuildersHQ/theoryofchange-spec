@@ -144,6 +144,9 @@
     ],
     "changed": [
       {
+        "description": "The `intermediate` outcome level is now `medium_term`, so short, medium, and long term form one series. Documents that use `level: intermediate` must use `level: medium_term`"
+      },
+      {
         "description": "An estimated latest value is shown as an estimate, with its observation note, in every report"
       },
       {
