@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 func TestNarrativeAndActorsGoldens(t *testing.T) {
@@ -20,32 +20,32 @@ func TestNarrativeAndActorsGoldens(t *testing.T) {
 	golden(t, "status-results.md", Results(in))
 }
 
-// mixed is a small theory with every kind of responsibility.
-func mixed(t *testing.T) (*toc.Document, *View) {
+// mixed is a small impact model with every kind of responsibility.
+func mixed(t *testing.T) (*impact.Model, *View) {
 	t.Helper()
-	d := toc.NewDocument("mixed", "People cannot reach services.")
+	d := impact.NewModel("mixed", "People cannot reach services.")
 	d.Metadata.Name = "Mixed"
-	d.Ceiling = &toc.Ceiling{Level: toc.LevelLongTerm}
-	d.Actors = []toc.Actor{{ID: "act-us", Name: "Us", Roles: []toc.ActorRole{toc.RoleImplementer}}, {ID: "act-them", Name: "Partner Org"}}
-	d.TargetGroups = []toc.TargetGroup{{ID: "tg-1", Name: "Rural residents"}}
-	d.Causes = []toc.Cause{
-		{ID: "c-struct", Statement: "No shared transport.", Level: toc.CauseStructural, AffectedGroupIDs: []string{"tg-1"}},
-		{ID: "c-under", Statement: "Providers work alone.", Level: toc.CauseUnderlying},
-		{ID: "c-imm", Statement: "Schedules clash.", Level: toc.CauseImmediate, OutOfScope: &toc.OutOfScope{Reason: "Providers set their own hours."}},
+	d.Ceiling = &impact.Ceiling{Level: impact.LevelLongTerm}
+	d.Actors = []impact.Actor{{ID: "act-us", Name: "Us", Roles: []impact.ActorRole{impact.RoleImplementer}}, {ID: "act-them", Name: "Partner Org"}}
+	d.TargetGroups = []impact.TargetGroup{{ID: "tg-1", Name: "Rural residents"}}
+	d.Causes = []impact.Cause{
+		{ID: "c-struct", Statement: "No shared transport.", Level: impact.CauseStructural, AffectedGroupIDs: []string{"tg-1"}},
+		{ID: "c-under", Statement: "Providers work alone.", Level: impact.CauseUnderlying},
+		{ID: "c-imm", Statement: "Schedules clash.", Level: impact.CauseImmediate, OutOfScope: &impact.OutOfScope{Reason: "Providers set their own hours."}},
 	}
-	d.Outcomes = []toc.Outcome{
-		{ID: "oc-impact", Title: "Services reachable", Level: toc.LevelImpact},
-		{ID: "oc-own", Title: "We run rides", Level: toc.LevelMediumTerm, AddressesCauses: []string{"c-under"}},
-		{ID: "oc-shared", Title: "Providers share rides", Level: toc.LevelMediumTerm, Responsibility: toc.ResponsibilityShared, DeliveredBy: []string{"act-us", "act-them"}},
-		{ID: "oc-partner", Title: "The county funds buses", Level: toc.LevelShortTerm, Responsibility: toc.ResponsibilityPartner, DeliveredBy: []string{"act-them"}},
-		{ID: "oc-nobody", Title: "Someone maps routes", Level: toc.LevelShortTerm, Responsibility: toc.ResponsibilityUnaddressed},
-		{ID: "oc-orphan", Title: "We train drivers", Level: toc.LevelShortTerm},
+	d.Outcomes = []impact.Outcome{
+		{ID: "oc-impact", Title: "Services reachable", Level: impact.LevelImpact},
+		{ID: "oc-own", Title: "We run rides", Level: impact.LevelMediumTerm, AddressesCauses: []string{"c-under"}},
+		{ID: "oc-shared", Title: "Providers share rides", Level: impact.LevelMediumTerm, Responsibility: impact.ResponsibilityShared, DeliveredBy: []string{"act-us", "act-them"}},
+		{ID: "oc-partner", Title: "The county funds buses", Level: impact.LevelShortTerm, Responsibility: impact.ResponsibilityPartner, DeliveredBy: []string{"act-them"}},
+		{ID: "oc-nobody", Title: "Someone maps routes", Level: impact.LevelShortTerm, Responsibility: impact.ResponsibilityUnaddressed},
+		{ID: "oc-orphan", Title: "We train drivers", Level: impact.LevelShortTerm},
 	}
-	d.Links = []toc.CausalLink{
+	d.Links = []impact.CausalLink{
 		{ID: "l1", From: "oc-own", To: "oc-impact"}, {ID: "l2", From: "oc-shared", To: "oc-impact"},
 		{ID: "l3", From: "oc-partner", To: "oc-own"}, {ID: "l4", From: "oc-nobody", To: "oc-shared"}, {ID: "l5", From: "oc-orphan", To: "oc-own"},
 	}
-	d.Interventions = []toc.Intervention{{ID: "int-1", Title: "Run rides", Targets: []string{"oc-own"}, OwnerID: "act-us"}}
+	d.Interventions = []impact.Intervention{{ID: "int-1", Title: "Run rides", Targets: []string{"oc-own"}, OwnerID: "act-us"}}
 	g, err := graph.Build(d)
 	if err != nil {
 		t.Fatal(err)
@@ -141,7 +141,7 @@ func TestActorsReport(t *testing.T) {
 func TestActorsWithNoPartnerOutcomes(t *testing.T) {
 	d, v := mixed(t)
 	for i := range v.Outcomes {
-		v.Outcomes[i].Responsibility = string(toc.ResponsibilityOwn)
+		v.Outcomes[i].Responsibility = string(impact.ResponsibilityOwn)
 	}
 	if out := Actors(v, d, nil); !strings.Contains(out, "None.") {
 		t.Error("with no partner outcomes the section should say none")

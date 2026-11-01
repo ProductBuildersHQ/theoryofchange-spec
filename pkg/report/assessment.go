@@ -5,17 +5,17 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
-// The assessment report renders from a theory alone. It tells a reader how
+// The assessment report renders from an impact model alone. It tells a reader how
 // much of a draft is the organization's own word and how much is ours, where
-// the theory has gaps, and what to ask the organization. It is the document
+// the impact model has gaps, and what to ask the organization. It is the document
 // to hand over with a draft.
 
 // tagged is one element in the provenance listings.
 type tagged struct {
-	kind        toc.ElementKind
+	kind        impact.ElementKind
 	id, title   string
 	basis       BasisView
 	accountable bool
@@ -39,45 +39,45 @@ func taggedElements(v *View) []tagged {
 		return id
 	}
 	for _, x := range v.Pathways {
-		out = append(out, tagged{toc.ElementPathway, x.ID, x.Title, x.Basis, true})
+		out = append(out, tagged{impact.ElementPathway, x.ID, x.Title, x.Basis, true})
 	}
 	for _, x := range v.Outcomes {
-		out = append(out, tagged{toc.ElementOutcome, x.ID, x.Title, x.Basis, x.Accountable})
+		out = append(out, tagged{impact.ElementOutcome, x.ID, x.Title, x.Basis, x.Accountable})
 	}
 	for _, x := range v.Links {
-		out = append(out, tagged{toc.ElementLink, x.ID, name(x.From) + " → " + name(x.To), x.Basis, true})
+		out = append(out, tagged{impact.ElementLink, x.ID, name(x.From) + " → " + name(x.To), x.Basis, true})
 	}
 	for _, x := range v.Groups {
-		out = append(out, tagged{toc.ElementGroup, x.ID, strings.ToUpper(x.Logic) + " into " + name(x.Target), x.Basis, true})
+		out = append(out, tagged{impact.ElementGroup, x.ID, strings.ToUpper(x.Logic) + " into " + name(x.Target), x.Basis, true})
 	}
 	for _, x := range v.Interventions {
-		out = append(out, tagged{toc.ElementIntervention, x.ID, x.Title, x.Basis, true})
+		out = append(out, tagged{impact.ElementIntervention, x.ID, x.Title, x.Basis, true})
 	}
 	for _, x := range v.Assumptions {
-		out = append(out, tagged{toc.ElementAssumption, x.ID, x.Statement, x.Basis, true})
+		out = append(out, tagged{impact.ElementAssumption, x.ID, x.Statement, x.Basis, true})
 	}
 	for _, x := range v.Indicators {
-		out = append(out, tagged{toc.ElementIndicator, x.ID, x.Name, x.Basis, true})
+		out = append(out, tagged{impact.ElementIndicator, x.ID, x.Name, x.Basis, true})
 	}
 	for _, x := range v.Metrics {
-		out = append(out, tagged{toc.ElementMetric, x.ID, x.Name, x.Basis, true})
+		out = append(out, tagged{impact.ElementMetric, x.ID, x.Name, x.Basis, true})
 	}
 	for _, x := range v.Actors {
-		out = append(out, tagged{toc.ElementActor, x.ID, x.Name, x.Basis, true})
+		out = append(out, tagged{impact.ElementActor, x.ID, x.Name, x.Basis, true})
 	}
 	return out
 }
 
 func (t tagged) text() string {
 	kind := Label(string(t.kind))
-	if t.kind == toc.ElementGroup {
+	if t.kind == impact.ElementGroup {
 		kind = "Precondition group"
 	}
 	return fmt.Sprintf("%s: %s (`%s`)", kind, mdText(t.title), t.id)
 }
 
 // Assessment renders the assessment report for a view of doc.
-func Assessment(v *View, doc *toc.Document) string {
+func Assessment(v *View, doc *impact.Model) string {
 	els := taggedElements(v)
 	var b strings.Builder
 	fmt.Fprintf(&b, "# %s: assessment\n\n", mdText(v.Document.Title))
@@ -87,14 +87,14 @@ func Assessment(v *View, doc *toc.Document) string {
 
 	b.WriteString("## Where each element comes from\n\n")
 	b.WriteString("| Basis | Meaning | Elements |\n|-------|---------|----------|\n")
-	meaning := map[toc.Basis]string{
-		toc.BasisStated:     "A cited source says it",
-		toc.BasisInferred:   "Our reading of the sources",
-		toc.BasisHypothesis: "A guess to test",
-		toc.BasisConfirmed:  "The organization agreed to it",
+	meaning := map[impact.Basis]string{
+		impact.BasisStated:     "A cited source says it",
+		impact.BasisInferred:   "Our reading of the sources",
+		impact.BasisHypothesis: "A guess to test",
+		impact.BasisConfirmed:  "The organization agreed to it",
 	}
-	for _, basis := range toc.AllBases() {
-		if basis == toc.BasisRejected {
+	for _, basis := range impact.AllBases() {
+		if basis == impact.BasisRejected {
 			fmt.Fprintf(&b, "| %s | Considered and set aside | %d |\n", Label(string(basis)), len(v.Rejected))
 			continue
 		}
@@ -104,7 +104,7 @@ func Assessment(v *View, doc *toc.Document) string {
 	if n := statedWithoutCitation(els); n > 0 {
 		fmt.Fprintf(&b, "%d stated element(s) cite no source; each needs one, or a different basis.\n\n", n)
 	}
-	for _, basis := range []toc.Basis{toc.BasisHypothesis, toc.BasisInferred, toc.BasisStated, toc.BasisConfirmed} {
+	for _, basis := range []impact.Basis{impact.BasisHypothesis, impact.BasisInferred, impact.BasisStated, impact.BasisConfirmed} {
 		var lines []string
 		for _, e := range els {
 			if e.basis.Basis == basis {
@@ -146,14 +146,14 @@ func assessmentSummary(v *View, els []tagged) string {
 			owned++
 		}
 	}
-	marked := v.BasisCounts[toc.BasisInferred] + v.BasisCounts[toc.BasisHypothesis]
+	marked := v.BasisCounts[impact.BasisInferred] + v.BasisCounts[impact.BasisHypothesis]
 	s := fmt.Sprintf("This draft has %d outcomes (%d within the organization's accountability), %d interventions, %d assumptions, and %d indicators",
 		len(v.Outcomes), owned, len(v.Interventions), len(v.Assumptions), len(v.Indicators))
 	if n := len(v.Pathways); n > 0 {
 		s += fmt.Sprintf(", organized into %d pathway(s)", n)
 	}
 	s += fmt.Sprintf(". Of its %d elements, %d are stated by cited sources, %d are our inference or hypothesis, %d are confirmed by the organization, and %d have no basis recorded.",
-		len(els), v.BasisCounts[toc.BasisStated], marked, v.BasisCounts[toc.BasisConfirmed], v.Unmarked)
+		len(els), v.BasisCounts[impact.BasisStated], marked, v.BasisCounts[impact.BasisConfirmed], v.Unmarked)
 	if marked > 0 {
 		s += " The inferred and hypothesis elements are the first to check with the organization."
 	}
@@ -163,7 +163,7 @@ func assessmentSummary(v *View, els []tagged) string {
 func statedWithoutCitation(els []tagged) int {
 	n := 0
 	for _, e := range els {
-		if e.basis.Basis == toc.BasisStated && len(e.basis.EvidenceIDs) == 0 {
+		if e.basis.Basis == impact.BasisStated && len(e.basis.EvidenceIDs) == 0 {
 			n++
 		}
 	}
@@ -171,7 +171,7 @@ func statedWithoutCitation(els []tagged) int {
 }
 
 // measuredByProxy returns the outcomes some active indicator stands in for.
-func measuredByProxy(doc *toc.Document) map[string]bool {
+func measuredByProxy(doc *impact.Model) map[string]bool {
 	out := map[string]bool{}
 	for _, ind := range doc.Indicators {
 		if ind.Provenance.IsRejected() {
@@ -186,7 +186,7 @@ func measuredByProxy(doc *toc.Document) map[string]bool {
 
 // outcomesWithoutIndicators lists owned outcomes that nothing measures: no
 // indicator of their own, and no indicator standing in for them.
-func outcomesWithoutIndicators(v *View, doc *toc.Document) []string {
+func outcomesWithoutIndicators(v *View, doc *impact.Model) []string {
 	var out []string
 	proxied := measuredByProxy(doc)
 	for _, o := range v.Outcomes {
@@ -211,7 +211,7 @@ func dataAvailabilityTable(v *View) string {
 	}
 	var b strings.Builder
 	b.WriteString("| Data availability | Indicators |\n|-------------------|------------|\n")
-	for _, a := range toc.AllDataAvailabilities() {
+	for _, a := range impact.AllDataAvailabilities() {
 		if names := byAvail[string(a)]; len(names) > 0 {
 			fmt.Fprintf(&b, "| %s | %s |\n", Label(string(a)), strings.Join(names, "; "))
 		}
@@ -227,7 +227,7 @@ func needsTesting(a AssumptionView) bool {
 	if a.NeedsTesting {
 		return true
 	}
-	high := a.Criticality == string(toc.CriticalityHigh) || a.Criticality == string(toc.CriticalityCritical)
+	high := a.Criticality == string(impact.CriticalityHigh) || a.Criticality == string(impact.CriticalityCritical)
 	return high && (a.Status == "" || a.Status == "untested")
 }
 
@@ -245,10 +245,10 @@ func assumptionsNeedingTesting(v *View) []string {
 	return out
 }
 
-func openDecisions(doc *toc.Document) []string {
+func openDecisions(doc *impact.Model) []string {
 	var out []string
 	for _, d := range doc.Decisions {
-		if d.Status == toc.DecisionDecided {
+		if d.Status == impact.DecisionDecided {
 			continue
 		}
 		s := fmt.Sprintf("%s (`%s`)", mdText(d.Question), d.ID)
@@ -264,14 +264,14 @@ func openDecisions(doc *toc.Document) []string {
 // inferred or hypothesis element at an accountable level, then one for each
 // gap. The wording is fixed so the same document always yields the same
 // questions.
-func questions(v *View, els []tagged, doc *toc.Document) []string {
+func questions(v *View, els []tagged, doc *impact.Model) []string {
 	var qs []string
 	for _, e := range els {
 		if !e.basis.Marked || !e.accountable {
 			continue
 		}
 		verb := "We inferred this from your public materials"
-		if e.basis.Basis == toc.BasisHypothesis {
+		if e.basis.Basis == impact.BasisHypothesis {
 			verb = "We are guessing here"
 		}
 		qs = append(qs, fmt.Sprintf("%s — %s. Is it right, and what would you change? (%s)", e.text(), verb, e.id))
@@ -283,7 +283,7 @@ func questions(v *View, els []tagged, doc *toc.Document) []string {
 		}
 	}
 	for _, ind := range v.Indicators {
-		if ind.DataAvailability == string(toc.DataUnknown) {
+		if ind.DataAvailability == string(impact.DataUnknown) {
 			qs = append(qs, fmt.Sprintf("Where could the data for \"%s\" (%s) come from, and who holds it?", mdText(ind.Name), ind.ID))
 		}
 	}
@@ -293,7 +293,7 @@ func questions(v *View, els []tagged, doc *toc.Document) []string {
 		}
 	}
 	for _, d := range doc.Decisions {
-		if d.Status != toc.DecisionDecided {
+		if d.Status != impact.DecisionDecided {
 			qs = append(qs, fmt.Sprintf("Decision needed: %s (%s)", mdText(d.Question), d.ID))
 		}
 	}

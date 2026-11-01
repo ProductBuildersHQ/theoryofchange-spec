@@ -6,23 +6,23 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
-func loadFixture(t *testing.T) *toc.Document {
+func loadFixture(t *testing.T) *impact.Model {
 	t.Helper()
-	data, err := os.ReadFile("../toc/testdata/full.json")
+	data, err := os.ReadFile("../impact/testdata/full.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	var d toc.Document
+	var d impact.Model
 	if err := json.Unmarshal(data, &d); err != nil {
 		t.Fatal(err)
 	}
 	return &d
 }
 
-func rejected() *toc.Provenance { return &toc.Provenance{Basis: toc.BasisRejected} }
+func rejected() *impact.Provenance { return &impact.Provenance{Basis: impact.BasisRejected} }
 
 func nodeIDs(g *Graph) []string {
 	var ids []string
@@ -116,7 +116,7 @@ func TestRejectedInterventionAndGroupAreExcluded(t *testing.T) {
 
 func TestRejectedOutcomeLeavesTheCeiling(t *testing.T) {
 	doc := loadFixture(t)
-	doc.Ceiling = &toc.Ceiling{OutcomeIDs: []string{"oc-enterprise-require", "oc-platform-support"}}
+	doc.Ceiling = &impact.Ceiling{OutcomeIDs: []string{"oc-enterprise-require", "oc-platform-support"}}
 	doc.Outcomes[3].Provenance = rejected()
 	g, err := Build(doc)
 	if err != nil {

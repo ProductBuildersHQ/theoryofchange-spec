@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
 const (
@@ -76,7 +76,7 @@ func Exec(in report.StatusInput, o Options) string {
 	d.line("# Where we stand")
 	d.line("")
 	if len(in.Status.Overall) == 0 {
-		d.line("This theory has no impact outcome yet.")
+		d.line("This impact model has no impact outcome yet.")
 	}
 	titles := map[string]string{}
 	for _, oc := range in.View.Outcomes {
@@ -96,7 +96,7 @@ func Exec(in report.StatusInput, o Options) string {
 	d.line("")
 	d.line("| Level | Outcomes | Pathway status |")
 	d.line("|-------|----------|----------------|")
-	for _, lv := range toc.AllLevels() {
+	for _, lv := range impact.AllLevels() {
 		counts := map[string]int{}
 		n := 0
 		for _, oc := range in.View.Outcomes {
@@ -141,7 +141,7 @@ func Exec(in report.StatusInput, o Options) string {
 			}
 			d.line("")
 		}
-		d.notes("These are the beliefs the theory leans on that are broken, at risk, or still untested.")
+		d.notes("These are the beliefs the impact model leans on that are broken, at risk, or still untested.")
 	}
 
 	if in.Diff != nil && len(in.Diff.Changes) > 0 {
@@ -223,7 +223,7 @@ func LearningReview(in report.LearningInput, o Options) string {
 	var moves []string
 	if in.Diff != nil {
 		for _, c := range in.Diff.Changes {
-			if c.ElementKind == toc.ElementAssumption && c.Field == "status" {
+			if c.ElementKind == impact.ElementAssumption && c.Field == "status" {
 				moves = append(moves, fmt.Sprintf("`%s`: %s → %s", c.ElementID, dash(c.From), dash(c.To)))
 			}
 		}
@@ -235,7 +235,7 @@ func LearningReview(in report.LearningInput, o Options) string {
 		for _, m := range moves {
 			d.line("- %s", m)
 		}
-		d.notes("An assumption that moved is the theory telling us something. Ask what it changes.")
+		d.notes("An assumption that moved is the impact model telling us something. Ask what it changes.")
 	}
 
 	d.themesAndStories(in)
@@ -245,7 +245,7 @@ func LearningReview(in report.LearningInput, o Options) string {
 	d.line("")
 	stale := 0
 	for _, s := range in.Status.Indicators {
-		if s.State == toc.StateStale || s.State == toc.StateNoData {
+		if s.State == impact.StateStale || s.State == impact.StateNoData {
 			stale++
 		}
 	}
@@ -305,7 +305,7 @@ func (d *deck) themesAndStories(in report.LearningInput) {
 		}
 		d.line("| %s%s | %d |", cell(c.Label), note, c.Count)
 	}
-	d.notes("A new theme is worth a conversation: it may be something the theory did not expect.")
+	d.notes("A new theme is worth a conversation: it may be something the impact model did not expect.")
 	for i, group := range chunk(shown, storiesPerSlide) {
 		d.slide("")
 		d.line("# Stories%s", pageSuffix(i, len(shown), storiesPerSlide))
@@ -325,7 +325,7 @@ func (d *deck) themesAndStories(in report.LearningInput) {
 }
 
 func (d *deck) recorded(in report.LearningInput) {
-	var found []toc.LearningReview
+	var found []impact.LearningReview
 	for _, set := range in.Sets {
 		for _, r := range set.Reviews {
 			if in.Period == "" || r.Period == in.Period {
@@ -354,7 +354,7 @@ func (d *deck) recorded(in report.LearningInput) {
 // five headline numbers with their caveats, one or two stories they may be
 // told, and a closing ask. A story appears only with granted consent, and a
 // quote only where the story may be quoted.
-func Story(in report.StatusInput, sets []*toc.ObservationSet, audienceID string, o Options) (string, error) {
+func Story(in report.StatusInput, sets []*impact.ObservationSet, audienceID string, o Options) (string, error) {
 	aud, ok := in.Doc.Audience(audienceID)
 	if !ok {
 		return "", fmt.Errorf("slides: unknown audience %q", audienceID)
@@ -373,7 +373,7 @@ func Story(in report.StatusInput, sets []*toc.ObservationSet, audienceID string,
 	d.line("%s", oneLine(aud.Needs))
 	d.notes("Say this back to them before showing a number.")
 
-	byInd := map[string]toc.IndicatorStatus{}
+	byInd := map[string]impact.IndicatorStatus{}
 	for _, s := range in.Status.Indicators {
 		byInd[s.IndicatorID] = s
 	}
@@ -399,7 +399,7 @@ func Story(in report.StatusInput, sets []*toc.ObservationSet, audienceID string,
 			ind := n.Indicator
 			v := views[ind.ID]
 			note := ""
-			if ind.EffectiveClaim() == toc.ClaimContribution {
+			if ind.EffectiveClaim() == impact.ClaimContribution {
 				note = " *"
 			}
 			d.line("| %s%s | %s | %s |", cell(cut(n.Label, 70)), note, cell(dashText(v.Latest)), label(string(byInd[ind.ID].State)))
@@ -417,7 +417,7 @@ func Story(in report.StatusInput, sets []*toc.ObservationSet, audienceID string,
 		d.notes("Use the numbers as given. Say 'contributed to' for anything marked.")
 	}
 
-	shown, _ := report.Disclose(sets, asOf, func(s toc.Story) bool { return containsString(s.AudienceIDs, audienceID) })
+	shown, _ := report.Disclose(sets, asOf, func(s impact.Story) bool { return containsString(s.AudienceIDs, audienceID) })
 	for i, dis := range shown {
 		if i == storiesPerSlide {
 			break

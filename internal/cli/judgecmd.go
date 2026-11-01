@@ -9,24 +9,24 @@ import (
 	"github.com/plexusone/structured-evaluation/rubric"
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/judge"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/spec"
+	"github.com/ProductBuildersHQ/impact-model/pkg/judge"
+	"github.com/ProductBuildersHQ/impact-model/spec"
 )
 
 func newJudgeCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "judge",
-		Short: "Prepare a theory for an LLM-as-a-Judge and combine the verdicts",
-		Long: `Support judging a theory against a rubric. This command makes no model calls: a
+		Short: "Prepare an impact model for an LLM-as-a-Judge and combine the verdicts",
+		Long: `Support judging an impact model against a rubric. This command makes no model calls: a
 judge, human or agent, reads the bundle and returns a verdict.
 
   judge show     print the bundle: rubric, document, narrative, lint report,
                  instructions, and a hash of all of them
-  judge record   check a verdict against the bundle and store it beside the theory
+  judge record   check a verdict against the bundle and store it beside the impact model
   judge summary  combine the stored verdicts: per-category scores, agreement,
-                 and whether the theory passes
+                 and whether the impact model passes
 
-A verdict names the bundle hash it judged. If the theory has changed since, the
+A verdict names the bundle hash it judged. If the impact model has changed since, the
 hash differs and the verdict is rejected.`,
 	}
 	cmd.PersistentFlags().String("profile", spec.ProfileCore, "rubric profile: "+strings.Join(spec.Profiles(), " or "))
@@ -51,9 +51,9 @@ func judgeBundle(cmd *cobra.Command, path string) (*judge.Bundle, error) {
 
 func newJudgeShowCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "show <toc-file>",
+		Use:     "show <model-file>",
 		Short:   "Print the judge bundle",
-		Example: "  theoryofchange judge show theory.yaml --profile development --out bundle.json",
+		Example: "  impact-model judge show impact-model.yaml --profile development --out bundle.json",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			b, err := judgeBundle(cmd, args[0])
@@ -75,15 +75,15 @@ func newJudgeShowCmd(e *env) *cobra.Command {
 
 func newJudgeRecordCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "record <toc-file> <verdict-file>",
-		Short: "Check a verdict and store it beside the theory",
+		Use:   "record <model-file> <verdict-file>",
+		Short: "Check a verdict and store it beside the impact model",
 		Long: `Check a verdict against the current bundle and store it under
-.toc/judgements/<bundle-hash>/<judge>.json beside the theory file.
+.toc/judgements/<bundle-hash>/<judge>.json beside the impact model file.
 
 The verdict is rejected, with exit code 1, if it judged a different version of
-the theory, is not a valid evaluation report, scores a category the rubric does
+the impact model, is not a valid evaluation report, scores a category the rubric does
 not have, or leaves a required category unscored.`,
-		Example: "  theoryofchange judge record theory.yaml verdict.json --judge model-a",
+		Example: "  impact-model judge record impact-model.yaml verdict.json --judge model-a",
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			b, err := judgeBundle(cmd, args[0])
@@ -115,19 +115,19 @@ not have, or leaves a required category unscored.`,
 
 func newJudgeSummaryCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "summary <toc-file>",
+		Use:   "summary <model-file>",
 		Short: "Combine the stored verdicts",
-		Long: `Combine every verdict recorded for the current version of the theory: per
+		Long: `Combine every verdict recorded for the current version of the impact model: per
 category, how many judges gave each score and the combined score; how closely
-the judges agree; and whether the theory passes the rubric.
+the judges agree; and whether the impact model passes the rubric.
 
 Aggregation is one of majority (a tie goes to partial), conservative (the
 lowest score), optimistic (the highest), or unanimous (anything else is
-partial). The theory passes when every required category passes, no blocking
+partial). The impact model passes when every required category passes, no blocking
 category fails, and the findings stay within the rubric's limits.
 
-Exit code 1 means the theory does not pass.`,
-		Example: "  theoryofchange judge summary theory.yaml --aggregation majority",
+Exit code 1 means the impact model does not pass.`,
+		Example: "  impact-model judge summary impact-model.yaml --aggregation majority",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			format, err := outputFormat(cmd)

@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-// runAsCLIEnv makes the test binary behave as the theoryofchange command, for
+// runAsCLIEnv makes the test binary behave as the impact-model command, for
 // tests that need a real process with its own standard input and output.
-const runAsCLIEnv = "THEORYOFCHANGE_RUN_AS_CLI"
+const runAsCLIEnv = "IMPACT_MODEL_RUN_AS_CLI"
 
 func TestMain(m *testing.M) {
 	if os.Getenv(runAsCLIEnv) == "1" {
@@ -69,13 +69,13 @@ func TestMCPServesOverStdio(t *testing.T) {
 	}
 	send(`{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}`)
 	init := readResponse()
-	if res, _ := init["result"].(map[string]any); res == nil || res["serverInfo"].(map[string]any)["name"] != "theoryofchange" {
+	if res, _ := init["result"].(map[string]any); res == nil || res["serverInfo"].(map[string]any)["name"] != "impact-model" {
 		t.Fatalf("initialize: %v", init)
 	}
 	send(`{"jsonrpc":"2.0","method":"notifications/initialized"}`)
 	send(`{"jsonrpc":"2.0","id":2,"method":"tools/list"}`)
 	list := readResponse()
-	if !strings.Contains(string(mustMarshal(t, list)), "toc_patch") {
+	if !strings.Contains(string(mustMarshal(t, list)), "impact_patch") {
 		t.Errorf("tools/list: %v", list)
 	}
 }

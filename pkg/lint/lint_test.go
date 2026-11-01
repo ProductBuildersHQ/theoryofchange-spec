@@ -10,10 +10,10 @@ import (
 
 	"github.com/plexusone/structured-evaluation/summary"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // fake is a rule that reports a fixed set of messages.
@@ -49,9 +49,9 @@ func registry(t *testing.T, rules ...Rule) *Registry {
 	return r
 }
 
-func load(t *testing.T, path string) (*toc.Document, *graph.Graph) {
+func load(t *testing.T, path string) (*impact.Model, *graph.Graph) {
 	t.Helper()
-	doc, err := tocio.LoadDocument(path)
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func load(t *testing.T, path string) (*toc.Document, *graph.Graph) {
 }
 
 func TestCategory(t *testing.T) {
-	for id, want := range map[string]string{"TOC-STR-001": "STR", "TOC-MEA-004": "MEA", "bad": "", "TOC-X": ""} {
+	for id, want := range map[string]string{"IMP-STR-001": "STR", "IMP-MEA-004": "MEA", "bad": "", "IMP-X": ""} {
 		if got := Category(id); got != want {
 			t.Errorf("Category(%q) = %q, want %q", id, got, want)
 		}
@@ -75,37 +75,37 @@ func TestRegistryRejectsBadAndDuplicateIDs(t *testing.T) {
 	if err := r.Add(fake{id: "STR-001"}); err == nil {
 		t.Error("an ID without the TOC prefix was accepted")
 	}
-	if err := r.Add(fake{id: "TOC-STR-001"}); err != nil {
+	if err := r.Add(fake{id: "IMP-STR-001"}); err != nil {
 		t.Fatal(err)
 	}
-	if err := r.Add(fake{id: "TOC-STR-001"}); !errors.Is(err, ErrDuplicateRule) {
+	if err := r.Add(fake{id: "IMP-STR-001"}); !errors.Is(err, ErrDuplicateRule) {
 		t.Errorf("duplicate error = %v", err)
 	}
-	if err := r.Add(fake{id: "TOC-ASM-001"}); err != nil {
+	if err := r.Add(fake{id: "IMP-ASM-001"}); err != nil {
 		t.Fatal(err)
 	}
 	var ids []string
 	for _, rule := range r.Rules() {
 		ids = append(ids, rule.ID())
 	}
-	if !slices.Equal(ids, []string{"TOC-ASM-001", "TOC-STR-001"}) {
+	if !slices.Equal(ids, []string{"IMP-ASM-001", "IMP-STR-001"}) {
 		t.Errorf("rules not sorted: %v", ids)
 	}
 }
 
 func TestProfilesSelectRules(t *testing.T) {
 	reg := registry(t,
-		fake{id: "TOC-INT-001", severity: validate.SeverityError, messages: []string{"e"}},
-		fake{id: "TOC-STR-004", severity: validate.SeverityWarning, messages: []string{"structural warning"}},
-		fake{id: "TOC-ASM-001", severity: validate.SeverityWarning, messages: []string{"w"}},
-		fake{id: "TOC-ASM-003", severity: validate.SeverityInfo, messages: []string{"i"}},
+		fake{id: "IMP-INT-001", severity: validate.SeverityError, messages: []string{"e"}},
+		fake{id: "IMP-STR-004", severity: validate.SeverityWarning, messages: []string{"structural warning"}},
+		fake{id: "IMP-ASM-001", severity: validate.SeverityWarning, messages: []string{"w"}},
+		fake{id: "IMP-ASM-003", severity: validate.SeverityInfo, messages: []string{"i"}},
 	)
 	want := map[Profile][]string{
-		ProfileDraft:    {"TOC-INT-001", "TOC-STR-004"},
-		ProfileStandard: {"TOC-ASM-001", "TOC-INT-001", "TOC-STR-004"},
-		ProfileFull:     {"TOC-ASM-001", "TOC-ASM-003", "TOC-INT-001", "TOC-STR-004"},
+		ProfileDraft:    {"IMP-INT-001", "IMP-STR-004"},
+		ProfileStandard: {"IMP-ASM-001", "IMP-INT-001", "IMP-STR-004"},
+		ProfileFull:     {"IMP-ASM-001", "IMP-ASM-003", "IMP-INT-001", "IMP-STR-004"},
 	}
-	doc := &toc.Document{}
+	doc := &impact.Model{}
 	for p, ids := range want {
 		res, err := Run(doc, nil, Options{Profile: p, Registry: reg})
 		if err != nil {
@@ -124,10 +124,10 @@ func TestProfilesSelectRules(t *testing.T) {
 
 func TestRunStampsRuleAndSortsFindings(t *testing.T) {
 	reg := registry(t,
-		fake{id: "TOC-MEA-001", severity: validate.SeverityWarning, messages: []string{"b", "a"}},
-		fake{id: "TOC-ASM-001", severity: validate.SeverityWarning, messages: []string{"z"}},
+		fake{id: "IMP-MEA-001", severity: validate.SeverityWarning, messages: []string{"b", "a"}},
+		fake{id: "IMP-ASM-001", severity: validate.SeverityWarning, messages: []string{"z"}},
 	)
-	res, err := Run(&toc.Document{}, nil, Options{Registry: reg})
+	res, err := Run(&impact.Model{}, nil, Options{Registry: reg})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -138,38 +138,38 @@ func TestRunStampsRuleAndSortsFindings(t *testing.T) {
 		}
 		got = append(got, f.Rule+":"+f.Message)
 	}
-	if !slices.Equal(got, []string{"TOC-ASM-001:z", "TOC-MEA-001:a", "TOC-MEA-001:b"}) {
+	if !slices.Equal(got, []string{"IMP-ASM-001:z", "IMP-MEA-001:a", "IMP-MEA-001:b"}) {
 		t.Errorf("findings = %v", got)
 	}
 }
 
 func TestDisableAndUnknowns(t *testing.T) {
 	calls := 0
-	reg := registry(t, fake{id: "TOC-ASM-001", severity: validate.SeverityWarning, messages: []string{"w"}, calls: &calls})
-	res, err := Run(&toc.Document{}, nil, Options{Registry: reg, Disable: []string{"TOC-ASM-001"}})
+	reg := registry(t, fake{id: "IMP-ASM-001", severity: validate.SeverityWarning, messages: []string{"w"}, calls: &calls})
+	res, err := Run(&impact.Model{}, nil, Options{Registry: reg, Disable: []string{"IMP-ASM-001"}})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if calls != 0 || len(res.Findings) != 0 || !slices.Equal(res.Disabled, []string{"TOC-ASM-001"}) || len(res.Ran) != 0 {
+	if calls != 0 || len(res.Findings) != 0 || !slices.Equal(res.Disabled, []string{"IMP-ASM-001"}) || len(res.Ran) != 0 {
 		t.Errorf("a disabled rule ran: calls=%d result=%+v", calls, res)
 	}
-	if _, err := Run(&toc.Document{}, nil, Options{Registry: reg, Disable: []string{"TOC-NOPE-001"}}); !errors.Is(err, ErrUnknownRule) {
+	if _, err := Run(&impact.Model{}, nil, Options{Registry: reg, Disable: []string{"IMP-NOPE-001"}}); !errors.Is(err, ErrUnknownRule) {
 		t.Errorf("unknown rule error = %v", err)
 	}
-	if _, err := Run(&toc.Document{}, nil, Options{Registry: reg, Profile: "strict"}); !errors.Is(err, ErrUnknownProfile) {
+	if _, err := Run(&impact.Model{}, nil, Options{Registry: reg, Profile: "strict"}); !errors.Is(err, ErrUnknownProfile) {
 		t.Errorf("unknown profile error = %v", err)
 	}
 }
 
 func TestSummaryReportShape(t *testing.T) {
 	reg := registry(t,
-		fake{id: "TOC-STR-001", severity: validate.SeverityError},
-		fake{id: "TOC-ASM-001", severity: validate.SeverityWarning, messages: []string{"no test"}},
-		fake{id: "TOC-ASM-003", severity: validate.SeverityInfo, messages: []string{"advice"}},
-		fake{id: "TOC-MEA-001", severity: validate.SeverityError, messages: []string{"unmeasured"}},
-		fake{id: "TOC-INT-002", severity: validate.SeverityWarning},
+		fake{id: "IMP-STR-001", severity: validate.SeverityError},
+		fake{id: "IMP-ASM-001", severity: validate.SeverityWarning, messages: []string{"no test"}},
+		fake{id: "IMP-ASM-003", severity: validate.SeverityInfo, messages: []string{"advice"}},
+		fake{id: "IMP-MEA-001", severity: validate.SeverityError, messages: []string{"unmeasured"}},
+		fake{id: "IMP-INT-002", severity: validate.SeverityWarning},
 	)
-	res, err := Run(&toc.Document{}, nil, Options{Profile: ProfileFull, Registry: reg, Disable: []string{"TOC-INT-002"}})
+	res, err := Run(&impact.Model{}, nil, Options{Profile: ProfileFull, Registry: reg, Disable: []string{"IMP-INT-002"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -204,11 +204,11 @@ func TestSummaryReportShape(t *testing.T) {
 		team, task string
 		want       summary.Status
 	}{
-		{"Structure", "TOC-STR-001", summary.StatusGo},
-		{"Assumptions", "TOC-ASM-001", summary.StatusWarn},
-		{"Assumptions", "TOC-ASM-003", summary.StatusGo},
-		{"Measurement", "TOC-MEA-001", summary.StatusNoGo},
-		{"Interventions", "TOC-INT-002", summary.StatusSkip},
+		{"Structure", "IMP-STR-001", summary.StatusGo},
+		{"Assumptions", "IMP-ASM-001", summary.StatusWarn},
+		{"Assumptions", "IMP-ASM-003", summary.StatusGo},
+		{"Measurement", "IMP-MEA-001", summary.StatusNoGo},
+		{"Interventions", "IMP-INT-002", summary.StatusSkip},
 	} {
 		if got := status(c.team, c.task); got != c.want {
 			t.Errorf("%s: %s = %s, want %s", c.team, c.task, got, c.want)
@@ -229,7 +229,7 @@ func TestSummaryReportShape(t *testing.T) {
 }
 
 func TestMinimalDocumentIsGoUnderDraft(t *testing.T) {
-	doc, g := load(t, "../toc/testdata/minimal.json")
+	doc, g := load(t, "../impact/testdata/minimal.json")
 	res, err := Run(doc, g, Options{Profile: ProfileDraft})
 	if err != nil {
 		t.Fatal(err)

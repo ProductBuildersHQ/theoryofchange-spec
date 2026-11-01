@@ -1,6 +1,6 @@
-// Package lint checks the quality of a Theory of Change with deterministic
+// Package lint checks the quality of an impact model with deterministic
 // rules, each with a stable ID and a severity. Validation answers "is this a
-// well-formed document?"; lint answers "is this a sound theory?".
+// well-formed document?"; lint answers "is this a sound impact model?".
 //
 // Rules are registered in a Registry. A profile picks how much to report:
 // draft runs the errors and the structural rules, so a small valid document
@@ -17,9 +17,9 @@ import (
 
 	"github.com/plexusone/structured-evaluation/summary"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // Profile selects which rules run.
@@ -42,7 +42,7 @@ func Profiles() []Profile { return []Profile{ProfileDraft, ProfileStandard, Prof
 func (p Profile) Valid() bool { return slices.Contains(Profiles(), p) }
 
 // Categories group rules in the report. A rule's category is the middle part
-// of its ID, such as STR in TOC-STR-001.
+// of its ID, such as STR in IMP-STR-001.
 const (
 	// CategorySTR is the structural category, which runs in every profile.
 	CategorySTR = "STR"
@@ -68,7 +68,7 @@ type Finding struct {
 
 // Context is what a rule sees. Rules must not modify it.
 type Context struct {
-	Doc   *toc.Document
+	Doc   *impact.Model
 	Graph *graph.Graph
 	// AsOf is the date time-based rules measure from (YYYY-MM-DD); empty
 	// when none was given, in which case those rules do not report.
@@ -77,7 +77,7 @@ type Context struct {
 
 // Rule is one check.
 type Rule interface {
-	// ID is the stable identifier, such as TOC-STR-001.
+	// ID is the stable identifier, such as IMP-STR-001.
 	ID() string
 	// Severity is the severity of every finding the rule reports.
 	Severity() validate.Severity
@@ -88,7 +88,7 @@ type Rule interface {
 	Check(*Context) []Finding
 }
 
-// Category returns the category of a rule ID: TOC-STR-001 is STR.
+// Category returns the category of a rule ID: IMP-STR-001 is STR.
 func Category(id string) string {
 	parts := strings.Split(id, "-")
 	if len(parts) != 3 {
@@ -134,8 +134,8 @@ func NewRegistry() *Registry { return &Registry{rules: map[string]Rule{}} }
 // Add registers a rule. An empty or repeated ID is an error.
 func (g *Registry) Add(r Rule) error {
 	id := r.ID()
-	if Category(id) == "" || !strings.HasPrefix(id, "TOC-") {
-		return fmt.Errorf("lint: rule ID %q is not of the form TOC-<CAT>-<NNN>", id)
+	if Category(id) == "" || !strings.HasPrefix(id, "IMP-") {
+		return fmt.Errorf("lint: rule ID %q is not of the form IMP-<CAT>-<NNN>", id)
 	}
 	if _, dup := g.rules[id]; dup {
 		return fmt.Errorf("%w: %s", ErrDuplicateRule, id)
@@ -212,7 +212,7 @@ func (r *Result) Go() bool { return r.Count(validate.SeverityError) == 0 }
 
 // Run checks doc with the rules of the profile. g is the document's graph.
 // The result is the same for the same inputs.
-func Run(doc *toc.Document, g *graph.Graph, o Options) (*Result, error) {
+func Run(doc *impact.Model, g *graph.Graph, o Options) (*Result, error) {
 	if o.Profile == "" {
 		o.Profile = ProfileStandard
 	}
@@ -279,7 +279,7 @@ var categoryNames = map[string]string{
 func (r *Result) SummaryReport(project, version string, generatedAt time.Time) *summary.SummaryReport {
 	rep := &summary.SummaryReport{
 		Project: project, Version: version, Phase: "THEORY OF CHANGE LINT (" + strings.ToUpper(string(r.Profile)) + ")",
-		Teams: []summary.TeamSection{}, GeneratedAt: generatedAt, GeneratedBy: "theoryofchange lint",
+		Teams: []summary.TeamSection{}, GeneratedAt: generatedAt, GeneratedBy: "impact-model lint",
 	}
 	byCat := map[string][]summary.TaskResult{}
 	var cats []string

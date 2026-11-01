@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
-func exampleSets(t *testing.T) []*toc.ObservationSet {
+func exampleSets(t *testing.T) []*impact.ObservationSet {
 	t.Helper()
-	sets, err := tocio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
+	sets, err := impactio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,16 +29,16 @@ func TestStoryReportGolden(t *testing.T) {
 	}
 }
 
-func story(id, date, consent, sensitivity, quote string, audiences ...string) toc.Story {
-	return toc.Story{
+func story(id, date, consent, sensitivity, quote string, audiences ...string) impact.Story {
+	return impact.Story{
 		ID: id, Date: date, Title: "Title " + id, Summary: "Summary " + id, Quote: quote,
-		AudienceIDs: audiences, Consent: toc.Consent(consent), Sensitivity: toc.Sensitivity(sensitivity),
+		AudienceIDs: audiences, Consent: impact.Consent(consent), Sensitivity: impact.Sensitivity(sensitivity),
 	}
 }
 
 func TestConsentAndSensitivityGateStoriesAndQuotes(t *testing.T) {
 	in := exampleInput(t)
-	sets := []*toc.ObservationSet{{Stories: []toc.Story{
+	sets := []*impact.ObservationSet{{Stories: []impact.Story{
 		story("ok-public", "2026-03-01", "granted", "public", "QUOTE-OK-PUBLIC", "aud-funders"),
 		story("ok-internal", "2026-03-02", "granted", "internal", "QUOTE-OK-INTERNAL", "aud-funders"),
 		story("ok-restricted", "2026-03-03", "granted", "restricted", "QUOTE-RESTRICTED", "aud-funders"),
@@ -80,7 +80,7 @@ func TestConsentAndSensitivityGateStoriesAndQuotes(t *testing.T) {
 
 func TestOneWithheldStoryIsSingular(t *testing.T) {
 	in := exampleInput(t)
-	sets := []*toc.ObservationSet{{Stories: []toc.Story{story("a", "2026-03-01", "not_granted", "public", "", "aud-funders")}}}
+	sets := []*impact.ObservationSet{{Stories: []impact.Story{story("a", "2026-03-01", "not_granted", "public", "", "aud-funders")}}}
 	out, _ := Story(in, sets, "aud-funders")
 	if !strings.Contains(out, "1 further story for this audience is not shown") {
 		t.Errorf("singular form missing:\n%s", out)
@@ -106,10 +106,10 @@ func TestStoryReportCarriesCaveatsAndHowToDescribeNumbers(t *testing.T) {
 
 func TestThemeCountsUseOnlyShownStories(t *testing.T) {
 	in := exampleInput(t)
-	sets := []*toc.ObservationSet{{Stories: []toc.Story{
-		{ID: "a", Date: "2026-03-01", Title: "a", Summary: "s", Consent: toc.ConsentGranted, Sensitivity: toc.SensitivityPublic, AudienceIDs: []string{"aud-funders"}, ThemeIDs: []string{"thm-peer-help"}},
-		{ID: "b", Date: "2026-03-02", Title: "b", Summary: "s", Consent: toc.ConsentGranted, Sensitivity: toc.SensitivityPublic, AudienceIDs: []string{"aud-funders"}, ThemeIDs: []string{"thm-peer-help", "thm-shared-savings"}},
-		{ID: "c", Date: "2026-03-03", Title: "c", Summary: "s", Consent: toc.ConsentNotGranted, Sensitivity: toc.SensitivityPublic, AudienceIDs: []string{"aud-funders"}, ThemeIDs: []string{"thm-shared-savings"}},
+	sets := []*impact.ObservationSet{{Stories: []impact.Story{
+		{ID: "a", Date: "2026-03-01", Title: "a", Summary: "s", Consent: impact.ConsentGranted, Sensitivity: impact.SensitivityPublic, AudienceIDs: []string{"aud-funders"}, ThemeIDs: []string{"thm-peer-help"}},
+		{ID: "b", Date: "2026-03-02", Title: "b", Summary: "s", Consent: impact.ConsentGranted, Sensitivity: impact.SensitivityPublic, AudienceIDs: []string{"aud-funders"}, ThemeIDs: []string{"thm-peer-help", "thm-shared-savings"}},
+		{ID: "c", Date: "2026-03-03", Title: "c", Summary: "s", Consent: impact.ConsentNotGranted, Sensitivity: impact.SensitivityPublic, AudienceIDs: []string{"aud-funders"}, ThemeIDs: []string{"thm-shared-savings"}},
 	}}}
 	out, _ := Story(in, sets, "aud-funders")
 	if !strings.Contains(out, "| Members helping each other | 2 |") || !strings.Contains(out, "| Savings from shared services | 1 |") {
@@ -125,9 +125,9 @@ func TestUnknownAudience(t *testing.T) {
 
 func TestDiscloseIsStableAndDeduplicates(t *testing.T) {
 	asOf := time.Date(2026, 12, 31, 0, 0, 0, 0, time.UTC)
-	sets := []*toc.ObservationSet{
-		{Stories: []toc.Story{story("b", "2026-05-01", "granted", "public", "q"), story("a", "2026-05-01", "granted", "public", "q")}},
-		{Stories: []toc.Story{story("a", "2026-05-01", "granted", "public", "q")}},
+	sets := []*impact.ObservationSet{
+		{Stories: []impact.Story{story("b", "2026-05-01", "granted", "public", "q"), story("a", "2026-05-01", "granted", "public", "q")}},
+		{Stories: []impact.Story{story("a", "2026-05-01", "granted", "public", "q")}},
 	}
 	shown, withheld := Disclose(sets, asOf, nil)
 	if len(shown) != 2 || withheld != 0 || shown[0].Story.ID != "a" || shown[1].Story.ID != "b" {

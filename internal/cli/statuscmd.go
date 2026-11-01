@@ -8,35 +8,35 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tabular"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/tabular"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 func newStatusCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "status <toc-file> -O <observations>...",
-		Short: "Compute how far a theory has come, as of a date",
+		Use:   "status <model-file> -O <observations>...",
+		Short: "Compute how far an impact model has come, as of a date",
 		Long: `Compute a status snapshot: for each indicator its progress against what the
 targets call for by the date; for each outcome its own state and its pathway
 state (what leads to it); for each link and assumption its state; and a
 confidence score for the routes to impact.
 
 The date is --as-of, or by default the latest date in the observations. The
-snapshot is a pure function of the theory, the observations, and the date.
+snapshot is a pure function of the impact model, the observations, and the date.
 
 By default a summary is printed. With --format json the snapshot is printed as
 JSON. --out writes the snapshot as JSON to a file whatever the format. With
 --prev, the changes since an earlier snapshot are listed too.
 
-Exit code 1 means the theory or the observations are invalid.`,
-		Example: `  theoryofchange status theory.yaml -O obs-q3.yaml --as-of 2026-09-30 --out status-q3.json
-  theoryofchange status theory.yaml -O obs-q3.yaml -O obs-q4.yaml --prev status-q3.json`,
+Exit code 1 means the impact model or the observations are invalid.`,
+		Example: `  impact-model status impact-model.yaml -O obs-q3.yaml --as-of 2026-09-30 --out status-q3.json
+  impact-model status impact-model.yaml -O obs-q3.yaml -O obs-q4.yaml --prev status-q3.json`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error { return runStatus(e, cmd, args[0]) },
 	}
@@ -52,17 +52,17 @@ func statusFlags(cmd *cobra.Command) {
 	f.StringSliceP("observations", "O", nil, "observation set files (repeatable)")
 	f.String("prev", "", "an earlier status snapshot (JSON) to compare with")
 	f.Float64("tolerance", measure.DefaultTolerance, "how far behind expected progress still counts as on track")
-	f.String("rollup", string(toc.RollupWorst), "how indicators combine into an outcome: worst or mean")
+	f.String("rollup", string(impact.RollupWorst), "how indicators combine into an outcome: worst or mean")
 }
 
-// loadStatus evaluates the theory at path against the observation files and
+// loadStatus evaluates the impact model at path against the observation files and
 // date given by the flags. It reports observation problems on e.errOut and
 // returns exit code 1 for them. The date is --as-of, else the latest date in
 // the observations.
-func loadStatus(e *env, cmd *cobra.Command, path string) (report.StatusInput, []*toc.ObservationSet, error) {
-	opts := toc.DefaultStatusOptions()
+func loadStatus(e *env, cmd *cobra.Command, path string) (report.StatusInput, []*impact.ObservationSet, error) {
+	opts := impact.DefaultStatusOptions()
 	opts.Tolerance, _ = cmd.Flags().GetFloat64("tolerance")
-	opts.Rollup = toc.RollupMethod(flagString(cmd, "rollup"))
+	opts.Rollup = impact.RollupMethod(flagString(cmd, "rollup"))
 	if !opts.Rollup.Valid() || opts.Tolerance <= 0 || opts.Tolerance >= 1 {
 		return report.StatusInput{}, nil, usageErr("--rollup must be worst or mean, and --tolerance between 0 and 1")
 	}
@@ -74,9 +74,9 @@ func loadStatus(e *env, cmd *cobra.Command, path string) (report.StatusInput, []
 	if err != nil {
 		panic(fmt.Sprintf("cli: --observations is not a string slice flag: %v", err))
 	}
-	var sets []*toc.ObservationSet
+	var sets []*impact.ObservationSet
 	if len(obsPaths) > 0 {
-		if sets, err = tocio.LoadObservations(obsPaths...); err != nil {
+		if sets, err = impactio.LoadObservations(obsPaths...); err != nil {
 			return report.StatusInput{}, nil, &ExitError{Code: ExitUsageErr, Err: err}
 		}
 		if issues := validate.Observations(doc, sets...); validate.HasErrors(issues) {
@@ -92,7 +92,7 @@ func loadStatus(e *env, cmd *cobra.Command, path string) (report.StatusInput, []
 	if err != nil {
 		return report.StatusInput{}, nil, err
 	}
-	var prev *toc.Status
+	var prev *impact.Status
 	if prevPath := flagString(cmd, "prev"); prevPath != "" {
 		if prev, err = loadSnapshot(prevPath); err != nil {
 			return report.StatusInput{}, nil, err
@@ -137,7 +137,7 @@ func runStatus(e *env, cmd *cobra.Command, path string) error {
 	return nil
 }
 
-func statusDate(cmd *cobra.Command, sets []*toc.ObservationSet) (time.Time, error) {
+func statusDate(cmd *cobra.Command, sets []*impact.ObservationSet) (time.Time, error) {
 	if s := flagString(cmd, "as-of"); s != "" {
 		at, err := time.Parse(time.DateOnly, s)
 		if err != nil {
@@ -151,26 +151,26 @@ func statusDate(cmd *cobra.Command, sets []*toc.ObservationSet) (time.Time, erro
 	return time.Time{}, usageErr("give --as-of: there are no observations to take a date from")
 }
 
-func loadSnapshot(prevPath string) (*toc.Status, error) {
+func loadSnapshot(prevPath string) (*impact.Status, error) {
 	data, err := os.ReadFile(prevPath)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("read previous snapshot: %w", err)}
 	}
-	prev, err := tocio.ParseStatus(data, tocio.FormatJSON)
+	prev, err := impactio.ParseStatus(data, impactio.FormatJSON)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", prevPath, err)}
 	}
 	return prev, nil
 }
 
-func printStatus(e *env, path string, st *toc.Status, diff *toc.StatusDiff) {
+func printStatus(e *env, path string, st *impact.Status, diff *impact.StatusDiff) {
 	fmt.Fprintf(e.out, "%s as of %s\n", path, st.AsOf)
-	counts := map[toc.State]int{}
+	counts := map[impact.State]int{}
 	for _, i := range st.Indicators {
 		counts[i.State]++
 	}
 	fmt.Fprintf(e.out, "indicators (%d): %s\n", len(st.Indicators), stateCounts(counts))
-	pathway := map[toc.State]int{}
+	pathway := map[impact.State]int{}
 	for _, o := range st.Outcomes {
 		pathway[o.PathwayState]++
 	}
@@ -183,7 +183,7 @@ func printStatus(e *env, path string, st *toc.Status, diff *toc.StatusDiff) {
 		fmt.Fprintf(e.out, "impact %s: %s (confidence %s)\n", i.OutcomeID, i.PathwayState, conf)
 	}
 	for _, l := range st.Links {
-		if l.State != toc.LinkStateOK {
+		if l.State != impact.LinkStateOK {
 			fmt.Fprintf(e.out, "link %s is %s\n", l.LinkID, l.State)
 		}
 	}
@@ -202,9 +202,9 @@ func absent(s string) string {
 	return s
 }
 
-func stateCounts(c map[toc.State]int) string {
+func stateCounts(c map[impact.State]int) string {
 	var parts []string
-	for _, s := range toc.AllStates() {
+	for _, s := range impact.AllStates() {
 		if c[s] > 0 {
 			parts = append(parts, fmt.Sprintf("%d %s", c[s], s))
 		}
@@ -223,7 +223,7 @@ func stateCounts(c map[toc.State]int) string {
 
 func newImportObservationsCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "observations --csv <file> --map <mapping> --toc <toc-file>",
+		Use:   "observations --csv <file> --map <mapping> --model <model-file>",
 		Short: "Turn a spreadsheet into an observation set",
 		Long: `Read a CSV sheet through a column mapping and write an observation set. Every
 row either becomes an observation or is reported as unmatched with its row
@@ -234,17 +234,17 @@ again.
 The observation set goes to --out (YAML or JSON by extension) or to standard
 output as YAML. Exit code 0 means every row was imported; 1 means some rows
 were unmatched (the rest are still written); 2 means an error.`,
-		Example: `  theoryofchange import observations --csv q3.csv --map mapping.yaml --toc theory.yaml --out obs-q3.yaml --unmatched q3-unmatched.csv`,
+		Example: `  impact-model import observations --csv q3.csv --map mapping.yaml --model impact-model.yaml --out obs-q3.yaml --unmatched q3-unmatched.csv`,
 		Args:    cobra.NoArgs,
 		RunE:    func(cmd *cobra.Command, _ []string) error { return runImportObservations(e, cmd) },
 	}
 	f := cmd.Flags()
 	f.String("csv", "", "the spreadsheet to read (required)")
 	f.String("map", "", "the column mapping file (required)")
-	f.String("toc", "", "the theory the sheet measures (required)")
+	f.String("model", "", "the impact model the sheet measures (required)")
 	f.StringP("out", "o", "", "write the observation set here (default: standard output, YAML)")
 	f.String("unmatched", "", "write the unmatched rows to this CSV file")
-	for _, name := range []string{"csv", "map", "toc"} {
+	for _, name := range []string{"csv", "map", "model"} {
 		if err := cmd.MarkFlagRequired(name); err != nil {
 			panic(fmt.Sprintf("cli: mark --%s required: %v", name, err))
 		}
@@ -253,7 +253,7 @@ were unmatched (the rest are still written); 2 means an error.`,
 }
 
 func runImportObservations(e *env, cmd *cobra.Command) error {
-	doc, err := loadForRender(flagString(cmd, "toc"))
+	doc, err := loadForRender(flagString(cmd, "model"))
 	if err != nil {
 		return err
 	}
@@ -261,11 +261,11 @@ func runImportObservations(e *env, cmd *cobra.Command) error {
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("read mapping: %w", err)}
 	}
-	mf, err := tocio.FormatFromPath(flagString(cmd, "map"))
+	mf, err := impactio.FormatFromPath(flagString(cmd, "map"))
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
-	m, err := tocio.ParseCSVMapping(mapData, mf)
+	m, err := impactio.ParseCSVMapping(mapData, mf)
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", flagString(cmd, "map"), err)}
 	}
@@ -281,18 +281,18 @@ func runImportObservations(e *env, cmd *cobra.Command) error {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 
-	format := tocio.FormatYAML
+	format := impactio.FormatYAML
 	if out := flagString(cmd, "out"); out != "" {
-		if format, err = tocio.FormatFromPath(out); err != nil {
+		if format, err = impactio.FormatFromPath(out); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 	}
-	data, err := tocio.Canonical(res.Set, format)
+	data, err := impactio.Canonical(res.Set, format)
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	if out := flagString(cmd, "out"); out != "" {
-		if err := tocio.WriteFile(out, data); err != nil {
+		if err := impactio.WriteFile(out, data); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 	} else if _, err := e.out.Write(data); err != nil {
@@ -308,7 +308,7 @@ func runImportObservations(e *env, cmd *cobra.Command) error {
 		if err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
-		if err := tocio.WriteFile(path, []byte(sheet)); err != nil {
+		if err := impactio.WriteFile(path, []byte(sheet)); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 	}

@@ -1,6 +1,6 @@
 // Package measure turns observations into status: how far each indicator has
 // moved, whether that is on track, and what that means for outcomes and
-// pathways. Everything here is a pure function of the theory, the
+// pathways. Everything here is a pure function of the impact model, the
 // observations, and the as-of date; it never reads the clock.
 package measure
 
@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // DefaultTolerance is how far behind expected progress an indicator may fall
@@ -73,10 +73,10 @@ func (s scale) fromValue(v *float64, level string) point {
 // is baseline only; no observation is not started or no data; an old
 // observation is stale; otherwise achieved, on track, at risk, or off track by
 // how progress compares with expected.
-func EvaluateIndicator(ind toc.Indicator, observations []toc.Observation, o Options) toc.IndicatorStatus {
+func EvaluateIndicator(ind impact.Indicator, observations []impact.Observation, o Options) impact.IndicatorStatus {
 	s := scale{levels: ind.Levels}
 	latest, count := latestObservation(ind, s, observations, o.AsOf)
-	st := toc.IndicatorStatus{IndicatorID: ind.ID, ObservationCount: count}
+	st := impact.IndicatorStatus{IndicatorID: ind.ID, ObservationCount: count}
 	if latest != nil {
 		obs := *latest
 		st.Latest = &obs
@@ -92,14 +92,14 @@ func EvaluateIndicator(ind toc.Indicator, observations []toc.Observation, o Opti
 	case len(targets) == 0:
 		st.State = baselineOnlyOrNoData(ind, latest)
 	case latest == nil:
-		st.State = toc.StateNoData
+		st.State = impact.StateNoData
 		if first, ok := parseDate(targets[0].Date); ok && o.AsOf.Before(first) {
-			st.State = toc.StateNotStarted
+			st.State = impact.StateNotStarted
 		}
 	case !base.ok:
 		// Progress is measured from a baseline; without one only the
 		// current value can be reported.
-		st.State = toc.StateBaselineOnly
+		st.State = impact.StateBaselineOnly
 	default:
 		evaluate(&st, ind, s, base, targets, latest, o)
 	}
@@ -107,20 +107,20 @@ func EvaluateIndicator(ind toc.Indicator, observations []toc.Observation, o Opti
 	return st
 }
 
-func baselineOnlyOrNoData(ind toc.Indicator, latest *toc.Observation) toc.State {
+func baselineOnlyOrNoData(ind impact.Indicator, latest *impact.Observation) impact.State {
 	if ind.Baseline != nil || latest != nil {
-		return toc.StateBaselineOnly
+		return impact.StateBaselineOnly
 	}
-	return toc.StateNoData
+	return impact.StateNoData
 }
 
 // evaluate fills in progress, expected progress, and the state of an
 // indicator that has a baseline, targets, and an observation.
-func evaluate(st *toc.IndicatorStatus, ind toc.Indicator, s scale, base point, targets []toc.Target, latest *toc.Observation, o Options) {
+func evaluate(st *impact.IndicatorStatus, ind impact.Indicator, s scale, base point, targets []impact.Target, latest *impact.Observation, o Options) {
 	cur := s.fromValue(latest.Value, latest.Level)
 	final := s.fromValue(targets[len(targets)-1].Value, targets[len(targets)-1].Level)
 	if !cur.ok || !final.ok {
-		st.State = toc.StateBaselineOnly
+		st.State = impact.StateBaselineOnly
 		return
 	}
 	p := progress(ind, base.value, cur.value, final.value)
@@ -131,39 +131,39 @@ func evaluate(st *toc.IndicatorStatus, ind toc.Indicator, s scale, base point, t
 	tol := o.tolerance()
 	switch {
 	case isStale(ind.Frequency, latest.Date, o.AsOf):
-		st.State = toc.StateStale
+		st.State = impact.StateStale
 	case p >= 1:
-		st.State = toc.StateAchieved
+		st.State = impact.StateAchieved
 	case p >= e-tol:
-		st.State = toc.StateOnTrack
+		st.State = impact.StateOnTrack
 	case p >= e-2*tol:
-		st.State = toc.StateAtRisk
+		st.State = impact.StateAtRisk
 	default:
-		st.State = toc.StateOffTrack
+		st.State = impact.StateOffTrack
 	}
 }
 
 // direction returns the indicator's desired direction. When none is stated it
 // follows from where the target lies relative to the baseline.
-func direction(d toc.Direction, base, final float64) toc.Direction {
+func direction(d impact.Direction, base, final float64) impact.Direction {
 	if d != "" {
 		return d
 	}
 	switch {
 	case final > base:
-		return toc.DirectionIncrease
+		return impact.DirectionIncrease
 	case final < base:
-		return toc.DirectionDecrease
+		return impact.DirectionDecrease
 	default:
-		return toc.DirectionMaintain
+		return impact.DirectionMaintain
 	}
 }
 
 // progress is the share of the way from baseline b to target t that the
 // current value c has come, capped to [0, maxProgress].
-func progress(ind toc.Indicator, b, c, t float64) float64 {
+func progress(ind impact.Indicator, b, c, t float64) float64 {
 	dir := direction(ind.Direction, b, t)
-	if dir == toc.DirectionMaintain {
+	if dir == impact.DirectionMaintain {
 		if math.Abs(c-t) <= ind.Tolerance {
 			return 1
 		}
@@ -172,13 +172,13 @@ func progress(ind toc.Indicator, b, c, t float64) float64 {
 	if t == b {
 		// The target is the baseline: it holds when the value has not moved
 		// the wrong way.
-		if (dir == toc.DirectionIncrease && c >= t) || (dir == toc.DirectionDecrease && c <= t) {
+		if (dir == impact.DirectionIncrease && c >= t) || (dir == impact.DirectionDecrease && c <= t) {
 			return 1
 		}
 		return 0
 	}
 	var p float64
-	if dir == toc.DirectionDecrease {
+	if dir == impact.DirectionDecrease {
 		p = (b - c) / (b - t)
 	} else {
 		p = (c - b) / (t - b)
@@ -189,7 +189,7 @@ func progress(ind toc.Indicator, b, c, t float64) float64 {
 // expected is the progress the targets call for at asOf: a straight line
 // from the baseline date (progress 0) through each target's own share of the
 // final change, flat before the first date and 1 after the last.
-func expected(s scale, baseline *toc.Baseline, base point, targets []toc.Target, final point, asOf time.Time, dir toc.Direction) float64 {
+func expected(s scale, baseline *impact.Baseline, base point, targets []impact.Target, final point, asOf time.Time, dir impact.Direction) float64 {
 	type step struct {
 		at time.Time
 		p  float64
@@ -235,14 +235,14 @@ func expected(s scale, baseline *toc.Baseline, base point, targets []toc.Target,
 // share is how much of the full baseline-to-final change a target value
 // represents. A maintain indicator calls for the whole thing at its first
 // target date.
-func share(dir toc.Direction, b, v, final float64) float64 {
-	if dir == toc.DirectionMaintain || final == b {
+func share(dir impact.Direction, b, v, final float64) float64 {
+	if dir == impact.DirectionMaintain || final == b {
 		return 1
 	}
 	return math.Min(math.Max((v-b)/(final-b), 0), maxProgress)
 }
 
-func sortedTargets(ts []toc.Target) []toc.Target {
+func sortedTargets(ts []impact.Target) []impact.Target {
 	out := slices.Clone(ts)
 	sort.SliceStable(out, func(i, j int) bool { return out[i].Date < out[j].Date })
 	return out
@@ -252,8 +252,8 @@ func sortedTargets(ts []toc.Target) []toc.Target {
 // indicator at or before asOf, and how many such observations there are. An
 // observation is usable when it has a valid date and a value the indicator's
 // scale understands. Of two on the same day, the later one in the input wins.
-func latestObservation(ind toc.Indicator, s scale, observations []toc.Observation, asOf time.Time) (*toc.Observation, int) {
-	var latest *toc.Observation
+func latestObservation(ind impact.Indicator, s scale, observations []impact.Observation, asOf time.Time) (*impact.Observation, int) {
+	var latest *impact.Observation
 	var latestAt time.Time
 	count := 0
 	for i := range observations {
@@ -276,15 +276,15 @@ func latestObservation(ind toc.Indicator, s scale, observations []toc.Observatio
 // Health maps a state to a health color: achieved and on track are green, at
 // risk and stale are yellow, off track is red, and states with no judgment
 // have none.
-func Health(s toc.State) string {
+func Health(s impact.State) string {
 	switch s {
-	case toc.StateAchieved, toc.StateOnTrack:
+	case impact.StateAchieved, impact.StateOnTrack:
 		return "green"
-	case toc.StateAtRisk, toc.StateStale:
+	case impact.StateAtRisk, impact.StateStale:
 		return "yellow"
-	case toc.StateOffTrack:
+	case impact.StateOffTrack:
 		return "red"
-	case toc.StateNotStarted, toc.StateNoData, toc.StateBaselineOnly, toc.StateUnmeasured:
+	case impact.StateNotStarted, impact.StateNoData, impact.StateBaselineOnly, impact.StateUnmeasured:
 		return ""
 	}
 	return ""

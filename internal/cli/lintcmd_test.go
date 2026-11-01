@@ -10,7 +10,7 @@ import (
 )
 
 func TestLintMinimalIsGoUnderDraft(t *testing.T) {
-	path := fixtureCopy(t, "minimal.json", "theory.json")
+	path := fixtureCopy(t, "minimal.json", "impact-model.json")
 	r := run(t, "", "lint", path, "--profile", "draft")
 	wantCode(t, r, ExitOK)
 	if !strings.Contains(r.stdout, "GO (draft profile)") {
@@ -19,18 +19,18 @@ func TestLintMinimalIsGoUnderDraft(t *testing.T) {
 }
 
 func TestLintFindsErrorsAndExitsOne(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	r := run(t, "", "lint", path)
 	wantCode(t, r, ExitInvalid)
-	if !strings.Contains(r.stdout, "NO-GO") || !strings.Contains(r.stdout, "TOC-MEA-001 oc-enterprise-require") {
+	if !strings.Contains(r.stdout, "NO-GO") || !strings.Contains(r.stdout, "IMP-MEA-001 oc-enterprise-require") {
 		t.Errorf("stdout = %.400s", r.stdout)
 	}
-	// Disabling the failing rule makes the theory GO.
-	wantCode(t, run(t, "", "lint", path, "--disable", "TOC-MEA-001"), ExitOK)
+	// Disabling the failing rule makes the impact model GO.
+	wantCode(t, run(t, "", "lint", path, "--disable", "IMP-MEA-001"), ExitOK)
 }
 
 func TestLintJSONIsASummaryReport(t *testing.T) {
-	path := fixtureCopy(t, "full.json", "theory.json")
+	path := fixtureCopy(t, "full.json", "impact-model.json")
 	r := run(t, "", "lint", path, "--format", "json", "--as-of", "2026-03-01")
 	wantCode(t, r, ExitInvalid)
 	var rep summary.SummaryReport
@@ -49,16 +49,16 @@ func TestLintJSONIsASummaryReport(t *testing.T) {
 func TestLintListAndUsageErrors(t *testing.T) {
 	r := run(t, "", "lint", "--list")
 	wantCode(t, r, ExitOK)
-	for _, want := range []string{"TOC-STR-001  error", "TOC-PRV-001  warning  from full"} {
+	for _, want := range []string{"IMP-STR-001  error", "IMP-PRV-001  warning  from full"} {
 		if !strings.Contains(r.stdout, want) {
 			t.Errorf("rule list is missing %q:\n%s", want, r.stdout)
 		}
 	}
-	path := fixtureCopy(t, "minimal.json", "theory.json")
+	path := fixtureCopy(t, "minimal.json", "impact-model.json")
 	for name, args := range map[string][]string{
 		"no file":      {"lint"},
 		"bad profile":  {"lint", path, "--profile", "strict"},
-		"unknown rule": {"lint", path, "--disable", "TOC-NOPE-001"},
+		"unknown rule": {"lint", path, "--disable", "IMP-NOPE-001"},
 		"bad date":     {"lint", path, "--as-of", "March"},
 		"missing file": {"lint", path + ".none"},
 	} {
@@ -69,7 +69,7 @@ func TestLintListAndUsageErrors(t *testing.T) {
 }
 
 func TestLintInvalidDocumentIsExitOne(t *testing.T) {
-	path := fixtureCopy(t, "minimal.json", "theory.json")
+	path := fixtureCopy(t, "minimal.json", "impact-model.json")
 	bad := strings.Replace(mustRead(t, path), `"to": "oc-funding"`, `"to": "oc-ghost"`, 1)
 	if err := os.WriteFile(path, []byte(bad), 0o600); err != nil {
 		t.Fatal(err)

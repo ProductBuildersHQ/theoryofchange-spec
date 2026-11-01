@@ -11,11 +11,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/burden"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 func exampleFiles(t *testing.T) []string {
@@ -44,11 +44,11 @@ func read(t *testing.T, path string) []byte {
 	return data
 }
 
-func loadTheory(t *testing.T, dir string) *toc.Document {
+func loadTheory(t *testing.T, dir string) *impact.Model {
 	t.Helper()
-	doc, err := tocio.LoadDocument(filepath.Join(dir, "theory.yaml"))
+	doc, err := impactio.LoadDocument(filepath.Join(dir, "impact-model.yaml"))
 	if err != nil {
-		t.Fatalf("%s/theory.yaml: %v", dir, err)
+		t.Fatalf("%s/impact-model.yaml: %v", dir, err)
 	}
 	return doc
 }
@@ -57,16 +57,16 @@ func TestEveryExampleFileIsCanonical(t *testing.T) {
 	for _, path := range exampleFiles(t) {
 		t.Run(path, func(t *testing.T) {
 			data := read(t, path)
-			f, err := tocio.FormatFromPath(path)
+			f, err := impactio.FormatFromPath(path)
 			if err != nil {
 				t.Fatal(err)
 			}
-			out, err := tocio.Reformat(data, f)
+			out, err := impactio.Reformat(data, f)
 			if err != nil {
 				t.Fatalf("Reformat: %v", err)
 			}
 			if string(out) != string(data) {
-				t.Fatalf("%s is not canonical; run: theoryofchange fmt %s", path, path)
+				t.Fatalf("%s is not canonical; run: impact-model fmt %s", path, path)
 			}
 		})
 	}
@@ -93,7 +93,7 @@ func TestExamplesAreFictional(t *testing.T) {
 
 func exampleDirs(t *testing.T) []string {
 	t.Helper()
-	dirs, err := filepath.Glob("*/theory.yaml")
+	dirs, err := filepath.Glob("*/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -146,7 +146,7 @@ func TestObservationsMatchTheirTheory(t *testing.T) {
 			t.Errorf("%s has no observation set", dir)
 		}
 		for _, p := range paths {
-			sets, err := tocio.LoadObservations(p)
+			sets, err := impactio.LoadObservations(p)
 			if err != nil {
 				t.Fatalf("%s: %v", p, err)
 			}
@@ -163,9 +163,9 @@ func TestObservationsMatchTheirTheory(t *testing.T) {
 }
 
 // basesUsed returns every provenance basis that appears in the document.
-func basesUsed(doc *toc.Document) map[toc.Basis]int {
-	count := map[toc.Basis]int{}
-	add := func(p *toc.Provenance) {
+func basesUsed(doc *impact.Model) map[impact.Basis]int {
+	count := map[impact.Basis]int{}
+	add := func(p *impact.Provenance) {
 		if p != nil {
 			count[p.Basis]++
 		}
@@ -211,22 +211,22 @@ func TestEveryBasisAndEveryStatedElementIsCited(t *testing.T) {
 		t.Run(dir, func(t *testing.T) {
 			doc := loadTheory(t, dir)
 			used := basesUsed(doc)
-			for _, b := range toc.AllBases() {
+			for _, b := range impact.AllBases() {
 				if used[b] == 0 {
 					t.Errorf("no element uses basis %q", b)
 				}
 			}
-			if used[toc.BasisRejected] < 2 {
-				t.Errorf("want at least two rejected elements, have %d", used[toc.BasisRejected])
+			if used[impact.BasisRejected] < 2 {
+				t.Errorf("want at least two rejected elements, have %d", used[impact.BasisRejected])
 			}
-			check := func(id string, p *toc.Provenance) {
+			check := func(id string, p *impact.Provenance) {
 				if p == nil {
 					return
 				}
-				if p.Basis == toc.BasisStated && len(p.EvidenceIDs) == 0 {
+				if p.Basis == impact.BasisStated && len(p.EvidenceIDs) == 0 {
 					t.Errorf("%s is stated but cites no evidence", id)
 				}
-				if p.Basis == toc.BasisConfirmed && (p.DecidedAt == "" || p.DecidedBy == "") {
+				if p.Basis == impact.BasisConfirmed && (p.DecidedAt == "" || p.DecidedBy == "") {
 					t.Errorf("%s is confirmed but not dated and attributed", id)
 				}
 			}
@@ -261,11 +261,11 @@ func TestEveryBasisAndEveryStatedElementIsCited(t *testing.T) {
 func TestIndicatorsCoverEveryDataAvailability(t *testing.T) {
 	for _, dir := range exampleDirs(t) {
 		doc := loadTheory(t, dir)
-		seen := map[toc.DataAvailability]bool{}
+		seen := map[impact.DataAvailability]bool{}
 		for _, ind := range doc.Indicators {
 			seen[ind.DataAvailability] = true
 		}
-		for _, d := range toc.AllDataAvailabilities() {
+		for _, d := range impact.AllDataAvailabilities() {
 			if !seen[d] {
 				t.Errorf("%s: no indicator has data availability %q", dir, d)
 			}
@@ -287,16 +287,16 @@ func TestIntermediaryExampleDemonstratesItsFeatures(t *testing.T) {
 	if len(doc.Outcomes) < 18 || live != 3 {
 		t.Errorf("outcomes=%d live pathways=%d (a rejected pathway is allowed in addition)", len(doc.Outcomes), live)
 	}
-	if doc.Ceiling == nil || doc.Ceiling.Level != toc.LevelLongTerm {
+	if doc.Ceiling == nil || doc.Ceiling.Level != impact.LevelLongTerm {
 		t.Error("the resident-level impact should sit above a long_term ceiling")
 	}
 	var any, rollup, none, weighted bool
 	for _, g := range doc.Groups {
-		if g.Logic.Type == toc.LogicAny || g.Logic.Type == toc.LogicAtLeast {
+		if g.Logic.Type == impact.LogicAny || g.Logic.Type == impact.LogicAtLeast {
 			any = true
 		}
 	}
-	claims := map[toc.Claim]bool{}
+	claims := map[impact.Claim]bool{}
 	for _, ind := range doc.Indicators {
 		claims[ind.EffectiveClaim()] = true
 		if len(ind.RollupFrom) > 0 {
@@ -304,13 +304,13 @@ func TestIntermediaryExampleDemonstratesItsFeatures(t *testing.T) {
 		}
 	}
 	for _, m := range doc.Metrics {
-		none = none || m.Aggregation == toc.AggregationNone
-		weighted = weighted || (m.Aggregation == toc.AggregationWeightedMean && m.WeightMetricID != "")
+		none = none || m.Aggregation == impact.AggregationNone
+		weighted = weighted || (m.Aggregation == impact.AggregationWeightedMean && m.WeightMetricID != "")
 	}
 	if !any || !rollup || !none || !weighted {
 		t.Errorf("any/at_least group=%v rollup=%v none-aggregation=%v weighted mean=%v", any, rollup, none, weighted)
 	}
-	if !claims[toc.ClaimAttribution] || !claims[toc.ClaimContribution] {
+	if !claims[impact.ClaimAttribution] || !claims[impact.ClaimContribution] {
 		t.Errorf("both claims should appear: %v", claims)
 	}
 	if len(doc.Glossary) < 6 || len(doc.Consultations) < 3 {
@@ -336,7 +336,7 @@ func TestMarketAdoptionExampleDemonstratesItsFeatures(t *testing.T) {
 	atLeast := false
 	for _, o := range doc.Outcomes {
 		categories[o.Category] = true
-		if o.Logic != nil && o.Logic.Type == toc.LogicAtLeast {
+		if o.Logic != nil && o.Logic.Type == impact.LogicAtLeast {
 			atLeast = true
 		}
 	}
@@ -352,7 +352,7 @@ func TestMarketAdoptionExampleDemonstratesItsFeatures(t *testing.T) {
 		t.Error("the market-wide impact should sit above a ceiling")
 	}
 
-	groupLogic := map[toc.LogicType]bool{}
+	groupLogic := map[impact.LogicType]bool{}
 	nested := false
 	groups := map[string]bool{}
 	for _, g := range doc.Groups {
@@ -364,31 +364,31 @@ func TestMarketAdoptionExampleDemonstratesItsFeatures(t *testing.T) {
 			nested = nested || groups[m]
 		}
 	}
-	if !groupLogic[toc.LogicAll] || !groupLogic[toc.LogicAny] || !nested {
+	if !groupLogic[impact.LogicAll] || !groupLogic[impact.LogicAny] || !nested {
 		t.Errorf("group logic=%v nested=%v", groupLogic, nested)
 	}
 
-	loops, negative := map[toc.LoopType]bool{}, false
+	loops, negative := map[impact.LoopType]bool{}, false
 	for _, l := range doc.Links {
 		if l.Feedback {
 			loops[l.LoopType] = true
 		}
-		negative = negative || l.Polarity == toc.PolarityNegative
+		negative = negative || l.Polarity == impact.PolarityNegative
 	}
-	if !loops[toc.LoopReinforcing] || !loops[toc.LoopBalancing] || !negative {
+	if !loops[impact.LoopReinforcing] || !loops[impact.LoopBalancing] || !negative {
 		t.Errorf("loops=%v negative polarity=%v", loops, negative)
 	}
 
-	statuses := map[toc.AssumptionStatus]bool{}
+	statuses := map[impact.AssumptionStatus]bool{}
 	for _, a := range doc.Assumptions {
 		statuses[a.Status] = true
 	}
-	if !statuses[toc.AssumptionAtRisk] || !statuses[toc.AssumptionInvalidated] {
+	if !statuses[impact.AssumptionAtRisk] || !statuses[impact.AssumptionInvalidated] {
 		t.Errorf("assumption statuses = %v", statuses)
 	}
 	contradicting := false
 	for _, e := range doc.Evidence {
-		contradicting = contradicting || e.Direction == toc.EvidenceContradicts
+		contradicting = contradicting || e.Direction == impact.EvidenceContradicts
 	}
 	if !contradicting {
 		t.Error("want contradicting evidence")
@@ -396,7 +396,7 @@ func TestMarketAdoptionExampleDemonstratesItsFeatures(t *testing.T) {
 	if doc.ActorRegistry != "delegation-market-actors" {
 		t.Errorf("actorRegistry = %q", doc.ActorRegistry)
 	}
-	reg, err := tocio.ParseActorRegistry(read(t, "market-adoption/actors.yaml"), tocio.FormatYAML)
+	reg, err := impactio.ParseActorRegistry(read(t, "market-adoption/actors.yaml"), impactio.FormatYAML)
 	if err != nil || reg.ID != doc.ActorRegistry || len(reg.Actors) < 4 {
 		t.Errorf("actor registry: %v %+v", err, reg)
 	}
@@ -424,13 +424,13 @@ func TestIntermediaryExampleDesignsItsMeasurement(t *testing.T) {
 	if len(rep.Uncosted) != 0 {
 		t.Errorf("selected indicators with no collection cost: %v", rep.Uncosted)
 	}
-	statuses := map[toc.SelectionStatus]int{}
+	statuses := map[impact.SelectionStatus]int{}
 	for _, ind := range doc.Indicators {
 		if ind.Selection != nil {
 			statuses[ind.Selection.Status]++
 		}
 	}
-	for _, st := range toc.AllSelectionStatuses() {
+	for _, st := range impact.AllSelectionStatuses() {
 		if statuses[st] == 0 {
 			t.Errorf("no indicator is %s", st)
 		}
@@ -438,7 +438,7 @@ func TestIntermediaryExampleDesignsItsMeasurement(t *testing.T) {
 	if len(doc.Audiences) == 0 || len(doc.Themes) == 0 || len(doc.Causes) < 4 || len(doc.TargetGroups) == 0 {
 		t.Error("audiences, themes, causes, and target groups should all be demonstrated")
 	}
-	levels := map[toc.CauseLevel]bool{}
+	levels := map[impact.CauseLevel]bool{}
 	scopedOut := false
 	for _, c := range doc.Causes {
 		levels[c.Level] = true
@@ -447,33 +447,33 @@ func TestIntermediaryExampleDesignsItsMeasurement(t *testing.T) {
 	if len(levels) != 3 || !scopedOut {
 		t.Errorf("the problem tree should span all three levels and set one cause aside: %v", levels)
 	}
-	responsibilities := map[toc.Responsibility]bool{}
+	responsibilities := map[impact.Responsibility]bool{}
 	for _, o := range doc.Outcomes {
 		responsibilities[o.EffectiveResponsibility()] = true
 	}
-	if !responsibilities[toc.ResponsibilityPartner] || !responsibilities[toc.ResponsibilityShared] {
+	if !responsibilities[impact.ResponsibilityPartner] || !responsibilities[impact.ResponsibilityShared] {
 		t.Errorf("partner-delivered and shared outcomes should both appear: %v", responsibilities)
 	}
 	theme := false
 	for _, ind := range doc.Indicators {
-		theme = theme || ind.MeasurementType == toc.MeasurementThemeCount
+		theme = theme || ind.MeasurementType == impact.MeasurementThemeCount
 	}
 	if !theme {
 		t.Error("no theme_count indicator")
 	}
 	measurement := false
 	for _, c := range doc.Consultations {
-		measurement = measurement || c.Step == toc.StepMeasurement
+		measurement = measurement || c.Step == impact.StepMeasurement
 	}
 	if !measurement {
 		t.Error("no consultation on the measurement framework")
 	}
 
-	set, err := tocio.LoadObservations(filepath.Join("intermediary", "observations-2026-q3.yaml"))
+	set, err := impactio.LoadObservations(filepath.Join("intermediary", "observations-2026-q3.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	consents := map[toc.Consent]bool{}
+	consents := map[impact.Consent]bool{}
 	for _, st := range set[0].Stories {
 		consents[st.Consent] = true
 	}

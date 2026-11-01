@@ -44,7 +44,7 @@ type Summary struct {
 	// Pass is true when every required category passes, no blocking category
 	// fails, and the findings stay within the rubric's limits.
 	Pass bool `json:"pass"`
-	// Reasons say why the theory does not pass.
+	// Reasons say why the impact model does not pass.
 	Reasons []string `json:"reasons"`
 }
 
@@ -53,7 +53,7 @@ type Summary struct {
 // rubric's order, so the result is the same on every run.
 func Summarize(b *Bundle, names []string, verdicts map[string]*Verdict, method rubric.AggregationMethod) (*Summary, error) {
 	if len(names) == 0 {
-		return nil, fmt.Errorf("judge: no verdicts recorded for this version of the theory")
+		return nil, fmt.Errorf("judge: no verdicts recorded for this version of the impact model")
 	}
 	if !slices.Contains(Aggregations(), method) {
 		return nil, fmt.Errorf("judge: unknown aggregation %q (want one of %v)", method, Aggregations())

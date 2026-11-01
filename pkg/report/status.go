@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // StatusKinds lists the status report kinds that need observations, in the
@@ -17,16 +17,16 @@ var StatusKinds = []string{"exec", "results", "assumptions", "interventions", "e
 // changed since the previous snapshot.
 type StatusInput struct {
 	View   *View
-	Doc    *toc.Document
-	Status *toc.Status
-	Diff   *toc.StatusDiff
+	Doc    *impact.Model
+	Status *impact.Status
+	Diff   *impact.StatusDiff
 }
 
 // stateRank orders states from worst to best for sorting.
 func stateRank(s string) int {
-	for i, st := range []toc.State{
-		toc.StateOffTrack, toc.StateAtRisk, toc.StateStale, toc.StateNoData, toc.StateNotStarted,
-		toc.StateBaselineOnly, toc.StateUnmeasured, toc.StateOnTrack, toc.StateAchieved,
+	for i, st := range []impact.State{
+		impact.StateOffTrack, impact.StateAtRisk, impact.StateStale, impact.StateNoData, impact.StateNotStarted,
+		impact.StateBaselineOnly, impact.StateUnmeasured, impact.StateOnTrack, impact.StateAchieved,
 	} {
 		if string(st) == s {
 			return i
@@ -50,8 +50,8 @@ func (in StatusInput) titles() map[string]string {
 	return t
 }
 
-func (in StatusInput) indicatorStatus() map[string]toc.IndicatorStatus {
-	m := map[string]toc.IndicatorStatus{}
+func (in StatusInput) indicatorStatus() map[string]impact.IndicatorStatus {
+	m := map[string]impact.IndicatorStatus{}
 	for _, s := range in.Status.Indicators {
 		m[s.IndicatorID] = s
 	}
@@ -59,15 +59,15 @@ func (in StatusInput) indicatorStatus() map[string]toc.IndicatorStatus {
 }
 
 // cites explains an indicator's status from the numbers behind it.
-func cites(s toc.IndicatorStatus, asOf string) string {
+func cites(s impact.IndicatorStatus, asOf string) string {
 	switch {
 	case s.Progress != nil && s.Expected != nil:
 		return fmt.Sprintf("%s of the way to target; %s expected by %s", pct(s.Progress), pct(s.Expected), asOf)
 	case s.Latest != nil:
 		return "latest value reported; no targets to measure progress against"
-	case s.State == toc.StateNotStarted:
+	case s.State == impact.StateNotStarted:
 		return "no observation yet; the first target is still ahead"
-	case s.State == toc.StateNoData:
+	case s.State == impact.StateNoData:
 		return "no observation, and the first target date has passed"
 	}
 	return "no data"
@@ -86,7 +86,7 @@ func header(in StatusInput, title string) string {
 
 // confidenceNote states how confidence and status were computed, so a reader
 // can see the settings behind every number.
-func confidenceNote(st *toc.Status) string {
+func confidenceNote(st *impact.Status) string {
 	w := st.Options.Weights
 	return fmt.Sprintf("_Method._ Status compares progress with what the dated targets call for, within a tolerance of %.0f%%; "+
 		"an outcome takes the %s of its indicators. Confidence in a link is %.1f × evidence + %.1f × assumptions + %.1f × rationale, "+
@@ -104,7 +104,7 @@ func Exec(in StatusInput) string {
 
 	b.WriteString("## Headline\n\n")
 	if len(in.Status.Overall) == 0 {
-		b.WriteString("This theory has no impact outcome yet.\n\n")
+		b.WriteString("This impact model has no impact outcome yet.\n\n")
 	}
 	for _, i := range in.Status.Overall {
 		fmt.Fprintf(&b, "- **%s**: %s", mdText(titles[i.OutcomeID]), statusLabel(string(i.PathwayState)))
@@ -116,7 +116,7 @@ func Exec(in StatusInput) string {
 	b.WriteString("\n")
 
 	b.WriteString("## Status by level\n\n| Level | Outcomes | Pathway status |\n|-------|----------|----------------|\n")
-	for _, lv := range toc.AllLevels() {
+	for _, lv := range impact.AllLevels() {
 		counts := map[string]int{}
 		n := 0
 		for _, o := range in.View.Outcomes {
@@ -177,7 +177,7 @@ func Attention(in StatusInput) []AttentionItem {
 		if o.Status == nil {
 			continue
 		}
-		if s := o.Status.PathwayState; s == string(toc.StateOffTrack) || s == string(toc.StateAtRisk) {
+		if s := o.Status.PathwayState; s == string(impact.StateOffTrack) || s == string(impact.StateAtRisk) {
 			rows = append(rows, row{o, s})
 		}
 	}
@@ -194,7 +194,7 @@ func Attention(in StatusInput) []AttentionItem {
 			pathway[o.ID] = o.Status.PathwayState
 		}
 	}
-	snapshot := map[string]toc.OutcomeStatus{}
+	snapshot := map[string]impact.OutcomeStatus{}
 	for _, o := range in.Status.Outcomes {
 		snapshot[o.OutcomeID] = o
 	}
@@ -202,12 +202,12 @@ func Attention(in StatusInput) []AttentionItem {
 	for _, r := range rows {
 		var why []string
 		for _, id := range snapshot[r.o.ID].IndicatorIDs {
-			if s, ok := byInd[id]; ok && (s.State == toc.StateOffTrack || s.State == toc.StateAtRisk) {
+			if s, ok := byInd[id]; ok && (s.State == impact.StateOffTrack || s.State == impact.StateAtRisk) {
 				why = append(why, fmt.Sprintf("indicator `%s` is %s (%s)", id, strings.ToLower(Label(string(s.State))), cites(s, in.Status.AsOf)))
 			}
 		}
 		for _, p := range r.o.Preconditions {
-			if ps := pathway[p]; ps == string(toc.StateOffTrack) || ps == string(toc.StateAtRisk) {
+			if ps := pathway[p]; ps == string(impact.StateOffTrack) || ps == string(impact.StateAtRisk) {
 				why = append(why, fmt.Sprintf("held back by `%s` (%s)", p, strings.ToLower(Label(ps))))
 			}
 		}
@@ -243,8 +243,8 @@ func attention(in StatusInput, limit int) string {
 func HighStakesAssumptions(in StatusInput) []AssumptionView {
 	var rows []AssumptionView
 	for _, a := range in.View.Assumptions {
-		high := a.Criticality == string(toc.CriticalityHigh) || a.Criticality == string(toc.CriticalityCritical)
-		bad := a.Status == string(toc.AssumptionInvalidated) || a.Status == string(toc.AssumptionAtRisk) || a.Status == string(toc.AssumptionUntested) || a.Status == ""
+		high := a.Criticality == string(impact.CriticalityHigh) || a.Criticality == string(impact.CriticalityCritical)
+		bad := a.Status == string(impact.AssumptionInvalidated) || a.Status == string(impact.AssumptionAtRisk) || a.Status == string(impact.AssumptionUntested) || a.Status == ""
 		if high && bad {
 			rows = append(rows, a)
 		}
@@ -276,9 +276,9 @@ func brokenAssumptions(in StatusInput) string {
 
 func assumptionRank(s string) int {
 	switch s {
-	case string(toc.AssumptionInvalidated):
+	case string(impact.AssumptionInvalidated):
 		return 0
-	case string(toc.AssumptionAtRisk):
+	case string(impact.AssumptionAtRisk):
 		return 1
 	default:
 		return 2
@@ -286,7 +286,7 @@ func assumptionRank(s string) int {
 }
 
 func sourceText(s string) string {
-	if s == string(toc.SourceAssessment) {
+	if s == string(impact.SourceAssessment) {
 		return "assessed"
 	}
 	return "as written"
@@ -326,7 +326,7 @@ func dash(s string) string {
 func DecisionPrompts(in StatusInput) []string {
 	var lines []string
 	for _, d := range in.Doc.Decisions {
-		if d.Status == "" || d.Status == toc.DecisionOpen {
+		if d.Status == "" || d.Status == impact.DecisionOpen {
 			line := mdText(d.Question)
 			if d.DueDate != "" {
 				line += " (by " + d.DueDate + ")"
@@ -335,7 +335,7 @@ func DecisionPrompts(in StatusInput) []string {
 		}
 	}
 	for _, a := range in.View.Assumptions {
-		if a.Status == string(toc.AssumptionInvalidated) || a.Status == string(toc.AssumptionAtRisk) {
+		if a.Status == string(impact.AssumptionInvalidated) || a.Status == string(impact.AssumptionAtRisk) {
 			lines = append(lines, fmt.Sprintf("What should change now that the assumption \"%s\" (`%s`) is %s?", mdText(a.Statement), a.ID, strings.ToLower(Label(a.Status))))
 		}
 	}
@@ -372,7 +372,7 @@ func Results(in StatusInput) string {
 	}
 	section := func(heading string, keep func(OutcomeView) bool) {
 		var body strings.Builder
-		for _, lv := range toc.AllLevels() {
+		for _, lv := range impact.AllLevels() {
 			var level strings.Builder
 			for _, o := range in.View.Outcomes {
 				if o.Level == lv && keep(o) {
@@ -392,7 +392,7 @@ func Results(in StatusInput) string {
 	return b.String()
 }
 
-func outcomeResults(in StatusInput, o OutcomeView, indicators map[string]IndicatorView, byInd map[string]toc.IndicatorStatus) string {
+func outcomeResults(in StatusInput, o OutcomeView, indicators map[string]IndicatorView, byInd map[string]impact.IndicatorStatus) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "#### %s%s\n\n", mdText(o.Title), BasisMark(o.Basis))
 	state := "—"
@@ -400,7 +400,7 @@ func outcomeResults(in StatusInput, o OutcomeView, indicators map[string]Indicat
 		state = statusLabel(o.Status.PathwayState)
 	}
 	fmt.Fprintf(&b, "Pathway status: %s. Own indicators: %s.", state, orDash(strings.Join(o.Indicators, ", ")))
-	if !o.Accountable && o.Responsibility != string(toc.ResponsibilityOwn) {
+	if !o.Accountable && o.Responsibility != string(impact.ResponsibilityOwn) {
 		fmt.Fprintf(&b, " Responsibility: %s.", strings.ToLower(o.Responsibility))
 	}
 	b.WriteString("\n\n")
@@ -480,7 +480,7 @@ func EvidenceGaps(in StatusInput) string {
 	b.WriteString("## High-stakes assumptions with no evidence\n\n")
 	var asm []string
 	for _, a := range in.Doc.Assumptions {
-		if !a.Provenance.IsRejected() && (a.Criticality == toc.CriticalityHigh || a.Criticality == toc.CriticalityCritical) && len(a.EvidenceIDs) == 0 {
+		if !a.Provenance.IsRejected() && (a.Criticality == impact.CriticalityHigh || a.Criticality == impact.CriticalityCritical) && len(a.EvidenceIDs) == 0 {
 			asm = append(asm, fmt.Sprintf("`%s`: %s", a.ID, mdText(a.Statement)))
 		}
 	}

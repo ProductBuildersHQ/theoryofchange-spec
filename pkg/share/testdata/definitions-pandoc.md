@@ -2,13 +2,13 @@
 title: "Open agent authorization standard adoption"
 version: "0.1"
 date: "2026-09-30"
-toc-id: "open-agent-auth"
-content-hash: "f59a711aecf7ba5c7595c35c36171958de9dc71331c018a0a1bb9bd793eb0958"
+model-id: "open-agent-auth"
+content-hash: "7f560786f0a2eb71aaa1482ee54be7386062983c34dc0b5181432c9a1a356005"
 ---
 
 ## Causal pathways
 
-### The theory on one page
+### The theory of change on one page
 
 ![Diagram](diagrams/d1.png)
 
@@ -104,4 +104,4 @@ _This is a view of the causal model. It flattens the links between outcomes; the
 | General availability | A release available to all customers without special arrangement, as opposed to a preview. | A vendor's public release notes list the feature without a preview label. |
 
 
-*Theory of Change open-agent-auth · version 0.1 · hash f59a711aecf7 · as of 2026-09-30*
+*Impact model open-agent-auth · version 0.1 · hash 7f560786f0a2 · as of 2026-09-30*

@@ -12,12 +12,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/share"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/share"
+	"github.com/ProductBuildersHQ/impact-model/pkg/slides"
 )
 
 // mermaidFence matches a fenced Mermaid block in the deck.
@@ -34,7 +34,7 @@ func newDeckCmd(e *env) *cobra.Command {
 
 func newWorkshopDeckCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "workshop <toc-file>",
+		Use:   "workshop <model-file>",
 		Short: "Generate a workshop deck as Marp Markdown",
 		Long: `Generate the workshop deck: the problem, the goal and ceiling of
 accountability, the pathway diagrams, a logic model per pathway, the key
@@ -46,12 +46,12 @@ With --export <file>, the deck is also rendered by the external tools marp
 (PDF, PPTX, or HTML by file extension) and mmdc (diagrams). If a needed tool
 is not installed, nothing is rendered and the exit code is 3; the Markdown
 can still be written without --export.`,
-		Example: `  theoryofchange deck workshop theory.yaml > workshop.md
-  theoryofchange deck workshop theory.yaml -o workshop.md
-  theoryofchange deck workshop theory.yaml --export workshop.pdf`,
+		Example: `  impact-model deck workshop impact-model.yaml > workshop.md
+  impact-model deck workshop impact-model.yaml -o workshop.md
+  impact-model deck workshop impact-model.yaml --export workshop.pdf`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			doc, err := tocio.LoadDocument(args[0])
+			doc, err := impactio.LoadDocument(args[0])
 			if err != nil {
 				return &ExitError{Code: ExitUsageErr, Err: err}
 			}
@@ -100,13 +100,13 @@ func exportDeck(ctx context.Context, md, target string) error {
 			return toolMissing("mmdc")
 		}
 	}
-	dir, err := os.MkdirTemp("", "theoryofchange-deck-")
+	dir, err := os.MkdirTemp("", "impact-model-deck-")
 	if err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	defer func() {
 		if err := os.RemoveAll(dir); err != nil {
-			fmt.Fprintf(os.Stderr, "theoryofchange: remove %s: %v\n", dir, err)
+			fmt.Fprintf(os.Stderr, "impact-model: remove %s: %v\n", dir, err)
 		}
 	}()
 
@@ -120,7 +120,7 @@ func exportDeck(ctx context.Context, md, target string) error {
 		src := filepath.Join(dir, fmt.Sprintf("d%d.mmd", n))
 		svg := filepath.Join(dir, fmt.Sprintf("d%d.svg", n))
 		body := mermaidFence.FindStringSubmatch(block)[1]
-		if renderErr = tocio.WriteFile(src, []byte(body)); renderErr != nil {
+		if renderErr = impactio.WriteFile(src, []byte(body)); renderErr != nil {
 			return block
 		}
 		if renderErr = runTool(ctx, mmdc, "-i", src, "-o", svg); renderErr != nil {
@@ -132,7 +132,7 @@ func exportDeck(ctx context.Context, md, target string) error {
 		return &ExitError{Code: ExitUsageErr, Err: renderErr}
 	}
 	deckFile := filepath.Join(dir, "deck.md")
-	if err := tocio.WriteFile(deckFile, []byte(md)); err != nil {
+	if err := impactio.WriteFile(deckFile, []byte(md)); err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	abs, err := filepath.Abs(target)
@@ -170,7 +170,7 @@ func deckOutputFlags(cmd *cobra.Command) {
 // --export, renders it with the external tools.
 func deliverDeck(e *env, cmd *cobra.Command, md string) error {
 	if out := flagString(cmd, "out"); out != "" {
-		if err := tocio.WriteFile(out, []byte(md)); err != nil {
+		if err := impactio.WriteFile(out, []byte(md)); err != nil {
 			return &ExitError{Code: ExitUsageErr, Err: err}
 		}
 	} else if flagString(cmd, "export") == "" {
@@ -197,16 +197,16 @@ func statusDeckOptions(cmd *cobra.Command, in report.StatusInput) (slides.Option
 
 func newExecDeckCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "exec <toc-file> -O <observations>...",
+		Use:   "exec <model-file> -O <observations>...",
 		Short: "Generate the executive deck",
-		Long: `Generate the executive deck from a status snapshot: where the theory stands,
+		Long: `Generate the executive deck from a status snapshot: where the impact model stands,
 status by level, the pathway coloured by status, where attention is needed,
 assumptions to watch, what changed, decisions needed, and how to read the
 numbers. The date is --as-of, or the latest date in the observations.
 
 Markdown goes to standard output or --out. With --export <file>, marp and
 mmdc render a PDF, PPTX, or HTML file; if a tool is missing the exit code is 3.`,
-		Example: `  theoryofchange deck exec theory.yaml -O obs-q3.yaml --prev status-q2.json --export exec.pdf`,
+		Example: `  impact-model deck exec impact-model.yaml -O obs-q3.yaml --prev status-q2.json --export exec.pdf`,
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			in, _, err := loadStatus(e, cmd, args[0])
@@ -227,7 +227,7 @@ mmdc render a PDF, PPTX, or HTML file; if a tool is missing the exit code is 3.`
 
 func newLearningReviewDeckCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "learning-review <toc-file> -O <observations>...",
+		Use:   "learning-review <model-file> -O <observations>...",
 		Short: "Generate the learning-review deck",
 		Long: `Generate the deck for a learning review: what changed, the surprises, assumptions
 that moved, what the stories are about, how far to trust the data, questions
@@ -236,18 +236,18 @@ for discussion, and any decisions already recorded for the period.
 --period names the period whose recorded review is merged (for example
 2026-Q3). --prev-observations names the earlier period's observation files, so
 new themes can be marked. Only stories with granted consent are shown.`,
-		Example: `  theoryofchange deck learning-review theory.yaml -O obs-q3.yaml --prev status-q2.json --period 2026-Q3`,
+		Example: `  impact-model deck learning-review impact-model.yaml -O obs-q3.yaml --prev status-q2.json --period 2026-Q3`,
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			in, sets, err := loadStatus(e, cmd, args[0])
 			if err != nil {
 				return err
 			}
-			var prevSets []*toc.ObservationSet
+			var prevSets []*impact.ObservationSet
 			if paths, err := cmd.Flags().GetStringSlice("prev-observations"); err != nil {
 				panic(fmt.Sprintf("cli: --prev-observations is not a string slice flag: %v", err))
 			} else if len(paths) > 0 {
-				if prevSets, err = tocio.LoadObservations(paths...); err != nil {
+				if prevSets, err = impactio.LoadObservations(paths...); err != nil {
 					return &ExitError{Code: ExitUsageErr, Err: err}
 				}
 			}
@@ -268,13 +268,13 @@ new themes can be marked. Only stories with granted consent are shown.`,
 
 func newStoryDeckCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "story <toc-file> -O <observations>... --audience <id>",
+		Use:   "story <model-file> -O <observations>... --audience <id>",
 		Short: "Generate a deck for one audience",
 		Long: `Generate a short deck for one audience: what they need, three to five headline
 numbers with their caveats, one or two stories they may be told, and a closing
 ask to fill in. A story appears only with granted consent, and its quote only
 where the story may be quoted.`,
-		Example: `  theoryofchange deck story theory.yaml -O obs-q3.yaml --audience aud-funders --export funders.pdf`,
+		Example: `  impact-model deck story impact-model.yaml -O obs-q3.yaml --audience aud-funders --export funders.pdf`,
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			in, sets, err := loadStatus(e, cmd, args[0])

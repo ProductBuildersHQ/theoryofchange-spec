@@ -1,5 +1,7 @@
-// Package theoryofchange is a Go-first specification for representing,
-// measuring, and reporting on Theories of Change.
+// Package impactmodel is a Go-first specification for representing,
+// measuring, and reporting on an impact: why a program expects to bring about
+// change, what it does, and what it measures. The impact model, the logic
+// model, the outcome map, and the logframe are views of one impact model.
 //
 // Go structs are the source of truth; JSON Schemas are generated from them
 // and embedded. Tooling built on the model validates documents, analyzes
@@ -8,10 +10,10 @@
 // slide decks.
 //
 // Key packages:
-//   - pkg/ref: typed references to ToC documents and their elements
-//   - pkg/toc: the Theory of Change document model
-//   - schema: JSON Schemas generated from pkg/toc, embedded for runtime use
+//   - pkg/ref: typed references to impact models and their elements
+//   - pkg/impact: the impact model
+//   - schema: JSON Schemas generated from pkg/impact, embedded for runtime use
 //
 // See docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001 for the PRD, TRD,
 // plan, and roadmap, and docs/research for the methodology background.
-package theoryofchange
+package impactmodel

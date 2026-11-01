@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
+	"github.com/ProductBuildersHQ/impact-model/pkg/slides"
 )
 
 var update = flag.Bool("update", false, "rewrite golden files")
@@ -37,13 +37,13 @@ func golden(t *testing.T, name, got string) {
 	}
 }
 
-func fullDoc(t *testing.T) *toc.Document {
+func fullDoc(t *testing.T) *impact.Model {
 	t.Helper()
-	data, err := os.ReadFile("../toc/testdata/full.json")
+	data, err := os.ReadFile("../impact/testdata/full.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	var d toc.Document
+	var d impact.Model
 	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.DisallowUnknownFields()
 	if err := dec.Decode(&d); err != nil {
@@ -54,7 +54,7 @@ func fullDoc(t *testing.T) *toc.Document {
 
 func TestStampHashMatchesCanonicalJSON(t *testing.T) {
 	doc := fullDoc(t)
-	want, err := tocio.ContentHash(doc)
+	want, err := impactio.ContentHash(doc)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func TestStampHashMatchesCanonicalJSON(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if s.ContentHash != want || s.TocID != doc.ID || s.AsOf != "2026-09-30" {
+	if s.ContentHash != want || s.ModelID != doc.ID || s.AsOf != "2026-09-30" {
 		t.Errorf("unexpected stamp %+v", s)
 	}
 }
@@ -74,7 +74,7 @@ func TestStampVersionFallsBack(t *testing.T) {
 	if s, err := NewStamp(doc, ""); err != nil || s.Version != unversioned {
 		t.Errorf("no version: %+v, %v", s, err)
 	}
-	doc.Revisions = []toc.Revision{{Version: "0.1", Date: "2026-01-01", Summary: "first"}, {Version: "0.2", Date: "2026-02-01", Summary: "second"}}
+	doc.Revisions = []impact.Revision{{Version: "0.1", Date: "2026-01-01", Summary: "first"}, {Version: "0.2", Date: "2026-02-01", Summary: "second"}}
 	if s, err := NewStamp(doc, ""); err != nil || s.Version != "0.2" {
 		t.Errorf("latest revision: %+v, %v", s, err)
 	}
@@ -101,15 +101,15 @@ func TestStampChangesWhenTheDocumentChanges(t *testing.T) {
 }
 
 func TestStampForms(t *testing.T) {
-	s := Stamp{TocID: "t1", Version: "0.3", ContentHash: strings.Repeat("ab", 32), AsOf: "2026-09-30"}
-	if got, want := s.CSVRow(), "# toc:t1 version:0.3 hash:"+s.ContentHash+"\r\n"; got != want {
+	s := Stamp{ModelID: "t1", Version: "0.3", ContentHash: strings.Repeat("ab", 32), AsOf: "2026-09-30"}
+	if got, want := s.CSVRow(), "# model:t1 version:0.3 hash:"+s.ContentHash+"\r\n"; got != want {
 		t.Errorf("CSVRow = %q, want %q", got, want)
 	}
-	if got := s.Line(); got != "Theory of Change t1 · version 0.3 · hash abababababab · as of 2026-09-30" {
+	if got := s.Line(); got != "Impact model t1 · version 0.3 · hash abababababab · as of 2026-09-30" {
 		t.Errorf("Line = %q", got)
 	}
 	block := s.YAMLBlock(`A "quoted" title`)
-	for _, want := range []string{"---\n", `title: "A \"quoted\" title"`, `version: "0.3"`, `date: "2026-09-30"`, `toc-id: "t1"`, "content-hash: \"" + s.ContentHash + "\""} {
+	for _, want := range []string{"---\n", `title: "A \"quoted\" title"`, `version: "0.3"`, `date: "2026-09-30"`, `model-id: "t1"`, "content-hash: \"" + s.ContentHash + "\""} {
 		if !strings.Contains(block, want) {
 			t.Errorf("YAML block is missing %q:\n%s", want, block)
 		}
@@ -120,7 +120,7 @@ func TestStampForms(t *testing.T) {
 	}
 }
 
-func definitions(t *testing.T, doc *toc.Document) string {
+func definitions(t *testing.T, doc *impact.Model) string {
 	t.Helper()
 	whole, err := report.BuildView(doc, nil, nil, report.Options{})
 	if err != nil {
@@ -153,7 +153,7 @@ func TestReportProfileGolden(t *testing.T) {
 
 func TestReportProfileRules(t *testing.T) {
 	doc := fullDoc(t)
-	s := Stamp{TocID: "t1", Version: "1", ContentHash: strings.Repeat("0", 64)}
+	s := Stamp{ModelID: "t1", Version: "1", ContentHash: strings.Repeat("0", 64)}
 	out, err := Profile{}.Report(s, "T", definitions(t, doc))
 	if err != nil {
 		t.Fatal(err)

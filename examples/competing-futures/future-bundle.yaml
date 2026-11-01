@@ -1,4 +1,4 @@
-kind: TheoryOfChange
+kind: ImpactModel
 specVersion: "0.1"
 id: future-bundle-wins
 metadata:
@@ -86,5 +86,5 @@ alignments:
   - elementId: ind-rival-pilots
     target:
       framework: custom
-      ref: toc:future-open-wins#ind-open-pilots
+      ref: model:future-open-wins#ind-open-pilots
       relation: measures

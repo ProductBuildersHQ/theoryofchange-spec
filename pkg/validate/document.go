@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/ref"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/ref"
 )
 
 // Option configures Document and Observations.
@@ -17,7 +17,7 @@ type Option func(*checker)
 
 // WithActorRegistry supplies the shared actor registry the document
 // references, so actor IDs defined there resolve.
-func WithActorRegistry(r *toc.ActorRegistry) Option {
+func WithActorRegistry(r *impact.ActorRegistry) Option {
 	return func(c *checker) {
 		if r == nil {
 			return
@@ -30,15 +30,15 @@ func WithActorRegistry(r *toc.ActorRegistry) Option {
 }
 
 type checker struct {
-	doc      *toc.Document
+	doc      *impact.Model
 	issues   []Issue
 	source   string
-	kinds    map[string]toc.ElementKind // first occurrence of each ID
-	registry map[string]bool            // actor IDs from a supplied registry
+	kinds    map[string]impact.ElementKind // first occurrence of each ID
+	registry map[string]bool               // actor IDs from a supplied registry
 }
 
-func newChecker(doc *toc.Document, opts []Option) *checker {
-	c := &checker{doc: doc, kinds: map[string]toc.ElementKind{}}
+func newChecker(doc *impact.Model, opts []Option) *checker {
+	c := &checker{doc: doc, kinds: map[string]impact.ElementKind{}}
 	for _, o := range opts {
 		o(c)
 	}
@@ -56,10 +56,10 @@ func (c *checker) errorf(code, path, element, format string, args ...any) {
 	c.add(code, SeverityError, path, element, format, args...)
 }
 
-// Document checks a Theory of Change for structural problems and returns
+// Document checks an impact model for structural problems and returns
 // the issues in document order. A nil result means the document is
 // structurally sound.
-func Document(doc *toc.Document, opts ...Option) []Issue {
+func Document(doc *impact.Model, opts ...Option) []Issue {
 	c := newChecker(doc, opts)
 	c.header()
 	c.identifiers()
@@ -128,7 +128,7 @@ func (c *checker) duration(path, element, v string) {
 
 // ref checks that id resolves to an element of one of the given kinds (any
 // kind when none are given). Empty IDs are skipped.
-func (c *checker) ref(path, element, id string, kinds ...toc.ElementKind) {
+func (c *checker) ref(path, element, id string, kinds ...impact.ElementKind) {
 	if id == "" {
 		return
 	}
@@ -142,13 +142,13 @@ func (c *checker) ref(path, element, id string, kinds ...toc.ElementKind) {
 	}
 }
 
-func (c *checker) refs(path, element string, ids []string, kinds ...toc.ElementKind) {
+func (c *checker) refs(path, element string, ids []string, kinds ...impact.ElementKind) {
 	for i, id := range ids {
 		c.ref(path+"/"+strconv.Itoa(i), element, id, kinds...)
 	}
 }
 
-func kindList(kinds []toc.ElementKind) string {
+func kindList(kinds []impact.ElementKind) string {
 	names := make([]string, len(kinds))
 	for i, k := range kinds {
 		names[i] = string(k)
@@ -164,7 +164,7 @@ func (c *checker) actor(path, element, id string) {
 		return
 	}
 	if k, ok := c.kinds[id]; ok {
-		if k != toc.ElementActor {
+		if k != impact.ElementActor {
 			c.errorf("VAL-REF-002", path, element, "references %q, which is a %s; expected actor", id, k)
 		}
 		return
@@ -189,8 +189,8 @@ func (c *checker) actorRefs(path, element string, ids []string) {
 
 func (c *checker) header() {
 	d := c.doc
-	if d.Kind != toc.KindTheoryOfChange {
-		c.errorf("VAL-DOC-001", "/kind", "", "kind is %q; expected %q", string(d.Kind), string(toc.KindTheoryOfChange))
+	if d.Kind != impact.KindImpactModel {
+		c.errorf("VAL-DOC-001", "/kind", "", "kind is %q; expected %q", string(d.Kind), string(impact.KindImpactModel))
 	}
 	if major, _, _ := strings.Cut(d.SpecVersion, "."); major != "0" {
 		c.errorf("VAL-DOC-002", "/specVersion", "", "specVersion %q is not supported (this version reads 0.x)", d.SpecVersion)
@@ -199,7 +199,7 @@ func (c *checker) header() {
 		c.errorf("VAL-DOC-003", "/id", "", "document id: %v", err)
 	}
 	if len(d.Outcomes) == 0 {
-		c.errorf("VAL-DOC-004", "/outcomes", "", "a Theory of Change needs at least one outcome")
+		c.errorf("VAL-DOC-004", "/outcomes", "", "An impact model needs at least one outcome")
 	}
 }
 
@@ -241,7 +241,7 @@ func (c *checker) context() {
 	}
 	if cl := d.Ceiling; cl != nil {
 		enum(c, "/ceilingOfAccountability/level", "", cl.Level)
-		c.refs("/ceilingOfAccountability/outcomeIds", "", cl.OutcomeIDs, toc.ElementOutcome)
+		c.refs("/ceilingOfAccountability/outcomeIds", "", cl.OutcomeIDs, impact.ElementOutcome)
 		if cl.Level == "" && len(cl.OutcomeIDs) == 0 {
 			c.errorf("VAL-CEIL-001", "/ceilingOfAccountability", "", "set level or outcomeIds")
 		}
@@ -252,12 +252,12 @@ func (c *checker) context() {
 	}
 }
 
-func (c *checker) logic(path, element string, l toc.Logic) {
+func (c *checker) logic(path, element string, l impact.Logic) {
 	enum(c, path+"/type", element, l.Type)
-	if l.Type == toc.LogicAtLeast && l.K < 1 {
+	if l.Type == impact.LogicAtLeast && l.K < 1 {
 		c.errorf("VAL-LOGIC-001", path+"/k", element, "at_least logic needs k of at least 1")
 	}
-	if l.Type != toc.LogicAtLeast && l.K != 0 {
+	if l.Type != impact.LogicAtLeast && l.K != 0 {
 		c.errorf("VAL-LOGIC-002", path+"/k", element, "k is only used with at_least logic")
 	}
 }
@@ -278,13 +278,13 @@ func (c *checker) outcomes() {
 			c.logic(p+"/logic", o.ID, *o.Logic)
 		}
 		c.actorRefs(p+"/actorIds", o.ID, o.ActorIDs)
-		c.refs(p+"/audienceIds", o.ID, o.AudienceIDs, toc.ElementAudience)
+		c.refs(p+"/audienceIds", o.ID, o.AudienceIDs, impact.ElementAudience)
 		enum(c, p+"/responsibility", o.ID, o.Responsibility)
 		c.actorRefs(p+"/deliveredBy", o.ID, o.DeliveredBy)
-		c.refs(p+"/addressesCauses", o.ID, o.AddressesCauses, toc.ElementCause)
-		c.refs(p+"/targetGroupIds", o.ID, o.TargetGroupIDs, toc.ElementTargetGroup)
+		c.refs(p+"/addressesCauses", o.ID, o.AddressesCauses, impact.ElementCause)
+		c.refs(p+"/targetGroupIds", o.ID, o.TargetGroupIDs, impact.ElementTargetGroup)
 		if o.Priority != nil {
-			c.scores(p+"/priority/scores", o.ID, o.Priority.Scores, toc.SubjectOutcome)
+			c.scores(p+"/priority/scores", o.ID, o.Priority.Scores, impact.SubjectOutcome)
 		}
 		c.contributesTo(p+"/contributesTo", o)
 	}
@@ -293,11 +293,11 @@ func (c *checker) outcomes() {
 func (c *checker) groups() {
 	for i, g := range c.doc.Groups {
 		p := "/preconditionGroups/" + strconv.Itoa(i)
-		c.ref(p+"/target", g.ID, g.Target, toc.ElementOutcome)
+		c.ref(p+"/target", g.ID, g.Target, impact.ElementOutcome)
 		if len(g.Members) < 2 {
 			c.errorf("VAL-GRP-001", p+"/members", g.ID, "a precondition group needs at least two members")
 		}
-		c.refs(p+"/members", g.ID, g.Members, toc.ElementOutcome, toc.ElementGroup)
+		c.refs(p+"/members", g.ID, g.Members, impact.ElementOutcome, impact.ElementGroup)
 		for j, m := range g.Members {
 			if m == g.ID || (m == g.Target && m != "") {
 				c.errorf("VAL-GRP-002", p+"/members/"+strconv.Itoa(j), g.ID, "group %q cannot contain %q", g.ID, m)
@@ -315,7 +315,7 @@ func (c *checker) groups() {
 					"nested group %q targets %q, not %q like %q", m, inner.Target, g.Target, g.ID)
 			}
 		}
-		if g.Logic.Type == toc.LogicAtLeast && g.Logic.K > len(g.Members) {
+		if g.Logic.Type == impact.LogicAtLeast && g.Logic.K > len(g.Members) {
 			c.errorf("VAL-LOGIC-003", p+"/logic/k", g.ID, "k=%d exceeds the %d members", g.Logic.K, len(g.Members))
 		}
 	}
@@ -324,8 +324,8 @@ func (c *checker) groups() {
 func (c *checker) links() {
 	for i, l := range c.doc.Links {
 		p := "/links/" + strconv.Itoa(i)
-		c.ref(p+"/from", l.ID, l.From, toc.ElementOutcome, toc.ElementIntervention)
-		c.ref(p+"/to", l.ID, l.To, toc.ElementOutcome)
+		c.ref(p+"/from", l.ID, l.From, impact.ElementOutcome, impact.ElementIntervention)
+		c.ref(p+"/to", l.ID, l.To, impact.ElementOutcome)
 		if l.From != "" && l.From == l.To {
 			c.errorf("VAL-LINK-001", p, l.ID, "link connects %q to itself", l.From)
 		}
@@ -336,9 +336,9 @@ func (c *checker) links() {
 			c.errorf("VAL-LINK-002", p+"/loopType", l.ID, "loopType requires feedback: true")
 		}
 		c.duration(p+"/lag", l.ID, l.Lag)
-		c.refs(p+"/assumptionIds", l.ID, l.AssumptionIDs, toc.ElementAssumption)
-		c.refs(p+"/evidenceIds", l.ID, l.EvidenceIDs, toc.ElementEvidence)
-		c.refs(p+"/interventionIds", l.ID, l.InterventionIDs, toc.ElementIntervention)
+		c.refs(p+"/assumptionIds", l.ID, l.AssumptionIDs, impact.ElementAssumption)
+		c.refs(p+"/evidenceIds", l.ID, l.EvidenceIDs, impact.ElementEvidence)
+		c.refs(p+"/interventionIds", l.ID, l.InterventionIDs, impact.ElementIntervention)
 	}
 }
 
@@ -351,10 +351,10 @@ func (c *checker) interventions() {
 		if len(in.Targets) == 0 {
 			c.errorf("VAL-INT-001", p+"/targets", in.ID, "intervention targets no outcomes")
 		}
-		c.refs(p+"/targets", in.ID, in.Targets, toc.ElementOutcome)
+		c.refs(p+"/targets", in.ID, in.Targets, impact.ElementOutcome)
 		c.actor(p+"/ownerActorId", in.ID, in.OwnerID)
 		if in.Priority != nil {
-			c.scores(p+"/priority/scores", in.ID, in.Priority.Scores, toc.SubjectIntervention)
+			c.scores(p+"/priority/scores", in.ID, in.Priority.Scores, impact.SubjectIntervention)
 		}
 		enum(c, p+"/type", in.ID, in.Type)
 		enum(c, p+"/status", in.ID, in.Status)
@@ -367,7 +367,7 @@ func (c *checker) interventions() {
 	}
 }
 
-func (c *checker) externalRefs(path, element string, refs []toc.ExternalRef) {
+func (c *checker) externalRefs(path, element string, refs []impact.ExternalRef) {
 	for i, r := range refs {
 		p := path + "/" + strconv.Itoa(i)
 		enum(c, p+"/framework", element, r.Framework)
@@ -388,9 +388,9 @@ func (c *checker) assumptions() {
 		enum(c, p+"/criticality", a.ID, a.Criticality)
 		enum(c, p+"/plausibility", a.ID, a.Plausibility)
 		enum(c, p+"/status", a.ID, a.Status)
-		c.refs(p+"/appliesTo", a.ID, a.AppliesTo, toc.ElementLink, toc.ElementOutcome, toc.ElementIntervention)
-		c.refs(p+"/indicatorIds", a.ID, a.IndicatorIDs, toc.ElementIndicator)
-		c.refs(p+"/evidenceIds", a.ID, a.EvidenceIDs, toc.ElementEvidence)
+		c.refs(p+"/appliesTo", a.ID, a.AppliesTo, impact.ElementLink, impact.ElementOutcome, impact.ElementIntervention)
+		c.refs(p+"/indicatorIds", a.ID, a.IndicatorIDs, impact.ElementIndicator)
+		c.refs(p+"/evidenceIds", a.ID, a.EvidenceIDs, impact.ElementEvidence)
 		c.actor(p+"/ownerActorId", a.ID, a.OwnerID)
 	}
 }
@@ -404,22 +404,22 @@ func (c *checker) indicators() {
 		if ind.Measures == "" {
 			c.errorf("VAL-IND-003", p+"/measures", ind.ID, "indicator measures nothing")
 		}
-		c.ref(p+"/measures", ind.ID, ind.Measures, toc.ElementOutcome, toc.ElementIntervention, toc.ElementAssumption, toc.ElementPathway)
+		c.ref(p+"/measures", ind.ID, ind.Measures, impact.ElementOutcome, impact.ElementIntervention, impact.ElementAssumption, impact.ElementPathway)
 		enum(c, p+"/measurementType", ind.ID, ind.MeasurementType)
 		enum(c, p+"/direction", ind.ID, ind.Direction)
 		c.duration(p+"/frequency", ind.ID, ind.Frequency)
 		c.actor(p+"/ownerActorId", ind.ID, ind.OwnerID)
-		c.refs(p+"/proxyFor", ind.ID, ind.ProxyFor, toc.ElementOutcome)
+		c.refs(p+"/proxyFor", ind.ID, ind.ProxyFor, impact.ElementOutcome)
 		c.externalRefs(p+"/externalRefs", ind.ID, ind.ExternalRefs)
 		c.indicatorMetric(p, ind)
 		c.collectionAndSelection(p, ind)
-		c.refs(p+"/audienceIds", ind.ID, ind.AudienceIDs, toc.ElementAudience)
-		c.refs(p+"/targetGroupIds", ind.ID, ind.TargetGroupIDs, toc.ElementTargetGroup)
-		c.refs(p+"/themeIds", ind.ID, ind.ThemeIDs, toc.ElementTheme)
+		c.refs(p+"/audienceIds", ind.ID, ind.AudienceIDs, impact.ElementAudience)
+		c.refs(p+"/targetGroupIds", ind.ID, ind.TargetGroupIDs, impact.ElementTargetGroup)
+		c.refs(p+"/themeIds", ind.ID, ind.ThemeIDs, impact.ElementTheme)
 		switch {
-		case ind.MeasurementType == toc.MeasurementThemeCount && len(ind.ThemeIDs) == 0:
+		case ind.MeasurementType == impact.MeasurementThemeCount && len(ind.ThemeIDs) == 0:
 			c.errorf("VAL-THM-003", p+"/themeIds", ind.ID, "a theme_count indicator needs themeIds, the themes it counts")
-		case ind.MeasurementType != toc.MeasurementThemeCount && len(ind.ThemeIDs) > 0:
+		case ind.MeasurementType != impact.MeasurementThemeCount && len(ind.ThemeIDs) > 0:
 			c.errorf("VAL-THM-004", p+"/themeIds", ind.ID, "themeIds is only used by theme_count indicators")
 		}
 		if pop := ind.Population; pop != nil {
@@ -491,7 +491,7 @@ func (c *checker) factorsAndRisks() {
 		}
 		enum(c, p+"/category", r.ID, r.Category)
 		c.refs(p+"/appliesTo", r.ID, r.AppliesTo)
-		c.refs(p+"/relatedAssumptionIds", r.ID, r.RelatedAssumptionIDs, toc.ElementAssumption)
+		c.refs(p+"/relatedAssumptionIds", r.ID, r.RelatedAssumptionIDs, impact.ElementAssumption)
 	}
 }
 
@@ -502,7 +502,7 @@ func (c *checker) alignmentsAndDecisions() {
 			c.errorf("VAL-ALN-001", p+"/elementId", "", "alignment has no elementId")
 		}
 		c.ref(p+"/elementId", "", a.ElementID)
-		c.externalRefs(p+"/target", "", []toc.ExternalRef{a.Target})
+		c.externalRefs(p+"/target", "", []impact.ExternalRef{a.Target})
 	}
 	for i, d := range c.doc.Decisions {
 		p := "/decisions/" + strconv.Itoa(i)
@@ -532,7 +532,7 @@ func (c *checker) revisions() {
 					"changed element %q no longer exists", id)
 			}
 		}
-		c.refs(p+"/triggerEvidenceIds", element, r.TriggerEvidenceIDs, toc.ElementEvidence)
+		c.refs(p+"/triggerEvidenceIds", element, r.TriggerEvidenceIDs, impact.ElementEvidence)
 		if q := r.QualityReview; q != nil {
 			enum(c, p+"/qualityReview/plausible", element, q.Plausible)
 			enum(c, p+"/qualityReview/feasible", element, q.Feasible)
@@ -541,7 +541,7 @@ func (c *checker) revisions() {
 	}
 }
 
-// docRef checks a reference to a whole document (toc:<doc>).
+// docRef checks a reference to a whole document (model:<doc>).
 func (c *checker) docRef(path, element, v string) {
 	if v == "" {
 		return
@@ -558,9 +558,9 @@ func (c *checker) docRef(path, element, v string) {
 }
 
 // contributesTo checks an outcome's references to outcomes in another
-// theory. Whether they resolve is checked by Family, which needs both
+// Impact model. Whether they resolve is checked by Family, which needs both
 // documents.
-func (c *checker) contributesTo(path string, o toc.Outcome) {
+func (c *checker) contributesTo(path string, o impact.Outcome) {
 	for i, v := range o.ContributesTo {
 		p := path + "/" + strconv.Itoa(i)
 		r, err := ref.Parse(v)
@@ -568,12 +568,12 @@ func (c *checker) contributesTo(path string, o toc.Outcome) {
 		case err != nil:
 			c.errorf("VAL-PTH-002", p, o.ID, "%q is not a valid reference: %v", v, err)
 		case !r.IsElement():
-			c.errorf("VAL-PTH-002", p, o.ID, "%q must reference an outcome (toc:<doc>#<outcome>)", v)
+			c.errorf("VAL-PTH-002", p, o.ID, "%q must reference an outcome (model:<doc>#<outcome>)", v)
 		case r.Doc == c.doc.ID:
 			c.errorf("VAL-PTH-002", p, o.ID, "%q refers to this document; use a link", v)
 		case c.doc.Parent != "":
 			if parent, perr := ref.Parse(c.doc.Parent); perr == nil && r.Doc != parent.Doc {
-				c.errorf("VAL-PTH-003", p, o.ID, "%q is not in the parent theory %q", v, c.doc.Parent)
+				c.errorf("VAL-PTH-003", p, o.ID, "%q is not in the parent impact model %q", v, c.doc.Parent)
 			}
 		}
 	}
@@ -588,13 +588,13 @@ func (c *checker) pathways() {
 		}
 		enum(c, p+"/kind", pw.ID, pw.Kind)
 		c.actor(p+"/ownerActorId", pw.ID, pw.OwnerID)
-		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, toc.ElementOutcome)
-		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, toc.ElementIntervention)
-		c.docRef(p+"/childToc", pw.ID, pw.ChildToc)
+		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, impact.ElementOutcome)
+		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, impact.ElementIntervention)
+		c.docRef(p+"/childModel", pw.ID, pw.ChildModel)
 		if f := pw.Focus; f != nil {
-			c.ref(p+"/focus/northStarId", pw.ID, f.NorthStarID, toc.ElementIndicator)
-			c.ref(p+"/focus/oneMetricId", pw.ID, f.OneMetricID, toc.ElementIndicator)
-			c.refs(p+"/focus/guardrailIds", pw.ID, f.GuardrailIDs, toc.ElementIndicator)
+			c.ref(p+"/focus/northStarId", pw.ID, f.NorthStarID, impact.ElementIndicator)
+			c.ref(p+"/focus/oneMetricId", pw.ID, f.OneMetricID, impact.ElementIndicator)
+			c.refs(p+"/focus/guardrailIds", pw.ID, f.GuardrailIDs, impact.ElementIndicator)
 			for j, id := range f.GuardrailIDs {
 				if slices.Contains(f.GuardrailIDs[:j], id) {
 					c.errorf("VAL-PTH-006", p+"/focus/guardrailIds/"+strconv.Itoa(j), pw.ID, "guardrail %q is listed more than once", id)
@@ -618,14 +618,14 @@ func (c *checker) metrics() {
 		enum(c, p+"/aggregation", m.ID, m.Aggregation)
 		enum(c, p+"/layer", m.ID, m.Layer)
 		switch {
-		case m.Aggregation == toc.AggregationWeightedMean && m.WeightMetricID == "":
+		case m.Aggregation == impact.AggregationWeightedMean && m.WeightMetricID == "":
 			c.errorf("VAL-MET-003", p+"/weightMetricId", m.ID, "a weighted_mean metric needs weightMetricId")
-		case m.Aggregation != toc.AggregationWeightedMean && m.WeightMetricID != "":
+		case m.Aggregation != impact.AggregationWeightedMean && m.WeightMetricID != "":
 			c.errorf("VAL-MET-004", p+"/weightMetricId", m.ID, "weightMetricId is only used with weighted_mean aggregation")
 		case m.WeightMetricID == m.ID && m.ID != "":
 			c.errorf("VAL-MET-004", p+"/weightMetricId", m.ID, "a metric cannot weight itself")
 		}
-		c.ref(p+"/weightMetricId", m.ID, m.WeightMetricID, toc.ElementMetric)
+		c.ref(p+"/weightMetricId", m.ID, m.WeightMetricID, impact.ElementMetric)
 	}
 }
 
@@ -644,11 +644,11 @@ func (c *checker) glossary() {
 
 // indicatorMetric checks an indicator's metric, pathway, claim, and
 // roll-up fields.
-func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
+func (c *checker) indicatorMetric(p string, ind impact.Indicator) {
 	enum(c, p+"/claim", ind.ID, ind.Claim)
-	c.ref(p+"/metricId", ind.ID, ind.MetricID, toc.ElementMetric)
-	c.refs(p+"/pathwayIds", ind.ID, ind.PathwayIDs, toc.ElementPathway)
-	c.refs(p+"/rollupFrom", ind.ID, ind.RollupFrom, toc.ElementIndicator)
+	c.ref(p+"/metricId", ind.ID, ind.MetricID, impact.ElementMetric)
+	c.refs(p+"/pathwayIds", ind.ID, ind.PathwayIDs, impact.ElementPathway)
+	c.refs(p+"/rollupFrom", ind.ID, ind.RollupFrom, impact.ElementIndicator)
 	c.composition(p, ind)
 	if len(ind.RollupFrom) == 0 {
 		return
@@ -657,7 +657,7 @@ func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
 		c.errorf("VAL-MET-005", p+"/rollupFrom", ind.ID, "rollupFrom needs metricId, which defines how values combine")
 		return
 	}
-	if m, ok := c.doc.Metric(ind.MetricID); ok && m.Aggregation == toc.AggregationNone {
+	if m, ok := c.doc.Metric(ind.MetricID); ok && m.Aggregation == impact.AggregationNone {
 		c.errorf("VAL-MET-002", p+"/rollupFrom", ind.ID, "metric %q has aggregation none; its values cannot be rolled up", ind.MetricID)
 	}
 	for i, srcID := range ind.RollupFrom {
@@ -675,14 +675,14 @@ func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
 // composition checks that an indicator's composition is well formed: a known
 // operation with the right number of parts, parts that exist, and no part that
 // leads back to the indicator itself.
-func (c *checker) composition(p string, ind toc.Indicator) {
+func (c *checker) composition(p string, ind impact.Indicator) {
 	comp := ind.ComposedOf
 	if comp == nil {
 		return
 	}
 	cp := p + "/composedOf"
 	enum(c, cp+"/op", ind.ID, comp.Op)
-	c.refs(cp+"/indicatorIds", ind.ID, comp.IndicatorIDs, toc.ElementIndicator)
+	c.refs(cp+"/indicatorIds", ind.ID, comp.IndicatorIDs, impact.ElementIndicator)
 	switch {
 	case comp.Op == "":
 		c.errorf("VAL-MET-007", cp+"/op", ind.ID, "composedOf needs an op")
@@ -761,7 +761,7 @@ func (c *checker) provenance() {
 	}
 }
 
-func (c *checker) prov(array string, i int, element string, p *toc.Provenance) {
+func (c *checker) prov(array string, i int, element string, p *impact.Provenance) {
 	if p == nil {
 		return
 	}
@@ -770,7 +770,7 @@ func (c *checker) prov(array string, i int, element string, p *toc.Provenance) {
 		c.errorf("VAL-PRV-001", path+"/basis", element, "provenance has no basis")
 	}
 	enum(c, path+"/basis", element, p.Basis)
-	c.refs(path+"/evidenceIds", element, p.EvidenceIDs, toc.ElementEvidence)
+	c.refs(path+"/evidenceIds", element, p.EvidenceIDs, impact.ElementEvidence)
 	c.date(path+"/decidedAt", element, p.DecidedAt)
 }
 
@@ -801,7 +801,7 @@ func (c *checker) consultations() {
 
 // collectionAndSelection checks an indicator's collection cost and its
 // metric-selection record.
-func (c *checker) collectionAndSelection(p string, ind toc.Indicator) {
+func (c *checker) collectionAndSelection(p string, ind impact.Indicator) {
 	if col := ind.Collection; col != nil {
 		enum(c, p+"/collection/mode", ind.ID, col.Mode)
 		c.duration(p+"/collection/period", ind.ID, col.Period)
@@ -817,13 +817,13 @@ func (c *checker) collectionAndSelection(p string, ind toc.Indicator) {
 		return
 	}
 	enum(c, p+"/selection/status", ind.ID, sel.Status)
-	c.scores(p+"/selection/scores", ind.ID, sel.Scores, toc.SubjectIndicator)
+	c.scores(p+"/selection/scores", ind.ID, sel.Scores, impact.SubjectIndicator)
 }
 
 // scores checks criterion scores on a subject of the given kind: each score
 // is 1 to 5, names a criterion that scores that kind of subject, and a
 // criterion is scored once.
-func (c *checker) scores(path, element string, scores []toc.CriterionScore, subject toc.SelectionSubject) {
+func (c *checker) scores(path, element string, scores []impact.CriterionScore, subject impact.SelectionSubject) {
 	seen := map[string]bool{}
 	for i, sc := range scores {
 		sp := path + "/" + strconv.Itoa(i)
@@ -834,7 +834,7 @@ func (c *checker) scores(path, element string, scores []toc.CriterionScore, subj
 			c.errorf("VAL-SEL-005", sp+"/criterionId", element, "criterion %q is scored more than once", sc.CriterionID)
 		}
 		seen[sc.CriterionID] = true
-		c.ref(sp+"/criterionId", element, sc.CriterionID, toc.ElementCriterion)
+		c.ref(sp+"/criterionId", element, sc.CriterionID, impact.ElementCriterion)
 		if cr, ok := c.doc.Criterion(sc.CriterionID); ok && cr.AppliesTo != subject {
 			c.errorf("VAL-SEL-004", sp+"/criterionId", element, "criterion %q scores %ss, not %ss", sc.CriterionID, cr.AppliesTo, subject)
 		}
@@ -869,7 +869,7 @@ func (c *checker) audiencesAndThemes() {
 				c.errorf("VAL-AUD-003", hp+"/indicatorId", a.ID, "headline entry names no indicator")
 				continue
 			}
-			c.ref(hp+"/indicatorId", a.ID, h.IndicatorID, toc.ElementIndicator)
+			c.ref(hp+"/indicatorId", a.ID, h.IndicatorID, impact.ElementIndicator)
 			for _, earlier := range a.Headline[:j] {
 				if earlier.IndicatorID == h.IndicatorID {
 					c.errorf("VAL-AUD-002", hp+"/indicatorId", a.ID, "indicator %q is in the headline list more than once", h.IndicatorID)
@@ -885,7 +885,7 @@ func (c *checker) audiencesAndThemes() {
 				c.errorf("VAL-THM-001", p+"/"+f.field, t.ID, "theme has no %s", f.field)
 			}
 		}
-		c.refs(p+"/outcomeIds", t.ID, t.OutcomeIDs, toc.ElementOutcome)
+		c.refs(p+"/outcomeIds", t.ID, t.OutcomeIDs, impact.ElementOutcome)
 	}
 }
 
@@ -907,12 +907,12 @@ func (c *checker) causesAndGroups() {
 			c.errorf("VAL-CAU-002", p+"/level", cause.ID, "cause has no level (immediate, underlying, or structural)")
 		}
 		enum(c, p+"/level", cause.ID, cause.Level)
-		c.refs(p+"/affectedGroupIds", cause.ID, cause.AffectedGroupIDs, toc.ElementTargetGroup)
-		c.refs(p+"/evidenceIds", cause.ID, cause.EvidenceIDs, toc.ElementEvidence)
+		c.refs(p+"/affectedGroupIds", cause.ID, cause.AffectedGroupIDs, impact.ElementTargetGroup)
+		c.refs(p+"/evidenceIds", cause.ID, cause.EvidenceIDs, impact.ElementEvidence)
 		if cause.OutOfScope != nil && strings.TrimSpace(cause.OutOfScope.Reason) == "" {
 			c.errorf("VAL-CAU-005", p+"/outOfScope/reason", cause.ID, "a cause set aside needs a reason")
 		}
-		c.ref(p+"/parent", cause.ID, cause.Parent, toc.ElementCause)
+		c.ref(p+"/parent", cause.ID, cause.Parent, impact.ElementCause)
 		if cause.Parent == cause.ID && cause.ID != "" {
 			c.errorf("VAL-CAU-003", p+"/parent", cause.ID, "a cause cannot be its own parent")
 		} else if c.causeCycle(cause.ID) {

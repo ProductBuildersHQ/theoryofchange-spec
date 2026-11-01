@@ -1,4 +1,4 @@
-kind: TheoryOfChange
+kind: ImpactModel
 specVersion: "0.1"
 id: future-extension-wins
 metadata:
@@ -70,5 +70,5 @@ alignments:
   - elementId: oc-idps-ship-extension
     target:
       framework: custom
-      ref: toc:future-open-wins#oc-pilots-cheap
+      ref: model:future-open-wins#oc-pilots-cheap
       relation: supports

@@ -6,29 +6,29 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/ref"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/ref"
 )
 
 // futureRef is the shape of a competing-future reference: ufm:<slug>.
 var futureRef = regexp.MustCompile(`^ufm:[a-z][a-z0-9]*(-[a-z0-9]+)*$`)
 
-// Futures checks theories that describe competing futures of one market. They
+// Futures checks impact models that describe competing futures of one market. They
 // should share one actor registry, so the same actor means the same thing in
 // each; each should name its future and its perspective; no two should speak
 // for the same perspective in the same future; and any reference from one
-// theory to an element of another, in the set, must resolve. The theories are
+// Impact model to an element of another, in the set, must resolve. The impact models are
 // each valid on their own (see Document); this checks them against one
 // another. Issues carry Source "future[<id>]".
-func Futures(docs ...*toc.Document) []Issue {
-	c := newChecker(&toc.Document{}, nil)
+func Futures(docs ...*impact.Model) []Issue {
+	c := newChecker(&impact.Model{}, nil)
 	type key struct{ future, actor string }
 	spoken := map[key]string{}
-	byID := map[string]*toc.Document{}
+	byID := map[string]*impact.Model{}
 	for _, d := range docs {
 		byID[d.ID] = d
 	}
-	registries := map[string][]string{} // registry ID -> theories naming it
+	registries := map[string][]string{} // registry ID -> impact models naming it
 	var market, marketOwner string
 
 	for _, d := range docs {
@@ -41,21 +41,21 @@ func Futures(docs ...*toc.Document) []Issue {
 		p := d.Perspective
 		switch {
 		case p == nil:
-			c.add("VAL-FUT-001", SeverityWarning, "/perspective", "", "theory %q names no perspective, so it cannot be placed in a future", d.ID)
+			c.add("VAL-FUT-001", SeverityWarning, "/perspective", "", "Impact model %q names no perspective, so it cannot be placed in a future", d.ID)
 		case p.FutureRef == "":
-			c.add("VAL-FUT-001", SeverityWarning, "/perspective/futureRef", "", "theory %q names no future", d.ID)
+			c.add("VAL-FUT-001", SeverityWarning, "/perspective/futureRef", "", "Impact model %q names no future", d.ID)
 		case !futureRef.MatchString(p.FutureRef):
 			c.errorf("VAL-FUT-002", "/perspective/futureRef", "", "future %q is not of the form ufm:<slug>", p.FutureRef)
 		default:
 			k := key{p.FutureRef, p.ActorID}
 			if other, dup := spoken[k]; dup {
-				c.errorf("VAL-FUT-004", "/perspective", "", "theories %q and %q both speak for %q in %s", other, d.ID, p.ActorID, p.FutureRef)
+				c.errorf("VAL-FUT-004", "/perspective", "", "Impact models %q and %q both speak for %q in %s", other, d.ID, p.ActorID, p.FutureRef)
 			}
 			spoken[k] = d.ID
 		}
 		if m := d.Context.Market; m != nil {
 			if market != "" && m.Ref != market {
-				c.add("VAL-FUT-007", SeverityWarning, "/context/market/ref", "", "theory %q is about market %q, but %q is about %q; competing futures describe one market", d.ID, m.Ref, marketOwner, market)
+				c.add("VAL-FUT-007", SeverityWarning, "/context/market/ref", "", "Impact model %q is about market %q, but %q is about %q; competing futures describe one market", d.ID, m.Ref, marketOwner, market)
 			} else if market == "" {
 				market, marketOwner = m.Ref, d.ID
 			}
@@ -65,9 +65,9 @@ func Futures(docs ...*toc.Document) []Issue {
 
 	c.source = "futures"
 	if named := registryNames(registries); len(named) > 1 {
-		c.errorf("VAL-FUT-003", "/actorRegistry", "", "theories name different actor registries (%s); competing futures share one", strings.Join(named, ", "))
+		c.errorf("VAL-FUT-003", "/actorRegistry", "", "Impact models name different actor registries (%s); competing futures share one", strings.Join(named, ", "))
 	} else if len(named) == 1 && len(registries[""]) > 0 {
-		c.add("VAL-FUT-003", SeverityWarning, "/actorRegistry", "", "theories %s name no actor registry, but the others share %q", strings.Join(registries[""], ", "), named[0])
+		c.add("VAL-FUT-003", SeverityWarning, "/actorRegistry", "", "Impact models %s name no actor registry, but the others share %q", strings.Join(registries[""], ", "), named[0])
 	}
 	return c.issues
 }
@@ -83,11 +83,11 @@ func registryNames(m map[string][]string) []string {
 	return out
 }
 
-// crossRefs checks references from d into other theories of the set: an
+// crossRefs checks references from d into other impact models of the set: an
 // alignment or the external references of an element that point at
-// toc:<doc>#<element>.
-func crossRefs(c *checker, d *toc.Document, set map[string]*toc.Document) {
-	check := func(path, element string, ext toc.ExternalRef) {
+// model:<doc>#<element>.
+func crossRefs(c *checker, d *impact.Model, set map[string]*impact.Model) {
+	check := func(path, element string, ext impact.ExternalRef) {
 		if !strings.HasPrefix(ext.Ref, ref.Prefix) {
 			return
 		}
@@ -99,11 +99,11 @@ func crossRefs(c *checker, d *toc.Document, set map[string]*toc.Document) {
 		target, inSet := set[r.Doc]
 		switch {
 		case !inSet:
-			// Points at a theory that was not supplied; nothing to check.
+			// Points at an impact model that was not supplied; nothing to check.
 		case !r.IsElement():
 		default:
 			if _, ok := target.Element(r.Element); !ok {
-				c.errorf("VAL-FUT-006", path, element, "%q: theory %q has no element %q", ext.Ref, r.Doc, r.Element)
+				c.errorf("VAL-FUT-006", path, element, "%q: Impact model %q has no element %q", ext.Ref, r.Doc, r.Element)
 			}
 		}
 	}

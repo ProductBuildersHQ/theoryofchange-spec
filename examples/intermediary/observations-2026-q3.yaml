@@ -1,6 +1,6 @@
 kind: ObservationSet
 specVersion: "0.1"
-tocId: riverbend-network
+modelId: riverbend-network
 period: 2026-Q3
 observations:
   - indicatorId: ind-hours-learning

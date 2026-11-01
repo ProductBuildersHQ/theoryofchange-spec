@@ -2,7 +2,7 @@
 
 1 element(s) added, 2 changed, 1 removed.
 
-## The theory
+## The impact model
 
 - `ceilingOfAccountability.rationale`: “Market-wide security outcomes depend on many actors.” → “Moved after review.”
 - `context.problemStatement`: “AI agents act on behalf of users with credentials designed for humans, so access is over-broad and unauditable.” → “AI agents act on behalf of users with credentials designed for humans, so access is over-broad and unauditable. It is getting worse.”

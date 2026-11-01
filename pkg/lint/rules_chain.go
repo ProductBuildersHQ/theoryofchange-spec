@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // activeInterventions returns the interventions that were not rejected, with
 // their index in the document.
-func activeInterventions(d *toc.Document) []indexed[toc.Intervention] {
-	var out []indexed[toc.Intervention]
+func activeInterventions(d *impact.Model) []indexed[impact.Intervention] {
+	var out []indexed[impact.Intervention]
 	for i, in := range d.Interventions {
 		if !in.Rejected() {
-			out = append(out, indexed[toc.Intervention]{i, in})
+			out = append(out, indexed[impact.Intervention]{i, in})
 		}
 	}
 	return out
@@ -24,7 +24,7 @@ func activeInterventions(d *toc.Document) []indexed[toc.Intervention] {
 // activity says what it produces, that it leads somewhere, that the links and
 // the interventions that carry them agree, and that what was done is measured.
 func init() {
-	register("TOC-INT-003", validate.SeverityWarning, "Every intervention says what it produces.", func(c *Context) []Finding {
+	register("IMP-INT-003", validate.SeverityWarning, "Every intervention says what it produces.", func(c *Context) []Finding {
 		var out []Finding
 		for _, in := range activeInterventions(c.Doc) {
 			if len(in.v.Outputs) > 0 {
@@ -32,7 +32,7 @@ func init() {
 			}
 			producesOutput := false
 			for _, t := range in.v.Targets {
-				if lv, ok := outcomeLevel(c.Doc, t); ok && lv == toc.LevelOutput {
+				if lv, ok := outcomeLevel(c.Doc, t); ok && lv == impact.LevelOutput {
 					producesOutput = true
 				}
 			}
@@ -44,7 +44,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-INT-004", validate.SeverityWarning, "Every intervention leads, through the outcomes it targets, to an impact outcome.", func(c *Context) []Finding {
+	register("IMP-INT-004", validate.SeverityWarning, "Every intervention leads, through the outcomes it targets, to an impact outcome.", func(c *Context) []Finding {
 		var out []Finding
 		for _, in := range activeInterventions(c.Doc) {
 			leads := false
@@ -53,17 +53,17 @@ func init() {
 				if !ok || o.Rejected() {
 					continue
 				}
-				leads = leads || o.Level == toc.LevelImpact || c.Graph.HasPathToImpact(t)
+				leads = leads || o.Level == impact.LevelImpact || c.Graph.HasPathToImpact(t)
 			}
 			if !leads {
 				out = append(out, Finding{Path: at("interventions", in.i) + "/targets", Element: in.v.ID,
-					Message: "no outcome this intervention targets leads to an impact outcome, so the work does not connect to what the theory is for"})
+					Message: "no outcome this intervention targets leads to an impact outcome, so the work does not connect to what the impact model is for"})
 			}
 		}
 		return out
 	})
 
-	register("TOC-INT-005", validate.SeverityWarning, "A link that names an intervention is carried out by an intervention that targets one end of the link.", func(c *Context) []Finding {
+	register("IMP-INT-005", validate.SeverityWarning, "A link that names an intervention is carried out by an intervention that targets one end of the link.", func(c *Context) []Finding {
 		var out []Finding
 		for _, l := range activeLinks(c.Doc) {
 			for _, id := range l.v.InterventionIDs {
@@ -80,7 +80,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-INT-006", validate.SeverityInfo, "Every intervention has an indicator of what was done.", func(c *Context) []Finding {
+	register("IMP-INT-006", validate.SeverityInfo, "Every intervention has an indicator of what was done.", func(c *Context) []Finding {
 		measured := map[string]bool{}
 		for _, ind := range activeIndicators(c.Doc) {
 			measured[ind.v.Measures] = true
@@ -95,7 +95,7 @@ func init() {
 		return out
 	})
 
-	register("TOC-INT-007", validate.SeverityInfo, "Every intervention states its resources.", func(c *Context) []Finding {
+	register("IMP-INT-007", validate.SeverityInfo, "Every intervention states its resources.", func(c *Context) []Finding {
 		var out []Finding
 		for _, in := range activeInterventions(c.Doc) {
 			if in.v.Resources == "" {

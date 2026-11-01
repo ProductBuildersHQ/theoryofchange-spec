@@ -1,8 +1,8 @@
-// Package mcp serves the Theory of Change tools to AI agents over the Model
+// Package mcp serves the impact model tools to AI agents over the Model
 // Context Protocol. Every tool is a thin adapter over pkg/service and the
 // domain packages, so the server and the command line behave identically.
 //
-// Tools take a theory inline (the "document" argument) or by path. A path is
+// Tools take an impact model inline (the "document" argument) or by path. A path is
 // confined to the server's root directory: it may not climb out with "..", and
 // a symbolic link that leads outside the root is refused.
 package mcp

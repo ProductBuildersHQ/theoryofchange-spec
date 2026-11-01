@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
 // StatusInputFor evaluates doc against the observation sets as of asOf and
 // returns what the status reports and decks are made from. prev, if given,
-// is an earlier snapshot of the same theory; the input then carries what
+// is an earlier snapshot of the same impact model; the input then carries what
 // changed since.
-func StatusInputFor(doc *toc.Document, sets []*toc.ObservationSet, asOf time.Time, opts toc.StatusOptions, prev *toc.Status) (report.StatusInput, error) {
+func StatusInputFor(doc *impact.Model, sets []*impact.ObservationSet, asOf time.Time, opts impact.StatusOptions, prev *impact.Status) (report.StatusInput, error) {
 	g, err := BuildGraph(doc)
 	if err != nil {
 		return report.StatusInput{}, err
@@ -28,8 +28,8 @@ func StatusInputFor(doc *toc.Document, sets []*toc.ObservationSet, asOf time.Tim
 	}
 	in := report.StatusInput{View: v, Doc: doc, Status: st}
 	if prev != nil {
-		if prev.TocID != st.TocID {
-			return report.StatusInput{}, fmt.Errorf("the earlier snapshot is of %q, not %q", prev.TocID, st.TocID)
+		if prev.ModelID != st.ModelID {
+			return report.StatusInput{}, fmt.Errorf("the earlier snapshot is of %q, not %q", prev.ModelID, st.ModelID)
 		}
 		in.Diff = measure.Diff(prev, st)
 	}

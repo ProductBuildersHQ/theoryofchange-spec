@@ -1,4 +1,4 @@
-// Package share prepares Theory of Change artifacts for sharing outside the
+// Package share prepares impact model artifacts for sharing outside the
 // tools: the export stamp every artifact carries, and the Markdown profile
 // that Pandoc converts to DOCX and PPTX. It only produces text. Rendering
 // diagrams and running Pandoc are done by the command line, never here.
@@ -8,14 +8,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
-// Stamp identifies exactly which version of which theory an artifact was
+// Stamp identifies exactly which version of which impact model an artifact was
 // made from, so a reader can tell whether it is out of date.
 type Stamp struct {
-	TocID   string `json:"tocId"`
+	ModelID string `json:"modelId"`
 	Version string `json:"version"`
 	// ContentHash is the SHA-256 (hex) of the document's canonical JSON.
 	ContentHash string `json:"contentHash"`
@@ -29,8 +29,8 @@ const unversioned = "unversioned"
 // NewStamp stamps doc. The version is the document's metadata version, else
 // that of its latest revision, else "unversioned". asOf is used as given; a
 // stamp never reads the clock, so the same inputs give the same artifact.
-func NewStamp(doc *toc.Document, asOf string) (Stamp, error) {
-	hash, err := tocio.ContentHash(doc)
+func NewStamp(doc *impact.Model, asOf string) (Stamp, error) {
+	hash, err := impactio.ContentHash(doc)
 	if err != nil {
 		return Stamp{}, fmt.Errorf("share: hash document: %w", err)
 	}
@@ -41,7 +41,7 @@ func NewStamp(doc *toc.Document, asOf string) (Stamp, error) {
 	if version == "" {
 		version = unversioned
 	}
-	return Stamp{TocID: doc.ID, Version: version, ContentHash: hash, AsOf: asOf}, nil
+	return Stamp{ModelID: doc.ID, Version: version, ContentHash: hash, AsOf: asOf}, nil
 }
 
 // shortHash is the leading characters of the hash, enough to compare by eye.
@@ -54,7 +54,7 @@ func (s Stamp) shortHash() string {
 
 // Line is the one-line form used in footers and on title slides.
 func (s Stamp) Line() string {
-	line := fmt.Sprintf("Theory of Change %s · version %s · hash %s", s.TocID, s.Version, s.shortHash())
+	line := fmt.Sprintf("Impact model %s · version %s · hash %s", s.ModelID, s.Version, s.shortHash())
 	if s.AsOf != "" {
 		line += " · as of " + s.AsOf
 	}
@@ -71,7 +71,7 @@ func (s Stamp) YAMLBlock(title string) string {
 	if s.AsOf != "" {
 		fmt.Fprintf(&b, "date: %q\n", s.AsOf)
 	}
-	fmt.Fprintf(&b, "toc-id: %q\n", s.TocID)
+	fmt.Fprintf(&b, "model-id: %q\n", s.ModelID)
 	fmt.Fprintf(&b, "content-hash: %q\n", s.ContentHash)
 	b.WriteString("---\n\n")
 	return b.String()
@@ -79,7 +79,7 @@ func (s Stamp) YAMLBlock(title string) string {
 
 // CSVRow is the leading comment row of a CSV export.
 func (s Stamp) CSVRow() string {
-	return fmt.Sprintf("# toc:%s version:%s hash:%s\r\n", s.TocID, s.Version, s.ContentHash)
+	return fmt.Sprintf("# model:%s version:%s hash:%s\r\n", s.ModelID, s.Version, s.ContentHash)
 }
 
 // StampMarkdown prefixes a Markdown report with the metadata block.

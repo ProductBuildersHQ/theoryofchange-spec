@@ -5,12 +5,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // AudienceNumber is one number an audience is told.
 type AudienceNumber struct {
-	Indicator toc.Indicator
+	Indicator impact.Indicator
 	// Label is the wording for this audience: the label its headline list gives,
 	// or else the indicator's name.
 	Label string
@@ -25,7 +25,7 @@ type AudienceNumber struct {
 //
 // Every audience is told the same figure for an indicator: only the label and
 // the note differ.
-func AudienceNumbers(doc *toc.Document, audienceID string) (numbers []AudienceNumber, chosen bool) {
+func AudienceNumbers(doc *impact.Model, audienceID string) (numbers []AudienceNumber, chosen bool) {
 	a, ok := doc.Audience(audienceID)
 	if !ok {
 		return nil, false
@@ -58,7 +58,7 @@ func AudienceNumbers(doc *toc.Document, audienceID string) (numbers []AudienceNu
 // numbers. The same indicator carries the same figure for every audience, so
 // the audiences differ only in what they lead with and how it is worded.
 func Headline(in StatusInput, audienceID string) (string, error) {
-	var auds []toc.Audience
+	var auds []impact.Audience
 	for _, a := range in.Doc.Audiences {
 		if audienceID == "" || a.ID == audienceID {
 			auds = append(auds, a)
@@ -77,7 +77,7 @@ func Headline(in StatusInput, audienceID string) (string, error) {
 	fmt.Fprintf(&b, "# %s: headline metrics\n\nAs of %s.\n\n", mdText(in.View.Document.Title), in.Status.AsOf)
 
 	type section struct {
-		aud     toc.Audience
+		aud     impact.Audience
 		numbers []AudienceNumber
 		chosen  bool
 	}
@@ -140,7 +140,7 @@ func Headline(in StatusInput, audienceID string) (string, error) {
 		for _, n := range s.numbers {
 			iv, st := views[n.Indicator.ID], byInd[n.Indicator.ID]
 			claim := "attributable to the work"
-			if n.Indicator.EffectiveClaim() == toc.ClaimContribution {
+			if n.Indicator.EffectiveClaim() == impact.ClaimContribution {
 				claim = "a contribution, not attributable to the work alone"
 			}
 			fmt.Fprintf(&b, "| %s | %s | %s | %s |\n", MDCell(n.Label), orDash(MDCell(iv.Latest)), statusLabel(string(st.State)), claim)

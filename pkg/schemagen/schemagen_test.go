@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/schema"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/schema"
 )
 
 // TestEmbeddedSchemasAreCurrent fails when schema/*.schema.json no longer
@@ -69,12 +69,12 @@ func TestSchemaHeaders(t *testing.T) {
 }
 
 // TestEveryEnumTypeIsMapped walks every type reachable from the published
-// documents and requires each named string type from pkg/toc (other than
+// documents and requires each named string type from pkg/impact (other than
 // the per-document Kind) to have enum values.
 func TestEveryEnumTypeIsMapped(t *testing.T) {
 	enums := EnumValues()
-	tocPkg := reflect.TypeFor[toc.Document]().PkgPath()
-	kindType := reflect.TypeFor[toc.Kind]()
+	tocPkg := reflect.TypeFor[impact.Model]().PkgPath()
+	kindType := reflect.TypeFor[impact.Kind]()
 	seen := map[reflect.Type]bool{}
 	var walk func(reflect.Type)
 	walk = func(rt reflect.Type) {

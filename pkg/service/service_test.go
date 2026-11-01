@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
-const fixtures = "../toc/testdata/"
+const fixtures = "../impact/testdata/"
 
 func fixture(t *testing.T, name string) []byte {
 	t.Helper()
@@ -34,9 +34,9 @@ func copyFixture(t *testing.T, name, as string) string {
 	return path
 }
 
-func fullDoc(t *testing.T) *toc.Document {
+func fullDoc(t *testing.T) *impact.Model {
 	t.Helper()
-	doc, err := tocio.ParseDocument(fixture(t, "full.json"), tocio.FormatJSON)
+	doc, err := impactio.ParseDocument(fixture(t, "full.json"), impactio.FormatJSON)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -44,22 +44,22 @@ func fullDoc(t *testing.T) *toc.Document {
 }
 
 func TestValidateBytes(t *testing.T) {
-	r := ValidateBytes("full.json", fixture(t, "full.json"), tocio.FormatJSON, nil)
-	if !r.Valid() || r.Kind != toc.KindTheoryOfChange || len(r.Issues) != 0 || r.Issues == nil {
+	r := ValidateBytes("full.json", fixture(t, "full.json"), impactio.FormatJSON, nil)
+	if !r.Valid() || r.Kind != impact.KindImpactModel || len(r.Issues) != 0 || r.Issues == nil {
 		t.Fatalf("valid document report = %+v", r)
 	}
 
 	dangling := strings.Replace(string(fixture(t, "minimal.json")), `"to": "oc-funding"`, `"to": "oc-nowhere"`, 1)
-	r = ValidateBytes("x", []byte(dangling), tocio.FormatJSON, nil)
+	r = ValidateBytes("x", []byte(dangling), impactio.FormatJSON, nil)
 	if r.Valid() || len(r.Issues) != 1 || r.Issues[0].Code != "VAL-REF-001" {
 		t.Fatalf("dangling report = %+v", r)
 	}
 
-	r = ValidateBytes("x", []byte(`{"kind":"TheoryOfChange"}`), tocio.FormatJSON, nil)
-	if r.Valid() || r.Kind != toc.KindTheoryOfChange {
+	r = ValidateBytes("x", []byte(`{"kind":"ImpactModel"}`), impactio.FormatJSON, nil)
+	if r.Valid() || r.Kind != impact.KindImpactModel {
 		t.Fatalf("schema-invalid report = %+v", r)
 	}
-	r = ValidateBytes("x", []byte(`{`), tocio.FormatJSON, nil)
+	r = ValidateBytes("x", []byte(`{`), impactio.FormatJSON, nil)
 	if r.Valid() || r.Kind != "" {
 		t.Fatalf("unparseable report = %+v", r)
 	}
@@ -67,16 +67,16 @@ func TestValidateBytes(t *testing.T) {
 
 func TestValidateObservationsAgainstTheory(t *testing.T) {
 	obs := fixture(t, "observations.json")
-	if r := ValidateBytes("obs", obs, tocio.FormatJSON, nil); !r.Valid() || r.Kind != toc.KindObservationSet {
+	if r := ValidateBytes("obs", obs, impactio.FormatJSON, nil); !r.Valid() || r.Kind != impact.KindObservationSet {
 		t.Fatalf("schema-only report = %+v", r)
 	}
-	if r := ValidateBytes("obs", obs, tocio.FormatJSON, fullDoc(t)); !r.Valid() {
-		t.Fatalf("report against theory = %+v", r)
+	if r := ValidateBytes("obs", obs, impactio.FormatJSON, fullDoc(t)); !r.Valid() {
+		t.Fatalf("report against impact model = %+v", r)
 	}
 	other := strings.Replace(string(obs), `"indicatorId": "ind-idp-count"`, `"indicatorId": "ind-ghost"`, 1)
-	r := ValidateBytes("obs", []byte(other), tocio.FormatJSON, fullDoc(t))
+	r := ValidateBytes("obs", []byte(other), impactio.FormatJSON, fullDoc(t))
 	if r.Valid() || r.Issues[0].Code != "VAL-REF-001" {
-		t.Fatalf("unknown indicator should fail against the theory: %+v", r)
+		t.Fatalf("unknown indicator should fail against the impact model: %+v", r)
 	}
 }
 
@@ -89,7 +89,7 @@ func TestValidateFile(t *testing.T) {
 	if _, err := ValidateFile(filepath.Join(t.TempDir(), "missing.json"), nil); err == nil {
 		t.Fatal("missing file should be an error")
 	}
-	if _, err := ValidateFile("doc.txt", nil); !errors.Is(err, tocio.ErrUnsupportedFormat) {
+	if _, err := ValidateFile("doc.txt", nil); !errors.Is(err, impactio.ErrUnsupportedFormat) {
 		t.Fatalf("unsupported extension error = %v", err)
 	}
 }
@@ -187,7 +187,7 @@ func TestDOT(t *testing.T) {
 	}
 	dot := DOT(g)
 	for _, want := range []string{
-		"digraph theoryofchange {",
+		"digraph impact-model {",
 		`"oc-safer-agents" [shape=box, label="oc-safer-agents\n(impact)"];`,
 		`"int-interop" [shape=ellipse`,
 		`"oc-enterprise-require" -> "oc-platform-support" [style=dashed];`,
@@ -211,15 +211,15 @@ func TestInitDocument(t *testing.T) {
 		t.Fatalf("doc = %+v", doc)
 	}
 	// It must round-trip through the YAML writer and parser.
-	out, err := tocio.Canonical(doc, tocio.FormatYAML)
+	out, err := impactio.Canonical(doc, impactio.FormatYAML)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := tocio.ParseDocument(out, tocio.FormatYAML); err != nil {
+	if _, err := impactio.ParseDocument(out, impactio.FormatYAML); err != nil {
 		t.Fatalf("starter does not parse back: %v\n%s", err, out)
 	}
 	def, err := InitDocument(InitOptions{Template: "minimal"})
-	if err != nil || def.ID != "my-theory-of-change" || !strings.HasPrefix(def.Context.ProblemStatement, "TODO") {
+	if err != nil || def.ID != "my-impact-model" || !strings.HasPrefix(def.Context.ProblemStatement, "TODO") {
 		t.Fatalf("defaults = %+v, %v", def, err)
 	}
 	if _, err := InitDocument(InitOptions{Template: "nope"}); !errors.Is(err, ErrUnknownTemplate) {
@@ -280,7 +280,7 @@ func TestFormatFile(t *testing.T) {
 
 	// --sort reorders by ID, and is idempotent too.
 	full := copyFixture(t, "full.json", "full.yaml")
-	if err := os.WriteFile(full, mustCanonical(t, fullDoc(t), tocio.FormatYAML), 0o600); err != nil {
+	if err := os.WriteFile(full, mustCanonical(t, fullDoc(t), impactio.FormatYAML), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	if res, err = FormatFile(full, false, true); err != nil || !res.Changed {
@@ -297,7 +297,7 @@ func TestFormatFile(t *testing.T) {
 	}
 
 	bad := filepath.Join(t.TempDir(), "bad.json")
-	if err := os.WriteFile(bad, []byte(`{"kind":"TheoryOfChange"}`), 0o600); err != nil {
+	if err := os.WriteFile(bad, []byte(`{"kind":"ImpactModel"}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	if _, err := FormatFile(bad, false, false); err == nil || !strings.Contains(err.Error(), "bad.json") {
@@ -308,9 +308,9 @@ func TestFormatFile(t *testing.T) {
 	}
 }
 
-func mustCanonical(t *testing.T, v any, f tocio.Format) []byte {
+func mustCanonical(t *testing.T, v any, f impactio.Format) []byte {
 	t.Helper()
-	b, err := tocio.Canonical(v, f)
+	b, err := impactio.Canonical(v, f)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -346,7 +346,7 @@ func TestPatchFile(t *testing.T) {
 	if err != nil || !res.Applied || !res.Written {
 		t.Fatalf("write = %+v, %v", res, err)
 	}
-	doc, err := tocio.LoadDocument(path)
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -391,7 +391,7 @@ func TestPatchFile(t *testing.T) {
 func TestPatchFilePreservesYAML(t *testing.T) {
 	doc := fullDoc(t)
 	path := filepath.Join(t.TempDir(), "doc.yaml")
-	if err := os.WriteFile(path, mustCanonical(t, doc, tocio.FormatYAML), 0o600); err != nil {
+	if err := os.WriteFile(path, mustCanonical(t, doc, impactio.FormatYAML), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	rename := must(edit.Replace("/outcomes/@oc-idp-support/title", "Providers ship it"))

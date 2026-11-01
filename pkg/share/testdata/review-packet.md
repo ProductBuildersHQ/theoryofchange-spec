@@ -2,7 +2,7 @@
 
 ## How to review
 
-This is a draft for you to correct. For each row, write one of agree, change, remove, unsure in the **Decision** column. If you choose change, say what it should be in **Suggested change**. Use **Comment** for anything else. Please leave the ID column as it is: it is how your answers are matched to the theory.
+This is a draft for you to correct. For each row, write one of agree, change, remove, unsure in the **Decision** column. If you choose change, say what it should be in **Suggested change**. Use **Comment** for anything else. Please leave the ID column as it is: it is how your answers are matched to the impact model.
 
 Rows marked inferred or hypothesis are our reading, not something the organization said, and are the most important to check.
 

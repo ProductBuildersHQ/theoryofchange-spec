@@ -6,36 +6,36 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // Report is the validation result for one input.
 type Report struct {
 	// Source is the file path or another label for the input.
 	Source string           `json:"source"`
-	Format tocio.Format     `json:"format,omitempty"`
-	Kind   toc.Kind         `json:"kind,omitempty"`
+	Format impactio.Format  `json:"format,omitempty"`
+	Kind   impact.Kind      `json:"kind,omitempty"`
 	Issues []validate.Issue `json:"issues"`
 }
 
 // Valid reports whether the input has no error-severity issues.
 func (r Report) Valid() bool { return !validate.HasErrors(r.Issues) }
 
-// ValidateBytes validates one input of any document kind. A Theory of
+// ValidateBytes validates one input of any document kind. A impact model of
 // Change is checked against its schema and structurally; other kinds are
 // checked against their schema. When against is given, an observation set
-// is also checked against that theory.
-func ValidateBytes(source string, data []byte, f tocio.Format, against *toc.Document, opts ...validate.Option) Report {
+// is also checked against that impact model.
+func ValidateBytes(source string, data []byte, f impactio.Format, against *impact.Model, opts ...validate.Option) Report {
 	r := Report{Source: source, Format: f, Issues: []validate.Issue{}}
-	if kind, err := tocio.DetectKind(data, f); err == nil {
+	if kind, err := impactio.DetectKind(data, f); err == nil {
 		r.Kind = kind
 	}
 	_, issues := validate.Source(data, f, opts...)
 	r.Issues = append(r.Issues, issues...)
-	if r.Kind == toc.KindObservationSet && against != nil && !validate.HasErrors(issues) {
-		set, err := tocio.ParseObservationSet(data, f)
+	if r.Kind == impact.KindObservationSet && against != nil && !validate.HasErrors(issues) {
+		set, err := impactio.ParseObservationSet(data, f)
 		if err != nil {
 			r.Issues = append(r.Issues, validate.Issue{Code: "VAL-SCH-002", Severity: validate.SeverityError, Message: err.Error()})
 		} else {
@@ -47,7 +47,7 @@ func ValidateBytes(source string, data []byte, f tocio.Format, against *toc.Docu
 
 // ValidateFile reads and validates a file. The format comes from the
 // extension.
-func ValidateFile(path string, against *toc.Document, opts ...validate.Option) (Report, error) {
+func ValidateFile(path string, against *impact.Model, opts ...validate.Option) (Report, error) {
 	data, f, err := readInput(path)
 	if err != nil {
 		return Report{}, err
@@ -55,17 +55,17 @@ func ValidateFile(path string, against *toc.Document, opts ...validate.Option) (
 	return ValidateBytes(path, data, f, against, opts...), nil
 }
 
-// ValidateFamily checks that child theories resolve against their parent:
+// ValidateFamily checks that child impact models resolve against their parent:
 // each names the parent, and every outcome reference into the parent
-// exists there. Only Theory of Change files can be children.
+// exists there. Only impact model files can be children.
 func ValidateFamily(parentPath string, childPaths ...string) (Report, error) {
-	parent, err := tocio.LoadDocument(parentPath)
+	parent, err := impactio.LoadDocument(parentPath)
 	if err != nil {
 		return Report{}, err
 	}
-	children := make([]*toc.Document, 0, len(childPaths))
+	children := make([]*impact.Model, 0, len(childPaths))
 	for _, p := range childPaths {
-		child, err := tocio.LoadDocument(p)
+		child, err := impactio.LoadDocument(p)
 		if err != nil {
 			return Report{}, err
 		}
@@ -73,37 +73,37 @@ func ValidateFamily(parentPath string, childPaths ...string) (Report, error) {
 	}
 	return Report{
 		Source: parentPath,
-		Kind:   toc.KindTheoryOfChange,
+		Kind:   impact.KindImpactModel,
 		Issues: append([]validate.Issue{}, validate.Family(parent, children...)...),
 	}, nil
 }
 
-// ValidateFutures checks theories that describe competing futures of one
+// ValidateFutures checks impact models that describe competing futures of one
 // market against one another (see validate.Futures). Each must also be valid
 // alone; use ValidateFile with the shared actor registry for that.
 func ValidateFutures(paths ...string) (Report, error) {
-	docs := make([]*toc.Document, 0, len(paths))
+	docs := make([]*impact.Model, 0, len(paths))
 	for _, p := range paths {
-		d, err := tocio.LoadDocument(p)
+		d, err := impactio.LoadDocument(p)
 		if err != nil {
 			return Report{}, err
 		}
 		docs = append(docs, d)
 	}
-	return Report{Source: "competing futures", Kind: toc.KindTheoryOfChange, Issues: append([]validate.Issue{}, validate.Futures(docs...)...)}, nil
+	return Report{Source: "competing futures", Kind: impact.KindImpactModel, Issues: append([]validate.Issue{}, validate.Futures(docs...)...)}, nil
 }
 
 // LoadActorRegistry reads an actor registry file.
-func LoadActorRegistry(path string) (*toc.ActorRegistry, error) {
+func LoadActorRegistry(path string) (*impact.ActorRegistry, error) {
 	data, f, err := readInput(path)
 	if err != nil {
 		return nil, err
 	}
-	return tocio.ParseActorRegistry(data, f)
+	return impactio.ParseActorRegistry(data, f)
 }
 
-func readInput(path string) ([]byte, tocio.Format, error) {
-	f, err := tocio.FormatFromPath(path)
+func readInput(path string) ([]byte, impactio.Format, error) {
+	f, err := impactio.FormatFromPath(path)
 	if err != nil {
 		return nil, "", err
 	}
@@ -111,8 +111,8 @@ func readInput(path string) ([]byte, tocio.Format, error) {
 	if err != nil {
 		return nil, "", err
 	}
-	if info.Size() > tocio.MaxFileBytes {
-		return nil, "", fmt.Errorf("%w: %s is %d bytes (limit %d)", tocio.ErrTooLarge, path, info.Size(), tocio.MaxFileBytes)
+	if info.Size() > impactio.MaxFileBytes {
+		return nil, "", fmt.Errorf("%w: %s is %d bytes (limit %d)", impactio.ErrTooLarge, path, info.Size(), impactio.MaxFileBytes)
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {

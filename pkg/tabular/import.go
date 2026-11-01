@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // DefaultDateFormat is the date layout used when a mapping gives none.
@@ -34,7 +34,7 @@ type Unmatched struct {
 
 // Result is the outcome of an import.
 type Result struct {
-	Set *toc.ObservationSet `json:"set"`
+	Set *impact.ObservationSet `json:"set"`
 	// Imported is the number of rows that became observations.
 	Imported int `json:"imported"`
 	// Blank is the number of empty rows skipped. They are not data.
@@ -51,9 +51,9 @@ func (r *Result) Rows() int { return r.Imported + len(r.Unmatched) + r.Blank }
 // Import reads a CSV sheet into an observation set for doc. The first row is
 // the header. Rows that cannot be resolved are returned in Unmatched, never
 // dropped. A leading byte-order mark is ignored.
-func Import(src io.Reader, m *toc.CSVMapping, doc *toc.Document) (*Result, error) {
-	if m.TocID != "" && doc.ID != "" && m.TocID != doc.ID {
-		return nil, fmt.Errorf("%w: the mapping is for theory %q, not %q", ErrMapping, m.TocID, doc.ID)
+func Import(src io.Reader, m *impact.CSVMapping, doc *impact.Model) (*Result, error) {
+	if m.ModelID != "" && doc.ID != "" && m.ModelID != doc.ID {
+		return nil, fmt.Errorf("%w: the mapping is for impact model %q, not %q", ErrMapping, m.ModelID, doc.ID)
 	}
 	data, err := io.ReadAll(src)
 	if err != nil {
@@ -81,7 +81,7 @@ func Import(src io.Reader, m *toc.CSVMapping, doc *toc.Document) (*Result, error
 	}
 	imp.index()
 
-	set := toc.NewObservationSet(doc.ID, m.Period)
+	set := impact.NewObservationSet(doc.ID, m.Period)
 	res := &Result{Set: set, Unmatched: []Unmatched{}, Header: header}
 	for row := 2; ; row++ {
 		rec, err := r.Read()
@@ -117,7 +117,7 @@ type columns struct {
 	indicator, date, value, level, pathway, quality, source, note int
 }
 
-func resolveColumns(header []string, c toc.CSVColumns) (columns, error) {
+func resolveColumns(header []string, c impact.CSVColumns) (columns, error) {
 	find := func(name, what string) (int, error) {
 		if name == "" {
 			return -1, nil
@@ -156,19 +156,19 @@ func resolveColumns(header []string, c toc.CSVColumns) (columns, error) {
 }
 
 type importer struct {
-	doc    *toc.Document
-	m      *toc.CSVMapping
+	doc    *impact.Model
+	m      *impact.CSVMapping
 	cols   columns
 	layout string
 
-	indicators map[string]toc.Indicator // by ID
-	byLabel    map[string]string        // lower-case alias or ID to indicator ID
-	metrics    map[string]string        // lower-case alias, ID, or name to metric ID
-	pathways   map[string]string        // lower-case ID or title to pathway ID
+	indicators map[string]impact.Indicator // by ID
+	byLabel    map[string]string           // lower-case alias or ID to indicator ID
+	metrics    map[string]string           // lower-case alias, ID, or name to metric ID
+	pathways   map[string]string           // lower-case ID or title to pathway ID
 }
 
 func (im *importer) index() {
-	im.indicators = map[string]toc.Indicator{}
+	im.indicators = map[string]impact.Indicator{}
 	im.byLabel = map[string]string{}
 	im.metrics = map[string]string{}
 	im.pathways = map[string]string{}
@@ -207,33 +207,33 @@ func cell(rec []string, i int) string {
 }
 
 // row turns one record into an observation, or says why it cannot.
-func (im *importer) row(rec []string, width int) (toc.Observation, string) {
+func (im *importer) row(rec []string, width int) (impact.Observation, string) {
 	if len(rec) != width {
-		return toc.Observation{}, fmt.Sprintf("the row has %d cells and the header has %d", len(rec), width)
+		return impact.Observation{}, fmt.Sprintf("the row has %d cells and the header has %d", len(rec), width)
 	}
 	ind, reason := im.indicator(rec)
 	if reason != "" {
-		return toc.Observation{}, reason
+		return impact.Observation{}, reason
 	}
-	if ind.MeasurementType == toc.MeasurementThemeCount {
-		return toc.Observation{}, fmt.Sprintf("indicator %q counts story themes; its value comes from stories, not from a sheet", ind.ID)
+	if ind.MeasurementType == impact.MeasurementThemeCount {
+		return impact.Observation{}, fmt.Sprintf("indicator %q counts story themes; its value comes from stories, not from a sheet", ind.ID)
 	}
 	raw := cell(rec, im.cols.date)
 	at, err := time.Parse(im.layout, raw)
 	if err != nil {
-		return toc.Observation{}, fmt.Sprintf("the date %q does not match the format %q", raw, im.layout)
+		return impact.Observation{}, fmt.Sprintf("the date %q does not match the format %q", raw, im.layout)
 	}
-	ob := toc.Observation{
+	ob := impact.Observation{
 		IndicatorID: ind.ID, Date: at.Format(time.DateOnly),
 		Source: cell(rec, im.cols.source), Note: cell(rec, im.cols.note),
 	}
 	if reason := im.setValue(&ob, ind, rec); reason != "" {
-		return toc.Observation{}, reason
+		return impact.Observation{}, reason
 	}
 	if q := cell(rec, im.cols.quality); q != "" {
-		quality := toc.DataQuality(strings.ToLower(q))
+		quality := impact.DataQuality(strings.ToLower(q))
 		if !quality.Valid() {
-			return toc.Observation{}, fmt.Sprintf("the data quality %q is not one of verified, reported, estimated", q)
+			return impact.Observation{}, fmt.Sprintf("the data quality %q is not one of verified, reported, estimated", q)
 		}
 		ob.Quality = quality
 	}
@@ -241,9 +241,9 @@ func (im *importer) row(rec []string, width int) (toc.Observation, string) {
 }
 
 // setValue fills in the observation's value or level.
-func (im *importer) setValue(ob *toc.Observation, ind toc.Indicator, rec []string) string {
+func (im *importer) setValue(ob *impact.Observation, ind impact.Indicator, rec []string) string {
 	value, level := cell(rec, im.cols.value), cell(rec, im.cols.level)
-	if len(ind.Levels) > 0 || ind.MeasurementType == toc.MeasurementQualitative {
+	if len(ind.Levels) > 0 || ind.MeasurementType == impact.MeasurementQualitative {
 		if level == "" {
 			level = value // a qualitative sheet may keep its levels in the value column
 		}
@@ -268,36 +268,36 @@ func (im *importer) setValue(ob *toc.Observation, ind toc.Indicator, rec []strin
 }
 
 // indicator finds the indicator a row is about.
-func (im *importer) indicator(rec []string) (toc.Indicator, string) {
+func (im *importer) indicator(rec []string) (impact.Indicator, string) {
 	if fixed := im.m.Columns.IndicatorFixed; fixed != "" && im.cols.indicator < 0 {
 		return im.lookup(fixed)
 	}
 	label := cell(rec, im.cols.indicator)
 	if label == "" {
-		return toc.Indicator{}, "the row names no indicator"
+		return impact.Indicator{}, "the row names no indicator"
 	}
 	if id, ok := im.byLabel[key(label)]; ok {
 		return im.lookup(id)
 	}
 	metric, ok := im.metrics[key(label)]
 	if !ok {
-		return toc.Indicator{}, fmt.Sprintf("unknown indicator %q", label)
+		return impact.Indicator{}, fmt.Sprintf("unknown indicator %q", label)
 	}
 	return im.byMetric(metric, label, cell(rec, im.cols.pathway))
 }
 
-func (im *importer) lookup(id string) (toc.Indicator, string) {
+func (im *importer) lookup(id string) (impact.Indicator, string) {
 	ind, ok := im.indicators[id]
 	if !ok {
-		return toc.Indicator{}, fmt.Sprintf("indicator %q is not in the theory", id)
+		return impact.Indicator{}, fmt.Sprintf("indicator %q is not in the impact model", id)
 	}
 	return ind, ""
 }
 
 // byMetric chooses, among the indicators of a metric, the one for the
 // pathway named in the row.
-func (im *importer) byMetric(metric, label, pathway string) (toc.Indicator, string) {
-	var of []toc.Indicator
+func (im *importer) byMetric(metric, label, pathway string) (impact.Indicator, string) {
+	var of []impact.Indicator
 	for _, ind := range im.doc.Indicators {
 		if ind.MetricID == metric && !ind.Provenance.IsRejected() {
 			of = append(of, ind)
@@ -305,17 +305,17 @@ func (im *importer) byMetric(metric, label, pathway string) (toc.Indicator, stri
 	}
 	switch {
 	case len(of) == 0:
-		return toc.Indicator{}, fmt.Sprintf("%q is a metric with no indicator", label)
+		return impact.Indicator{}, fmt.Sprintf("%q is a metric with no indicator", label)
 	case len(of) == 1 && pathway == "":
 		return of[0], ""
 	case pathway == "":
-		return toc.Indicator{}, fmt.Sprintf("%q is a metric with %d indicators; the row needs a pathway to choose one", label, len(of))
+		return impact.Indicator{}, fmt.Sprintf("%q is a metric with %d indicators; the row needs a pathway to choose one", label, len(of))
 	}
 	pw, ok := im.pathways[key(pathway)]
 	if !ok {
-		return toc.Indicator{}, fmt.Sprintf("unknown pathway %q", pathway)
+		return impact.Indicator{}, fmt.Sprintf("unknown pathway %q", pathway)
 	}
-	var match []toc.Indicator
+	var match []impact.Indicator
 	for _, ind := range of {
 		if slices.Contains(ind.PathwayIDs, pw) {
 			match = append(match, ind)
@@ -324,15 +324,15 @@ func (im *importer) byMetric(metric, label, pathway string) (toc.Indicator, stri
 	if len(match) > 1 {
 		// An indicator that rolls several pathways up also serves this one;
 		// the sheet means the indicator for the pathway alone.
-		match = slices.DeleteFunc(slices.Clone(match), func(i toc.Indicator) bool { return len(i.PathwayIDs) != 1 })
+		match = slices.DeleteFunc(slices.Clone(match), func(i impact.Indicator) bool { return len(i.PathwayIDs) != 1 })
 	}
 	switch len(match) {
 	case 1:
 		return match[0], ""
 	case 0:
-		return toc.Indicator{}, fmt.Sprintf("no indicator of metric %q serves pathway %q", label, pathway)
+		return impact.Indicator{}, fmt.Sprintf("no indicator of metric %q serves pathway %q", label, pathway)
 	default:
-		return toc.Indicator{}, fmt.Sprintf("%d indicators of metric %q serve pathway %q", len(match), label, pathway)
+		return impact.Indicator{}, fmt.Sprintf("%d indicators of metric %q serve pathway %q", len(match), label, pathway)
 	}
 }
 

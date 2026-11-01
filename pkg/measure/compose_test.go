@@ -5,11 +5,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
-func composed(op toc.CompositionOp, parts ...string) toc.Indicator {
-	return toc.Indicator{ID: "x", Measures: "oc", Name: "x", ComposedOf: &toc.Composition{Op: op, IndicatorIDs: parts}}
+func composed(op impact.CompositionOp, parts ...string) impact.Indicator {
+	return impact.Indicator{ID: "x", Measures: "oc", Name: "x", ComposedOf: &impact.Composition{Op: op, IndicatorIDs: parts}}
 }
 
 func TestComposeArithmetic(t *testing.T) {
@@ -17,14 +17,14 @@ func TestComposeArithmetic(t *testing.T) {
 	obs := values("cost", "2026-12-01", 900.0, "n", "2026-12-01", 12.0, "m", "2026-12-01", 3.0)
 	tests := []struct {
 		name string
-		ind  toc.Indicator
+		ind  impact.Indicator
 		want float64
 	}{
-		{"ratio is the first over the second", composed(toc.CompositionRatio, "cost", "n"), 75},
-		{"ratio is not commutative", composed(toc.CompositionRatio, "n", "cost"), 12.0 / 900},
-		{"difference is the first less the second", composed(toc.CompositionDifference, "cost", "n"), 888},
-		{"product multiplies every part", composed(toc.CompositionProduct, "cost", "n", "m"), 32400},
-		{"sum adds every part", composed(toc.CompositionSum, "cost", "n", "m"), 915},
+		{"ratio is the first over the second", composed(impact.CompositionRatio, "cost", "n"), 75},
+		{"ratio is not commutative", composed(impact.CompositionRatio, "n", "cost"), 12.0 / 900},
+		{"difference is the first less the second", composed(impact.CompositionDifference, "cost", "n"), 888},
+		{"product multiplies every part", composed(impact.CompositionProduct, "cost", "n", "m"), 32400},
+		{"sum adds every part", composed(impact.CompositionSum, "cost", "n", "m"), 915},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -41,42 +41,42 @@ func TestComposeArithmetic(t *testing.T) {
 func TestComposeWithholdsWhatCannotBeWorkedOut(t *testing.T) {
 	asOf := day("2026-12-31")
 
-	res, _ := Compose(composed(toc.CompositionRatio, "cost", "n"), values("cost", "2026-12-01", 900.0), asOf)
+	res, _ := Compose(composed(impact.CompositionRatio, "cost", "n"), values("cost", "2026-12-01", 900.0), asOf)
 	if res.Value != nil || !slices.Equal(res.Missing, []string{"n"}) {
 		t.Errorf("a missing part: %+v", res)
 	}
 
-	res, _ = Compose(composed(toc.CompositionRatio, "cost", "n"), values("cost", "2026-12-01", 900.0, "n", "2026-12-01", 0.0), asOf)
+	res, _ = Compose(composed(impact.CompositionRatio, "cost", "n"), values("cost", "2026-12-01", 900.0, "n", "2026-12-01", 0.0), asOf)
 	if res.Value != nil {
 		t.Errorf("a division by zero was given the value %v", *res.Value)
 	}
 
-	res, _ = Compose(composed(toc.CompositionRatio, "cost", "n"), values("x", "2026-12-02", 5.0, "cost", "2026-12-01", 900.0, "n", "2026-12-01", 12.0), asOf)
+	res, _ = Compose(composed(impact.CompositionRatio, "cost", "n"), values("x", "2026-12-02", 5.0, "cost", "2026-12-01", 900.0, "n", "2026-12-01", 12.0), asOf)
 	if !res.Direct || res.Value != nil {
 		t.Errorf("an indicator with its own observation: %+v", res)
 	}
 
-	res, _ = Compose(composed(toc.CompositionRatio, "cost", "n"), values("cost", "2027-02-01", 900.0, "n", "2027-02-01", 12.0), asOf)
+	res, _ = Compose(composed(impact.CompositionRatio, "cost", "n"), values("cost", "2027-02-01", 900.0, "n", "2027-02-01", 12.0), asOf)
 	if res.Value != nil {
 		t.Errorf("parts observed after the date were used: %+v", res)
 	}
 
-	if _, ok := Compose(toc.Indicator{ID: "plain"}, nil, asOf); ok {
+	if _, ok := Compose(impact.Indicator{ID: "plain"}, nil, asOf); ok {
 		t.Error("an indicator that is not composed was composed")
 	}
 }
 
 func TestComposeIsAnEstimateWhenAnyPartIs(t *testing.T) {
 	asOf := day("2026-12-31")
-	est := func(q toc.DataQuality) []toc.Observation {
+	est := func(q impact.DataQuality) []impact.Observation {
 		obs := values("cost", "2026-12-01", 900.0, "n", "2026-12-01", 12.0)
 		obs[1].Quality = q
 		return obs
 	}
-	if res, _ := Compose(composed(toc.CompositionRatio, "cost", "n"), est(toc.QualityEstimated), asOf); res.Quality != toc.QualityEstimated {
+	if res, _ := Compose(composed(impact.CompositionRatio, "cost", "n"), est(impact.QualityEstimated), asOf); res.Quality != impact.QualityEstimated {
 		t.Errorf("quality = %q, want estimated", res.Quality)
 	}
-	if res, _ := Compose(composed(toc.CompositionRatio, "cost", "n"), est(toc.QualityVerified), asOf); res.Quality != toc.QualityReported {
+	if res, _ := Compose(composed(impact.CompositionRatio, "cost", "n"), est(impact.QualityVerified), asOf); res.Quality != impact.QualityReported {
 		t.Errorf("quality = %q, want reported", res.Quality)
 	}
 }
@@ -84,15 +84,15 @@ func TestComposeIsAnEstimateWhenAnyPartIs(t *testing.T) {
 // A composed indicator takes its place in the evaluated status like any other
 // with an observation, and can itself be a part of another composition.
 func TestComposedValueReachesTheStatus(t *testing.T) {
-	d := toc.NewDocument("t", "p")
-	d.Indicators = []toc.Indicator{
-		{ID: "per", Measures: "oc", Name: "per", ComposedOf: &toc.Composition{Op: toc.CompositionRatio, IndicatorIDs: []string{"cost", "n"}}},
-		{ID: "twice", Measures: "oc", Name: "twice", ComposedOf: &toc.Composition{Op: toc.CompositionProduct, IndicatorIDs: []string{"per", "two"}}},
+	d := impact.NewModel("t", "p")
+	d.Indicators = []impact.Indicator{
+		{ID: "per", Measures: "oc", Name: "per", ComposedOf: &impact.Composition{Op: impact.CompositionRatio, IndicatorIDs: []string{"cost", "n"}}},
+		{ID: "twice", Measures: "oc", Name: "twice", ComposedOf: &impact.Composition{Op: impact.CompositionProduct, IndicatorIDs: []string{"per", "two"}}},
 		{ID: "cost", Measures: "oc", Name: "cost"},
 		{ID: "n", Measures: "oc", Name: "n"},
 		{ID: "two", Measures: "oc", Name: "two"},
 	}
-	sets := []*toc.ObservationSet{{Observations: values("cost", "2026-12-01", 900.0, "n", "2026-12-01", 12.0, "two", "2026-12-01", 2.0)}}
+	sets := []*impact.ObservationSet{{Observations: values("cost", "2026-12-01", 900.0, "n", "2026-12-01", 12.0, "two", "2026-12-01", 2.0)}}
 	obs := derivedObservations(d, sets, day("2026-12-31"))
 	got := map[string]float64{}
 	for _, o := range obs {

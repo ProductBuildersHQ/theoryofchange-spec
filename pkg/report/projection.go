@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // The projections below are views of the causal model, not second models.
@@ -16,7 +16,7 @@ import (
 
 const projectionNote = "_This is a view of the causal model. It flattens the links between outcomes; the pathway diagram shows them._\n\n"
 
-// views returns the views to project: one per pathway, or the whole theory
+// views returns the views to project: one per pathway, or the whole impact model
 // when it has none.
 func views(whole *View, pathways []*View) []*View {
 	if len(pathways) == 0 {
@@ -48,7 +48,7 @@ func OutcomeMap(v *View) string {
 		b.WriteString("This view has no outcomes.\n\n")
 		return b.String()
 	}
-	for _, lv := range toc.AllLevels() {
+	for _, lv := range impact.AllLevels() {
 		var rows []string
 		for _, o := range v.Outcomes {
 			if o.Level != lv {
@@ -122,11 +122,11 @@ func Logframe(v *View) string {
 	}
 	rows := []struct {
 		level  string
-		levels []toc.Level
+		levels []impact.Level
 	}{
-		{"Goal", []toc.Level{toc.LevelImpact}},
-		{"Purpose", []toc.Level{toc.LevelLongTerm, toc.LevelMediumTerm}},
-		{"Outputs", []toc.Level{toc.LevelShortTerm, toc.LevelOutput}},
+		{"Goal", []impact.Level{impact.LevelImpact}},
+		{"Purpose", []impact.Level{impact.LevelLongTerm, impact.LevelMediumTerm}},
+		{"Outputs", []impact.Level{impact.LevelShortTerm, impact.LevelOutput}},
 	}
 	for _, r := range rows {
 		for _, o := range v.Outcomes {

@@ -7,16 +7,16 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 func newPatchCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "patch <toc-file> <patch-file|->",
-		Short: "Apply a JSON Patch to a Theory of Change",
-		Long: `Apply an RFC 6902 JSON Patch to a Theory of Change, atomically.
+		Use:   "patch <model-file> <patch-file|->",
+		Short: "Apply a JSON Patch to an impact model",
+		Long: `Apply an RFC 6902 JSON Patch to an impact model, atomically.
 
 Pointers may address array elements by ID: /outcomes/@oc-adoption/title
 selects the outcome with id oc-adoption, and /outcomes/- appends. The patch
@@ -32,8 +32,8 @@ stderr.
 Exit codes: 0 applied (or nothing to change); 1 rejected; 2 the patch could
 not be applied (bad path, unknown ID, failed test, or unreadable input).`,
 		Example: `  echo '[{"op":"replace","path":"/outcomes/@oc-skills/title","value":"Staff write strong applications"}]' \
-    | theoryofchange patch theory.yaml -
-  theoryofchange patch theory.yaml changes.json --dry-run`,
+    | impact-model patch impact-model.yaml -
+  impact-model patch impact-model.yaml changes.json --dry-run`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			format, err := outputFormat(cmd)
@@ -65,12 +65,12 @@ not be applied (bad path, unknown ID, failed test, or unreadable input).`,
 
 func readPatchSource(e *env, src string) ([]byte, error) {
 	if src == "-" {
-		data, err := io.ReadAll(io.LimitReader(e.in, tocio.MaxFileBytes+1))
+		data, err := io.ReadAll(io.LimitReader(e.in, impactio.MaxFileBytes+1))
 		if err != nil {
 			return nil, fmt.Errorf("read patch from stdin: %w", err)
 		}
-		if len(data) > tocio.MaxFileBytes {
-			return nil, fmt.Errorf("%w: patch on stdin exceeds %d bytes", tocio.ErrTooLarge, tocio.MaxFileBytes)
+		if len(data) > impactio.MaxFileBytes {
+			return nil, fmt.Errorf("%w: patch on stdin exceeds %d bytes", impactio.ErrTooLarge, impactio.MaxFileBytes)
 		}
 		return data, nil
 	}

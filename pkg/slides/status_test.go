@@ -5,16 +5,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
-func statusInput(t *testing.T) (report.StatusInput, []*toc.ObservationSet) {
+func statusInput(t *testing.T) (report.StatusInput, []*impact.ObservationSet) {
 	t.Helper()
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -22,7 +22,7 @@ func statusInput(t *testing.T) (report.StatusInput, []*toc.ObservationSet) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	sets, err := tocio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
+	sets, err := impactio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,11 +33,11 @@ func statusInput(t *testing.T) (report.StatusInput, []*toc.ObservationSet) {
 		}
 		return d
 	}
-	prev, err := measure.Evaluate(doc, g, sets, at("2026-06-30"), toc.DefaultStatusOptions())
+	prev, err := measure.Evaluate(doc, g, sets, at("2026-06-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
-	cur, err := measure.Evaluate(doc, g, sets, at("2026-09-30"), toc.DefaultStatusOptions())
+	cur, err := measure.Evaluate(doc, g, sets, at("2026-09-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func statusInput(t *testing.T) (report.StatusInput, []*toc.ObservationSet) {
 
 func TestStatusDeckGoldens(t *testing.T) {
 	in, sets := statusInput(t)
-	golden(t, "exec.md", Exec(in, Options{Stamp: "Theory of Change riverbend-network · version 0.2 · hash abc123"}))
+	golden(t, "exec.md", Exec(in, Options{Stamp: "Impact model riverbend-network · version 0.2 · hash abc123"}))
 	golden(t, "learning-review.md", LearningReview(report.LearningInput{StatusInput: in, Sets: sets, Period: "2026-Q3"}, Options{}))
 	story, err := Story(in, sets, "aud-funders", Options{})
 	if err != nil {
@@ -96,11 +96,11 @@ func TestExecDeckContent(t *testing.T) {
 
 func TestStoryDeckHonoursConsent(t *testing.T) {
 	in, _ := statusInput(t)
-	story := func(id, consent, sensitivity, quote string) toc.Story {
-		return toc.Story{ID: id, Date: "2026-03-01", Title: "Title " + id, Summary: "Summary " + id, Quote: quote,
-			AudienceIDs: []string{"aud-funders"}, Consent: toc.Consent(consent), Sensitivity: toc.Sensitivity(sensitivity)}
+	story := func(id, consent, sensitivity, quote string) impact.Story {
+		return impact.Story{ID: id, Date: "2026-03-01", Title: "Title " + id, Summary: "Summary " + id, Quote: quote,
+			AudienceIDs: []string{"aud-funders"}, Consent: impact.Consent(consent), Sensitivity: impact.Sensitivity(sensitivity)}
 	}
-	sets := []*toc.ObservationSet{{Stories: []toc.Story{
+	sets := []*impact.ObservationSet{{Stories: []impact.Story{
 		story("ok", "granted", "public", "QUOTE-OK"), story("restricted", "granted", "restricted", "QUOTE-RESTRICTED"),
 		story("refused", "not_granted", "public", "QUOTE-REFUSED"), story("unknown", "unknown", "public", "QUOTE-UNKNOWN"),
 	}}}
@@ -123,8 +123,8 @@ func TestStoryDeckHonoursConsent(t *testing.T) {
 
 func TestLearningReviewDeckGatesStoriesAndMergesTheRecord(t *testing.T) {
 	in, sets := statusInput(t)
-	sets = append(sets, &toc.ObservationSet{Stories: []toc.Story{
-		{ID: "x", Date: "2026-03-01", Title: "Hidden", Summary: "HIDDEN-SUMMARY", Quote: "HIDDEN-QUOTE", Consent: toc.ConsentUnknown, Sensitivity: toc.SensitivityPublic},
+	sets = append(sets, &impact.ObservationSet{Stories: []impact.Story{
+		{ID: "x", Date: "2026-03-01", Title: "Hidden", Summary: "HIDDEN-SUMMARY", Quote: "HIDDEN-QUOTE", Consent: impact.ConsentUnknown, Sensitivity: impact.SensitivityPublic},
 	}})
 	md := LearningReview(report.LearningInput{StatusInput: in, Sets: sets, Period: "2026-Q3"}, Options{})
 	if strings.Contains(md, "HIDDEN") {
@@ -147,7 +147,7 @@ func TestDecksAreDeterministic(t *testing.T) {
 // the deck tells the first few indicators reported to the audience.
 func TestStoryDeckUsesTheHeadlineList(t *testing.T) {
 	in, sets := statusInput(t)
-	var aud *toc.Audience
+	var aud *impact.Audience
 	for i := range in.Doc.Audiences {
 		if in.Doc.Audiences[i].ID == "aud-funders" {
 			aud = &in.Doc.Audiences[i]
@@ -156,7 +156,7 @@ func TestStoryDeckUsesTheHeadlineList(t *testing.T) {
 	if aud == nil || len(in.Doc.Indicators) == 0 {
 		t.Fatal("example has no aud-funders or no indicators")
 	}
-	aud.Headline = []toc.HeadlineMetric{{IndicatorID: in.Doc.Indicators[len(in.Doc.Indicators)-1].ID, Label: "DECK HEADLINE LABEL"}}
+	aud.Headline = []impact.HeadlineMetric{{IndicatorID: in.Doc.Indicators[len(in.Doc.Indicators)-1].ID, Label: "DECK HEADLINE LABEL"}}
 	md, err := Story(in, sets, "aud-funders", Options{})
 	if err != nil {
 		t.Fatal(err)

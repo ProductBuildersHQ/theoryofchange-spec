@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // Counts returns how many elements were added, changed, and removed.
@@ -49,7 +49,7 @@ func (r *Result) Markdown() string {
 	fmt.Fprintf(&b, "%d element(s) added, %d changed, %d removed.\n\n", added, changed, removed)
 
 	if len(r.Document) > 0 {
-		b.WriteString("## The theory\n\n")
+		b.WriteString("## The impact model\n\n")
 		for _, f := range r.Document {
 			fmt.Fprintf(&b, "- `%s`: %s\n", f.Path, arrow(f))
 		}
@@ -119,9 +119,9 @@ func heading(kind string) string {
 // DraftRevision returns a revision entry that records this difference: the
 // version, date, and trigger given, a summary of the counts, and the IDs
 // that changed. Nothing is applied; see RevisionPatch.
-func (r *Result) DraftRevision(version, date string, trigger toc.RevisionTrigger) toc.Revision {
+func (r *Result) DraftRevision(version, date string, trigger impact.RevisionTrigger) impact.Revision {
 	added, changed, removed := r.Counts()
-	return toc.Revision{
+	return impact.Revision{
 		Version: version, Date: date, Trigger: trigger,
 		Summary:    fmt.Sprintf("%d element(s) added, %d changed, %d removed.", added, changed, removed),
 		ChangedIDs: r.ChangedIDs(),
@@ -131,13 +131,13 @@ func (r *Result) DraftRevision(version, date string, trigger toc.RevisionTrigger
 // RevisionPatch returns the patch that appends a revision to a document
 // that has (hasRevisions) or does not have a revisions list yet, ready for
 // the patch engine.
-func RevisionPatch(rev toc.Revision, hasRevisions bool) (edit.Patch, error) {
+func RevisionPatch(rev impact.Revision, hasRevisions bool) (edit.Patch, error) {
 	var op edit.Op
 	var err error
 	if hasRevisions {
 		op, err = edit.Add(edit.Pointer("revisions", "-"), rev)
 	} else {
-		op, err = edit.Add(edit.Pointer("revisions"), []toc.Revision{rev})
+		op, err = edit.Add(edit.Pointer("revisions"), []impact.Revision{rev})
 	}
 	if err != nil {
 		return nil, err

@@ -10,7 +10,7 @@ import (
 
 	"github.com/plexusone/structured-evaluation/rubric"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/judge"
+	"github.com/ProductBuildersHQ/impact-model/pkg/judge"
 )
 
 // bundleOf runs `judge show` and returns the parsed bundle.
@@ -28,7 +28,7 @@ func bundleOf(t *testing.T, theory string, extra ...string) *judge.Bundle {
 func writeVerdict(t *testing.T, dir string, b *judge.Bundle, judgeID string, def rubric.ScoreValue, hash string) string {
 	t.Helper()
 	v := &judge.Verdict{BundleHash: hash}
-	v.Metadata = rubric.ReportMetadata{Document: "theory.json", GeneratedAt: time.Date(2026, 3, 1, 0, 0, 0, 0, time.UTC), ReviewerID: judgeID}
+	v.Metadata = rubric.ReportMetadata{Document: "impact-model.json", GeneratedAt: time.Date(2026, 3, 1, 0, 0, 0, 0, time.UTC), ReviewerID: judgeID}
 	v.ReviewType = "toc"
 	v.Judge = &rubric.JudgeMetadata{JudgeID: judgeID}
 	v.Findings = []rubric.Finding{}
@@ -48,7 +48,7 @@ func writeVerdict(t *testing.T, dir string, b *judge.Bundle, judgeID string, def
 }
 
 func TestJudgeShowRecordSummary(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	dir := filepath.Dir(theory)
 	b := bundleOf(t, theory)
 	if b.Profile != "core" || b.BundleHash == "" {
@@ -90,13 +90,13 @@ func TestJudgeShowRecordSummary(t *testing.T) {
 		t.Errorf("conservative summary = %+v (%v)", s, err)
 	}
 
-	// Editing the theory moves to a new bundle with no verdicts yet.
+	// Editing the impact model moves to a new bundle with no verdicts yet.
 	wantCode(t, run(t, "", "outcome", "set", theory, "oc-spec-stable", "--title", "Edited after judging"), ExitOK)
 	wantCode(t, run(t, "", "judge", "summary", theory), ExitUsageErr)
 }
 
 func TestJudgeUsageErrors(t *testing.T) {
-	theory := fixtureCopy(t, "full.json", "theory.json")
+	theory := fixtureCopy(t, "full.json", "impact-model.json")
 	b := bundleOf(t, theory)
 	good := writeVerdict(t, filepath.Dir(theory), b, "m", rubric.ScorePass, b.BundleHash)
 	for name, args := range map[string][]string{

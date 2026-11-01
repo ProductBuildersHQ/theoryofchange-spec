@@ -1,4 +1,4 @@
-// Package cli builds the theoryofchange command line. It is a thin adapter:
+// Package cli builds the impact-model command line. It is a thin adapter:
 // every operation lives in pkg/service.
 //
 // Exit codes: 0 success; 1 the input is invalid or a change was rejected;
@@ -58,9 +58,9 @@ type env struct {
 func NewRootCmd(in io.Reader, out, errOut io.Writer) *cobra.Command {
 	e := &env{in: in, out: out, errOut: errOut}
 	root := &cobra.Command{
-		Use:   "theoryofchange",
-		Short: "Capture, check, edit, and report on Theories of Change",
-		Long: `theoryofchange works with Theory of Change documents (JSON or YAML) and the
+		Use:   "impact-model",
+		Short: "Capture, check, edit, and report on impact models",
+		Long: `impact-model works with impact model documents (JSON or YAML) and the
 observation sets that measure them.
 
 Exit codes: 0 success; 1 the input is invalid or a change was rejected;
@@ -112,11 +112,11 @@ func Execute(args []string, in io.Reader, out, errOut io.Writer) int {
 	var ee *ExitError
 	if errors.As(err, &ee) {
 		if ee.Err != nil {
-			fmt.Fprintf(errOut, "theoryofchange: %v\n", ee.Err)
+			fmt.Fprintf(errOut, "impact-model: %v\n", ee.Err)
 		}
 		return ee.Code
 	}
-	fmt.Fprintf(errOut, "theoryofchange: %v\n", err)
+	fmt.Fprintf(errOut, "impact-model: %v\n", err)
 	return ExitUsageErr
 }
 

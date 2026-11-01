@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/review-response.schema.json",
+  "$id": "https://github.com/ProductBuildersHQ/impact-model/schema/v0/review-response.schema.json",
   "$ref": "#/$defs/ReviewResponse",
   "$defs": {
     "ReviewItem": {
@@ -56,7 +56,7 @@
         "specVersion": {
           "type": "string"
         },
-        "tocId": {
+        "modelId": {
           "type": "string"
         },
         "version": {
@@ -95,7 +95,7 @@
       "required": [
         "kind",
         "specVersion",
-        "tocId",
+        "modelId",
         "contentHash",
         "reviewers",
         "method",
@@ -104,6 +104,6 @@
       ]
     }
   },
-  "title": "Theory of Change Review Response",
-  "description": "What reviewers said about a Theory of Change, by element, independent of the channel it was collected through."
+  "title": "Impact Model Review Response",
+  "description": "What reviewers said about an impact model, by element, independent of the channel it was collected through."
 }

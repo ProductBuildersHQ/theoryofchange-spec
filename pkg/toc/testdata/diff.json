@@ -1,8 +1,0 @@
-{
-  "tocId": "open-agent-auth",
-  "fromAsOf": "2026-09-30",
-  "toAsOf": "2026-12-31",
-  "changes": [
-    { "elementId": "ind-idp-count", "elementKind": "indicator", "field": "state", "from": "on_track", "to": "achieved" }
-  ]
-}

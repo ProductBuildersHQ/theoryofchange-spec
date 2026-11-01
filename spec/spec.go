@@ -1,5 +1,5 @@
-// Package spec embeds the Theory of Change specification template and the
-// rubrics an LLM-as-a-Judge uses to review a theory. It makes no model calls:
+// Package spec embeds the impact model specification template and the
+// rubrics an LLM-as-a-Judge uses to review an impact model. It makes no model calls:
 // a judge, human or agent, reads a bundle built from these and the document.
 package spec
 

@@ -11,7 +11,7 @@ import (
 )
 
 func TestNamesAndGet(t *testing.T) {
-	want := []string{ActorRegistry, CSVMapping, ReviewResponse, ObservationSet, StatusDiff, TheoryOfChange, Status}
+	want := []string{ActorRegistry, CSVMapping, ReviewResponse, ObservationSet, StatusDiff, ImpactModel, Status}
 	slices.Sort(want)
 	if got := Names(); !slices.Equal(got, want) {
 		t.Fatalf("Names() = %v, want %v", got, want)
@@ -34,8 +34,8 @@ func TestNamesAndGet(t *testing.T) {
 
 func TestFixturesValidate(t *testing.T) {
 	tests := []struct{ schema, file string }{
-		{TheoryOfChange, "minimal.json"},
-		{TheoryOfChange, "full.json"},
+		{ImpactModel, "minimal.json"},
+		{ImpactModel, "full.json"},
 		{ObservationSet, "observations.json"},
 		{Status, "status.json"},
 		{StatusDiff, "diff.json"},
@@ -44,7 +44,7 @@ func TestFixturesValidate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.file, func(t *testing.T) {
-			data, err := os.ReadFile("../pkg/toc/testdata/" + tt.file)
+			data, err := os.ReadFile("../pkg/impact/testdata/" + tt.file)
 			if err != nil {
 				t.Fatalf("read: %v", err)
 			}
@@ -56,13 +56,13 @@ func TestFixturesValidate(t *testing.T) {
 }
 
 const minimal = `{
-  "kind": "TheoryOfChange", "specVersion": "0.1", "id": "m",
+  "kind": "ImpactModel", "specVersion": "0.1", "id": "m",
   "metadata": {}, "context": {"problemStatement": "p"},
   "outcomes": [{"id": "oc-1", "title": "t", "level": "impact"}]
 }`
 
 func TestInvalidDocuments(t *testing.T) {
-	if err := Validate(TheoryOfChange, []byte(minimal)); err != nil {
+	if err := Validate(ImpactModel, []byte(minimal)); err != nil {
 		t.Fatalf("baseline minimal document invalid: %v", err)
 	}
 	tests := map[string]struct {
@@ -72,7 +72,7 @@ func TestInvalidDocuments(t *testing.T) {
 		"missing outcomes": {`"outcomes": [{"id": "oc-1", "title": "t", "level": "impact"}]`, `"outcomes": []`, "/outcomes"},
 		"bad level":        {`"level": "impact"`, `"level": "huge"`, "/outcomes/0/level"},
 		"unknown property": {`"id": "m",`, `"id": "m", "bogus": 1,`, "bogus"},
-		"wrong kind":       {`"kind": "TheoryOfChange"`, `"kind": "ObservationSet"`, "/kind"},
+		"wrong kind":       {`"kind": "ImpactModel"`, `"kind": "ObservationSet"`, "/kind"},
 		"missing problem":  {`{"problemStatement": "p"}`, `{}`, "/context"},
 		"bad date":         {`"context": {"problemStatement": "p"}`, `"context": {"problemStatement": "p", "timeHorizon": {"start": "soon", "end": "2027-01-01"}}`, "/context/timeHorizon/start"},
 		"missing title":    {`"title": "t", `, ``, "/outcomes/0"},
@@ -83,7 +83,7 @@ func TestInvalidDocuments(t *testing.T) {
 			if doc == minimal {
 				t.Fatalf("test edit %q did not apply", tt.old)
 			}
-			err := Validate(TheoryOfChange, []byte(doc))
+			err := Validate(ImpactModel, []byte(doc))
 			var verr *jsonschema.ValidationError
 			if !errors.As(err, &verr) {
 				t.Fatalf("expected a validation error, got %v", err)
@@ -96,7 +96,7 @@ func TestInvalidDocuments(t *testing.T) {
 }
 
 func TestValidateRejectsMalformedJSON(t *testing.T) {
-	err := Validate(TheoryOfChange, []byte(`{"kind":`))
+	err := Validate(ImpactModel, []byte(`{"kind":`))
 	if err == nil {
 		t.Fatal("expected a parse error")
 	}

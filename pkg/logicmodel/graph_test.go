@@ -5,25 +5,25 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/report"
 )
 
-// view is a small theory: two activities share a resource, one lists an
+// view is a small impact model: two activities share a resource, one lists an
 // output, and the outcomes run from output level to impact.
 func view() *report.View {
 	return &report.View{
-		Document: report.DocumentView{Title: "Whole theory"},
+		Document: report.DocumentView{Title: "Whole impact model"},
 		Interventions: []report.InterventionView{
 			{ID: "int-a", Title: "Run workshops", Resources: "Two staff", Outputs: []string{"Workshops held"}, Targets: []string{"oc-skills"}},
 			{ID: "int-b", Title: "Coach leaders", Resources: "Two staff", Targets: []string{"oc-reach"}},
 		},
 		Outcomes: []report.OutcomeView{
-			{ID: "oc-reach", Title: "Members reached", Level: toc.LevelOutput},
-			{ID: "oc-skills", Title: "Skills gained", Level: toc.LevelShortTerm},
-			{ID: "oc-practice", Title: "Practice applied", Level: toc.LevelMediumTerm, Basis: report.BasisView{Basis: toc.BasisInferred, Marked: true}},
-			{ID: "oc-strong", Title: "Members are strong", Level: toc.LevelLongTerm},
-			{ID: "oc-served", Title: "Residents served", Level: toc.LevelImpact},
+			{ID: "oc-reach", Title: "Members reached", Level: impact.LevelOutput},
+			{ID: "oc-skills", Title: "Skills gained", Level: impact.LevelShortTerm},
+			{ID: "oc-practice", Title: "Practice applied", Level: impact.LevelMediumTerm, Basis: report.BasisView{Basis: impact.BasisInferred, Marked: true}},
+			{ID: "oc-strong", Title: "Members are strong", Level: impact.LevelLongTerm},
+			{ID: "oc-served", Title: "Residents served", Level: impact.LevelImpact},
 		},
 		Links: []report.LinkView{
 			{ID: "l1", From: "oc-reach", To: "oc-skills"},
@@ -56,7 +56,7 @@ func TestStagesRunFromInputsToImpact(t *testing.T) {
 	if !slices.Equal(got, want) {
 		t.Errorf("stages = %v, want %v", got, want)
 	}
-	if g.Title != "Whole theory" {
+	if g.Title != "Whole impact model" {
 		t.Errorf("title = %q", g.Title)
 	}
 }
@@ -97,7 +97,7 @@ func TestFeedbackIsKeptApart(t *testing.T) {
 		t.Errorf("note:\n%s", note)
 	}
 	if feedbackNote(Build(view())) != "" {
-		t.Error("a theory with no feedback gets no note")
+		t.Error("An impact model with no feedback gets no note")
 	}
 }
 
@@ -142,7 +142,7 @@ func TestMarkedElementsSayWhatTheyAre(t *testing.T) {
 }
 
 func TestStagesWithNothingInThemAreLeftOut(t *testing.T) {
-	v := &report.View{Outcomes: []report.OutcomeView{{ID: "a", Title: "A", Level: toc.LevelShortTerm}, {ID: "b", Title: "B", Level: toc.LevelImpact}}}
+	v := &report.View{Outcomes: []report.OutcomeView{{ID: "a", Title: "A", Level: impact.LevelShortTerm}, {ID: "b", Title: "B", Level: impact.LevelImpact}}}
 	g := Build(v)
 	if len(g.Stages) != 2 || g.Stages[0].Stage != StageShortTerm || g.Stages[1].Stage != StageImpact {
 		t.Errorf("stages = %+v", g.Stages)
@@ -153,11 +153,11 @@ func TestStagesWithNothingInThemAreLeftOut(t *testing.T) {
 // so arrows do not cross when they need not.
 func TestNodesAreOrderedToAvoidCrossings(t *testing.T) {
 	v := &report.View{Outcomes: []report.OutcomeView{
-		{ID: "s1", Title: "S1", Level: toc.LevelShortTerm},
-		{ID: "s2", Title: "S2", Level: toc.LevelShortTerm},
+		{ID: "s1", Title: "S1", Level: impact.LevelShortTerm},
+		{ID: "s2", Title: "S2", Level: impact.LevelShortTerm},
 		// Written in the opposite order to the nodes that lead to them.
-		{ID: "m2", Title: "M2", Level: toc.LevelMediumTerm},
-		{ID: "m1", Title: "M1", Level: toc.LevelMediumTerm},
+		{ID: "m2", Title: "M2", Level: impact.LevelMediumTerm},
+		{ID: "m1", Title: "M1", Level: impact.LevelMediumTerm},
 	}, Links: []report.LinkView{{From: "s1", To: "m1"}, {From: "s2", To: "m2"}}}
 	g := Build(v)
 	var mediums []string

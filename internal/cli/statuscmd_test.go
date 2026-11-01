@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 const (
-	exTheory = "../../examples/intermediary/theory.yaml"
+	exTheory = "../../examples/intermediary/impact-model.yaml"
 	exObs    = "../../examples/intermediary/observations-2026-q3.yaml"
 	exMap    = "../../examples/intermediary/csv/mapping.yaml"
 	exSheet  = "../../examples/intermediary/csv/monthly-q4.csv"
@@ -28,7 +28,7 @@ func TestStatusSummaryAndJSON(t *testing.T) {
 	}
 	j := run(t, "", "status", exTheory, "-O", exObs, "--format", "json", "--as-of", "2026-09-30")
 	wantCode(t, j, ExitOK)
-	if _, err := tocio.ParseStatus([]byte(j.stdout), tocio.FormatJSON); err != nil {
+	if _, err := impactio.ParseStatus([]byte(j.stdout), impactio.FormatJSON); err != nil {
 		t.Fatalf("the JSON is not a status snapshot: %v", err)
 	}
 	if again := run(t, "", "status", exTheory, "-O", exObs, "--format", "json", "--as-of", "2026-09-30"); again.stdout != j.stdout {
@@ -50,8 +50,8 @@ func TestStatusAgainstAPreviousSnapshot(t *testing.T) {
 	}
 	j := run(t, "", "status", exTheory, "-O", exObs, "--as-of", "2026-09-30", "--prev", prev, "--format", "json")
 	var both struct {
-		Status toc.Status
-		Diff   toc.StatusDiff
+		Status impact.Status
+		Diff   impact.StatusDiff
 	}
 	if err := json.Unmarshal([]byte(j.stdout), &both); err != nil || both.Diff.FromAsOf != "2026-06-30" || both.Status.AsOf != "2026-09-30" {
 		t.Errorf("json = %v %+v", err, both.Diff)
@@ -77,7 +77,7 @@ func TestStatusErrors(t *testing.T) {
 func TestStatusRejectsInvalidObservations(t *testing.T) {
 	dir := t.TempDir()
 	bad := filepath.Join(dir, "bad.yaml")
-	body := "kind: ObservationSet\nspecVersion: \"0.1\"\ntocId: riverbend-network\nobservations:\n  - indicatorId: ind-ghost\n    date: \"2026-09-01\"\n    value: 1\n"
+	body := "kind: ObservationSet\nspecVersion: \"0.1\"\nmodelId: riverbend-network\nobservations:\n  - indicatorId: ind-ghost\n    date: \"2026-09-01\"\n    value: 1\n"
 	if err := os.WriteFile(bad, []byte(body), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -91,12 +91,12 @@ func TestStatusRejectsInvalidObservations(t *testing.T) {
 func TestImportObservationsThenStatus(t *testing.T) {
 	dir := t.TempDir()
 	out := filepath.Join(dir, "obs-q4.yaml")
-	r := run(t, "", "import", "observations", "--csv", exSheet, "--map", exMap, "--toc", exTheory, "--out", out)
+	r := run(t, "", "import", "observations", "--csv", exSheet, "--map", exMap, "--model", exTheory, "--out", out)
 	wantCode(t, r, ExitOK)
 	if !strings.Contains(r.err, "5 row(s): 5 imported, 0 unmatched") {
 		t.Errorf("stderr = %q", r.err)
 	}
-	wantCode(t, run(t, "", "validate", out, "--toc", exTheory), ExitOK)
+	wantCode(t, run(t, "", "validate", out, "--model", exTheory), ExitOK)
 	wantCode(t, run(t, "", "status", exTheory, "-O", exObs, "-O", out), ExitOK)
 }
 
@@ -108,7 +108,7 @@ func TestImportObservationsReportsUnmatchedRows(t *testing.T) {
 		t.Fatal(err)
 	}
 	out, unmatched := filepath.Join(dir, "obs.json"), filepath.Join(dir, "unmatched.csv")
-	r := run(t, "", "import", "observations", "--csv", sheet, "--map", exMap, "--toc", exTheory, "--out", out, "--unmatched", unmatched)
+	r := run(t, "", "import", "observations", "--csv", sheet, "--map", exMap, "--model", exTheory, "--out", out, "--unmatched", unmatched)
 	wantCode(t, r, ExitInvalid)
 	for _, want := range []string{"3 row(s): 1 imported, 2 unmatched", "row 3: unknown indicator", "row 4: the date"} {
 		if !strings.Contains(r.err, want) {
@@ -126,10 +126,10 @@ func TestImportObservationsReportsUnmatchedRows(t *testing.T) {
 
 func TestImportObservationsUsageErrors(t *testing.T) {
 	for name, args := range map[string][]string{
-		"no flags":        {"import", "observations"},
-		"missing sheet":   {"import", "observations", "--csv", exSheet + ".none", "--map", exMap, "--toc", exTheory},
-		"missing map":     {"import", "observations", "--csv", exSheet, "--map", exMap + ".none", "--toc", exTheory},
-		"map is a theory": {"import", "observations", "--csv", exSheet, "--map", exTheory, "--toc", exTheory},
+		"no flags":               {"import", "observations"},
+		"missing sheet":          {"import", "observations", "--csv", exSheet + ".none", "--map", exMap, "--model", exTheory},
+		"missing map":            {"import", "observations", "--csv", exSheet, "--map", exMap + ".none", "--model", exTheory},
+		"map is an impact model": {"import", "observations", "--csv", exSheet, "--map", exTheory, "--model", exTheory},
 	} {
 		if r := run(t, "", args...); r.code != ExitUsageErr {
 			t.Errorf("%s: exit %d, want %d (%s)", name, r.code, ExitUsageErr, r.err)

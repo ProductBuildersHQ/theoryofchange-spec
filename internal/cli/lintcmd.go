@@ -8,34 +8,34 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/lint"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/share"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/lint"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
+	"github.com/ProductBuildersHQ/impact-model/pkg/share"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 func newLintCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "lint <toc-file>",
-		Short: "Check the quality of a theory with deterministic rules",
-		Long: `Check a theory against the lint rules. Validation says a document is well
-formed; lint says whether the theory is sound.
+		Use:   "lint <model-file>",
+		Short: "Check the quality of an impact model with deterministic rules",
+		Long: `Check an impact model against the lint rules. Validation says a document is well
+formed; lint says whether the impact model is sound.
 
 Profiles choose how much is reported:
 
-  draft     errors and structural rules; a small valid theory is GO
+  draft     errors and structural rules; a small valid impact model is GO
   standard  also the warnings (the default)
   full      also the advice
 
 The result is GO unless a rule reports an error (exit code 1). With --format
-json the output is a structured-evaluation summary report. The theory must
+json the output is a structured-evaluation summary report. The impact model must
 validate first; a document that does not is exit code 1.
 
 Use --list to print the rules instead of running them.`,
-		Example: `  theoryofchange lint theory.yaml
-  theoryofchange lint theory.yaml --profile draft
-  theoryofchange lint theory.yaml --disable TOC-PRV-001,TOC-AUD-001 --format json
-  theoryofchange lint --list`,
+		Example: `  impact-model lint impact-model.yaml
+  impact-model lint impact-model.yaml --profile draft
+  impact-model lint impact-model.yaml --disable IMP-PRV-001,IMP-AUD-001 --format json
+  impact-model lint --list`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error { return runLint(e, cmd, args) },
 	}
@@ -53,7 +53,7 @@ func runLint(e *env, cmd *cobra.Command, args []string) error {
 		return nil
 	}
 	if len(args) != 1 {
-		return usageErr("give a theory file, or --list")
+		return usageErr("give an impact model file, or --list")
 	}
 	format, err := outputFormat(cmd)
 	if err != nil {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // GraphQuery names a graph query.
@@ -71,7 +71,7 @@ type LevelEntry struct {
 }
 
 // BuildGraph builds the causal graph of a document.
-func BuildGraph(doc *toc.Document) (*graph.Graph, error) {
+func BuildGraph(doc *impact.Model) (*graph.Graph, error) {
 	return graph.Build(doc)
 }
 
@@ -155,7 +155,7 @@ func summarize(g *graph.Graph) Summary {
 		s.Cycles = [][]string{}
 	}
 	for _, n := range g.Nodes() {
-		if n.Kind == toc.ElementOutcome && n.Level == toc.LevelImpact {
+		if n.Kind == impact.ElementOutcome && n.Level == impact.LevelImpact {
 			s.ImpactOutcomes = append(s.ImpactOutcomes, n.ID)
 		}
 	}
@@ -166,10 +166,10 @@ func summarize(g *graph.Graph) Summary {
 // implicit intervention edges are dotted. Output is deterministic.
 func DOT(g *graph.Graph) string {
 	var b strings.Builder
-	b.WriteString("digraph theoryofchange {\n  rankdir=BT;\n")
+	b.WriteString("digraph impact-model {\n  rankdir=BT;\n")
 	for _, n := range g.Nodes() {
 		shape, label := "box", n.ID
-		if n.Kind == toc.ElementIntervention {
+		if n.Kind == impact.ElementIntervention {
 			shape = "ellipse"
 		} else if n.Level != "" {
 			label = fmt.Sprintf("%s\n(%s)", n.ID, n.Level)

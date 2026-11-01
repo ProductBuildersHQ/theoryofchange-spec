@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/review"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/review"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 func newImportCmd(e *env) *cobra.Command {
@@ -24,13 +24,13 @@ func newImportCmd(e *env) *cobra.Command {
 
 func newImportReviewCmd(e *env) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "review <toc-file> [response-file]",
+		Use:   "review <model-file> [response-file]",
 		Short: "Turn reviewers' answers into proposed changes",
-		Long: `Read what reviewers said about a theory and propose what to do about it. The
-theory is never changed. The command writes:
+		Long: `Read what reviewers said about an impact model and propose what to do about it. The
+Impact model is never changed. The command writes:
 
   - a patch of the changes it could work out (--out), to be looked over and
-    then applied with 'theoryofchange patch';
+    then applied with 'impact-model patch';
   - a list of the rows that need a person to decide;
   - a consultation record of the review (--consultation-out).
 
@@ -47,13 +47,13 @@ How a row is handled:
 
 A row with no element ID is matched to an element by its quoted text, and
 flagged if no single element matches. If the response was written against a
-different version of the theory (its hash differs), every row is flagged,
+different version of the impact model (its hash differs), every row is flagged,
 though changes are still proposed.
 
 Exit code 0 means every row became a change. Exit code 1 means a person has to
 look at something: a flagged row or an out-of-date response.`,
-		Example: `  theoryofchange import review theory.yaml response.json --out proposed.patch.json
-  theoryofchange import review theory.yaml --from-csv sheet.csv --reviewer "program staff" --date 2026-03-01`,
+		Example: `  impact-model import review impact-model.yaml response.json --out proposed.patch.json
+  impact-model import review impact-model.yaml --from-csv sheet.csv --reviewer "program staff" --date 2026-03-01`,
 		Args: cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error { return runImportReview(e, cmd, args) },
 	}
@@ -80,7 +80,7 @@ func runImportReview(e *env, cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	step := toc.ConsultationStep(flagString(cmd, "step"))
+	step := impact.ConsultationStep(flagString(cmd, "step"))
 	if step != "" && !step.Valid() {
 		return usageErr("--step %q is not a consultation step", step)
 	}
@@ -113,7 +113,7 @@ func runImportReview(e *env, cmd *cobra.Command, args []string) error {
 
 // readResponse reads the response from the JSON/YAML file argument or from a
 // returned sheet. Exactly one source is allowed.
-func readResponse(cmd *cobra.Command, doc *toc.Document, rest []string) (*toc.ReviewResponse, error) {
+func readResponse(cmd *cobra.Command, doc *impact.Model, rest []string) (*impact.ReviewResponse, error) {
 	sheet := flagString(cmd, "from-csv")
 	switch {
 	case sheet == "" && len(rest) == 0:
@@ -139,22 +139,22 @@ func readResponse(cmd *cobra.Command, doc *toc.Document, rest []string) (*toc.Re
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: err}
 	}
-	if resp.TocID == "" {
-		resp.TocID = doc.ID
+	if resp.ModelID == "" {
+		resp.ModelID = doc.ID
 	}
 	return resp, nil
 }
 
-func loadResponse(path string) (*toc.ReviewResponse, error) {
+func loadResponse(path string) (*impact.ReviewResponse, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("read response: %w", err)}
 	}
-	f, err := tocio.FormatFromPath(path)
+	f, err := impactio.FormatFromPath(path)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: err}
 	}
-	resp, err := tocio.ParseReviewResponse(data, f)
+	resp, err := impactio.ParseReviewResponse(data, f)
 	if err != nil {
 		return nil, &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", path, err)}
 	}
@@ -166,7 +166,7 @@ func writeJSONFile(path string, v any) error {
 	if err := writeJSON(&buf, v); err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
-	if err := tocio.WriteFile(path, buf.Bytes()); err != nil {
+	if err := impactio.WriteFile(path, buf.Bytes()); err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}
 	}
 	return nil
@@ -175,7 +175,7 @@ func writeJSONFile(path string, v any) error {
 func printImport(e *env, path string, rows int, res *review.Result) {
 	fmt.Fprintf(e.out, "%s: %d row(s): %d became changes, %d need a person\n", path, rows, res.Mapped, len(res.Flags))
 	if res.Stale {
-		fmt.Fprintln(e.out, "warning: the theory has changed since it was reviewed; check every row")
+		fmt.Fprintln(e.out, "warning: the impact model has changed since it was reviewed; check every row")
 	}
 	for _, f := range res.Flags {
 		target := f.ElementID

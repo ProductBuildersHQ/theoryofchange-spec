@@ -1,6 +1,6 @@
-// Package prismx exports a Theory of Change and its status to PRISM
+// Package prismx exports an impact model and its status to PRISM
 // documents: OKRs and outcome journeys. It is the only package that imports
-// them. The model and the tools never do, so a theory stays usable without
+// them. The model and the tools never do, so an impact model stays usable without
 // the PRISM family; a test checks that boundary.
 package prismx
 
@@ -13,9 +13,9 @@ import (
 
 	"github.com/grokify/structured-goals/okr"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
 )
 
 // ToOKR exports the outcomes an organization answers for (owned or shared,
@@ -29,7 +29,7 @@ import (
 // An OKR document holds a handful of objectives. This exports every
 // qualifying outcome and leaves choosing among them to the caller; the
 // result's own validation warns when there are more than the usual five.
-func ToOKR(doc *toc.Document, st *toc.Status) (*okr.OKRDocument, error) {
+func ToOKR(doc *impact.Model, st *impact.Status) (*okr.OKRDocument, error) {
 	if doc == nil {
 		return nil, fmt.Errorf("prismx: nil document")
 	}
@@ -37,7 +37,7 @@ func ToOKR(doc *toc.Document, st *toc.Status) (*okr.OKRDocument, error) {
 	if err != nil {
 		return nil, err
 	}
-	statuses := map[string]toc.IndicatorStatus{}
+	statuses := map[string]impact.IndicatorStatus{}
 	if st != nil {
 		for _, s := range st.Indicators {
 			statuses[s.IndicatorID] = s
@@ -110,7 +110,7 @@ func capitalize(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-func ownerName(doc *toc.Document, o toc.Outcome) string {
+func ownerName(doc *impact.Model, o impact.Outcome) string {
 	if len(o.DeliveredBy) > 0 {
 		if a, ok := doc.Actor(o.DeliveredBy[0]); ok {
 			return a.Name
@@ -119,7 +119,7 @@ func ownerName(doc *toc.Document, o toc.Outcome) string {
 	return ""
 }
 
-func keyResult(ind toc.Indicator, s toc.IndicatorStatus, withStatus bool) okr.KeyResult {
+func keyResult(ind impact.Indicator, s impact.IndicatorStatus, withStatus bool) okr.KeyResult {
 	kr := okr.KeyResult{ID: ind.ID, Title: ind.Name, Description: ind.Definition, Metric: ind.Name, Unit: ind.Unit}
 	if ind.Baseline != nil {
 		kr.Baseline = valueText(ind.Baseline.Value, ind.Baseline.Level, ind.Unit)
@@ -159,17 +159,17 @@ func valueText(v *float64, level, unit string) string {
 	}
 }
 
-func krStatus(s toc.State) string {
+func krStatus(s impact.State) string {
 	switch s {
-	case toc.StateAchieved:
+	case impact.StateAchieved:
 		return "Achieved"
-	case toc.StateOnTrack:
+	case impact.StateOnTrack:
 		return "On Track"
-	case toc.StateAtRisk, toc.StateStale:
+	case impact.StateAtRisk, impact.StateStale:
 		return "At Risk"
-	case toc.StateOffTrack:
+	case impact.StateOffTrack:
 		return "Behind"
-	case toc.StateNotStarted, toc.StateNoData, toc.StateBaselineOnly, toc.StateUnmeasured:
+	case impact.StateNotStarted, impact.StateNoData, impact.StateBaselineOnly, impact.StateUnmeasured:
 		return ""
 	}
 	return ""

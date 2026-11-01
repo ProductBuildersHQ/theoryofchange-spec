@@ -1,20 +1,20 @@
-// Package ref provides typed references to Theory of Change documents and
+// Package ref provides typed references to impact model documents and
 // the elements inside them.
 //
 // The reference grammar is
 //
-//	ref       = "toc:" docSlug [ "#" elementId ]
+//	ref       = "model:" docSlug [ "#" elementId ]
 //	docSlug   = slug
 //	elementId = slug
 //	slug      = [a-z][a-z0-9]*(-[a-z0-9]+)*   (at most 128 characters)
 //
 // Examples:
 //
-//	toc:agent-auth-open-standard
-//	toc:agent-auth-open-standard#oc-idp-support
+//	model:agent-auth-open-standard
+//	model:agent-auth-open-standard#oc-idp-support
 //
 // References are stable across repositories, so other models (for example a
-// strategy or futures model) can point at a ToC or one of its elements
+// strategy or futures model) can point at a impact model or one of its elements
 // without importing it.
 package ref
 
@@ -25,8 +25,8 @@ import (
 	"strings"
 )
 
-// Prefix is the scheme prefix of every Theory of Change reference.
-const Prefix = "toc:"
+// Prefix is the scheme prefix of every impact model reference.
+const Prefix = "model:"
 
 // MaxSlugLength is the maximum length of a document slug or element ID.
 const MaxSlugLength = 128
@@ -59,7 +59,7 @@ func IsSlug(s string) bool {
 	return ValidateSlug(s) == nil
 }
 
-// Ref identifies a Theory of Change document and, optionally, one element
+// Ref identifies an impact model document and, optionally, one element
 // within it.
 type Ref struct {
 	// Doc is the document slug (the document's id).
@@ -88,7 +88,7 @@ func MustNew(doc, element string) Ref {
 	return r
 }
 
-// Parse parses a string of the form toc:<doc>[#<element>].
+// Parse parses a string of the form model:<doc>[#<element>].
 func Parse(s string) (Ref, error) {
 	rest, ok := strings.CutPrefix(s, Prefix)
 	if !ok {
@@ -138,7 +138,7 @@ func (r Ref) WithElement(element string) Ref {
 	return Ref{Doc: r.Doc, Element: element}
 }
 
-// String formats r as toc:<doc>[#<element>]. The zero Ref formats as "".
+// String formats r as model:<doc>[#<element>]. The zero Ref formats as "".
 func (r Ref) String() string {
 	if r.IsZero() {
 		return ""

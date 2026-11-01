@@ -1,5 +1,5 @@
 // Command generate-schema writes the JSON Schemas generated from the Go
-// types in pkg/toc. It is the only producer of schema/*.schema.json.
+// types in pkg/impact. It is the only producer of schema/*.schema.json.
 //
 // Usage:
 //
@@ -13,7 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/schemagen"
+	"github.com/ProductBuildersHQ/impact-model/pkg/schemagen"
 )
 
 func main() {

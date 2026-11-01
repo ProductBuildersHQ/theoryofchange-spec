@@ -6,22 +6,22 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
 )
 
 // maxInline bounds an inline document or observation set, the same limit as a
 // file.
-const maxInline = tocio.MaxFileBytes
+const maxInline = impactio.MaxFileBytes
 
-// Source names a theory: inline as the document argument, or by path inside
+// Source names an impact model: inline as the document argument, or by path inside
 // the server root. Inline is preferred for agents, since it needs no file.
 type Source struct {
-	// Document is the theory itself: a JSON object, or a string of JSON or YAML.
-	Document any `json:"document,omitempty" jsonschema:"the theory, as a JSON object or a string of JSON or YAML"`
-	// Path is a theory file inside the server root.
-	Path string `json:"path,omitempty" jsonschema:"a theory file inside the server root, used when document is not given"`
+	// Document is the impact model itself: a JSON object, or a string of JSON or YAML.
+	Document any `json:"document,omitempty" jsonschema:"the impact model, as a JSON object or a string of JSON or YAML"`
+	// Path is an impact model file inside the server root.
+	Path string `json:"path,omitempty" jsonschema:"An impact model file inside the server root, used when document is not given"`
 }
 
 // Observations names observation sets the same two ways.
@@ -31,13 +31,13 @@ type Observations struct {
 }
 
 // text returns the raw bytes and format of an inline value.
-func inlineBytes(v any) ([]byte, tocio.Format, error) {
+func inlineBytes(v any) ([]byte, impactio.Format, error) {
 	switch x := v.(type) {
 	case string:
 		if len(x) > maxInline {
 			return nil, "", fmt.Errorf("the inline document is %d bytes; the limit is %d", len(x), maxInline)
 		}
-		return []byte(x), tocio.FormatYAML, nil // YAML reads JSON too
+		return []byte(x), impactio.FormatYAML, nil // YAML reads JSON too
 	default:
 		b, err := json.Marshal(x)
 		if err != nil {
@@ -46,41 +46,41 @@ func inlineBytes(v any) ([]byte, tocio.Format, error) {
 		if len(b) > maxInline {
 			return nil, "", fmt.Errorf("the inline document is %d bytes; the limit is %d", len(b), maxInline)
 		}
-		return b, tocio.FormatJSON, nil
+		return b, impactio.FormatJSON, nil
 	}
 }
 
-// load reads the theory a Source names. It returns the resolved path when
-// the theory came from a file, else "".
-func (s *Server) load(src Source) (*toc.Document, string, error) {
+// load reads the impact model a Source names. It returns the resolved path when
+// the impact model came from a file, else "".
+func (s *Server) load(src Source) (*impact.Model, string, error) {
 	switch {
 	case src.Document != nil:
 		data, f, err := inlineBytes(src.Document)
 		if err != nil {
 			return nil, "", err
 		}
-		doc, err := tocio.ParseDocument(data, f)
+		doc, err := impactio.ParseDocument(data, f)
 		return doc, "", err
 	case src.Path != "":
 		path, err := s.root.Resolve(src.Path)
 		if err != nil {
 			return nil, "", err
 		}
-		doc, err := tocio.LoadDocument(path)
+		doc, err := impactio.LoadDocument(path)
 		return doc, path, err
 	}
 	return nil, "", errors.New("give a document or a path")
 }
 
 // loadObservations reads the observation sets in o.
-func (s *Server) loadObservations(o Observations) ([]*toc.ObservationSet, error) {
-	var sets []*toc.ObservationSet
+func (s *Server) loadObservations(o Observations) ([]*impact.ObservationSet, error) {
+	var sets []*impact.ObservationSet
 	for i, v := range o.Observations {
 		data, f, err := inlineBytes(v)
 		if err != nil {
 			return nil, fmt.Errorf("observations[%d]: %w", i, err)
 		}
-		set, err := tocio.ParseObservationSet(data, f)
+		set, err := impactio.ParseObservationSet(data, f)
 		if err != nil {
 			return nil, fmt.Errorf("observations[%d]: %w", i, err)
 		}
@@ -95,7 +95,7 @@ func (s *Server) loadObservations(o Observations) ([]*toc.ObservationSet, error)
 			}
 			paths[i] = rp
 		}
-		more, err := tocio.LoadObservations(paths...)
+		more, err := impactio.LoadObservations(paths...)
 		if err != nil {
 			return nil, err
 		}
@@ -106,7 +106,7 @@ func (s *Server) loadObservations(o Observations) ([]*toc.ObservationSet, error)
 
 // asOfDate returns the status date: the one given, else the latest in the
 // observations.
-func asOfDate(asOf string, sets []*toc.ObservationSet) (time.Time, error) {
+func asOfDate(asOf string, sets []*impact.ObservationSet) (time.Time, error) {
 	if asOf != "" {
 		at, err := time.Parse(time.DateOnly, asOf)
 		if err != nil {

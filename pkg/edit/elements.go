@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 // ElementKind is a kind of identified element that can be added, changed,
@@ -109,7 +109,7 @@ func ExpandDotted(fields map[string]any) (map[string]any, error) {
 // include "id". Dotted keys become nested objects. When the document has no
 // list of this kind yet, the patch creates it, since an append needs an
 // existing array.
-func AddElement(doc *toc.Document, k ElementKind, fields map[string]any) (Patch, error) {
+func AddElement(doc *impact.Model, k ElementKind, fields map[string]any) (Patch, error) {
 	expanded, err := ExpandDotted(fields)
 	if err != nil {
 		return nil, err
@@ -137,7 +137,7 @@ func AddElement(doc *toc.Document, k ElementKind, fields map[string]any) (Patch,
 // element of doc. Keys may be dotted ("provenance.basis") to reach nested
 // objects, which are created when the element does not have them yet. An
 // element's id cannot be changed.
-func SetFields(doc *toc.Document, k ElementKind, id string, set map[string]any, unset []string) (Patch, error) {
+func SetFields(doc *impact.Model, k ElementKind, id string, set map[string]any, unset []string) (Patch, error) {
 	if _, ok := set["id"]; ok {
 		return nil, fmt.Errorf("%w: an element's id cannot be changed; remove it and add a new one", ErrPatch)
 	}
@@ -271,7 +271,7 @@ func init() {
 // removes or rewrites every reference, and removes any element that cannot
 // survive losing one (a link whose end is gone, an indicator whose subject
 // is gone, a group left with fewer than two members), repeating for those.
-func RemoveElement(doc *toc.Document, k ElementKind, id string, cascade bool) (Patch, error) {
+func RemoveElement(doc *impact.Model, k ElementKind, id string, cascade bool) (Patch, error) {
 	tree, err := treeOf(doc)
 	if err != nil {
 		return nil, err
@@ -324,7 +324,7 @@ func RemoveElement(doc *toc.Document, k ElementKind, id string, cascade bool) (P
 	return patch, nil
 }
 
-func treeOf(doc *toc.Document) (any, error) {
+func treeOf(doc *impact.Model) (any, error) {
 	data, err := json.Marshal(doc)
 	if err != nil {
 		return nil, fmt.Errorf("encode document: %w", err)

@@ -8,25 +8,25 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/schema"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/schema"
 )
 
 // Schema validates raw input against the schema for its declared kind and
 // returns one issue per violation, each with the JSON pointer of the
 // offending value. Input that cannot be parsed, or whose kind is missing or
 // unknown, yields a single issue. A nil result means the input conforms.
-func Schema(data []byte, f tocio.Format) []Issue {
-	j, err := tocio.ToJSON(data, f)
+func Schema(data []byte, f impactio.Format) []Issue {
+	j, err := impactio.ToJSON(data, f)
 	if err != nil {
 		return []Issue{{Code: "VAL-SCH-002", Severity: SeverityError, Path: "", Message: err.Error()}}
 	}
-	kind, err := tocio.DetectKind(data, f)
+	kind, err := impactio.DetectKind(data, f)
 	if err != nil {
 		return []Issue{{Code: "VAL-SCH-003", Severity: SeverityError, Path: "/kind", Message: err.Error()}}
 	}
-	name, err := tocio.SchemaName(kind)
+	name, err := impactio.SchemaName(kind)
 	if err != nil {
 		return []Issue{{Code: "VAL-SCH-003", Severity: SeverityError, Path: "/kind", Message: err.Error()}}
 	}
@@ -66,19 +66,19 @@ func schemaIssues(name string, j []byte) []Issue {
 	return out
 }
 
-// Source validates raw input of any document kind and, for a Theory of
+// Source validates raw input of any document kind and, for a impact model of
 // Change that conforms to its schema, also runs the structural checks of
 // Document. The returned document is nil unless the input passed the schema.
-func Source(data []byte, f tocio.Format, opts ...Option) (*toc.Document, []Issue) {
+func Source(data []byte, f impactio.Format, opts ...Option) (*impact.Model, []Issue) {
 	issues := Schema(data, f)
 	if len(issues) > 0 {
 		return nil, issues
 	}
-	kind, err := tocio.DetectKind(data, f)
-	if err != nil || kind != toc.KindTheoryOfChange {
+	kind, err := impactio.DetectKind(data, f)
+	if err != nil || kind != impact.KindImpactModel {
 		return nil, nil
 	}
-	doc, err := tocio.ParseDocument(data, f)
+	doc, err := impactio.ParseDocument(data, f)
 	if err != nil {
 		return nil, []Issue{{Code: "VAL-SCH-002", Severity: SeverityError, Message: fmt.Sprint(err)}}
 	}

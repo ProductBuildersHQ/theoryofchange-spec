@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/edit"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/validate"
+	"github.com/ProductBuildersHQ/impact-model/pkg/edit"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
 // ---- init -----------------------------------------------------------------
@@ -35,30 +35,30 @@ var ErrUnknownTemplate = errors.New("unknown template")
 
 // InitDocument returns a starter document that already passes validation,
 // with placeholders to replace.
-func InitDocument(o InitOptions) (*toc.Document, error) {
+func InitDocument(o InitOptions) (*impact.Model, error) {
 	if !slices.Contains(Templates(), o.Template) {
 		return nil, fmt.Errorf("%w %q (available: %v)", ErrUnknownTemplate, o.Template, Templates())
 	}
 	if o.ID == "" {
-		o.ID = "my-theory-of-change"
+		o.ID = "my-impact-model"
 	}
 	if o.Name == "" {
-		o.Name = "My Theory of Change"
+		o.Name = "My impact model"
 	}
 	if o.Problem == "" {
-		o.Problem = "TODO: describe the problem this theory addresses, for whom, and where."
+		o.Problem = "TODO: describe the problem this impact model addresses, for whom, and where."
 	}
-	doc := toc.NewDocument(o.ID, o.Problem)
+	doc := impact.NewModel(o.ID, o.Problem)
 	doc.Metadata.Name = o.Name
 	doc.Metadata.Status = "draft"
-	doc.Outcomes = []toc.Outcome{
-		{ID: "oc-impact", Title: "TODO: the long-term change you want to see", Level: toc.LevelImpact},
-		{ID: "oc-first", Title: "TODO: the first condition that must exist", Level: toc.LevelShortTerm},
+	doc.Outcomes = []impact.Outcome{
+		{ID: "oc-impact", Title: "TODO: the long-term change you want to see", Level: impact.LevelImpact},
+		{ID: "oc-first", Title: "TODO: the first condition that must exist", Level: impact.LevelShortTerm},
 	}
-	doc.Links = []toc.CausalLink{
+	doc.Links = []impact.CausalLink{
 		{ID: "ln-first-impact", From: "oc-first", To: "oc-impact", Rationale: "TODO: why this condition leads to the change"},
 	}
-	doc.Indicators = []toc.Indicator{
+	doc.Indicators = []impact.Indicator{
 		{ID: "ind-first", Measures: "oc-first", Name: "TODO: how you will know this condition exists"},
 	}
 	if issues := validate.Document(doc); validate.HasErrors(issues) {
@@ -71,18 +71,18 @@ func InitDocument(o InitOptions) (*toc.Document, error) {
 
 // SortElements orders every identified-element list by ID. Element order is
 // otherwise preserved by formatting.
-func SortElements(doc *toc.Document) {
-	slices.SortStableFunc(doc.Outcomes, func(a, b toc.Outcome) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Groups, func(a, b toc.PreconditionGroup) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Links, func(a, b toc.CausalLink) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Interventions, func(a, b toc.Intervention) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Assumptions, func(a, b toc.Assumption) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Indicators, func(a, b toc.Indicator) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Actors, func(a, b toc.Actor) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Evidence, func(a, b toc.Evidence) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.ExternalFactors, func(a, b toc.ExternalFactor) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Risks, func(a, b toc.Risk) int { return cmp.Compare(a.ID, b.ID) })
-	slices.SortStableFunc(doc.Decisions, func(a, b toc.Decision) int { return cmp.Compare(a.ID, b.ID) })
+func SortElements(doc *impact.Model) {
+	slices.SortStableFunc(doc.Outcomes, func(a, b impact.Outcome) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Groups, func(a, b impact.PreconditionGroup) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Links, func(a, b impact.CausalLink) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Interventions, func(a, b impact.Intervention) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Assumptions, func(a, b impact.Assumption) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Indicators, func(a, b impact.Indicator) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Actors, func(a, b impact.Actor) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Evidence, func(a, b impact.Evidence) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.ExternalFactors, func(a, b impact.ExternalFactor) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Risks, func(a, b impact.Risk) int { return cmp.Compare(a.ID, b.ID) })
+	slices.SortStableFunc(doc.Decisions, func(a, b impact.Decision) int { return cmp.Compare(a.ID, b.ID) })
 }
 
 // FormatResult reports what formatting did to one file.
@@ -95,7 +95,7 @@ type FormatResult struct {
 }
 
 // FormatFile rewrites a file in canonical form. With check it only reports
-// whether the file would change. With sortElements, a Theory of Change has
+// whether the file would change. With sortElements, an impact model has
 // its element lists ordered by ID first.
 func FormatFile(path string, check, sortElements bool) (FormatResult, error) {
 	data, f, err := readInput(path)
@@ -108,7 +108,7 @@ func FormatFile(path string, check, sortElements bool) (FormatResult, error) {
 	}
 	res := FormatResult{Path: path, Changed: !bytes.Equal(data, out)}
 	if res.Changed && !check {
-		if err := tocio.WriteFile(path, out); err != nil {
+		if err := impactio.WriteFile(path, out); err != nil {
 			return res, err
 		}
 		res.Written = true
@@ -116,18 +116,18 @@ func FormatFile(path string, check, sortElements bool) (FormatResult, error) {
 	return res, nil
 }
 
-func formatBytes(data []byte, f tocio.Format, sortElements bool) ([]byte, error) {
+func formatBytes(data []byte, f impactio.Format, sortElements bool) ([]byte, error) {
 	if sortElements {
-		if kind, err := tocio.DetectKind(data, f); err == nil && kind == toc.KindTheoryOfChange {
-			doc, err := tocio.ParseDocument(data, f)
+		if kind, err := impactio.DetectKind(data, f); err == nil && kind == impact.KindImpactModel {
+			doc, err := impactio.ParseDocument(data, f)
 			if err != nil {
 				return nil, err
 			}
 			SortElements(doc)
-			return tocio.Canonical(doc, f)
+			return impactio.Canonical(doc, f)
 		}
 	}
-	return tocio.Reformat(data, f)
+	return impactio.Reformat(data, f)
 }
 
 // ---- patch ----------------------------------------------------------------
@@ -155,15 +155,15 @@ type PatchResult struct {
 	Document []byte `json:"-"`
 }
 
-// PatchFile applies a patch to a Theory of Change file and, unless DryRun,
+// PatchFile applies a patch to an impact model file and, unless DryRun,
 // writes the canonical result in the file's own format. Nothing is written
 // when the patch is rejected or changes nothing.
 func PatchFile(path string, p edit.Patch, o PatchOptions) (*PatchResult, error) {
-	doc, err := tocio.LoadDocument(path)
+	doc, err := impactio.LoadDocument(path)
 	if err != nil {
 		return nil, err
 	}
-	f, err := tocio.FormatFromPath(path)
+	f, err := impactio.FormatFromPath(path)
 	if err != nil {
 		return nil, err
 	}
@@ -178,7 +178,7 @@ func PatchFile(path string, p edit.Patch, o PatchOptions) (*PatchResult, error) 
 	if !res.Applied {
 		return out, nil
 	}
-	data, err := tocio.Canonical(res.Document, f)
+	data, err := impactio.Canonical(res.Document, f)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", path, err)
 	}
@@ -186,7 +186,7 @@ func PatchFile(path string, p edit.Patch, o PatchOptions) (*PatchResult, error) 
 	case o.DryRun:
 		out.Document = data
 	case res.Changed:
-		if err := tocio.WriteFile(path, data); err != nil {
+		if err := impactio.WriteFile(path, data); err != nil {
 			return nil, err
 		}
 		out.Written = true

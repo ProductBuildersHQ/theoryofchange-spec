@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 )
 
 func TestMermaidGolden(t *testing.T) {
@@ -102,7 +102,7 @@ var (
 )
 
 func TestMermaidReferencesOnlyDefinedNodes(t *testing.T) {
-	for _, st := range []*toc.Status{nil, fullStatus(t)} {
+	for _, st := range []*impact.Status{nil, fullStatus(t)} {
 		out := Mermaid(build(t, fullDoc(t), st, Options{}), MermaidOptions{})
 		defined := map[string]int{}
 		for _, m := range nodeDef.FindAllStringSubmatch(out, -1) {
@@ -144,7 +144,7 @@ func TestMermaidEscapesLabels(t *testing.T) {
 
 func TestMermaidRendersNegativePolarityAndDeterminism(t *testing.T) {
 	doc := fullDoc(t)
-	doc.Links[1].Polarity = toc.PolarityNegative
+	doc.Links[1].Polarity = impact.PolarityNegative
 	v := build(t, doc, nil, Options{})
 	out := Mermaid(v, MermaidOptions{})
 	if !strings.Contains(out, `-->|"reduces"|`) {
@@ -157,7 +157,7 @@ func TestMermaidRendersNegativePolarityAndDeterminism(t *testing.T) {
 
 func TestMermaidPathwayFilter(t *testing.T) {
 	doc := fullDoc(t)
-	doc.Pathways = append(doc.Pathways, toc.Pathway{ID: "pw-platform", Title: "Platforms", OutcomeIDs: []string{"oc-platform-support"}})
+	doc.Pathways = append(doc.Pathways, impact.Pathway{ID: "pw-platform", Title: "Platforms", OutcomeIDs: []string{"oc-platform-support"}})
 	out := Mermaid(build(t, doc, nil, Options{Pathway: "pw-platform"}), MermaidOptions{})
 	if strings.Contains(out, "oc_spec_stable") || !strings.Contains(out, "n_oc_platform_support") {
 		t.Errorf("filtered diagram:\n%s", out)

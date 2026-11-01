@@ -5,17 +5,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
 )
 
 // exampleInput evaluates the intermediary example at two dates and returns
 // the later snapshot with the changes since the earlier.
 func exampleInput(t *testing.T) StatusInput {
 	t.Helper()
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func exampleInput(t *testing.T) StatusInput {
 	if err != nil {
 		t.Fatal(err)
 	}
-	sets, err := tocio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
+	sets, err := impactio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,11 +34,11 @@ func exampleInput(t *testing.T) StatusInput {
 		}
 		return d
 	}
-	prev, err := measure.Evaluate(doc, g, sets, at("2026-06-30"), toc.DefaultStatusOptions())
+	prev, err := measure.Evaluate(doc, g, sets, at("2026-06-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
-	cur, err := measure.Evaluate(doc, g, sets, at("2026-09-30"), toc.DefaultStatusOptions())
+	cur, err := measure.Evaluate(doc, g, sets, at("2026-09-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -99,7 +99,7 @@ func TestExecWithoutADiffOrWithABrokenAssumption(t *testing.T) {
 		t.Error("changes shown with no previous snapshot")
 	}
 	for i := range in.View.Assumptions {
-		in.View.Assumptions[i].Status = string(toc.AssumptionInvalidated)
+		in.View.Assumptions[i].Status = string(impact.AssumptionInvalidated)
 	}
 	exec := Exec(in)
 	if !strings.Contains(exec, "What should change now that the assumption") {

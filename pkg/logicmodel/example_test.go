@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/service"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 var update = flag.Bool("update", false, "rewrite the golden files")
@@ -34,7 +34,7 @@ func golden(t *testing.T, name, got string) {
 // The reports the CLI offers, over the intermediary example: one diagram for
 // each of its three pathways, as D2 and as Mermaid.
 func TestLayeredReportsOverTheExample(t *testing.T) {
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}

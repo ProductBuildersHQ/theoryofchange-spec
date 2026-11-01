@@ -7,16 +7,16 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/tocio"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 )
 
 var update = flag.Bool("update", false, "rewrite golden files")
 
-func loadExample(t *testing.T) (*toc.Document, *graph.Graph, []*toc.ObservationSet) {
+func loadExample(t *testing.T) (*impact.Model, *graph.Graph, []*impact.ObservationSet) {
 	t.Helper()
-	doc, err := tocio.LoadDocument("../../examples/intermediary/theory.yaml")
+	doc, err := impactio.LoadDocument("../../examples/intermediary/impact-model.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func loadExample(t *testing.T) (*toc.Document, *graph.Graph, []*toc.ObservationS
 	if err != nil {
 		t.Fatal(err)
 	}
-	sets, err := tocio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
+	sets, err := impactio.LoadObservations("../../examples/intermediary/observations-2026-q3.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func loadExample(t *testing.T) (*toc.Document, *graph.Graph, []*toc.ObservationS
 
 func canonical(t *testing.T, v any) []byte {
 	t.Helper()
-	b, err := tocio.Canonical(v, tocio.FormatJSON)
+	b, err := impactio.Canonical(v, impactio.FormatJSON)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestSnapshotIsByteIdenticalAndMatchesTheGolden(t *testing.T) {
 	asOf := day("2026-09-30")
 	var runs [2][]byte
 	for i := range runs {
-		st, err := Evaluate(doc, g, sets, asOf, toc.DefaultStatusOptions())
+		st, err := Evaluate(doc, g, sets, asOf, impact.DefaultStatusOptions())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -71,21 +71,21 @@ func TestSnapshotIsByteIdenticalAndMatchesTheGolden(t *testing.T) {
 
 func TestSnapshotIsAValidStatusDocument(t *testing.T) {
 	doc, g, sets := loadExample(t)
-	st, err := Evaluate(doc, g, sets, day("2026-09-30"), toc.DefaultStatusOptions())
+	st, err := Evaluate(doc, g, sets, day("2026-09-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := tocio.ParseStatus(canonical(t, st), tocio.FormatJSON); err != nil {
+	if _, err := impactio.ParseStatus(canonical(t, st), impactio.FormatJSON); err != nil {
 		t.Fatalf("the snapshot does not conform to its schema: %v", err)
 	}
-	if st.Kind != toc.KindStatus || st.TocID != doc.ID || st.AsOf != "2026-09-30" {
+	if st.Kind != impact.KindStatus || st.ModelID != doc.ID || st.AsOf != "2026-09-30" {
 		t.Errorf("header = %+v", st)
 	}
 }
 
 func TestEvaluateWithoutObservations(t *testing.T) {
 	doc, g, _ := loadExample(t)
-	st, err := Evaluate(doc, g, nil, day("2026-06-30"), toc.DefaultStatusOptions())
+	st, err := Evaluate(doc, g, nil, day("2026-06-30"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,34 +94,34 @@ func TestEvaluateWithoutObservations(t *testing.T) {
 	}
 	for _, i := range st.Indicators {
 		switch i.State {
-		case toc.StateNoData, toc.StateNotStarted, toc.StateBaselineOnly:
+		case impact.StateNoData, impact.StateNotStarted, impact.StateBaselineOnly:
 		default:
 			t.Errorf("indicator %s is %s with no observations", i.IndicatorID, i.State)
 		}
 	}
 }
 
-func themeDoc() (*toc.Document, []*toc.ObservationSet) {
-	d := toc.NewDocument("t", "p")
-	d.Outcomes = []toc.Outcome{{ID: "oc-a", Title: "a", Level: toc.LevelImpact}, {ID: "oc-b", Title: "b", Level: toc.LevelImpact}}
-	d.Themes = []toc.Theme{{ID: "thm-1", Label: "l", Definition: "d"}, {ID: "thm-2", Label: "l", Definition: "d"}}
-	d.Pathways = []toc.Pathway{{ID: "pw-a", Title: "A", OutcomeIDs: []string{"oc-a"}}}
-	d.Indicators = []toc.Indicator{
-		{ID: "ind-any", Measures: "oc-a", Name: "n", MeasurementType: toc.MeasurementThemeCount, ThemeIDs: []string{"thm-1", "thm-2"}},
-		{ID: "ind-pw", Measures: "oc-a", Name: "n", MeasurementType: toc.MeasurementThemeCount, ThemeIDs: []string{"thm-1"}, PathwayIDs: []string{"pw-a"}},
+func themeDoc() (*impact.Model, []*impact.ObservationSet) {
+	d := impact.NewModel("t", "p")
+	d.Outcomes = []impact.Outcome{{ID: "oc-a", Title: "a", Level: impact.LevelImpact}, {ID: "oc-b", Title: "b", Level: impact.LevelImpact}}
+	d.Themes = []impact.Theme{{ID: "thm-1", Label: "l", Definition: "d"}, {ID: "thm-2", Label: "l", Definition: "d"}}
+	d.Pathways = []impact.Pathway{{ID: "pw-a", Title: "A", OutcomeIDs: []string{"oc-a"}}}
+	d.Indicators = []impact.Indicator{
+		{ID: "ind-any", Measures: "oc-a", Name: "n", MeasurementType: impact.MeasurementThemeCount, ThemeIDs: []string{"thm-1", "thm-2"}},
+		{ID: "ind-pw", Measures: "oc-a", Name: "n", MeasurementType: impact.MeasurementThemeCount, ThemeIDs: []string{"thm-1"}, PathwayIDs: []string{"pw-a"}},
 	}
-	story := func(id, date string, themes, outcomes []string) toc.Story {
-		return toc.Story{ID: id, Date: date, Title: id, Summary: "s", ThemeIDs: themes, OutcomeIDs: outcomes, Consent: toc.ConsentGranted, Sensitivity: toc.SensitivityPublic}
+	story := func(id, date string, themes, outcomes []string) impact.Story {
+		return impact.Story{ID: id, Date: date, Title: id, Summary: "s", ThemeIDs: themes, OutcomeIDs: outcomes, Consent: impact.ConsentGranted, Sensitivity: impact.SensitivityPublic}
 	}
-	sets := []*toc.ObservationSet{
-		{Stories: []toc.Story{
+	sets := []*impact.ObservationSet{
+		{Stories: []impact.Story{
 			story("s1", "2026-03-01", []string{"thm-1"}, []string{"oc-a"}),
 			story("s2", "2026-04-01", []string{"thm-2"}, []string{"oc-b"}),
 			story("s3", "2026-05-01", []string{"thm-1", "thm-2"}, []string{"oc-a"}),
 			story("s4", "2026-06-01", []string{"thm-3"}, nil),
 			story("s5", "2027-01-01", []string{"thm-1"}, []string{"oc-a"}), // after asOf
 		}},
-		{Stories: []toc.Story{story("s1", "2026-03-01", []string{"thm-1"}, []string{"oc-a"})}}, // the same story again
+		{Stories: []impact.Story{story("s1", "2026-03-01", []string{"thm-1"}, []string{"oc-a"})}}, // the same story again
 	}
 	return d, sets
 }
@@ -142,51 +142,51 @@ func TestThemeCounts(t *testing.T) {
 
 func TestThemeCountsBecomeIndicatorValues(t *testing.T) {
 	d, sets := themeDoc()
-	d.Indicators[0].Baseline = &toc.Baseline{Value: f(0), Date: "2026-01-01"}
-	d.Indicators[0].Targets = []toc.Target{{Value: f(3), Date: "2026-12-31"}}
+	d.Indicators[0].Baseline = &impact.Baseline{Value: f(0), Date: "2026-01-01"}
+	d.Indicators[0].Targets = []impact.Target{{Value: f(3), Date: "2026-12-31"}}
 	g, err := graph.Build(d)
 	if err != nil {
 		t.Fatal(err)
 	}
-	st, err := Evaluate(d, g, sets, day("2026-12-31"), toc.DefaultStatusOptions())
+	st, err := Evaluate(d, g, sets, day("2026-12-31"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
 	got := st.Indicators[0]
-	if got.State != toc.StateAchieved || got.Latest == nil || *got.Latest.Value != 3 || got.Latest.Source != "story theme count" {
+	if got.State != impact.StateAchieved || got.Latest == nil || *got.Latest.Value != 3 || got.Latest.Source != "story theme count" {
 		t.Errorf("theme count status = %+v", got)
 	}
 }
 
 func TestRollupsBecomeIndicatorValues(t *testing.T) {
-	d := rollupDoc(toc.AggregationSum)
-	d.Outcomes = []toc.Outcome{{ID: "oc", Title: "t", Level: toc.LevelImpact}}
-	d.Indicators[0].Baseline = &toc.Baseline{Value: f(0), Date: "2026-01-01"}
-	d.Indicators[0].Targets = []toc.Target{{Value: f(60), Date: "2026-12-31"}}
+	d := rollupDoc(impact.AggregationSum)
+	d.Outcomes = []impact.Outcome{{ID: "oc", Title: "t", Level: impact.LevelImpact}}
+	d.Indicators[0].Baseline = &impact.Baseline{Value: f(0), Date: "2026-01-01"}
+	d.Indicators[0].Targets = []impact.Target{{Value: f(60), Date: "2026-12-31"}}
 	g, err := graph.Build(d)
 	if err != nil {
 		t.Fatal(err)
 	}
-	sets := []*toc.ObservationSet{{Observations: values("a", "2026-12-01", 10.0, "b", "2026-12-01", 20.0, "c", "2026-12-01", 30.0)}}
-	st, err := Evaluate(d, g, sets, day("2026-12-31"), toc.DefaultStatusOptions())
+	sets := []*impact.ObservationSet{{Observations: values("a", "2026-12-01", 10.0, "b", "2026-12-01", 20.0, "c", "2026-12-01", 30.0)}}
+	st, err := Evaluate(d, g, sets, day("2026-12-31"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
 	total := st.Indicators[0]
-	if total.IndicatorID != "total" || total.Latest == nil || *total.Latest.Value != 60 || total.State != toc.StateAchieved {
+	if total.IndicatorID != "total" || total.Latest == nil || *total.Latest.Value != 60 || total.State != impact.StateAchieved {
 		t.Errorf("rolled-up indicator = %+v", total)
 	}
 }
 
 func TestDirectObservationsBeatRollups(t *testing.T) {
-	d := rollupDoc(toc.AggregationSum)
-	d.Outcomes = []toc.Outcome{{ID: "oc", Title: "t", Level: toc.LevelImpact}}
+	d := rollupDoc(impact.AggregationSum)
+	d.Outcomes = []impact.Outcome{{ID: "oc", Title: "t", Level: impact.LevelImpact}}
 	g, err := graph.Build(d)
 	if err != nil {
 		t.Fatal(err)
 	}
-	sets := []*toc.ObservationSet{{Observations: values("a", "2026-12-01", 1.0, "b", "2026-12-01", 2.0, "c", "2026-12-01", 3.0, "total", "2026-12-15", 100.0)}}
-	st, _ := Evaluate(d, g, sets, day("2026-12-31"), toc.DefaultStatusOptions())
+	sets := []*impact.ObservationSet{{Observations: values("a", "2026-12-01", 1.0, "b", "2026-12-01", 2.0, "c", "2026-12-01", 3.0, "total", "2026-12-15", 100.0)}}
+	st, _ := Evaluate(d, g, sets, day("2026-12-31"), impact.DefaultStatusOptions())
 	if *st.Indicators[0].Latest.Value != 100 {
 		t.Errorf("direct value lost: %v", *st.Indicators[0].Latest.Value)
 	}
@@ -194,12 +194,12 @@ func TestDirectObservationsBeatRollups(t *testing.T) {
 
 func TestEvaluateRespectsTheAsOfDate(t *testing.T) {
 	doc, g, sets := loadExample(t)
-	early, err := Evaluate(doc, g, sets, day("2026-02-01"), toc.DefaultStatusOptions())
+	early, err := Evaluate(doc, g, sets, day("2026-02-01"), impact.DefaultStatusOptions())
 	if err != nil {
 		t.Fatal(err)
 	}
-	late, _ := Evaluate(doc, g, sets, day("2026-09-30"), toc.DefaultStatusOptions())
-	countObserved := func(st *toc.Status) int {
+	late, _ := Evaluate(doc, g, sets, day("2026-09-30"), impact.DefaultStatusOptions())
+	countObserved := func(st *impact.Status) int {
 		n := 0
 		for _, i := range st.Indicators {
 			n += i.ObservationCount
@@ -211,21 +211,21 @@ func TestEvaluateRespectsTheAsOfDate(t *testing.T) {
 	}
 }
 
-func snapshot(asOf string, indicator, outcomePathway toc.State, conf float64, link toc.LinkState, assumption toc.AssumptionStatus) *toc.Status {
-	return &toc.Status{
-		TocID: "t", AsOf: asOf,
-		Indicators:  []toc.IndicatorStatus{{IndicatorID: "ind", State: indicator}},
-		Outcomes:    []toc.OutcomeStatus{{OutcomeID: "oc", State: indicator, PathwayState: outcomePathway, Confidence: &conf}},
-		Links:       []toc.LinkStatus{{LinkID: "ln", State: link}},
-		Assumptions: []toc.AssumptionState{{AssumptionID: "asm", Status: assumption}},
+func snapshot(asOf string, indicator, outcomePathway impact.State, conf float64, link impact.LinkState, assumption impact.AssumptionStatus) *impact.Status {
+	return &impact.Status{
+		ModelID: "t", AsOf: asOf,
+		Indicators:  []impact.IndicatorStatus{{IndicatorID: "ind", State: indicator}},
+		Outcomes:    []impact.OutcomeStatus{{OutcomeID: "oc", State: indicator, PathwayState: outcomePathway, Confidence: &conf}},
+		Links:       []impact.LinkStatus{{LinkID: "ln", State: link}},
+		Assumptions: []impact.AssumptionState{{AssumptionID: "asm", Status: assumption}},
 	}
 }
 
 func TestDiff(t *testing.T) {
-	prev := snapshot("2026-06-30", toc.StateOnTrack, toc.StateOnTrack, 0.50, toc.LinkStateOK, toc.AssumptionHolding)
-	cur := snapshot("2026-09-30", toc.StateAtRisk, toc.StateAtRisk, 0.50, toc.LinkStateAtRisk, toc.AssumptionAtRisk)
+	prev := snapshot("2026-06-30", impact.StateOnTrack, impact.StateOnTrack, 0.50, impact.LinkStateOK, impact.AssumptionHolding)
+	cur := snapshot("2026-09-30", impact.StateAtRisk, impact.StateAtRisk, 0.50, impact.LinkStateAtRisk, impact.AssumptionAtRisk)
 	d := Diff(prev, cur)
-	if d.TocID != "t" || d.FromAsOf != "2026-06-30" || d.ToAsOf != "2026-09-30" {
+	if d.ModelID != "t" || d.FromAsOf != "2026-06-30" || d.ToAsOf != "2026-09-30" {
 		t.Errorf("header = %+v", d)
 	}
 	var got []string
@@ -245,8 +245,8 @@ func TestDiff(t *testing.T) {
 }
 
 func TestDiffReportsConfidenceAtTwoPlaces(t *testing.T) {
-	prev := snapshot("a", toc.StateOnTrack, toc.StateOnTrack, 0.501, toc.LinkStateOK, toc.AssumptionHolding)
-	cur := snapshot("b", toc.StateOnTrack, toc.StateOnTrack, 0.504, toc.LinkStateOK, toc.AssumptionHolding)
+	prev := snapshot("a", impact.StateOnTrack, impact.StateOnTrack, 0.501, impact.LinkStateOK, impact.AssumptionHolding)
+	cur := snapshot("b", impact.StateOnTrack, impact.StateOnTrack, 0.504, impact.LinkStateOK, impact.AssumptionHolding)
 	if d := Diff(prev, cur); len(d.Changes) != 0 {
 		t.Errorf("noise below two places is a change: %v", d.Changes)
 	}
@@ -258,10 +258,10 @@ func TestDiffReportsConfidenceAtTwoPlaces(t *testing.T) {
 }
 
 func TestDiffReportsAddedAndRemovedElements(t *testing.T) {
-	prev := snapshot("a", toc.StateOnTrack, toc.StateOnTrack, 0.5, toc.LinkStateOK, toc.AssumptionHolding)
-	cur := snapshot("b", toc.StateOnTrack, toc.StateOnTrack, 0.5, toc.LinkStateOK, toc.AssumptionHolding)
-	cur.Indicators = append(cur.Indicators, toc.IndicatorStatus{IndicatorID: "new", State: toc.StateNoData})
-	prev.Links = append(prev.Links, toc.LinkStatus{LinkID: "gone", State: toc.LinkStateOK})
+	prev := snapshot("a", impact.StateOnTrack, impact.StateOnTrack, 0.5, impact.LinkStateOK, impact.AssumptionHolding)
+	cur := snapshot("b", impact.StateOnTrack, impact.StateOnTrack, 0.5, impact.LinkStateOK, impact.AssumptionHolding)
+	cur.Indicators = append(cur.Indicators, impact.IndicatorStatus{IndicatorID: "new", State: impact.StateNoData})
+	prev.Links = append(prev.Links, impact.LinkStatus{LinkID: "gone", State: impact.LinkStateOK})
 	d := Diff(prev, cur)
 	if len(d.Changes) != 2 || d.Changes[0].Field != "presence" || d.Changes[0].To != "added" || d.Changes[1].To != "removed" {
 		t.Errorf("changes = %+v", d.Changes)

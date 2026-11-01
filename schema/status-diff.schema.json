@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ProductBuildersHQ/theoryofchange-spec/schema/v0/status-diff.schema.json",
+  "$id": "https://github.com/ProductBuildersHQ/impact-model/schema/v0/status-diff.schema.json",
   "$ref": "#/$defs/StatusDiff",
   "$defs": {
     "StatusChange": {
@@ -53,7 +53,7 @@
     },
     "StatusDiff": {
       "properties": {
-        "tocId": {
+        "modelId": {
           "type": "string"
         },
         "fromAsOf": {
@@ -74,12 +74,12 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "tocId",
+        "modelId",
         "fromAsOf",
         "toAsOf"
       ]
     }
   },
-  "title": "Theory of Change Status Diff",
+  "title": "Impact Model Status Diff",
   "description": "Changes between two status snapshots."
 }

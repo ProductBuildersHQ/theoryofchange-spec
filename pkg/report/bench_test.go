@@ -4,20 +4,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ProductBuildersHQ/theoryofchange-spec/internal/testfixture"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/graph"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/measure"
-	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
+	"github.com/ProductBuildersHQ/impact-model/internal/testfixture"
+	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/measure"
 )
 
 // execPipeline builds the graph, evaluates the status, builds the view, and
 // renders the executive report.
-func execPipeline(d *toc.Document, sets []*toc.ObservationSet) (string, error) {
+func execPipeline(d *impact.Model, sets []*impact.ObservationSet) (string, error) {
 	g, err := graph.Build(d)
 	if err != nil {
 		return "", err
 	}
-	st, err := measure.Evaluate(d, g, sets, time.Date(2026, 12, 31, 0, 0, 0, 0, time.UTC), toc.DefaultStatusOptions())
+	st, err := measure.Evaluate(d, g, sets, time.Date(2026, 12, 31, 0, 0, 0, 0, time.UTC), impact.DefaultStatusOptions())
 	if err != nil {
 		return "", err
 	}
@@ -38,7 +38,7 @@ func BenchmarkExecReport(b *testing.B) {
 	}
 }
 
-// The executive report for a theory of 200 outcomes, 400 links, and 300
+// The executive report for an impact model of 200 outcomes, 400 links, and 300
 // indicators must take under a second, from graph to rendered text.
 func TestExecReportForALargeTheoryTakesUnderASecond(t *testing.T) {
 	if testing.Short() {

@@ -75,7 +75,7 @@ Ask why. A gap is as often a bad target as bad work.
 - `asm-positions-hold`: untested → holding
 
 <!--
-An assumption that moved is the theory telling us something. Ask what it changes.
+An assumption that moved is the impact model telling us something. Ask what it changes.
 -->
 
 ---
@@ -89,7 +89,7 @@ An assumption that moved is the theory telling us something. Ask what it changes
 | Hard to attend | 1 |
 
 <!--
-A new theme is worth a conversation: it may be something the theory did not expect.
+A new theme is worth a conversation: it may be something the impact model did not expect.
 -->
 
 ---

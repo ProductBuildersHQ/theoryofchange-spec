@@ -2,7 +2,7 @@
 
 ## Causal pathways
 
-### The theory on one page
+### The theory of change on one page
 
 ```mermaid
 flowchart BT
