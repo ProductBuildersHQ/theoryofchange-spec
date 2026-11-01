@@ -490,12 +490,12 @@ causes:
   - id: cause-no-budget
     statement: Small nonprofits have no training budget.
     level: structural
+    parents:
+      - cause-no-time
     evidenceIds:
       - ev-learner-survey
   - id: cause-no-time
     statement: Staff cannot set aside an hour at a time for a course.
     level: immediate
-    parents:
-      - cause-no-budget
     evidenceIds:
       - ev-platform-logs

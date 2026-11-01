@@ -2928,18 +2928,19 @@ causes:
   - id: cause-no-standing-voice
     statement: Members have no standing channel to speak with one voice to local government and funders.
     level: structural
+    parents:
+      - cause-isolation
     affectedGroupIds:
       - tg-small-members
   - id: cause-isolation
     statement: Each organization works alone, so effort and costs are duplicated.
     level: underlying
     parents:
-      - cause-no-standing-voice
+      - cause-no-peer-exchange
+      - cause-high-overhead
   - id: cause-no-peer-exchange
     statement: Leaders get little management support or peer exchange.
     level: immediate
-    parents:
-      - cause-isolation
     affectedGroupIds:
       - tg-small-members
     evidenceIds:
@@ -2947,8 +2948,6 @@ causes:
   - id: cause-high-overhead
     statement: Back-office work takes scarce staff time.
     level: immediate
-    parents:
-      - cause-isolation
     affectedGroupIds:
       - tg-small-members
   - id: cause-funding-volatility

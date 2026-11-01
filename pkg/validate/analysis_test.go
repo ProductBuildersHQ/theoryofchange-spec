@@ -19,12 +19,12 @@ func TestChangeAnalysisIssues(t *testing.T) {
 		{"cause parent unknown", func(d *impact.Model) { d.Causes[1].Parents = []string{"cause-ghost"} }, "VAL-REF-001", "/causes/1/parents/0"},
 		{"cause parent is an outcome", func(d *impact.Model) { d.Causes[1].Parents = []string{"oc-idp-support"} }, "VAL-REF-002", "/causes/1/parents/0"},
 		{"cause is its own parent", func(d *impact.Model) { d.Causes[0].Parents = []string{d.Causes[0].ID} }, "VAL-CAU-003", "/causes/0/parents"},
-		{"causes form a loop", func(d *impact.Model) { d.Causes[0].Parents = []string{"cause-no-reference"} }, "VAL-CAU-004", "/causes/0/parents"},
+		{"causes form a loop", func(d *impact.Model) { d.Causes[2].Parents = []string{"cause-no-demand-signal"} }, "VAL-CAU-004", "/causes/2/parents"},
 		// A loop through the second of two parents is still a loop.
 		{"causes loop through a second parent", func(d *impact.Model) {
 			d.Causes = append(d.Causes, impact.Cause{ID: "cause-extra", Statement: "Another cause.", Level: impact.CauseImmediate})
-			d.Causes[0].Parents = []string{"cause-extra", "cause-no-reference"}
-		}, "VAL-CAU-004", "/causes/0/parents"},
+			d.Causes[2].Parents = []string{"cause-extra", "cause-no-demand-signal"}
+		}, "VAL-CAU-004", "/causes/2/parents"},
 		{"effect without statement", func(d *impact.Model) { d.Effects[0].Statement = " " }, "VAL-EFF-001", "/effects/0/statement"},
 		{"effect parent unknown", func(d *impact.Model) { d.Effects[1].Parents = []string{"eff-ghost"} }, "VAL-REF-001", "/effects/1/parents/0"},
 		{"effect parent is a cause", func(d *impact.Model) { d.Effects[1].Parents = []string{"cause-no-reference"} }, "VAL-REF-002", "/effects/1/parents/0"},

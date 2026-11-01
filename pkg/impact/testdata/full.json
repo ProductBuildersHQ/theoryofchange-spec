@@ -801,7 +801,7 @@
       "statement": "Providers see no customer demand for a common standard.",
       "level": "underlying",
       "parents": [
-        "cause-fragmented-auth"
+        "cause-no-reference"
       ],
       "affectedGroupIds": [
         "tg-small-providers"
@@ -811,9 +811,6 @@
       "id": "cause-no-reference",
       "statement": "There is no reference implementation to copy.",
       "level": "immediate",
-      "parents": [
-        "cause-no-demand-signal"
-      ],
       "provenance": {
         "basis": "inferred"
       }
