@@ -105,7 +105,7 @@ program, shown as a pathway. The second shows how its metrics reach each audienc
 flowchart LR
   classDef step fill:#eef7ee,stroke:#2e7d32,color:#111
   classDef metric fill:#e8eefc,stroke:#3f51b5,color:#111
-  classDef planned fill:#fff4cc,stroke:#b8860b,stroke-dasharray: 5 3,color:#111
+  classDef focus fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
   classDef above fill:#f3f3f3,stroke:#757575,color:#111
 
   subgraph program["One program, shown as a pathway. Every arrow carries a reason, assumptions, and evidence"]
@@ -123,8 +123,8 @@ flowchart LR
   m1["Input and activity metrics<br/>staff hours, events held"]:::metric
   m2["Output metrics<br/>reach, attendee hours"]:::metric
   m3["Outcome metrics, the drivers<br/>skills gained, practice applied"]:::metric
-  ns["North Star<br/>one per program"]:::planned
-  gr["Guardrails<br/>equity, quality, burden"]:::planned
+  ns["North Star<br/>one per program"]:::focus
+  gr["Guardrails<br/>equity, quality, burden"]:::focus
   mi["Impact metric<br/>reported as a contribution"]:::metric
 
   res -.-> m1
@@ -153,25 +153,25 @@ Reading the first diagram:
 ```mermaid
 flowchart LR
   classDef metric fill:#e8eefc,stroke:#3f51b5,color:#111
-  classDef planned fill:#fff4cc,stroke:#b8860b,stroke-dasharray: 5 3,color:#111
+  classDef focus fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
   classDef out fill:#eef7ee,stroke:#2e7d32,color:#111
 
   subgraph lib["One metric library: every number is defined once"]
     common["Common-layer metrics<br/>same definition in every program"]:::metric
     drivers["Output, driver, and activity metrics"]:::metric
-    ns["North Star for each program"]:::planned
-    gr["Guardrails"]:::planned
+    ns["North Star for each program"]:::focus
+    gr["Guardrails"]:::focus
   end
 
   assigned["Indicators assigned to each audience"]:::metric
   lib --> assigned
 
   subgraph head["Headline metrics: a short, ordered list per audience, worded for that audience"]
-    hb["Board and leadership"]:::planned
-    hf["Funders"]:::planned
-    hm["Members"]:::planned
-    hg["Government"]:::planned
-    hc["Community"]:::planned
+    hb["Board and leadership"]:::focus
+    hf["Funders"]:::focus
+    hm["Members"]:::focus
+    hg["Government"]:::focus
+    hc["Community"]:::focus
   end
   assigned --> head
 
@@ -200,11 +200,13 @@ Reading the second diagram:
   They can differ. The board, funders, members, government, and the community each
   get a short list, worded for them, drawn from the same indicators. A North Star may
   lead one list and not appear in another.
-- **Solid boxes exist today.** You can assign each indicator to the audiences it
-  should be reported to, and the story report and deck use that. **Dashed boxes are
-  planned**: a North Star and guardrails for each program, and ordered, worded
-  headline lists for each audience. They are tracked in Phase 13, "Headline Metrics",
-  of the [roadmap](docs/specs/initiatives/INIT-THEORYOFCHANGESPEC-001/ROADMAP.md).
+- **Every box is something you can record and report today.** Mark an indicator as a
+  program's North Star, with its guardrails, in the pathway's `focus`. Give each
+  audience an ordered, worded `headline` list. `theoryofchange report metric-tree`
+  shows a program's North Star and every indicator from activity to impact, and
+  `theoryofchange report headline` shows what each audience is told. The amber boxes
+  are the choices you make: which number a program steers by, and which few each
+  audience leads with. `theoryofchange lint` checks them.
 
 ## What this project gives you
 
@@ -212,7 +214,7 @@ Reading the second diagram:
 |---------|-----|
 | **A theory you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
 | **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
-| **Quality you can check** | A schema, structural validation, 48 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat |
+| **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat |
 | **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |
 | **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash |
 | **Review that comes back** | Send a packet or sheet to reviewers, import their answers as proposed changes you inspect, then record approval |
