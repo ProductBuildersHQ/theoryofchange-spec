@@ -590,6 +590,12 @@
         "vision": {
           "type": "string"
         },
+        "values": {
+          "items": {
+            "$ref": "#/$defs/Value"
+          },
+          "type": "array"
+        },
         "narrative": {
           "type": "string"
         }
@@ -2176,6 +2182,21 @@
       "required": [
         "start",
         "end"
+      ]
+    },
+    "Value": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
       ]
     }
   },

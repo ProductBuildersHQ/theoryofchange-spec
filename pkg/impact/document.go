@@ -113,8 +113,18 @@ type Context struct {
 	Mission string `json:"mission,omitempty"`
 	// Vision is the future the organization works toward. The impact
 	// outcomes are how the impact model says it is reached.
-	Vision    string `json:"vision,omitempty"`
-	Narrative string `json:"narrative,omitempty"`
+	Vision string `json:"vision,omitempty"`
+	// Values are the principles that guide how the organization works, most
+	// important first. Like the mission and vision they frame the impact model
+	// and are not outcomes.
+	Values    []Value `json:"values,omitempty"`
+	Narrative string  `json:"narrative,omitempty"`
+}
+
+// Value is one principle that guides how the organization works.
+type Value struct {
+	Name        string `json:"name" jsonschema:"required"`
+	Description string `json:"description,omitempty"`
 }
 
 // TimeHorizon is the period the impact model covers.

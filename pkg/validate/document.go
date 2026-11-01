@@ -228,6 +228,19 @@ func (c *checker) context() {
 	if strings.TrimSpace(d.Context.ProblemStatement) == "" {
 		c.errorf("VAL-DOC-005", "/context/problemStatement", "", "problemStatement is empty")
 	}
+	seenValue := map[string]bool{}
+	for i, v := range d.Context.Values {
+		p := fmt.Sprintf("/context/values/%d/name", i)
+		name := strings.TrimSpace(v.Name)
+		if name == "" {
+			c.errorf("VAL-DOC-006", p, "", "value %d has no name", i)
+			continue
+		}
+		if seenValue[name] {
+			c.errorf("VAL-DOC-007", p, "", "value %q is listed more than once", name)
+		}
+		seenValue[name] = true
+	}
 	if h := d.Context.TimeHorizon; h != nil {
 		c.date("/context/timeHorizon/start", "", h.Start)
 		c.date("/context/timeHorizon/end", "", h.End)
