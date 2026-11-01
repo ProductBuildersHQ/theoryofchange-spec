@@ -7,6 +7,97 @@
   "maintainers": ["grokify"],
   "releases": [
     {
+      "version": "v0.2.0",
+      "date": "2026-11-01",
+      "highlights": [
+        {
+          "description": "Headline metrics: a North Star, one metric that matters, and guardrails for each program or product, and a short, ordered headline list for each audience"
+        },
+        {
+          "description": "18 more lint rules, 66 in all, that check the chain from activity to impact, headline lists, and North Stars"
+        },
+        {
+          "description": "A layered logic model diagram that draws columns from inputs to impact with an arrow wherever the theory says one leads to another, in D2 and Mermaid"
+        },
+        {
+          "description": "Indicators can be worked out from others, such as a cost per outcome, and an estimated value is shown as an estimate"
+        },
+        {
+          "description": "The `intermediate` outcome level is now `medium_term` (breaking)"
+        }
+      ],
+      "added": [
+        {
+          "description": "Headline lists: an audience leads with a short, ordered, worded list of indicators, and the story report and deck use it"
+        },
+        {
+          "description": "A North Star, one metric that matters, and guardrails for a program or product, set in the pathway's `focus`; a `product` pathway kind"
+        },
+        {
+          "description": "`context.mission` and `context.vision`, so purpose is stated without being part of the causal chain"
+        },
+        {
+          "description": "`composedOf` on an indicator: a ratio, product, sum, or difference of other indicators, such as a cost per outcome, worked out from observed values"
+        },
+        {
+          "description": "The `headline` and `metric-tree` reports, and `--audience` and `--pathway` to narrow them"
+        },
+        {
+          "description": "18 lint rules for the chain from activity to impact (`INT-003` to `INT-007`), headline lists (`AUD-002`, `HLN-001` to `HLN-004`), North Stars (`NSM-001` to `NSM-007`), and framing (`CTX-001`)"
+        },
+        {
+          "description": "Flags `--north-star`, `--one-metric`, `--guardrails`, `--composed-op`, and `--composed-of`"
+        },
+        {
+          "description": "A layered logic model diagram: a column for each stage from inputs to impact, a box for each item, and an arrow wherever the theory says one leads to another. Reports `logic-model-layered` (Mermaid) and `logic-model-d2` (D2, with a grid that keeps each stage in its column), and a slide beside each logic model table in the workshop deck"
+        },
+        {
+          "description": "`Document.IndicatorTier`, `IndicatorServes`, and `IndicatorPathways`, so every rule and report agrees on where an indicator sits in the chain and which pathways it serves"
+        }
+      ],
+      "changed": [
+        {
+          "description": "The `intermediate` outcome level is now `medium_term`, so short, medium, and long term form one series. Documents that use `level: intermediate` must use `level: medium_term`"
+        },
+        {
+          "description": "An estimated latest value is shown as an estimate, with its observation note, in every report"
+        },
+        {
+          "description": "The story deck tells an audience's whole headline list instead of the first five indicators in file order"
+        },
+        {
+          "description": "Lint rules that decide which pathways an indicator serves ask the document, so they agree with the reports"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "Credits for the methods and projects the specification builds on, in the README and on a credits page, with the license notices of the dependencies compiled into the command line"
+        },
+        {
+          "description": "Diagrams of how the chain, its metrics, and each audience's headline numbers fit together, in the README and the docs index"
+        },
+        {
+          "description": "Guides for tiers, North Stars, headline lists, mission and vision, composed indicators, the layered logic model diagram, and the new reports and lint rules"
+        }
+      ],
+      "tests": [
+        {
+          "description": "Each chain, headline, and North Star defect is seeded and repaired in a test, so every new rule is shown to fire and to go quiet once the defect is fixed"
+        },
+        {
+          "description": "Reports for headline lists, estimates, the metric tree, and the layered diagram are checked against golden files, and the D2 is compiled when the d2 tool is installed"
+        }
+      ],
+      "build": [
+        {
+          "description": "Depend on d2vision v0.5.0 for diagram specs"
+        },
+        {
+          "description": "Third-party notices and the script that generates them"
+        }
+      ]
+    },
+    {
       "version": "v0.1.0",
       "date": "2026-10-30",
       "highlights": [
@@ -117,44 +208,5 @@
         }
       ]
     }
-  ],
-  "unreleased": {
-    "added": [
-      {
-        "description": "Headline lists: an audience leads with a short, ordered, worded list of indicators, and the story report and deck use it"
-      },
-      {
-        "description": "A North Star, one metric that matters, and guardrails for a program or product, set in the pathway's `focus`; a `product` pathway kind"
-      },
-      {
-        "description": "`context.mission` and `context.vision`, so purpose is stated without being part of the causal chain"
-      },
-      {
-        "description": "`composedOf` on an indicator: a ratio, product, sum, or difference of other indicators, such as a cost per outcome, worked out from observed values"
-      },
-      {
-        "description": "The `headline` and `metric-tree` reports, and `--audience` and `--pathway` to narrow them"
-      },
-      {
-        "description": "18 lint rules for the chain from activity to impact (`INT-003` to `INT-007`), headline lists (`AUD-002`, `HLN-001` to `HLN-004`), North Stars (`NSM-001` to `NSM-007`), and framing (`CTX-001`)"
-      },
-      {
-        "description": "Flags `--north-star`, `--one-metric`, `--guardrails`, `--composed-op`, and `--composed-of`"
-      },
-      {
-        "description": "A layered logic model diagram: a column for each stage from inputs to impact, a box for each item, and an arrow wherever the theory says one leads to another. Reports `logic-model-layered` (Mermaid) and `logic-model-d2` (D2, with a grid that keeps each stage in its column), and a slide beside each logic model table in the workshop deck"
-      }
-    ],
-    "changed": [
-      {
-        "description": "The `intermediate` outcome level is now `medium_term`, so short, medium, and long term form one series. Documents that use `level: intermediate` must use `level: medium_term`"
-      },
-      {
-        "description": "An estimated latest value is shown as an estimate, with its observation note, in every report"
-      },
-      {
-        "description": "The story deck tells an audience's whole headline list instead of the first five indicators in file order"
-      }
-    ]
-  }
+  ]
 }
