@@ -125,3 +125,23 @@ func TestNotesCannotCloseTheComment(t *testing.T) {
 		t.Error("speaker notes must not contain a comment terminator")
 	}
 }
+
+// Each logic model table is followed by the layered diagram of the same logic
+// model. The table stays.
+func TestWorkshopShowsTheLayeredDiagramBesideTheTable(t *testing.T) {
+	whole, pathways := views(t, fullDoc(t))
+	out := Workshop(whole, pathways, Options{})
+	tables := strings.Count(out, "# Logic model: ")
+	layered := strings.Count(out, "# Logic model, step by step: ")
+	if tables == 0 || layered != tables {
+		t.Fatalf("%d logic model tables and %d layered diagrams", tables, layered)
+	}
+	i := strings.Index(out, "# Logic model: ")
+	j := strings.Index(out, "# Logic model, step by step: ")
+	if j < i {
+		t.Error("the layered diagram comes before its table")
+	}
+	if !strings.Contains(out, "flowchart LR") || !strings.Contains(out, "subgraph n_inputs") {
+		t.Errorf("the layered diagram is not drawn:\n%s", out)
+	}
+}

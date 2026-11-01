@@ -71,6 +71,16 @@ Read left to right: what goes in, what we do, what we produce, what changes. A b
 
 ---
 
+# Logic model, step by step: Supply side: providers and platforms
+
+![Diagram](d.png)
+
+::: notes
+Follow one input to the change it is for. Is each arrow a thing that really leads to the next? Where does an arrow have no reason behind it?
+:::
+
+---
+
 # What we are assuming
 
 **Identity providers see commercial advantage in supporting agent delegation.** [inferred]
