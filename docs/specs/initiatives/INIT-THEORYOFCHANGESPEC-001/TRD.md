@@ -375,6 +375,7 @@ Severity `error` blocks GO; `warning` is reported; `info` is advisory.
 | IMP-AUD-001 | info | Every audience is targeted by ≥ 1 selected indicator or story theme |
 | IMP-CAU-001 | warning | Every `underlying` and `structural` cause is addressed by ≥ 1 outcome or marked `outOfScope` with a reason |
 | IMP-CAU-002 | info | When causes are declared, outcomes address ≥ 1 non-`immediate` cause (root causes, not only immediate ones) |
+| IMP-CAU-003 | warning | A cause contributes only to causes at its own level or nearer the problem (`structural` → `underlying` → `immediate`); a parent at a deeper level usually means the link was written backwards |
 | IMP-RSP-001 | warning | Outcomes with responsibility `partner` or `shared` name ≥ 1 delivering actor; `shared` names ≥ 2 |
 | IMP-RSP-002 | info | `partner` and `unaddressed` outcomes on a path to impact still have ≥ 1 indicator (monitor the whole solution tree) |
 | IMP-ASM-004 | warning | Assumptions with `needsTesting: true` have a `test` and either a monitoring indicator or a linked decision / evaluation question |

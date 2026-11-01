@@ -512,8 +512,9 @@ named version, so that both teams work from the same agreed theory.
   the "plausible, doable, testable" criteria and the research brief, each with
   a stable ID (`TOC-<AREA>-<NNN>`), severity, and fix hint.
 - **PRD-FR-305** Lint MUST report an effect that no outcome relieves and that
-  is not set aside with a reason, and advise when effects are relieved only by
-  outcomes below the long-term level.
+  is not set aside with a reason, advise when effects are relieved only by
+  outcomes below the long-term level, and report a cause that contributes to a
+  deeper cause, which usually means the link was written backwards.
 - **PRD-FR-304** Lint output MUST be a structured-evaluation summary report
   (GO / NO-GO) so it plugs into existing ecosystem gates.
 
