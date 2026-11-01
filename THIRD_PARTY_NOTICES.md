@@ -25,8 +25,8 @@ Regenerate this file with `scripts/third-party-notices.sh`.
 | [`github.com/google/jsonschema-go`](third_party/licenses/github.com/google/jsonschema-go) | v0.4.3 | MIT | Copyright (c) 2025 JSON Schema Go Project Authors |
 | [`github.com/grokify/d2vision`](third_party/licenses/github.com/grokify/d2vision) | v0.5.0 | MIT | Copyright (c) 2026 John Wang |
 | [`github.com/grokify/oscompat`](third_party/licenses/github.com/grokify/oscompat) | v0.13.0 | MIT | Copyright (c) 2025 John Wang |
-| [`github.com/grokify/prism-core`](third_party/licenses/github.com/grokify/prism-core) | v0.5.0 | MIT | Copyright (c) 2026 John Wang |
-| [`github.com/grokify/prism-roadmap`](third_party/licenses/github.com/grokify/prism-roadmap) | v0.21.0 | MIT | Copyright (c) 2026 John Wang |
+| [`github.com/grokify/prism-core`](third_party/licenses/github.com/grokify/prism-core) | v0.6.0 | MIT | Copyright (c) 2026 John Wang |
+| [`github.com/grokify/prism-roadmap`](third_party/licenses/github.com/grokify/prism-roadmap) | v0.22.0 | MIT | Copyright (c) 2026 John Wang |
 | [`github.com/modelcontextprotocol/go-sdk`](third_party/licenses/github.com/modelcontextprotocol/go-sdk) | v1.8.0 | MIT AND Apache-2.0 | Copyright (c) 2024-2025 Model Context Protocol a Series of LF Projects, LLC. |
 | [`github.com/plexusone/structured-evaluation`](third_party/licenses/github.com/plexusone/structured-evaluation) | v0.15.0 | MIT | Copyright (c) 2026 John Wang |
 | [`github.com/santhosh-tekuri/jsonschema/v6`](third_party/licenses/github.com/santhosh-tekuri/jsonschema/v6) | v6.0.3 | Apache-2.0 | see the license file |
@@ -76,3 +76,17 @@ they are listed here for completeness.
 |--------|---------|---------|
 | `github.com/bahlo/generic-list-go` | v0.2.0 | BSD-3-Clause |
 | `github.com/buger/jsonparser` | v1.6.1 | MIT |
+| `github.com/invopop/jsonschema` | v0.14.0 | MIT |
+| `github.com/pb33f/go-yaml` | v0.1.1 | Apache-2.0 |
+| `github.com/pb33f/ordered-map/v2` | v2.3.2 | Apache-2.0 |
+
+## Programs this project can call but does not include
+
+[Marp](https://marp.app), the [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli),
+and [Pandoc](https://pandoc.org) are optional programs that some commands run
+when they are installed. They are not part of this repository or its binary, and
+each is used under its own license.
+
+Optional documentation tooling ([MkDocs](https://www.mkdocs.org) with the
+[Material theme](https://squidfunk.github.io/mkdocs-material/)) builds the
+documentation site and is likewise not included.
