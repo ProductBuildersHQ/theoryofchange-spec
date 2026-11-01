@@ -120,6 +120,10 @@ func TestDocumentIssues(t *testing.T) {
 		}, "VAL-DOC-004", "/outcomes", SeverityError},
 		{"empty problem statement", func(d *impact.Model) { d.Context.ProblemStatement = "" }, "VAL-DOC-005", "/context/problemStatement", SeverityError},
 		{"value without name", func(d *impact.Model) { d.Context.Values = []impact.Value{{Name: " "}} }, "VAL-DOC-006", "/context/values/0/name", SeverityError},
+		{"unknown projection", func(d *impact.Model) { d.Pathways[0].Projections = []impact.Projection{"six_sigma"} }, "VAL-ENUM-001", "/pathways/0/projections/0", SeverityError},
+		{"duplicate projection", func(d *impact.Model) {
+			d.Pathways[0].Projections = []impact.Projection{impact.ProjectionDMAIC, impact.ProjectionDMAIC}
+		}, "VAL-PTH-007", "/pathways/0/projections/1", SeverityError},
 		{"duplicate value", func(d *impact.Model) {
 			d.Context.Values = []impact.Value{{Name: "Candor"}, {Name: "Candor"}}
 		}, "VAL-DOC-007", "/context/values/1/name", SeverityError},
