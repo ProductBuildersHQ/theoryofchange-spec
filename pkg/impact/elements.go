@@ -559,8 +559,13 @@ type Pathway struct {
 	// (model:<doc>).
 	ChildModel string `json:"childModel,omitempty" jsonschema:"pattern=^model:[a-z][a-z0-9]*(-[a-z0-9]+)*$"`
 	// Focus names the metrics this program is steered by.
-	Focus      *Focus      `json:"focus,omitempty"`
-	Provenance *Provenance `json:"provenance,omitempty"`
+	Focus *Focus `json:"focus,omitempty"`
+	// Projections names the projections this pathway is meant for beyond the
+	// ones every pathway gets. dmaic marks a program whose metrics are
+	// measured often enough to improve with DMAIC: lint then checks their
+	// cadence and sample size, and export dmaic includes the pathway.
+	Projections []Projection `json:"projections,omitempty"`
+	Provenance  *Provenance  `json:"provenance,omitempty"`
 }
 
 // Focus names the metrics a program, product, or other pathway is steered by.

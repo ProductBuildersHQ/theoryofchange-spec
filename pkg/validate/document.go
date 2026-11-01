@@ -604,6 +604,13 @@ func (c *checker) pathways() {
 		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, impact.ElementOutcome)
 		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, impact.ElementIntervention)
 		c.docRef(p+"/childModel", pw.ID, pw.ChildModel)
+		for j, pr := range pw.Projections {
+			jp := p + "/projections/" + strconv.Itoa(j)
+			enum(c, jp, pw.ID, pr)
+			if slices.Contains(pw.Projections[:j], pr) {
+				c.errorf("VAL-PTH-007", jp, pw.ID, "projection %q is listed more than once", pr)
+			}
+		}
 		if f := pw.Focus; f != nil {
 			c.ref(p+"/focus/northStarId", pw.ID, f.NorthStarID, impact.ElementIndicator)
 			c.ref(p+"/focus/oneMetricId", pw.ID, f.OneMetricID, impact.ElementIndicator)
