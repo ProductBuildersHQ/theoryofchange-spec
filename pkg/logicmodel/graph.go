@@ -84,7 +84,13 @@ type Graph struct {
 	// Stages holds the stages that have nodes, in order.
 	Stages []StageNodes
 	// Edges are in a fixed order, and every edge joins two nodes of the graph.
+	// They run from a stage to a later one, or down a column.
 	Edges []Edge
+	// Feedback holds the edges that run back to an earlier stage, such as a
+	// long-term outcome that strengthens a short-term one. They are left out of
+	// the diagram, where they would cut across the boxes between, and listed
+	// beside it.
+	Feedback []Edge
 }
 
 // Build derives the graph from a view.
@@ -95,7 +101,8 @@ type Graph struct {
 // directly. Outcomes are placed by level, with output-level outcomes in the
 // outputs stage, and every causal link between two of them is an edge.
 // Within a stage, nodes are ordered to keep arrows from crossing where they
-// can, and otherwise stay in the order of the theory.
+// can, and otherwise stay in the order of the theory. A link that runs back to
+// an earlier stage is feedback and is kept apart from the edges.
 func Build(v *report.View) *Graph {
 	b := &builder{stage: map[string]StageID{}, nodes: map[StageID][]Node{}, seen: map[Edge]bool{}}
 
@@ -153,7 +160,17 @@ func Build(v *report.View) *Graph {
 			g.Stages = append(g.Stages, StageNodes{Stage: st, Nodes: nodes})
 		}
 	}
-	g.Edges = b.edges
+	rank := map[StageID]int{}
+	for i, st := range Stages() {
+		rank[st] = i
+	}
+	for _, e := range b.edges {
+		if rank[b.stage[e.To]] < rank[b.stage[e.From]] {
+			g.Feedback = append(g.Feedback, e)
+		} else {
+			g.Edges = append(g.Edges, e)
+		}
+	}
 	return g
 }
 

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/burden"
+	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/logicmodel"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/report"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/slides"
 	"github.com/ProductBuildersHQ/theoryofchange-spec/pkg/toc"
@@ -59,6 +60,10 @@ func DefinitionReport(doc *toc.Document, kind, pathway string) (string, error) {
 		return report.LogicModels(whole, pathways), nil
 	case "logic-model-diagram":
 		return report.LogicModelDiagrams(whole, pathways), nil
+	case "logic-model-layered":
+		return logicmodel.Diagrams(whole, pathways, logicmodel.FormatMermaid)
+	case "logic-model-d2":
+		return logicmodel.Diagrams(whole, pathways, logicmodel.FormatD2)
 	case "outcome-map":
 		return report.OutcomeMaps(whole, pathways), nil
 	case "logframe":
