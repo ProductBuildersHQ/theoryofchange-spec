@@ -494,10 +494,10 @@
 ## Phase 19 — Strategy Projections
 
 **Theme:** Draw strategy and improvement formats such as V2MOM and DMAIC from the impact model, on prism-roadmap's goal types, linked by ID and kept as separate documents
-**Status:** In progress — 1 of 3 items completed
+**Status:** In progress — 2 of 3 items completed
 
-- [ ] `RMI-IMPACTMODEL-003` Export a V2MOM projection of an impact model
-  - Type: capability · Status: proposed
+- [x] `RMI-IMPACTMODEL-003` Export a V2MOM projection of an impact model
+  - Type: capability · Status: completed
   - Acceptance: context.values added; export v2mom writes vision, values, methods, obstacles, and measures from the model, linked by ID; the V2MOM document stays separate
 
 - [ ] `RMI-IMPACTMODEL-005` Export a DMAIC projection of an impact model

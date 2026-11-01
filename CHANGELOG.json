@@ -256,6 +256,22 @@
     }
   ],
   "unreleased": {
+    "added": [
+      {
+        "description": "`export v2mom` writes the impact model as a V2MOM: the vision and values from the context, one method per pathway with its interventions as projects and its North Star, one metric, and guardrails as measures, and obstacles from risks and from high or critical assumptions not yet shown to hold, by their assessed status with `-O`. A model without a vision, values, or a pathway is refused with a message naming what to add"
+      },
+      {
+        "description": "`context.values` lists the principles that guide how the organization works, most important first. Validation reports a value without a name (VAL-DOC-006) and a repeated value (VAL-DOC-007)"
+      }
+    ],
+    "documentation": [
+      {
+        "description": "A V2MOM guide maps each part of a V2MOM to the impact model, with one pathway followed end to end, what the V2MOM leaves out, and how to fix a refused export"
+      },
+      {
+        "description": "The README describes the impact model as a causal model, and the glossary says how each projection names an intervention"
+      }
+    ],
     "changed": [
       {
         "description": "The OKR export uses the OKR types of `prism-roadmap/goals/okr`, the goal types shared across the PRISM tools, in place of `structured-goals`. The exported JSON is unchanged"
