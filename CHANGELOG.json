@@ -140,6 +140,9 @@
       },
       {
         "description": "Flags `--north-star`, `--one-metric`, `--guardrails`, `--composed-op`, and `--composed-of`"
+      },
+      {
+        "description": "A layered logic model diagram: a column for each stage from inputs to impact, a box for each item, and an arrow wherever the theory says one leads to another. Reports `logic-model-layered` (Mermaid) and `logic-model-d2` (D2, with a grid that keeps each stage in its column), and a slide beside each logic model table in the workshop deck"
       }
     ],
     "changed": [
