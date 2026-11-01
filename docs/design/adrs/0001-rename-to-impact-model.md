@@ -54,7 +54,9 @@ pathway of change, the outcome map, and the logframe are views of it.
 - **`specVersion`**, which stays `0.1`. The reader accepts any `0.x`.
 - **Identifiers of the work.** The initiative `INIT-THEORYOFCHANGESPEC-001` and the
   roadmap items `RMI-THEORYOFCHANGESPEC-*` keep their names, since an identifier is
-  not a label.
+  not a label. New roadmap items take the repository's new slug,
+  `RMI-IMPACTMODEL-001` onward, so the two series sit side by side in one
+  initiative.
 - **The quality rubric and the specification template** in `spec/`. They are the
   theory of change quality checklist and outline, and will become the rubric of
   that view.

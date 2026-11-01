@@ -37,9 +37,17 @@ Read before implementing:
 
 ## VisionStudio
 
-Roadmap items are tracked in VisionStudio under `INIT-THEORYOFCHANGESPEC-001`.
-Claim work with `visionstudio work claim <RMI-ID>` and carry the trailer
-`Refs: RMI-THEORYOFCHANGESPEC-<NNN>` on every implementing commit.
+Roadmap items are tracked in VisionStudio under `INIT-THEORYOFCHANGESPEC-001`,
+whose home repository is `github.com/ProductBuildersHQ/impact-model`. Claim work
+with `visionstudio work claim <RMI-ID>` and carry the item's own ID as the
+trailer on every implementing commit: `Refs: <RMI-ID>`.
+
+- **New items** take the repository's slug: `RMI-IMPACTMODEL-<NNN>`, starting at
+  001. `visionstudio rmi create --repo github.com/ProductBuildersHQ/impact-model`
+  assigns the next one.
+- **Items from before the rename** keep their IDs, `RMI-THEORYOFCHANGESPEC-001`
+  to `-076`. Use them as they are; never renumber or recreate them under the new
+  slug.
 
 ## Checks before committing
 
