@@ -10,6 +10,7 @@ import (
 	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
 	"github.com/ProductBuildersHQ/impact-model/pkg/impactio"
 	"github.com/ProductBuildersHQ/impact-model/pkg/prismx"
+	"github.com/ProductBuildersHQ/impact-model/pkg/service"
 )
 
 func newPrismExportCmd(e *env, kind string) *cobra.Command {
@@ -87,20 +88,9 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 		}
 		st, sets = in.Status, loaded
 	}
-	var v any
-	switch kind {
-	case "okr":
-		v, err = prismx.ToOKR(doc, st)
-	case "v2mom":
-		v, err = prismx.ToV2MOM(doc, st)
-	case "dmaic":
-		var omissions []prismx.Omission
-		v, omissions, err = prismx.ToDMAIC(doc, st, sets)
-		for _, o := range omissions {
-			fmt.Fprintf(e.errOut, "note: %s is left out: %s\n", o.IndicatorID, o.Reason)
-		}
-	default:
-		v, err = prismx.ToOutcomeJourneys(doc, st)
+	exp, err := service.ExportPRISM(kind, doc, st, sets)
+	for _, o := range exp.Omissions {
+		fmt.Fprintf(e.errOut, "note: %s is left out: %s\n", o.IndicatorID, o.Reason)
 	}
 	if errors.Is(err, prismx.ErrNotV2MOMReady) || errors.Is(err, prismx.ErrNotDMAICReady) {
 		return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", path, err)}
@@ -108,6 +98,7 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 	if err != nil {
 		return renderError(path, err)
 	}
+	v := exp.Document
 	var buf bytes.Buffer
 	if err := writeJSON(&buf, v); err != nil {
 		return &ExitError{Code: ExitUsageErr, Err: err}

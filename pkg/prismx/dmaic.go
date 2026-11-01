@@ -22,8 +22,8 @@ var ErrNotDMAICReady = errors.New("the impact model cannot be drawn as DMAIC")
 // and why. DMAIC metrics are numbers with a baseline and a target, so an
 // indicator without them cannot be one.
 type Omission struct {
-	IndicatorID string
-	Reason      string
+	IndicatorID string `json:"indicatorId"`
+	Reason      string `json:"reason"`
 }
 
 // ToDMAIC exports the pathways marked `projections: [dmaic]` as a DMAIC
