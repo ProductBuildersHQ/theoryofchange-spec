@@ -245,6 +245,6 @@ export stamp ("# model:<id> version:<v> hash:<h>"); --no-stamp leaves it off.`,
 	csv.Flags().StringP("out", "o", "", "write to this file instead of standard output")
 	asOfFlags(csv)
 	export.AddCommand(csv, newExportDocCmd("docx"), newExportDocCmd("pptx"), newReviewPacketCmd(e), newReviewSheetCmd(e),
-		newPrismExportCmd(e, "okr"), newPrismExportCmd(e, "journey"), newPrismExportCmd(e, "v2mom"))
+		newPrismExportCmd(e, "okr"), newPrismExportCmd(e, "journey"), newPrismExportCmd(e, "v2mom"), newPrismExportCmd(e, "dmaic"))
 	return export
 }
