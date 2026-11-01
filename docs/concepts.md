@@ -17,7 +17,8 @@ projections of it, drawn by the `report` command:
 | Logframe | A matrix of narrative, indicators, verification, and assumptions | `logframe` |
 
 OKRs and outcome journeys are projections too, written by `export okr` and
-`export journey` for the PRISM planning tools. A V2MOM projection is planned.
+`export journey` for the PRISM planning tools. V2MOM and DMAIC projections are
+planned.
 
 **Delivered by** names the roadmap item (`RMI-THEORYOFCHANGESPEC-NNN`, shown
 as `NNN`) that adds the type or field. Concepts not in v0 are listed under

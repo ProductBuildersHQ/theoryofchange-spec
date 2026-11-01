@@ -25,8 +25,8 @@ generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
 You describe the change once, in one impact model. The
 [theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
-model, the outcome map, the logframe, and strategy formats such as OKRs and V2MOM
-are **projections** of it. Each draws the same model for a different reader and
+model, the outcome map, the logframe, strategy formats such as OKRs and V2MOM,
+and improvement formats such as DMAIC are **projections** of it. Each draws the same model for a different reader and
 leaves something out, and none of them is a part of another.
 
 ```mermaid
@@ -43,6 +43,7 @@ flowchart LR
   im --> lf["Logframe"]:::method
   im --> okr["OKRs"]:::strategy
   im -.-> v2["V2MOM (planned)"]:::planned
+  im -.-> dm["DMAIC (planned)"]:::planned
 ```
 
 ## What is an impact model?
@@ -79,6 +80,7 @@ Each projection answers a different question for a different reader:
 | **Metric tree and headline metrics** | What does each program steer by, and what is each audience told? | `report metric-tree`, `report headline` |
 | **OKRs and outcome journeys** | What will a team commit to this quarter, and how does a person move through the outcomes? For the [PRISM](#part-of-the-prism-ecosystem) planning tools | `export okr`, `export journey` |
 | **V2MOM** *(planned)* | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision, values, methods, obstacles, and measures, drawn from the model's vision, values, interventions, assumptions and risks, and indicators | — |
+| **DMAIC** *(planned)* | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them | — |
 
 Each projection leaves something out. A logic model shows the sequence from what
 goes in to what comes out, and rarely why each step holds. A theory of change
