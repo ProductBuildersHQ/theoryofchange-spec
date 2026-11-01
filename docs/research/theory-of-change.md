@@ -238,7 +238,7 @@ The literature on ToC outside the nonprofit and development sector is thinner bu
 
 Entities are marked **[C]** for core and **[E]** for optional or extension. Cardinalities are given in parentheses.
 
-**TheoryOfChange [C]** is the root document.
+**ImpactModel [C]** is the root document.
 
 - Fields: `id`, `name`, `version`, `status` (draft / active / under_review / archived), `scope` {breadth, depth}, `timeHorizon`, `problemStatement`, `narrative`, `owners[]`, `createdAt`, `updatedAt`.
 - Contains (1:N): outcomes, links, preconditionGroups, interventions, assumptions, indicators, evidence, risks, actors, externalFactors, revisions.
@@ -351,7 +351,7 @@ Entities are marked **[C]** for core and **[E]** for optional or extension. Card
 
 **Core (minimum viable ToC, matching Vogel's consensus elements and the ActKnowledge components):**
 
-- TheoryOfChange (problem statement, narrative, ceiling)
+- ImpactModel (problem statement, narrative, ceiling)
 - Outcome
 - CausalLink (with rationale)
 - PreconditionGroup (AND/OR)

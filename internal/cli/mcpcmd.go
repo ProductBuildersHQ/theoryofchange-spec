@@ -24,7 +24,7 @@ current directory: ".." is refused, and so is a symbolic link that leaves the
 root. impact_patch rejects any patch that adds validation errors.
 
 The server makes no network calls and no model calls.`,
-		Example: `  impact-model mcp --root ./Impact models`,
+		Example: `  impact-model mcp --root ./impact-models`,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			root := flagString(cmd, "root")

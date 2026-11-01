@@ -1,6 +1,6 @@
 # Integration contract for USM and UFM
 
-This page says what the Theory of Change module promises to the Unified
+This page says what the impact model module promises to the Unified
 Strategy Model (USM) and the Unified Futures Model (UFM), and what it asks of
 them. It is a contract in the plain sense: each side can build against it
 without reading the other's code.
@@ -8,36 +8,36 @@ without reading the other's code.
 **Status: draft, for review by the owners of USM and UFM.** Nothing here is
 final until they have read it.
 
-## What each model uses a theory for
+## What each model uses an impact model for
 
 - **USM** describes a strategy from one market participant's point of view,
   combining a theory of change with a balanced scorecard. It reads a
-  theory's outcomes, indicators, status, and confidence, and attaches its own
-  scorecard measures to elements of the theory.
+  Impact model's outcomes, indicators, status, and confidence, and attaches its own
+  scorecard measures to elements of the impact model.
 - **UFM** describes competing futures of a market, such as one scheme winning
-  over another. It groups theories by the future each one is working toward
+  over another. It groups impact models by the future each one is working toward
   and compares them.
 
-The theory of change is the shared part: neither model owns it, and it owns
+The impact model is the shared part: neither model owns it, and it owns
 neither of them.
 
 ## The promises
 
-### 1. Every theory and element has a stable address
+### 1. Every impact model and element has a stable address
 
-A theory is `toc:<doc>`; an element is `toc:<doc>#<element>`. Both parts are
+An impact model is `model:<doc>`; an element is `model:<doc>#<element>`. Both parts are
 slugs: lower case letters, digits, and single hyphens, starting with a letter,
 at most 128 characters. An ID is permanent for the life of the element:
 
-- the tools never change an element's ID (`theoryofchange outcome set` refuses
-  to), and `theoryofchange patch` addresses elements by ID, not position;
+- the tools never change an element's ID (`impact-model outcome set` refuses
+  to), and `impact-model patch` addresses elements by ID, not position;
 - renaming means removing the element and adding a new one, which shows as
-  such in `theoryofchange diff`;
+  such in `impact-model diff`;
 - a removed or rejected element keeps its place in history, and its ID should not be reused for something else.
 
 USM and UFM should store these references, not copies of the content.
 
-### 2. A theory says whose it is and which future it belongs to
+### 2. An impact model says whose it is and which future it belongs to
 
 ```yaml
 perspective:
@@ -46,37 +46,37 @@ perspective:
   futureRef: ufm:open-standard-wins   # the future (UFM's future)
 ```
 
-`futureRef` has the form `ufm:<slug>`. UFM owns what a future *is*; the theory
-only points at it. Two theories may belong to the same future if they speak for
-different actors; two theories may not speak for the same actor in the same
-future (`theoryofchange validate --futures` reports it).
+`futureRef` has the form `ufm:<slug>`. UFM owns what a future *is*; the impact model
+only points at it. Two impact models may belong to the same future if they speak for
+different actors; two impact models may not speak for the same actor in the same
+future (`impact-model validate --futures` reports it).
 
-### 3. Theories in one market share actors through a registry
+### 3. Impact models in one market share actors through a registry
 
-An `ActorRegistry` document holds the actors several theories refer to. A
-theory names it in `actorRegistry`, and actor IDs not defined in the theory
+An `ActorRegistry` document holds the actors several impact models refer to. A
+Impact model names it in `actorRegistry`, and actor IDs not defined in the impact model
 resolve there. The tools check that competing futures name one registry
 (`validate --registry actors.yaml --futures`).
 
 USM and UFM may read the registry to learn who the market's actors are. They
-should not add actors to a registry belonging to a theory they do not own;
-add them to their own and have the theory reference both.
+should not add actors to a registry belonging to an impact model they do not own;
+add them to their own and have the impact model reference both.
 
-### 4. Strategy data attaches by alignment, and the theory never holds it
+### 4. Strategy data attaches by alignment, and the impact model never holds it
 
-A theory may carry `alignments`: an element ID and an external target
+An impact model may carry `alignments`: an element ID and an external target
 (`framework`, `ref`, `relation`). Frameworks include `bsc`, `usm`, `ufm`, `okr`,
 `v2mom`, and `market_spec`. This is how a scorecard objective or measure points
 at an outcome or indicator.
 
-The theory never stores scorecard data. USM computes its scorecard from the
-theory's status and its own measures. The theory does not list the models that
-consume it: references run from USM and UFM into the theory.
+The impact model never stores scorecard data. USM computes its scorecard from the
+Impact model's status and its own measures. The impact model does not list the models that
+consume it: references run from USM and UFM into the impact model.
 
 ### 5. Status is a document
 
-`theoryofchange status` produces a `TheoryOfChangeStatus` document (schema
-`theory-of-change-status`) that anyone can read without the Go module. For each
+`impact-model status` produces a `ImpactModelStatus` document (schema
+`impact-model-status`) that anyone can read without the Go module. For each
 indicator, outcome, link, and assumption it gives a state; for each outcome,
 a pathway state and a confidence from 0 to 1; and, per impact outcome, the
 headline. The snapshot records the settings it was computed with, so any
@@ -88,10 +88,10 @@ and is listed in its changelog.
 
 ### 6. Comparing futures
 
-Competing-futures theories compare without any schema change: see
-`examples/competing-futures`. A UFM reading three theories can line up their
+Competing-futures impact models compare without any schema change: see
+`examples/competing-futures`. A UFM reading three impact models can line up their
 impact outcomes (each is `level: impact`), their status and confidence, and
-the assumptions each depends on. A theory may name another theory's element in
+the assumptions each depends on. An impact model may name another impact model's element in
 an alignment or an indicator's external reference; `validate --futures` checks
 that such a reference resolves.
 
@@ -106,14 +106,14 @@ that such a reference resolves.
 - The reference grammar and the `futureRef` form are part of this contract and
   change only with a major version.
 
-## How a model reads a theory
+## How a model reads an impact model
 
 Any of these, in order of preference for a program:
 
-1. The Go packages: `pkg/toc` (types), `pkg/tocio` (read and write), `pkg/measure`
+1. The Go packages: `pkg/impact` (types), `pkg/impactio` (read and write), `pkg/measure`
    (status), `pkg/report` (views).
 2. The command line, with `--format json` where offered.
-3. The MCP server (`theoryofchange mcp`), which exposes validate, lint, graph, status,
+3. The MCP server (`impact-model mcp`), which exposes validate, lint, graph, status,
    report, patch, deck, judge bundle, and diff to an agent.
 4. The files and schemas alone.
 
@@ -127,8 +127,8 @@ Any of these, in order of preference for a program:
 
 ## Open questions for the owners
 
-1. Does USM want the theory's `alignments` to be one-way (USM points at the
-   theory) only, or may a theory point at a scorecard objective, as `bsc`
+1. Does USM want the impact model's `alignments` to be one-way (USM points at the
+   Impact model) only, or may an impact model point at a scorecard objective, as `bsc`
    alignments do today?
 2. Is `ufm:<slug>` the right form for a future's reference, or should UFM
    publish its own reference grammar for the module to adopt?

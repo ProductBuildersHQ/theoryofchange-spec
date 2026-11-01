@@ -53,7 +53,7 @@ func TestLogicModelsFallBackToTheWholeTheory(t *testing.T) {
 	whole := build(t, doc, nil, Options{})
 	out := LogicModels(whole, nil)
 	if !strings.Contains(out, "## Logic model: Open agent authorization standard adoption") {
-		t.Errorf("An impact model without pathways should render one whole-impact model model:\n%s", out)
+		t.Errorf("An impact model without pathways should render one whole-model view:\n%s", out)
 	}
 	if strings.Count(out, "## Logic model") != 1 {
 		t.Errorf("want exactly one logic model:\n%s", out)

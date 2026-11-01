@@ -1,35 +1,35 @@
 # Quality and Judging
 
-Three layers check a theory, from cheapest to most thorough. Each one assumes the
+Three layers check an impact model, from cheapest to most thorough. Each one assumes the
 one before it passes.
 
 | Layer | Question | Command | Needs a model? |
 |-------|----------|---------|----------------|
 | Validate | Is the document well formed? | `validate` | No |
-| Lint | Is the theory sound? | `lint` | No |
+| Lint | Is the impact model sound? | `lint` | No |
 | Judge | Does an expert reader think it is good? | `judge` | A judge, human or agent |
 
 ## Validate
 
 ```bash
-theoryofchange validate theory.yaml
+impact-model validate impact-model.yaml
 ```
 
 Checks the schema and the structure: duplicate IDs, references that do not
 resolve, invalid values, bad dates, group logic, and that nested groups share a
-target. It also checks observation sets (`--toc`), a child against its parent
+target. It also checks observation sets (`--model`), a child against its parent
 (`--parent`), and competing futures (`--registry --futures`). Exit code 1 means
 at least one file has errors.
 
 ## Lint
 
 ```bash
-theoryofchange lint theory.yaml --profile standard
-theoryofchange lint --list
+impact-model lint impact-model.yaml --profile standard
+impact-model lint --list
 ```
 
-Validation says a document is well formed; lint says whether the theory is
-sound. There are 66 deterministic rules, each with an ID such as `TOC-LOG-001`,
+Validation says a document is well formed; lint says whether the impact model is
+sound. There are 66 deterministic rules, each with an ID such as `IMP-LOG-001`,
 grouped by what they look at:
 
 | Area | What the rules look for |
@@ -41,16 +41,16 @@ grouped by what they look at:
 | Collection budget (`BUD`) | Selected indicators fit the staff-time and question budgets and say how data is collected |
 | Accountability and responsibility (`ACC`, `RSP`, `ACT`, `INT`) | A ceiling is declared; outcomes above it are not owned; shared and partner outcomes name who delivers them; every intervention has an owner |
 | The chain from activity to impact (`INT`) | Every intervention says what it produces, leads through the outcomes it targets to an impact, agrees with the links that name it, is measured, and states its resources |
-| North Stars and headline lists (`NSM`, `HLN`, `AUD`, `CTX`) | A North Star measures an outcome at or below the ceiling, has a baseline, a target, and a guardrail, and belongs to its own pathway; a headline list is short, reported to its audience, and producible; an audience told about outcomes is also told numbers; the theory states its mission or vision |
-| Provenance and evidence (`PRV`, `EVD`) | Every element says where it comes from; stated elements cite a source; an approved theory has no hypotheses among what the organization answers for |
+| North Stars and headline lists (`NSM`, `HLN`, `AUD`, `CTX`) | A North Star measures an outcome at or below the ceiling, has a baseline, a target, and a guardrail, and belongs to its own pathway; a headline list is short, reported to its audience, and producible; an audience told about outcomes is also told numbers; the impact model states its mission or vision |
+| Provenance and evidence (`PRV`, `EVD`) | Every element says where it comes from; stated elements cite a source; an approved impact model has no hypotheses among what the organization answers for |
 | Equity, causes, audiences (`EQU`, `CAU`, `AUD`) | Outcomes for target groups are measured by those groups; each deeper cause is addressed or set aside with a reason; every audience is the target of something reported |
-| Pathways and validation (`PTH`, `VAL`) | Every pathway reaches impact and has a selected indicator; the main steps have been checked with the people the theory concerns |
+| Pathways and validation (`PTH`, `VAL`) | Every pathway reaches impact and has a selected indicator; the main steps have been checked with the people the impact model concerns |
 
 Profiles choose how much is reported:
 
 | Profile | Reports |
 |---------|---------|
-| `draft` | Errors and structural rules. A small valid theory is GO |
+| `draft` | Errors and structural rules. A small valid impact model is GO |
 | `standard` | Also the warnings (the default) |
 | `full` | Also the advice |
 
@@ -63,15 +63,15 @@ summary report. Rejected elements are ignored.
 
 A rubric is better than a checklist when the question needs judgment: is the
 causal logic plausible, is the problem framed fairly, would the people it
-concerns recognise themselves. The `judge` commands prepare a theory for a judge
+concerns recognise themselves. The `judge` commands prepare an impact model for a judge
 and combine the verdicts. **They make no model calls**: a human reviewer or an AI
 agent reads the bundle and returns a verdict.
 
 ```bash
-theoryofchange judge show theory.yaml --profile development --out bundle.json
-theoryofchange judge record theory.yaml verdict.json --judge reviewer-a
-theoryofchange judge record theory.yaml verdict2.json --judge reviewer-b
-theoryofchange judge summary theory.yaml --aggregation majority
+impact-model judge show impact-model.yaml --profile development --out bundle.json
+impact-model judge record impact-model.yaml verdict.json --judge reviewer-a
+impact-model judge record impact-model.yaml verdict2.json --judge reviewer-b
+impact-model judge summary impact-model.yaml --aggregation majority
 ```
 
 1. `show` prints the **bundle**: the rubric, the document, a narrative, the lint
@@ -81,21 +81,21 @@ theoryofchange judge summary theory.yaml --aggregation majority
    rubric category and names its findings.
 3. `record` checks the verdict against the bundle and stores it under
    `.toc/judgements/<hash>/<judge>.json`. It is rejected, with exit code 1, if it
-   judged a different version of the theory, is not a valid report, scores a
+   judged a different version of the impact model, is not a valid report, scores a
    category the rubric does not have, or leaves a required category unscored.
 4. `summary` combines every verdict for the current version: per-category scores,
-   how closely the judges agree, and whether the theory passes.
+   how closely the judges agree, and whether the impact model passes.
 
 Rubric profiles: `core` has 12 categories; `development` adds categories for
 programs working on development outcomes. Aggregation is `majority` (a tie goes
 to partial), `conservative` (the lowest score), `optimistic` (the highest), or
-`unanimous` (anything else is partial). The theory passes when every required
+`unanimous` (anything else is partial). The impact model passes when every required
 category passes, no blocking category fails, and the findings stay within the
 rubric's limits.
 
 !!! note "How well does the rubric discriminate?"
     The [rubric evaluation](../evals/rubric-discrimination.md) records two judges
-    scoring a reference theory and a deliberately weak one. The weak theory fails
+    scoring a reference impact model and a deliberately weak one. The weak impact model fails
     most categories and the reference has no high or critical findings.
 
 ## Next

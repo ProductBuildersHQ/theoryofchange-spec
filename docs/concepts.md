@@ -1,10 +1,20 @@
 # Concepts → Go Types
 
-How each Theory of Change concept from the
+How each concept from the
 [research brief](research/theory-of-change.md) (§8 entity model, §9.8 UNDG
-implications) maps to the Go model in `pkg/toc`. The
+implications) maps to the Go model in `pkg/impact`. The
 [TRD §7](specs/initiatives/INIT-THEORYOFCHANGESPEC-001/TRD.md) is normative;
 this page is the index.
+
+The model is one impact model. The methods the research brief describes are
+views of it, drawn by the `report` command:
+
+| Method | View | Report kinds |
+|--------|------|--------------|
+| Theory of change | Pathways of change, with the reasons and assumptions behind each link | `pathway` |
+| Logic model | Inputs, activities, outputs, and outcomes by level, for each pathway | `logic-model`, `logic-model-layered`, `logic-model-d2` |
+| Outcome map | Outcomes by level, with who is responsible for each | `outcome-map` |
+| Logframe | A matrix of narrative, indicators, verification, and assumptions | `logframe` |
 
 **Delivered by** names the roadmap item (`RMI-THEORYOFCHANGESPEC-NNN`, shown
 as `NNN`) that adds the type or field. Concepts not in v0 are listed under
@@ -14,18 +24,18 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 
 | Concept (source) | Go type / field | Delivered by |
 |------------------|-----------------|--------------|
-| Theory of Change document (ActKnowledge, UNDG) | `toc.Document` (`kind: TheoryOfChange`) | 004 |
-| Metadata, owners, status | `Document.Metadata` (`prism-core` `Metadata`) | 004 |
-| Whose theory it is (perspective) | `Document.Perspective` (`actorId`, `role`, `futureRef`) | 004 |
-| Problem statement, target population, time horizon, narrative | `Document.Context` | 004 |
+| Impact model document (holds the theory of change of ActKnowledge and UNDG) | `impact.Model` (`kind: ImpactModel`) | 004 |
+| Metadata, owners, status | `Model.Metadata` (`prism-core` `Metadata`) | 004 |
+| Whose impact model it is (perspective) | `Model.Perspective` (`actorId`, `role`, `futureRef`) | 004 |
+| Problem statement, target population, time horizon, narrative | `Model.Context` | 004 |
 | Purpose: why the organization exists and what it works toward (a statement, not a causal element) | `Context.Mission`, `Context.Vision` | 064 |
-| Ceiling of accountability (ActKnowledge) | `Document.Ceiling` | 004 |
-| Revision / adaptive management, quality review (plausible, feasible, testable) | `Document.Revisions[]` (`Revision`, `QualityReview`) | 004 |
-| Decisions requested | `Document.Decisions[]` | 004 |
-| Problem tree: immediate / underlying / structural causes (UNDG) | `Document.Causes[]` (`Cause`) | 044 |
-| Target groups (UNDG equity) | `Document.TargetGroups[]` | 044 |
-| Validation and consultation trail (UNDG) | `Document.Consultations[]` (`Consultation`) | 052 |
-| Glossary (shared vocabulary) | `Document.Glossary[]` (`GlossaryTerm`) | 033 |
+| Ceiling of accountability (ActKnowledge) | `Model.Ceiling` | 004 |
+| Revision / adaptive management, quality review (plausible, feasible, testable) | `Model.Revisions[]` (`Revision`, `QualityReview`) | 004 |
+| Decisions requested | `Model.Decisions[]` | 004 |
+| Problem tree: immediate / underlying / structural causes (UNDG) | `Model.Causes[]` (`Cause`) | 044 |
+| Target groups (UNDG equity) | `Model.TargetGroups[]` | 044 |
+| Validation and consultation trail (UNDG) | `Model.Consultations[]` (`Consultation`) | 052 |
+| Glossary (shared vocabulary) | `Model.Glossary[]` (`GlossaryTerm`) | 033 |
 
 ## Causal backbone
 
@@ -42,8 +52,8 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Polarity, lag, feedback loops (reinforcing / balancing) | `CausalLink.Polarity`, `Lag`, `Feedback`, `LoopType` | 004 |
 | Intervention, strategy, activity, outputs | `Intervention` (`Targets`, `Outputs`, `Status`, `Resources`) | 004 |
 | Capability links (PRISM) | `Intervention.Capabilities` (`prism-core` `CapabilityRef`) | 004 |
-| Pathways / program areas / products | `Document.Pathways[]` (`Pathway`, kind `program` or `product`) | 032, 064 |
-| Nested ToCs (overarching vs outcome-level, UNDG) | `Document.Parent`, `Pathway.ChildToc` | 032 |
+| Pathways / program areas / products | `Model.Pathways[]` (`Pathway`, kind `program` or `product`) | 032, 064 |
+| Nested ToCs (overarching vs outcome-level, UNDG) | `Model.Parent`, `Pathway.ChildModel` | 032 |
 
 ## Assumptions, risks, context, evidence
 
@@ -66,7 +76,7 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 |---------|-----------------|--------------|
 | Stakeholders, boundary partners, beneficiaries, champions, competitors | `Actor` (`Type`, `Roles`, `Stance`, `Influence`, `Interest`) | 004 |
 | Contact person | `Actor.Contact` (`prism-core` `Person`) | 004 |
-| Shared actor registry across documents (UFM) | `ActorRegistry` document; `Document.ActorRegistry` | 005 |
+| Shared actor registry across documents (UFM) | `ActorRegistry` document; `Model.ActorRegistry` | 005 |
 
 ## Measurement
 
@@ -78,9 +88,9 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Quantitative / qualitative / progress markers (expect / like / love) | `Indicator.MeasurementType`, `Levels` | 004 |
 | Data source, method, frequency, owner, disaggregation | `Indicator.DataSource`, `Method`, `Frequency`, `OwnerActorID`, `Disaggregation` | 004 |
 | Indicator subject: outcome, output, or assumption | `Indicator.Measures` | 004 |
-| Shared metric definitions with formulas | `Document.Metrics[]` (`Metric`); `Indicator.MetricID`, `RollupFrom` | 033 |
+| Shared metric definitions with formulas | `Model.Metrics[]` (`Metric`); `Indicator.MetricID`, `RollupFrom` | 033 |
 | Attribution vs contribution | `Indicator.Claim`, `Caveats` | 033 |
-| Metric tier: activity, output, outcome, impact (input, output, and driver metrics) | `Document.IndicatorTier` (derived from what the indicator measures; never stored) | 063 |
+| Metric tier: activity, output, outcome, impact (input, output, and driver metrics) | `Model.IndicatorTier` (derived from what the indicator measures; never stored) | 063 |
 | North Star, one metric that matters, guardrails, for a program or product | `Pathway.Focus` (`NorthStarID`, `OneMetricID`, `GuardrailIDs`, `Rationale`) | 064 |
 | Headline metrics: the few numbers an audience leads with, in its order and wording | `Audience.Headline[]` (`HeadlineMetric`: `IndicatorID`, `Label`, `Note`) | 064 |
 | A metric worked out from others, such as cost per outcome | `Indicator.ComposedOf` (`Composition`: `Op` ratio, product, sum, or difference, and `IndicatorIDs`) | 067 |
@@ -88,7 +98,7 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Metric selection, collection burden, budget | `SelectionCriterion`, `Indicator.Selection`, `Indicator.Collection`, `MeasurementBudget` | 034 |
 | Observations (time series, data quality) | `ObservationSet.Observations[]` (`Observation`) | 005 |
 | Assumption assessments over time | `ObservationSet.Assessments[]` | 005 |
-| Most Significant Change stories, theme codebook | `ObservationSet.Stories[]`, `Document.Themes[]` | 035 |
+| Most Significant Change stories, theme codebook | `ObservationSet.Stories[]`, `Model.Themes[]` | 035 |
 | Learning reviews (MEL) | `ObservationSet.Reviews[]` | 035 |
 | Computed status, diffs between periods | `Status`, `StatusDiff` | 005 (types), 017–020 (computation) |
 
@@ -97,8 +107,8 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Concept | Go type / field | Delivered by |
 |---------|-----------------|--------------|
 | Links to OKRs, Balanced Scorecard, V2MOM, capabilities, maturity SLIs, market entities, VSEM, USM, UFM, SDGs | `Alignment` with `ExternalRef` | 004 |
-| Cross-repository references | `pkg/ref` (`toc:<doc>#<element>`) | 003 |
-| Audiences for reports and stories | `Document.Audiences[]` | 035 |
+| Cross-repository references | `pkg/ref` (`model:<doc>#<element>`) | 003 |
+| Audiences for reports and stories | `Model.Audiences[]` | 035 |
 
 ## Deferred
 

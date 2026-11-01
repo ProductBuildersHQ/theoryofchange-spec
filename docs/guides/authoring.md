@@ -1,6 +1,6 @@
-# Authoring a Theory
+# Authoring an Impact Model
 
-A theory is one document of connected elements. This guide describes the
+An impact model is one document of connected elements. This guide describes the
 elements, how they refer to each other, and the ways to change them.
 
 ## The elements
@@ -15,10 +15,10 @@ elements, how they refer to each other, and the ways to change them.
 | **Indicator** | How an outcome, activity, or assumption is measured, with a baseline, targets, and a frequency. It can also be worked out from other indicators, such as a cost per outcome |
 | **Actor** | A person or organization who changes, delivers, or co-owns an outcome |
 | **Evidence** | A source that supports or contradicts an element, with a sensitivity |
-| **Pathway** | A named route through the theory, such as one program's or product's contribution, with the North Star it steers by |
+| **Pathway** | A named route through the impact model, such as one program's or product's contribution, with the North Star it steers by |
 | **Cause**, **target group** | The problem tree and the groups affected, for equity and root-cause analysis |
 | **Audience**, **theme** | Who needs to see what reported, the short list of numbers each is told, and the codebook for coding stories |
-| **Metric**, **term** | A shared metric library, and a glossary of the words the theory uses |
+| **Metric**, **term** | A shared metric library, and a glossary of the words the impact model uses |
 | **Risk**, **decision**, **factor**, **consultation** | What could go wrong, what is awaiting a decision, external factors, and the review trail |
 
 An outcome also records its **responsibility**: `own`, `shared`, `partner`, or
@@ -32,7 +32,7 @@ references are by ID.
 ## What a program steers by, and what each audience is told
 
 Three choices sit on top of the chain from activities to impact. They are
-different things, and a theory can make all three.
+different things, and an impact model can make all three.
 
 - **A North Star** is the one number a program or product steers by. It is set on
   the pathway, with an optional *one metric that matters* and the guardrails that
@@ -49,16 +49,16 @@ different things, and a theory can make all three.
 
 ```bash
 # A pathway's North Star, and what watches it
-theoryofchange pathway set theory.yaml pw-learning \
+impact-model pathway set impact-model.yaml pw-learning \
   --north-star ind-practice-maturity --guardrails ind-retention-learning
 
 # What the board is told, in order
-theoryofchange audience set theory.yaml aud-board --set 'headline=[
+impact-model audience set impact-model.yaml aud-board --set 'headline=[
   {"indicatorId":"ind-practice-maturity","label":"Leadership practice across members"},
   {"indicatorId":"ind-reach-network"}]'
 
 # Why the organization exists
-theoryofchange patch theory.yaml - <<'EOF'
+impact-model patch impact-model.yaml - <<'EOF'
 [{"op":"add","path":"/context/mission","value":"Strengthen local nonprofits."}]
 EOF
 ```
@@ -68,7 +68,7 @@ per applied change. Give that indicator a `composedOf`, and its value is worked
 out from the latest value of each part when it has none of its own:
 
 ```bash
-theoryofchange indicator set theory.yaml ind-cost-per-change \
+impact-model indicator set impact-model.yaml ind-cost-per-change \
   --composed-op ratio --composed-of ind-cost,ind-changes-applied
 ```
 
@@ -79,7 +79,7 @@ how the value is worked out and what is withheld, and
 
 ## Provenance: stated, inferred, or confirmed
 
-Each element carries a **basis** that says why it is in the theory:
+Each element carries a **basis** that says why it is in the impact model:
 
 | Basis | Meaning |
 |-------|---------|
@@ -92,18 +92,18 @@ Each element carries a **basis** that says why it is in the theory:
 Record who decided a confirmed or rejected basis with `--decided-by` as a
 **group or role**, not a personal name, and when with `--decided-at`.
 
-## Change a theory with commands
+## Change an impact model with commands
 
 Every element kind has `add`, `set`, and `rm`:
 
 ```bash
-theoryofchange outcome add theory.yaml --id oc-skills --title "Staff write strong applications" --level short_term
-theoryofchange link add theory.yaml --id ln-skills-adoption --from oc-skills --to oc-adoption --rationale "Skilled staff apply more often"
-theoryofchange outcome set theory.yaml oc-skills --basis confirmed --decided-by "Program board" --decided-at 2026-04-01
-theoryofchange outcome rm theory.yaml oc-skills --cascade
+impact-model outcome add impact-model.yaml --id oc-skills --title "Staff write strong applications" --level short_term
+impact-model link add impact-model.yaml --id ln-skills-adoption --from oc-skills --to oc-adoption --rationale "Skilled staff apply more often"
+impact-model outcome set impact-model.yaml oc-skills --basis confirmed --decided-by "Program board" --decided-at 2026-04-01
+impact-model outcome rm impact-model.yaml oc-skills --cascade
 ```
 
-Run `theoryofchange <element> add --help` to see every field as a flag.
+Run `impact-model <element> add --help` to see every field as a flag.
 
 Each command is compiled to a JSON Patch and applied through the same validated
 path, which has these guarantees:
@@ -117,14 +117,14 @@ path, which has these guarantees:
 - **Honest removal.** Removing an element that others refer to is rejected;
   `rm --cascade` removes the references as well and tells you what it removed.
 
-## Change a theory with a patch
+## Change an impact model with a patch
 
 For many changes at once, or from a script or an agent, apply an
 [RFC 6902](https://www.rfc-editor.org/rfc/rfc6902) JSON Patch:
 
 ```bash
 echo '[{"op":"replace","path":"/outcomes/@oc-skills/title","value":"Staff write strong applications"}]' \
-  | theoryofchange patch theory.yaml -
+  | impact-model patch impact-model.yaml -
 ```
 
 Pointers can address an array element by ID: `/outcomes/@oc-skills/title`
@@ -133,26 +133,26 @@ applied to a copy, and all of the guarantees above apply.
 
 ## Keep a revision log
 
-When a theory changes after review, record why. `theoryofchange diff` compares
+When an impact model changes after review, record why. `impact-model diff` compares
 two versions by element ID, so a retitled outcome is one changed element, and
-the same theory in YAML and JSON has no differences:
+the same impact model in YAML and JSON has no differences:
 
 ```bash
-theoryofchange diff theory-v1.yaml theory-v2.yaml
-theoryofchange diff theory-v1.yaml theory-v2.yaml --revision --version 0.2 --date 2026-03-01 \
+impact-model diff impact-model-v1.yaml impact-model-v2.yaml
+impact-model diff impact-model-v1.yaml impact-model-v2.yaml --revision --version 0.2 --date 2026-03-01 \
   > revision.patch.json
-theoryofchange patch theory-v2.yaml revision.patch.json
+impact-model patch impact-model-v2.yaml revision.patch.json
 ```
 
 `--revision` prints a patch that appends a draft revision listing every changed
 element ID. Review it, then apply it.
 
-## Theories that belong together
+## Impact models that belong together
 
-- **Parent and child.** A program's theory can contribute to an organization's.
+- **Parent and child.** A program's impact model can contribute to an organization's.
   `validate program.yaml --parent organization.yaml` checks that the
   `contributesTo` references resolve in the parent.
-- **Competing futures.** Theories describing different futures of one market
+- **Competing futures.** Impact models describing different futures of one market
   share one actor registry. `validate a.yaml b.yaml c.yaml --registry actors.yaml --futures`
   checks that they name their futures and perspectives, do not both speak for the
   same actor in the same future, and refer to each other's elements correctly.
@@ -163,12 +163,12 @@ element ID. Review it, then apply it.
 The JSON Schemas are generated from the Go types and embedded in the binary:
 
 ```bash
-theoryofchange schema                                   # list them
-theoryofchange schema theory-of-change > theory-of-change.schema.json
+impact-model schema                                   # list them
+impact-model schema impact-model > impact-model.schema.json
 ```
 
 Seven schemas are available: `theory-of-change`, `observation-set`,
-`theory-of-change-status`, `status-diff`, `actor-registry`, `review-response`,
+`impact-model-status`, `status-diff`, `actor-registry`, `review-response`,
 and `csv-mapping`.
 
 ## Next

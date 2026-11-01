@@ -149,7 +149,7 @@ func withPandoc(cmd *cobra.Command, format string, build func(share.Profile) (st
 	return nil
 }
 
-// reviewView builds the whole-impact model view the review exports render.
+// reviewView builds the whole impact model view the review exports render.
 func reviewView(path string) (*impact.Model, *report.View, error) {
 	doc, err := loadForRender(path)
 	if err != nil {

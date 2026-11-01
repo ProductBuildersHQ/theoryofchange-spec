@@ -1,7 +1,7 @@
 # PLAN — Theory of Change Specification — Go-first model, JSON Schema, measurement, and leadership reporting
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
-**Repository:** `github.com/ProductBuildersHQ/theoryofchange-spec`
+**Repository:** `github.com/ProductBuildersHQ/impact-model`
 **Version:** 0.4
 **Status:** Draft — pending tech-lead review (pbhq-lite gate: after PLAN)
 
@@ -97,16 +97,16 @@ New repository; every component is new.
 | Component | Change | Notes |
 |-----------|--------|-------|
 | Repo scaffold (`go.mod`, CI, `.golangci.yaml`, `CLAUDE.md`, `README.md`, `LICENSE`) | New | Mirrors market-spec / prism conventions |
-| `pkg/toc`, `pkg/ref` | New | Model (including provenance) and reference grammar |
+| `pkg/impact`, `pkg/ref` | New | Model (including provenance) and reference grammar |
 | `schema/`, `cmd/generate-schema` | New | Go-first schema pipeline |
-| `pkg/tocio`, `pkg/validate`, `pkg/graph` | New | Load, canonical format, check, analyze |
+| `pkg/impactio`, `pkg/validate`, `pkg/graph` | New | Load, canonical format, check, analyze |
 | `pkg/edit`, `pkg/diff` | New | Patch engine, element commands, theory diff |
 | `pkg/report`, `pkg/slides` | New | Reports and Marp decks from one view model |
 | `pkg/share`, `pkg/review` | New | Sharing exports and stamps; review import and approval |
 | `pkg/burden`, `pkg/tabular` | New | Collection burden; CSV import / export |
 | `pkg/lint`, `pkg/judge`, `spec/` | New | Rules and profiles; judge bundles; template + rubrics |
 | `pkg/measure` | New | Status computation |
-| `pkg/service`, `cmd/theoryofchange`, `pkg/mcp` | New | Service layer; thin Cobra CLI and MCP adapters |
+| `pkg/service`, `cmd/impact-model`, `pkg/mcp` | New | Service layer; thin Cobra CLI and MCP adapters |
 | `skills/` | New | Agent skills over the CLI, including source drafting and Google sharing |
 | `pkg/prismx` | New | prism-roadmap adapters |
 | `examples/`, `testdata/`, `docs/` | New | Fictional reference ToCs, defect corpus, concept mapping, integration contract |
@@ -125,7 +125,7 @@ by sequence, not by number.
 | P-01 | Scaffold module, CI, lint config, README, CLAUDE.md, LICENSE | — (enabler) | CI green | — |
 | P-02 | Concept-to-type mapping doc and glossary from the research brief | PRD G-1 | Mapping covers research §8.4 and §9.8 | P-01 |
 | P-03 | `pkg/ref` reference grammar | PRD-FR-604; TRD-015 | Round-trip tests | P-01 |
-| P-04 | `pkg/toc` core model with a minimal required set, reusing prism-core | PRD-FR-101…110; TRD-001, 016 | Round-trip, enum, minimal fixture | P-02, P-03 |
+| P-04 | `pkg/impact` core model with a minimal required set, reusing prism-core | PRD-FR-101…110; TRD-001, 016 | Round-trip, enum, minimal fixture | P-02, P-03 |
 | P-05 | `ObservationSet`, `Status`, `StatusDiff`, `ActorRegistry` | PRD-FR-111, 406; TRD-002 | Round-trip tests | P-04 |
 | P-06 | Schema pipeline, embed, schemakit lint, drift check | PRD-FR-201, 202; TRD-003, 004 | 0 lint violations; drift check | P-04, P-05 |
 
@@ -133,11 +133,11 @@ by sequence, not by number.
 
 | Step | Approach | Satisfies | Verification | Depends on |
 |------|----------|-----------|--------------|------------|
-| P-07 | `pkg/tocio` load, limits, merge, canonical `Format` | PRD-FR-203, 704; TRD-005, 031 | YAML/JSON equality; fmt idempotence | P-06 |
+| P-07 | `pkg/impactio` load, limits, merge, canonical `Format` | PRD-FR-203, 704; TRD-005, 031 | YAML/JSON equality; fmt idempotence | P-06 |
 | P-08 | `pkg/validate` | PRD-FR-301; TRD-006 | Table tests | P-07 |
 | P-09 | `pkg/graph` | PRD-FR-302; TRD-007 | Unit, property, benchmark | P-08 |
 | P-46 | `pkg/edit` patch engine | PRD-FR-701, 702, G-14; TRD-029 | Rejection and `@id` tests | P-08 |
-| P-11 | `pkg/service` + `cmd/theoryofchange`: validate, graph, schema, init, fmt, patch | PRD US-1, US-16; TRD §6.1 | CLI tests | P-09, P-46 |
+| P-11 | `pkg/service` + `cmd/impact-model`: validate, graph, schema, init, fmt, patch | PRD US-1, US-16; TRD §6.1 | CLI tests | P-09, P-46 |
 | P-47 | Element commands compiled to patches | PRD-FR-703, US-16; TRD-030 | Equivalence; dangling-reference tests | P-46, P-11 |
 
 ### Phase 3 — Pathways, Metric Library, Provenance, and Reference Examples
@@ -157,18 +157,18 @@ by sequence, not by number.
 | P-23 | Mermaid pathway renderer | PRD-FR-501, G-12 | Golden Mermaid | P-22 |
 | P-37 | Logic-model, metric-definitions, glossary reports | PRD-FR-505, US-12; TRD-022 | Golden files | P-22 |
 | P-49 | Marp engine and workshop deck | PRD-FR-801, G-15, US-17; TRD-033 | Golden deck | P-23, P-37 |
-| P-39 | `theoryofchange report` definition kinds, `definitions` pack, `theoryofchange export csv` | PRD-FR-204, 505, G-12; TRD-021 | CLI and CSV golden tests | P-23, P-37, P-11 |
-| P-53 | `theoryofchange evidence add`; `toc-draft-from-sources` skill | PRD-FR-606, US-19, G-17; TRD-037 | Skill smoke test over saved fixture pages | P-47, P-52, P-39 |
+| P-39 | `impact-model report` definition kinds, `definitions` pack, `impact-model export csv` | PRD-FR-204, 505, G-12; TRD-021 | CLI and CSV golden tests | P-23, P-37, P-11 |
+| P-53 | `impact-model evidence add`; `impact-draft-from-sources` skill | PRD-FR-606, US-19, G-17; TRD-037 | Skill smoke test over saved fixture pages | P-47, P-52, P-39 |
 
 ### Phase 5 — Review and Agreement (→ M1)
 
 | Step | Approach | Satisfies | Verification | Depends on |
 |------|----------|-----------|--------------|------------|
 | P-54 | `assessment` report | PRD-FR-512, US-19; TRD-038 | Golden file | P-22, P-52 |
-| P-56 | `pandoc` Markdown profile, PNG diagrams, export stamps, `theoryofchange export docx\|pptx` | PRD-FR-901, 902; TRD-039 | Golden Markdown; stamp tests; pandoc test (skipped when absent) | P-39, P-49, P-23 |
+| P-56 | `pandoc` Markdown profile, PNG diagrams, export stamps, `impact-model export docx\|pptx` | PRD-FR-901, 902; TRD-039 | Golden Markdown; stamp tests; pandoc test (skipped when absent) | P-39, P-49, P-23 |
 | P-57 | Review packet and review sheet exports | PRD-FR-903, US-20; TRD-039 | Golden files | P-54, P-56 |
-| P-58 | `ReviewResponse` schema; `theoryofchange import review` (JSON and `--from-csv`) to proposals plus consultation | PRD-FR-904, 905, US-20; TRD-040; INV-10 | Seeded-row tests incl. stale hash and quoted-text resolution | P-57, P-46 |
-| P-55 | `theoryofchange approve` | PRD-FR-707, US-21; TRD-041 | Approval and refusal tests | P-58, P-52 |
+| P-58 | `ReviewResponse` schema; `impact-model import review` (JSON and `--from-csv`) to proposals plus consultation | PRD-FR-904, 905, US-20; TRD-040; INV-10 | Seeded-row tests incl. stale hash and quoted-text resolution | P-57, P-46 |
+| P-55 | `impact-model approve` | PRD-FR-707, US-21; TRD-041 | Approval and refusal tests | P-58, P-52 |
 
 ### Phase 6 — Measurement Framework Design (→ M1.5)
 
@@ -189,7 +189,7 @@ by sequence, not by number.
 | P-14 | Remaining rule families (incl. provenance TOC-PRV-*) | PRD-FR-303, US-10, US-11 | Fixture per rule | P-12, P-36 |
 | P-15 | Template, core rubric, development profile | PRD-FR-601; TRD-012, 028 | Parse; checklist coverage | P-04 |
 | P-50 | `pkg/judge` show / record / summary | PRD-FR-803, G-16, US-18; TRD-034 | Bundle, hash, aggregation tests | P-15, P-39 |
-| P-16 | `theoryofchange lint` CLI; discrimination eval with ≥ 2 judges | PRD US-2 | Eval record | P-13, P-14, P-50 |
+| P-16 | `impact-model lint` CLI; discrimination eval with ≥ 2 judges | PRD US-2 | Eval record | P-13, P-14, P-50 |
 
 ### Phase 8 — Measurement (→ M2)
 
@@ -200,7 +200,7 @@ by sequence, not by number.
 | P-19 | Assumption propagation; confidence | PRD-FR-404, 405 | US-5 test | P-18 |
 | P-20 | `measure.Evaluate`, theme counts, `Diff` | PRD-FR-406; INV-3 | Golden snapshots | P-19, P-35 |
 | P-40 | CSV observation import | PRD-FR-204, US-13; TRD-021 | Seeded-bad-row tests | P-07, P-33 |
-| P-21 | `theoryofchange status`, `theoryofchange import` CLI; benchmarks | PRD US-4, US-13; TRD §8 | CLI; < 1 s | P-20, P-40, P-11 |
+| P-21 | `impact-model status`, `impact-model import` CLI; benchmarks | PRD US-4, US-13; TRD §8 | CLI; < 1 s | P-20, P-40, P-11 |
 
 ### Phase 9 — Reporting, Story, and Presentations (→ M3)
 
@@ -212,14 +212,14 @@ by sequence, not by number.
 | P-45 | Narrative and division-of-labour reports | PRD-FR-510, 511, 120; TRD-026, 027 | Golden | P-22, P-44 |
 | P-25 | Custom templates; restricted suppression | PRD-FR-502, 503; TRD-011 | Template; absence | P-24 |
 | P-51 | Exec, learning-review, story decks; export | PRD-FR-801, 802, US-17; TRD-033 | Golden; export | P-49, P-24, P-41, P-42 |
-| P-26 | `theoryofchange report` status kinds; benchmark | PRD G-5 | CLI; benchmark | P-25, P-41, P-42, P-45, P-21 |
+| P-26 | `impact-model report` status kinds; benchmark | PRD G-5 | CLI; benchmark | P-25, P-41, P-42, P-45, P-21 |
 
 ### Phase 10 — Agents and Revisions (→ M4)
 
 | Step | Approach | Satisfies | Verification | Depends on |
 |------|----------|-----------|--------------|------------|
-| P-27 | MCP server incl. `toc_patch`, `toc_deck`, `toc_judge_bundle` | PRD-FR-602, 706, US-6; TRD-013 | In-memory transport; traversal | P-26, P-46, P-50 |
-| P-48 | `pkg/diff`; `theoryofchange diff --revision` | PRD-FR-705, US-16, US-21; TRD-032 | Golden diffs incl. rejected elements | P-46, P-09 |
+| P-27 | MCP server incl. `impact_patch`, `impact_deck`, `impact_judge_bundle` | PRD-FR-602, 706, US-6; TRD-013 | In-memory transport; traversal | P-26, P-46, P-50 |
+| P-48 | `pkg/diff`; `impact-model diff --revision` | PRD-FR-705, US-16, US-21; TRD-032 | Golden diffs incl. rejected elements | P-46, P-09 |
 | P-43 | Agent skills: author, status refresh, learning review, audience story | PRD-FR-605, US-15, G-13; TRD-024 | Smoke test twice | P-26, P-39, P-47 |
 | P-59 | `toc-share-google` skill with manual fallback | PRD-FR-607, US-20, G-18; TRD-042 | Smoke test with recorded tool outputs | P-56, P-57, P-58, `RMI-GOGOOGLE-006`, `RMI-MCPGOOGLE-004`, `RMI-MCPGOOGLE-005` |
 
@@ -256,7 +256,7 @@ P-58 → P-55.
 (`RMI-GOGOOGLE-006`, the CLI) and `INIT-MCPGOOGLE-001`
 (`RMI-MCPGOOGLE-004/005`, suggestions and comments tools). The M1 review loop
 does **not** wait on them: it runs with manual upload, a CSV review sheet,
-and `theoryofchange import review --from-csv`.
+and `impact-model import review --from-csv`.
 
 **Parallel streams:**
 
@@ -268,8 +268,8 @@ and `theoryofchange import review --from-csv`.
 
 ## 5. Data and Migration
 
-Not applicable for v0.1. Pre-release documents are migrated with `theoryofchange fmt`
-and `theoryofchange validate`. The model only gets additive changes after Phase 6.
+Not applicable for v0.1. Pre-release documents are migrated with `impact-model fmt`
+and `impact-model validate`. The model only gets additive changes after Phase 6.
 
 ## 6. Testing Strategy
 
@@ -280,7 +280,7 @@ As in TRD §12, plus:
   comment, suggestion) and stale hashes.
 - **Export stamps:** checked for every format.
 - **`pandoc` and `mmdc`:** export tests skipped when the tools are absent.
-- **Skills:** smoke tests for `toc-draft-from-sources` (saved fixture pages)
+- **Skills:** smoke tests for `impact-draft-from-sources` (saved fixture pages)
   and `toc-share-google` (recorded gogoogle / mcp-google outputs).
 
 Coverage target ≥ 80 % on `pkg/...`.
@@ -314,6 +314,6 @@ Coverage target ≥ 80 % on `pkg/...`.
 | PR-11 | Marp, Mermaid, or Pandoc CLI changes or absence | Medium / Low | Markdown is the contract; exports optional. Owner: implementer |
 | PR-12 | Public-source drafts read as claims about the organization | Medium / High | Basis badges in every artifact; assessment report frames inferred items as questions; provenance lint. Owner: initiative lead |
 | PR-13 | Reviewers use comments and suggestions that tooling cannot yet read | High / Medium | Response columns requested in the packet; review sheet; gogoogle and mcp-google initiatives add comment and suggestion reading. Owner: initiative lead |
-| PR-14 | Free-text review rows are misinterpreted when turned into patches | Medium / Medium | Free text becomes flagged notes, not ops; a human applies proposals with `theoryofchange patch`. Owner: implementer |
+| PR-14 | Free-text review rows are misinterpreted when turned into patches | Medium / Medium | Free text becomes flagged notes, not ops; a human applies proposals with `impact-model patch`. Owner: implementer |
 
 No open question blocks Phase 1.

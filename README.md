@@ -1,4 +1,4 @@
-# Theory of Change Spec
+# Impact Model
 
 [![Go CI][go-ci-svg]][go-ci-url]
 [![Go Lint][go-lint-svg]][go-lint-url]
@@ -6,29 +6,58 @@
 [![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
 
- [go-ci-svg]: https://github.com/ProductBuildersHQ/theoryofchange-spec/actions/workflows/go-ci.yaml/badge.svg?branch=main
- [go-ci-url]: https://github.com/ProductBuildersHQ/theoryofchange-spec/actions/workflows/go-ci.yaml
- [go-lint-svg]: https://github.com/ProductBuildersHQ/theoryofchange-spec/actions/workflows/go-lint.yaml/badge.svg?branch=main
- [go-lint-url]: https://github.com/ProductBuildersHQ/theoryofchange-spec/actions/workflows/go-lint.yaml
- [go-sast-svg]: https://github.com/ProductBuildersHQ/theoryofchange-spec/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
- [go-sast-url]: https://github.com/ProductBuildersHQ/theoryofchange-spec/actions/workflows/go-sast-codeql.yaml
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/ProductBuildersHQ/theoryofchange-spec
- [docs-godoc-url]: https://pkg.go.dev/github.com/ProductBuildersHQ/theoryofchange-spec
+ [go-ci-svg]: https://github.com/ProductBuildersHQ/impact-model/actions/workflows/go-ci.yaml/badge.svg?branch=main
+ [go-ci-url]: https://github.com/ProductBuildersHQ/impact-model/actions/workflows/go-ci.yaml
+ [go-lint-svg]: https://github.com/ProductBuildersHQ/impact-model/actions/workflows/go-lint.yaml/badge.svg?branch=main
+ [go-lint-url]: https://github.com/ProductBuildersHQ/impact-model/actions/workflows/go-lint.yaml
+ [go-sast-svg]: https://github.com/ProductBuildersHQ/impact-model/actions/workflows/go-sast-codeql.yaml/badge.svg?branch=main
+ [go-sast-url]: https://github.com/ProductBuildersHQ/impact-model/actions/workflows/go-sast-codeql.yaml
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/ProductBuildersHQ/impact-model
+ [docs-godoc-url]: https://pkg.go.dev/github.com/ProductBuildersHQ/impact-model
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/ProductBuildersHQ/theoryofchange-spec/blob/main/LICENSE
+ [license-url]: https://github.com/ProductBuildersHQ/impact-model/blob/main/LICENSE
 
-An AI-native, spec-driven way to capture, measure, and report on a
-[Theory of Change](https://en.wikipedia.org/wiki/Theory_of_change):
-a Go-first data model with generated JSON Schema, plus an SDK, the
-`theoryofchange` CLI, and an MCP server.
+An AI-native, spec-driven way to model, measure, and report on impact: how a
+program, product, or organization expects to bring about change, what it does to
+get there, and what it measures along the way. It is a Go-first data model with
+generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
-> **Status:** the latest release is v0.2.0; see the
-> [release notes](docs/releases/v0.2.0.md). It renames the `intermediate` outcome
-> level to `medium_term`, so a theory written for v0.1.0 needs that one change.
+One impact model describes the change once. The
+[theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
+model, the pathway of change, the outcome map, and the logframe are different
+**views** of it, each made for a different reader, and none of them is a part of
+another.
 
-## What is a Theory of Change?
+> **Status:** the latest release, v0.2.0, was published as `theoryofchange-spec`.
+> This repository is now `impact-model`, and the next release (v0.3.0) carries
+> the rename: the module, the command, the document `kind`, and the schema names.
+> A document written for v0.2.0 needs `kind: ImpactModel` and a few renamed
+> fields. See [the decision](docs/design/adrs/0001-rename-to-impact-model.md).
 
-A Theory of Change explains **how and why a program expects to bring about a
+## What is an impact model?
+
+An impact model is one structured description of **how and why change is
+expected to happen**. It holds:
+
+- the **outcomes** that should change, at five levels from output to impact, and
+  the **causal links** between them, each with a reason to believe it;
+- the **assumptions** that must hold for a link to work, and the **evidence** for
+  and against them;
+- what is done to bring the change about: **interventions**, and the resources
+  and outputs they need and produce;
+- how progress is **measured**: indicators, targets, and observations over time;
+- who is accountable for each change, and who needs to see what.
+
+Every element records where it came from (stated, inferred, a hypothesis, or
+confirmed), so a reader can tell what an organization has claimed from what an
+assistant has proposed.
+
+The model is a graph of causes and measures. A diagram of it is a view, and a
+single model can produce several.
+
+## What is a theory of change?
+
+A theory of change explains **how and why a program expects to bring about a
 change**. It starts from the long-term goal and works backwards: what
 conditions must exist for the goal to be reached, what must exist before each of
 those, and so on down to what the program does today. Each step is an
@@ -58,17 +87,17 @@ sources agree on five reasons:
   money on activities.
 - **Closing the "missing middle".** Show how day-to-day activities connect to a
   long-term goal, instead of asserting that they do.
-- **Evaluability.** Indicators and tests come from the theory, so you know what to
-  measure and what would count as being wrong.
+- **Evaluability.** Indicators and tests come from the causal reasoning, so you
+  know what to measure and what would count as being wrong.
 - **Communication.** Funders, partners, staff, and the people the program serves
   can see the same reasoning and argue with it.
-- **Learning.** The theory is a living framework. When evidence arrives, you revise
-  the theory instead of defending it.
+- **Learning.** The model is a living framework. When evidence arrives, you revise
+  it instead of defending it.
 
-### Pathways of change, outcome maps, and logic models
+### Views of one impact model
 
-These are different **views of one theory**. Each answers a different question for
-a different reader:
+These are different **views of one impact model**. Each answers a different
+question for a different reader:
 
 | View | Answers | What it looks like |
 |------|---------|--------------------|
@@ -77,28 +106,31 @@ a different reader:
 | **Logic model** | What goes in, what is done, and what comes out? | Stages from inputs, activities, and outputs through short-term, medium-term, and long-term outcomes to impact, one model per pathway |
 | **Logframe** | What do we promise, and how will we verify it? | A matrix of narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring |
 
-A logic model or logframe is a *flattened* picture: it shows the sequence but
-rarely why each step holds, and it cannot hold several pathways, feedback loops, or
-the actors who are not you. You can generate a logic model from a Theory of
-Change; you cannot recover the theory from a logic model. So this project keeps the
-**theory as the source of truth** and produces every other view from it:
+Each view is a projection of the model, and each leaves something out. A logic
+model shows the sequence from what goes in to what comes out, and rarely why each
+step holds. A theory of change shows why, and says less about what is delivered.
+A logframe fits the model into a matrix for contracts. None is derived from
+another. The impact model holds what they all need, so any of them can be drawn
+from it. A logic model that arrives on its own can seed a *candidate* impact
+model, but it cannot supply the reasons and assumptions it never held, so those
+stay marked as inferred until someone confirms them.
 
 ```bash
-theoryofchange report pathway theory.yaml           # the pathways of change, as diagrams
-theoryofchange report outcome-map theory.yaml       # the outcome map
-theoryofchange report logic-model theory.yaml       # a logic model for each pathway
-theoryofchange report logframe theory.yaml          # the logframe matrix
-theoryofchange report definitions theory.yaml       # all of them, plus metrics and glossary
+impact-model report pathway impact-model.yaml           # the theory of change as pathways of change, in diagrams
+impact-model report outcome-map impact-model.yaml       # the outcome map
+impact-model report logic-model impact-model.yaml       # a logic model for each pathway
+impact-model report logframe impact-model.yaml          # the logframe matrix
+impact-model report definitions impact-model.yaml       # all of them, plus metrics and glossary
 ```
 
-Change the theory once and every view changes with it, so the numbers and labels
+Change the model once and every view changes with it, so the numbers and labels
 never drift apart. (The outcome map here is the outcomes framework from the
 ActKnowledge method; it is not IDRC's *Outcome Mapping*, which tracks progress
 markers for the partners a program influences.)
 
 ### How the chain, the metrics, and what each audience sees fit together
 
-A Theory of Change is the chain from resources to impact. Metrics hang off each step
+An impact model is the chain from resources to impact. Metrics hang off each step
 of it, and different readers should see a different few. The first diagram is one
 program, shown as a pathway. The second shows how its metrics reach each audience.
 
@@ -203,19 +235,19 @@ Reading the second diagram:
   lead one list and not appear in another.
 - **Every box is something you can record and report today.** Mark an indicator as a
   program's North Star, with its guardrails, in the pathway's `focus`. Give each
-  audience an ordered, worded `headline` list. `theoryofchange report metric-tree`
+  audience an ordered, worded `headline` list. `impact-model report metric-tree`
   shows a program's North Star and every indicator from activity to impact, and
-  `theoryofchange report headline` shows what each audience is told. The amber boxes
+  `impact-model report headline` shows what each audience is told. The amber boxes
   are the choices you make: which number a program steers by, and which few each
-  audience leads with. `theoryofchange lint` checks them.
+  audience leads with. `impact-model lint` checks them.
 
 ## What this project gives you
 
 | Benefit | How |
 |---------|-----|
-| **A theory you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
+| **A model you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
 | **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
-| **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good theory?" has an answer you can repeat |
+| **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat |
 | **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |
 | **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash |
 | **Review that comes back** | Send a packet or sheet to reviewers, import their answers as proposed changes you inspect, then record approval |
@@ -228,19 +260,22 @@ whether it did.
 
 ## Quick start
 
-```bash
-go install github.com/ProductBuildersHQ/theoryofchange-spec/cmd/theoryofchange@latest
+The command is available from v0.3.0. Until it is tagged, build it from a checkout
+with `go build ./cmd/impact-model`.
 
-theoryofchange init --id my-program --name "My program" --out theory.yaml
-theoryofchange validate theory.yaml
-theoryofchange lint theory.yaml
-theoryofchange report definitions theory.yaml --out definitions.md   # pathway, logic model, metrics, glossary
-theoryofchange status theory.yaml -O observations.yaml                # how far it has come
-theoryofchange mcp --root .                                          # serve the tools to an AI agent
+```bash
+go install github.com/ProductBuildersHQ/impact-model/cmd/impact-model@latest
+
+impact-model init --id my-program --name "My program" --out impact-model.yaml
+impact-model validate impact-model.yaml
+impact-model lint impact-model.yaml
+impact-model report definitions impact-model.yaml --out definitions.md   # pathway, logic model, metrics, glossary
+impact-model status impact-model.yaml -O observations.yaml                # how far it has come
+impact-model mcp --root .                                          # serve the tools to an AI agent
 ```
 
 Fictional, complete examples are in [`examples/`](examples/): a membership
-network, a market-adoption theory, and three competing futures that share
+network, a market-adoption model, and three competing futures that share
 one actor registry.
 
 ## Documentation
@@ -251,10 +286,10 @@ as a documentation site (`mkdocs serve` runs it locally):
 | To | Read |
 |----|------|
 | Install and try it | [Getting started](docs/guides/getting-started.md) |
-| Write or change a theory | [Authoring a theory](docs/guides/authoring.md) |
+| Write or change an impact model | [Authoring an impact model](docs/guides/authoring.md) |
 | Measure progress | [Measuring progress](docs/guides/measurement.md) |
 | Produce reports and decks | [Reports and decks](docs/guides/reports-and-decks.md) |
-| Send a theory out for review | [Review round trip](docs/guides/review-round-trip.md) |
+| Send an impact model out for review | [Review round trip](docs/guides/review-round-trip.md) |
 | Check quality and run a judge | [Quality and judging](docs/guides/quality-and-judging.md) |
 | Connect an AI agent | [MCP server and agent skills](docs/guides/mcp-and-skills.md) |
 | Look up a command | [CLI reference](docs/guides/cli.md) |

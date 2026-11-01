@@ -16,7 +16,7 @@ import (
 
 // PathwayViews returns one View per pathway, each restricted to that
 // pathway and its route to impact, in document order. An impact model without
-// pathways yields no views; render the whole-impact model view instead.
+// pathways yields no views; render the whole impact model view instead.
 func PathwayViews(doc *impact.Model, g *graph.Graph, st *impact.Status) ([]*View, error) {
 	var views []*View
 	for _, p := range doc.Pathways {

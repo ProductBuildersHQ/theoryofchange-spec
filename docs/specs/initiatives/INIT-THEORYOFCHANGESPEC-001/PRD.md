@@ -1,7 +1,13 @@
-# PRD — Theory of Change Specification — Go-first model, JSON Schema, measurement, and leadership reporting
+# PRD — Impact Model Specification — Go-first model, JSON Schema, measurement, and leadership reporting
+
+> **Note on names.** This specification was written when the product was called
+> the Theory of Change specification. It is now the impact model, and the theory
+> of change, the logic model, the outcome map, and the logframe are views of it.
+> Below, "theory" means the impact model document unless it names the method.
+> See [the decision](../../../design/adrs/0001-rename-to-impact-model.md).
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
-**Repository:** `github.com/ProductBuildersHQ/theoryofchange-spec`
+**Repository:** `github.com/ProductBuildersHQ/impact-model`
 **Workflow:** pbhq-lite
 **Status:** Draft — pending stakeholder review (pbhq-lite gate: after PRD)
 
@@ -98,10 +104,10 @@ summary, pathway diagram, results framework, assumption register — in seconds.
 | G-11 | Connect measurement to story and learning | Audiences, a story theme codebook, Most-Significant-Change-style stories, and learning reviews are modelled; audience-specific story, learning-review, and portfolio-decision reports render from data |
 | G-12 | Produce workshop-ready definition artifacts before any data exists | Pathway diagram, per-pathway logic models, glossary, metric-selection matrix, results-framework definitions, and collection plan render from a ToC document alone |
 | G-13 | Work where non-technical staff work | CSV import of observations and CSV export of definition tables; packaged agent skills let an AI assistant run each step through the deterministic tools |
-| G-14 | Change the theory safely through the CLI, SDK, and MCP | Every edit goes through one patch engine that applies atomically and rejects edits introducing validation errors; ergonomic `theoryofchange <element> add/set/rm` commands; canonical formatting for readable diffs; semantic theory diffs that draft revision-log entries |
+| G-14 | Change the theory safely through the CLI, SDK, and MCP | Every edit goes through one patch engine that applies atomically and rejects edits introducing validation errors; ergonomic `impact-model <element> add/set/rm` commands; canonical formatting for readable diffs; semantic theory diffs that draft revision-log entries |
 | G-15 | Produce presentation-ready artifacts | Marp slide decks (workshop, executive, learning review, audience story) generated from the same report view as the Markdown reports, with optional SVG / PDF / PPTX export |
 | G-17 | Draft a credible ToC from public sources, honestly labelled | Every element carries a basis (`stated`, `inferred`, `hypothesis`, `confirmed`, `rejected`) and source citations; reports and decks mark inferred elements; an assessment report lists gaps and questions for the organization |
-| G-18 | Run a review-and-agreement round trip with people who never touch the tools | Review packet (DOCX via Pandoc) and review sheet (CSV) go out with stable element IDs and a version stamp; responses come back as a `ReviewResponse` and become proposed patches plus a consultation record; `theoryofchange approve` produces the agreed baseline version |
+| G-18 | Run a review-and-agreement round trip with people who never touch the tools | Review packet (DOCX via Pandoc) and review sheet (CSV) go out with stable element IDs and a version stamp; responses come back as a `ReviewResponse` and become proposed patches plus a consultation record; `impact-model approve` produces the agreed baseline version |
 | G-16 | Make LLM-as-a-Judge results reproducible and trustworthy | Judge bundles and verdicts are files alongside the ToC; multi-judge runs record inter-rater agreement; lint profiles keep early drafts from drowning in warnings |
 
 ### 2.2 Non-Goals
@@ -144,7 +150,7 @@ published schema, so that editors give me completion and errors as I type.
 
 - Given a document with `$schema` set to the published schema URL, VS Code /
   any JSON-Schema-aware editor validates it (manual check, documented).
-- `theoryofchange validate my.toc.yaml` exits 0 for a valid document and non-zero with
+- `impact-model validate my.impact-model.yaml` exits 0 for a valid document and non-zero with
   JSON-pointer locations for each schema or reference error.
 
 **US-2 — Catch weak theories early.**
@@ -152,7 +158,7 @@ As a *strategy owner*, I want an automated critique of my ToC's logic, so that
 gaps (outcomes with no indicator, links with no rationale, pathways that never
 reach the goal) are found before review.
 
-- `theoryofchange lint` reports each finding with rule ID, severity, element ID, and a
+- `impact-model lint` reports each finding with rule ID, severity, element ID, and a
   fix hint; output is a structured-evaluation GO/NO-GO summary report in JSON
   or a human table.
 - A seeded-defect fixture triggers every lint rule exactly once.
@@ -162,7 +168,7 @@ As an *executive*, I want a one-page summary of progress toward the long-term
 goal, so that I know where the theory is holding, where it is failing, and
 what decision is needed.
 
-- `theoryofchange report exec` produces Markdown containing: overall status, pathway
+- `impact-model report exec` produces Markdown containing: overall status, pathway
   status by level, top at-risk outcomes, broken or untested critical
   assumptions, changes since the previous period, and decisions requested.
 - Every status in the report traces to an indicator observation or an
@@ -173,7 +179,7 @@ As an *analyst*, I want to record observations in a separate file per period,
 so that the slow-changing theory and the fast-changing measurements have
 independent git histories.
 
-- Observation sets reference indicators by ID; `theoryofchange status` merges any number
+- Observation sets reference indicators by ID; `impact-model status` merges any number
   of observation files; references to unknown indicators are errors.
 
 **US-5 — Test assumptions explicitly.**
@@ -189,8 +195,8 @@ As a *strategy owner working with an AI agent*, I want the agent to draft and
 revise my ToC through tools that validate every edit, so that agent output is
 always schema-valid and lint-checked.
 
-- MCP server exposes `toc_validate`, `toc_lint`, `toc_graph`, `toc_status`,
-  `toc_report`, and `toc_schema`; each returns structured JSON; an MCP
+- MCP server exposes `impact_validate`, `impact_lint`, `impact_graph`, `impact_status`,
+  `impact_report`, and `impact_schema`; each returns structured JSON; an MCP
   integration test drives every tool.
 - A ToC spec template and rubric are published so visionspec / visionstudio
   can run LLM-as-a-Judge on a ToC narrative.
@@ -200,7 +206,7 @@ As a *portfolio leader*, I want ToC outcomes and indicators exported as OKRs
 and interventions linked to PRISM capabilities, so that execution plans trace
 back to the theory.
 
-- `theoryofchange export okr` emits a `prism-roadmap` OKR document that passes
+- `impact-model export okr` emits a `prism-roadmap` OKR document that passes
   prism-roadmap's own validation.
 - Interventions reference capabilities with `prism-core` `CapabilityRef`.
 
@@ -241,7 +247,7 @@ selection criteria and see the total collection burden of the selected set,
 so that we measure what matters within our staff-time budget.
 
 - Candidate indicators carry criterion scores and a selection status;
-  `theoryofchange report metric-selection` ranks them; `theoryofchange report collection-plan`
+  `impact-model report metric-selection` ranks them; `impact-model report collection-plan`
   totals staff minutes per period and survey questions per respondent per
   year against the declared budget; lint warns on budget overrun.
 
@@ -258,7 +264,7 @@ system will later measure against.
 As a *non-technical analyst*, I want to load monthly numbers from a CSV and
 record coded stories, so that I never hand-edit JSON.
 
-- `theoryofchange import observations --csv` maps columns to indicators and periods and
+- `impact-model import observations --csv` maps columns to indicators and periods and
   reports unmatched rows; stories carry themes from the document's codebook,
   consent and sensitivity; theme counts become qualitative indicator values.
 
@@ -268,8 +274,8 @@ specific impact stories, and a portfolio view of each program's progress,
 burden, and confidence, so that we learn, communicate, and decide to grow,
 adjust, or sunset programs from the same data.
 
-- `theoryofchange report learning-review`, `theoryofchange report story --audience <id>`, and
-  `theoryofchange report portfolio` render from the ToC, observations, and stories;
+- `impact-model report learning-review`, `impact-model report story --audience <id>`, and
+  `impact-model report portfolio` render from the ToC, observations, and stories;
   every number cites its source; restricted stories are never quoted.
 
 **US-15 — An assistant runs the routine.**
@@ -289,15 +295,15 @@ outcomes, links, assumptions, indicators, and actors with commands or small
 patches that are validated before they are written, so that the document is
 never left in a broken state and every change is a readable diff.
 
-- `theoryofchange patch` applies an RFC 6902 JSON Patch atomically; if the result has
+- `impact-model patch` applies an RFC 6902 JSON Patch atomically; if the result has
   more `error`-severity validation issues than the input, nothing is written
   and the new issues are reported.
-- `theoryofchange outcome add --id … --title … --level …`, `theoryofchange link add --from … --to …`,
+- `impact-model outcome add --id … --title … --level …`, `impact-model link add --from … --to …`,
   and siblings for every element kind produce the same result as the
   equivalent patch.
-- `theoryofchange fmt` rewrites a document in canonical form; running it twice is a
+- `impact-model fmt` rewrites a document in canonical form; running it twice is a
   no-op.
-- `theoryofchange diff old new` lists added / removed / changed elements by ID and can
+- `impact-model diff old new` lists added / removed / changed elements by ID and can
   emit a draft `Revision` entry.
 
 **US-17 — Present it.**
@@ -305,7 +311,7 @@ As a *facilitator or executive sponsor*, I want slide decks generated from
 the ToC and its status, so that workshops, board meetings, and funder
 briefings use the same numbers as the reports.
 
-- `theoryofchange deck workshop|exec|learning-review|story` writes Marp Markdown; with
+- `impact-model deck workshop|exec|learning-review|story` writes Marp Markdown; with
   the optional Marp and Mermaid CLIs installed, `--export pdf|pptx|html`
   produces a finished file, and diagrams render to SVG.
 
@@ -314,9 +320,9 @@ As a *reviewer*, I want the judge input and each judge's verdict stored as
 files, and agreement across judges reported, so that a rubric score is
 auditable rather than a one-off chat answer.
 
-- `theoryofchange judge show` emits the judge bundle (rubric, ToC JSON, generated
-  narrative, lint summary); `theoryofchange judge record` validates and stores a
-  structured-evaluation verdict; `theoryofchange judge summary` aggregates several
+- `impact-model judge show` emits the judge bundle (rubric, ToC JSON, generated
+  narrative, lint summary); `impact-model judge record` validates and stores a
+  structured-evaluation verdict; `impact-model judge summary` aggregates several
   verdicts with agreement metrics.
 
 **US-19 — Draft from public sources.**
@@ -325,11 +331,11 @@ ToC from its public website and reports, with every element labelled as
 stated by the organization or inferred by us and cited to its source, so
 that the draft is a credible, honest conversation starter.
 
-- `theoryofchange evidence add --url … --title … --excerpt … --accessed …` records
-  sources; the `toc-draft-from-sources` skill creates evidence records and
+- `impact-model evidence add --url … --title … --excerpt … --accessed …` records
+  sources; the `impact-draft-from-sources` skill creates evidence records and
   builds the draft only through validated patches; lint reports elements
   without a basis and `stated` elements without a citation.
-- `theoryofchange report assessment` lists stated vs inferred elements, outcomes with no
+- `impact-model report assessment` lists stated vs inferred elements, outcomes with no
   indicator, indicators whose data is not available, assumptions needing
   testing, and generated questions for the organization.
 
@@ -339,25 +345,25 @@ familiar document or spreadsheet in Google Drive and mark each element agree
 / change / remove / unsure with comments, so that my feedback reaches the
 model without learning a new tool.
 
-- `theoryofchange export review-packet` produces Markdown that Pandoc converts to DOCX,
+- `impact-model export review-packet` produces Markdown that Pandoc converts to DOCX,
   with one ID-tagged table per element kind and empty response columns;
-  `theoryofchange export review-sheet` produces the same rows as CSV.
+  `impact-model export review-sheet` produces the same rows as CSV.
 - Every exported artifact carries the ToC ID, version, and content hash.
 - Responses read back (by a person or an assistant using Google tooling
   outside this module) are normalized into a `ReviewResponse` file;
-  `theoryofchange import review` turns it into a proposed patch and a consultation
-  record. Nothing is applied until someone runs `theoryofchange patch` on the proposal.
+  `impact-model import review` turns it into a proposed patch and a consultation
+  record. Nothing is applied until someone runs `impact-model patch` on the proposal.
   Responses against a different content hash are flagged.
 
 **US-21 — Agree on the baseline.**
 As an *organization's leadership*, I want to approve the reviewed ToC as a
 named version, so that both teams work from the same agreed theory.
 
-- `theoryofchange approve --version v1.0 --approver …` sets status `approved`, records
+- `impact-model approve --version v1.0 --approver …` sets status `approved`, records
   approvers and a `Revision`, and refuses while any `error` lint finding or
   unresolved `hypothesis` element remains at an accountable level unless
   `--force` with a reason.
-- `theoryofchange diff hypothesis.json v1.0.json` shows what changed through review,
+- `impact-model diff hypothesis.json v1.0.json` shows what changed through review,
   including rejected elements.
 
 ## 4. Functional Requirements
@@ -475,7 +481,7 @@ named version, so that both teams work from the same agreed theory.
 - **PRD-FR-201** JSON Schemas MUST be generated from the Go types; no
   hand-written schema files.
 - **PRD-FR-202** Generated schemas MUST be embedded and retrievable by name at
-  runtime and via `theoryofchange schema <name>`.
+  runtime and via `impact-model schema <name>`.
 - **PRD-FR-203** Documents MAY be authored in YAML; YAML MUST be converted to
   JSON before schema validation so both formats validate identically.
 - **PRD-FR-204** Observations MUST be importable from CSV through a declared
@@ -594,7 +600,7 @@ named version, so that both teams work from the same agreed theory.
   helper templates) for: authoring / revising a ToC, refreshing status from
   CSV, drafting a learning review, and drafting audience stories. Skills MUST
   delegate every computation to the deterministic CLI or MCP tools.
-- **PRD-FR-606** The repository MUST ship a `toc-draft-from-sources` skill:
+- **PRD-FR-606** The repository MUST ship a `impact-draft-from-sources` skill:
   given source URLs or documents, it records evidence with excerpts, drafts
   elements through patches with provenance, and renders the workshop pack and
   assessment report.
@@ -602,7 +608,7 @@ named version, so that both teams work from the same agreed theory.
   exports the review packet, review sheet, and decks, publishes them with
   external Google tooling (an SDK CLI or an MCP server, not a dependency of
   this module), reads responses back (response columns, comments, and
-  suggestions), writes a `ReviewResponse`, and runs `theoryofchange import review`. The
+  suggestions), writes a `ReviewResponse`, and runs `impact-model import review`. The
   skill MUST also document a manual fallback (download/upload by hand, CSV
   review sheet).
 
@@ -619,13 +625,13 @@ named version, so that both teams work from the same agreed theory.
   assumptions, indicators, metrics, pathways, actors, evidence, causes, and
   glossary terms; removing an element MUST report (and with `--cascade`,
   remove) references to it.
-- **PRD-FR-704** `theoryofchange fmt` MUST produce a canonical serialization (field
+- **PRD-FR-704** `impact-model fmt` MUST produce a canonical serialization (field
   order, indentation, element order preserved unless `--sort`), idempotent,
   for JSON and YAML.
-- **PRD-FR-705** `theoryofchange diff` MUST report a semantic diff between two ToC
+- **PRD-FR-705** `impact-model diff` MUST report a semantic diff between two ToC
   versions keyed by element ID and MAY emit a draft `Revision` entry.
-- **PRD-FR-706** The MCP server MUST expose `toc_patch` using the same engine.
-- **PRD-FR-707** `theoryofchange approve` MUST be the only path to status `approved`:
+- **PRD-FR-706** The MCP server MUST expose `impact_patch` using the same engine.
+- **PRD-FR-707** `impact-model approve` MUST be the only path to status `approved`:
   it records approvers (prism-core `Approver`), a `Revision` with trigger
   `review`, and the version label, and enforces the checks in US-21.
 
@@ -634,12 +640,12 @@ named version, so that both teams work from the same agreed theory.
 - **PRD-FR-901** A `pandoc` Markdown profile MUST be available for every
   report and the review packet: diagrams pre-rendered to PNG, pipe tables
   without nested formatting, a YAML metadata block (title, version, date),
-  and explicit page breaks; `theoryofchange export docx|pptx` MUST wrap an optional
+  and explicit page breaks; `impact-model export docx|pptx` MUST wrap an optional
   external `pandoc` with an optional reference template, from the CLI only.
 - **PRD-FR-902** Every exported artifact (Markdown, DOCX, PPTX, CSV, deck)
   MUST carry an export stamp: ToC ID, version label, content hash (SHA-256
   of canonical JSON), and as-of date.
-- **PRD-FR-903** `theoryofchange export review-packet` and `theoryofchange export review-sheet`
+- **PRD-FR-903** `impact-model export review-packet` and `impact-model export review-sheet`
   MUST list elements by kind with stable element ID, statement, basis,
   sources, and empty response columns `decision` (agree / change / remove /
   unsure), `suggested_change`, and `comment`.
@@ -647,7 +653,7 @@ named version, so that both teams work from the same agreed theory.
   version, content hash, reviewer group (not individual names required),
   method, and rows (element ID, decision, suggested change, comment, origin:
   `sheet`, `table`, `comment`, `suggestion`, plus quoted anchor text).
-- **PRD-FR-905** `theoryofchange import review` MUST validate a `ReviewResponse`,
+- **PRD-FR-905** `impact-model import review` MUST validate a `ReviewResponse`,
   produce a proposed patch (agree → basis `confirmed`; remove → basis
   `rejected`; change → field edits when the suggested change is structured,
   otherwise a note flagged for human decision), and a `Consultation` record;
@@ -662,9 +668,9 @@ named version, so that both teams work from the same agreed theory.
   and `story` (per audience).
 - **PRD-FR-802** Diagram and deck export (Mermaid → SVG, Marp → PDF / PPTX /
   HTML) MUST be optional and performed by external CLIs invoked from the
-  `theoryofchange` command only; the library emits text and stays network- and
+  `impact-model` command only; the library emits text and stays network- and
   binary-free.
-- **PRD-FR-803** `theoryofchange judge show | record | summary` MUST produce the judge
+- **PRD-FR-803** `impact-model judge show | record | summary` MUST produce the judge
   bundle, validate and store structured-evaluation verdicts beside the
   document, and aggregate multiple verdicts with inter-rater agreement.
 - **PRD-FR-804** Lint MUST support profiles: `draft` (errors and structural
@@ -696,9 +702,9 @@ by a documented, repeatable procedure.
 | Collection-burden visibility | Unknown (not tracked) | Staff minutes / period and questions / respondent / year computed for 100 % of selected indicators that declare collection cost; budget overrun flagged | Collection-plan golden test; lint rule test |
 | Agent-skill determinism | n/a | Two runs of each skill's command sequence on the same inputs produce byte-identical outputs | Skill smoke test runs the documented commands twice |
 | Edit safety | n/a | 100 % of error-introducing patches rejected with nothing written; command edits equal their patch equivalents | Patch engine tests; command ↔ patch equivalence tests |
-| Canonical formatting | n/a | `theoryofchange fmt` idempotent on 100 % of fixtures | Fixture test runs fmt twice |
+| Canonical formatting | n/a | `impact-model fmt` idempotent on 100 % of fixtures | Fixture test runs fmt twice |
 | Thin-slice time to workshop pack | Manual diagram + slides, hours per revision | Minimal ToC → diagram, logic models, metric definitions, glossary, and workshop deck in one command | Golden test over the intermediary example |
-| Provenance coverage | n/a | 100 % of elements in reference examples carry a basis; 100 % of `stated` elements cite a source | Lint rules TOC-PRV-001/002 over examples |
+| Provenance coverage | n/a | 100 % of elements in reference examples carry a basis; 100 % of `stated` elements cite a source | Lint rules IMP-PRV-001/002 over examples |
 | Review round-trip fidelity | Manual transcription of feedback | 100 % of review rows become a proposed patch op or a flagged note; 0 silent drops; stale-hash responses flagged | Import tests with seeded sheet, table, comment, and suggestion rows |
 | Export stamp coverage | n/a | 100 % of exported artifacts carry ID, version, hash | Export tests per format |
 | Judge agreement recorded | n/a | Discrimination eval runs ≥ 2 judges and reports agreement per category | `docs/evals/` record includes agreement metrics |

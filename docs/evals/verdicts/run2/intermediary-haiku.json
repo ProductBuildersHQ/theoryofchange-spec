@@ -25,7 +25,7 @@
     {
       "category": "root_causes",
       "score": "pass",
-      "reasoning": "Problem is traced through a causal tree: cause-no-standing-voice (structural), cause-isolation (underlying), cause-no-peer-exchange and cause-high-overhead (immediate). Outcomes address them: oc-lt-collective-voice addressesCauses [cause-no-standing-voice, cause-isolation]; oc-im-officials-engage [cause-no-standing-voice]; oc-im-peer-network [cause-no-peer-exchange]; oc-im-lower-overhead [cause-high-overhead]. cause-funding-volatility is set aside with a reason (outOfScope). Lint TOC-CAU-001 GO. Minor: cause-isolation is logically addressed by oc-lt-collab and oc-im-lower-overhead but those outcomes do not list it in addressesCauses."
+      "reasoning": "Problem is traced through a causal tree: cause-no-standing-voice (structural), cause-isolation (underlying), cause-no-peer-exchange and cause-high-overhead (immediate). Outcomes address them: oc-lt-collective-voice addressesCauses [cause-no-standing-voice, cause-isolation]; oc-im-officials-engage [cause-no-standing-voice]; oc-im-peer-network [cause-no-peer-exchange]; oc-im-lower-overhead [cause-high-overhead]. cause-funding-volatility is set aside with a reason (outOfScope). Lint IMP-CAU-001 GO. Minor: cause-isolation is logically addressed by oc-lt-collab and oc-im-lower-overhead but those outcomes do not list it in addressesCauses."
     },
     {
       "category": "assumptions_risks",
@@ -35,7 +35,7 @@
     {
       "category": "actors",
       "score": "pass",
-      "reasoning": "Every intervention names an ownerActorId (e.g. int-peer-cohorts act-network, int-liaison-channel act-county-office, int-funder-roundtable act-regional-funder). Shared and partner outcomes name deliverers: oc-resident-access responsibility shared, deliveredBy [act-network, act-members-small, act-members-large]; oc-im-officials-engage responsibility partner, deliveredBy [act-county-office, act-city-council]. Key partners carry stance (act-county-office neutral, act-regional-funder supporter, act-library supporter, act-members-large neutral). Lint TOC-RSP-001 GO. Low note: the council (act-city-council) that is a named deliverer has stance unknown and provenance hypothesis."
+      "reasoning": "Every intervention names an ownerActorId (e.g. int-peer-cohorts act-network, int-liaison-channel act-county-office, int-funder-roundtable act-regional-funder). Shared and partner outcomes name deliverers: oc-resident-access responsibility shared, deliveredBy [act-network, act-members-small, act-members-large]; oc-im-officials-engage responsibility partner, deliveredBy [act-county-office, act-city-council]. Key partners carry stance (act-county-office neutral, act-regional-funder supporter, act-library supporter, act-members-large neutral). Lint IMP-RSP-001 GO. Low note: the council (act-city-council) that is a named deliverer has stance unknown and provenance hypothesis."
     },
     {
       "category": "evidence",
@@ -60,12 +60,12 @@
     {
       "category": "feasible",
       "score": "partial",
-      "reasoning": "Capacity is examined: rsk-staff-capacity names about eight staff across three program areas with mitigation (stage launches, use partners); ceiling of accountability is declared (ceilingOfAccountability, long_term) and matches the network's control; measurement budget fits (measurementBudget 90 min/week, lint TOC-BUD-001 GO). Gaps: the civic liaison staffing is unresolved (dec-liaison-staff open, due 2026-12-15) yet int-liaison-channel relies on it; the county owner has stated limits (con-county-staff: 'cannot commit to inviting members into every planning process'); int-funder-roundtable is planned with no resource line. Partner-owned delivery in Civic Voice is plausible but its resourcing is not examined. Flag for the board: dec-liaison-staff and dec-service-fees are human decisions, not judged here."
+      "reasoning": "Capacity is examined: rsk-staff-capacity names about eight staff across three program areas with mitigation (stage launches, use partners); ceiling of accountability is declared (ceilingOfAccountability, long_term) and matches the network's control; measurement budget fits (measurementBudget 90 min/week, lint IMP-BUD-001 GO). Gaps: the civic liaison staffing is unresolved (dec-liaison-staff open, due 2026-12-15) yet int-liaison-channel relies on it; the county owner has stated limits (con-county-staff: 'cannot commit to inviting members into every planning process'); int-funder-roundtable is planned with no resource line. Partner-owned delivery in Civic Voice is plausible but its resourcing is not examined. Flag for the board: dec-liaison-staff and dec-service-fees are human decisions, not judged here."
     },
     {
       "category": "testable",
       "score": "partial",
-      "reasoning": "Most indicators have baseline, target, source and frequency (e.g. ind-hours-learning, ind-retention-learning, ind-collab-maturity). Two long-term outcomes inside the ceiling that the organization answers for are measured only by candidate indicators not in the selected set: oc-lt-sustainable by ind-funding-mix (selection candidate) and oc-lt-collective-voice by ind-voice-level (candidate, partner_held). ind-residents-served has dataAvailability 'unknown', though its baseline cites the 2025 member service-count report. asm-time-to-attend's test uses ind-attendance-rate, which is status retired. ind-story-peer-help has no unit. Lint TOC-MEA-001 and TOC-MEA-002 are GO and are treated as settled."
+      "reasoning": "Most indicators have baseline, target, source and frequency (e.g. ind-hours-learning, ind-retention-learning, ind-collab-maturity). Two long-term outcomes inside the ceiling that the organization answers for are measured only by candidate indicators not in the selected set: oc-lt-sustainable by ind-funding-mix (selection candidate) and oc-lt-collective-voice by ind-voice-level (candidate, partner_held). ind-residents-served has dataAvailability 'unknown', though its baseline cites the 2025 member service-count report. asm-time-to-attend's test uses ind-attendance-rate, which is status retired. ind-story-peer-help has no unit. Lint IMP-MEA-001 and IMP-MEA-002 are GO and are treated as settled."
     },
     {
       "category": "structural_integrity",
