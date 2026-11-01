@@ -2,9 +2,9 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/impact-model`
-**Status:** In progress — 15 of 17 phases completed
+**Status:** In progress — 16 of 18 phases completed
 
-> RMI IDs are stable and permanent. Commits implementing an item carry the trailer `Refs: RMI-THEORYOFCHANGESPEC-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
+> RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, `Refs: <RMI-ID>`. Items from before the rename to impact-model are `RMI-THEORYOFCHANGESPEC-001` to `-076`; later items are `RMI-IMPACTMODEL-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
 ## Phase 1 — Core Model and Schema
 
@@ -477,3 +477,11 @@
   - Depends on: `RMI-THEORYOFCHANGESPEC-075`
   - Acceptance: an ADR states the decision, what changed, and what did not; CHANGELOG.json notes the breaking rename; the roadmap lists the phase
 
+## Phase 18 — Release v0.3.0
+
+**Theme:** Prepare the first release as impact-model: changelog, release notes, and an upgrade guide for the rename
+**Status:** Completed — 1 of 1 items completed
+
+- [x] `RMI-IMPACTMODEL-001` Prepare v0.3.0: changelog, release notes, and the upgrade guide for the rename
+  - Type: capability · Status: completed
+  - Acceptance: CHANGELOG.json has v0.3.0 and CHANGELOG.md is generated from it; docs/releases/v0.3.0.md maps every old name to its new one; README and docs index point to it; mkdocs build --strict passes
