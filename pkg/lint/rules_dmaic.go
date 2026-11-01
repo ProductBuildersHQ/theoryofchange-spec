@@ -12,17 +12,6 @@ import (
 	"github.com/ProductBuildersHQ/impact-model/pkg/validate"
 )
 
-const (
-	// dmaicMinPointsPerYear is the fewest measurements a year that let a DMAIC
-	// effort set control limits within about a year: statistical process
-	// control asks for 20 to 25 points before the limits mean anything.
-	dmaicMinPointsPerYear = 20
-	// dmaicMinResponsesPerPoint is the fewest survey responses behind one
-	// measurement before its value stops swinging with chance. An NPS needs
-	// about 100 for a margin near ±10 points; 30 is the floor.
-	dmaicMinResponsesPerPoint = 30
-)
-
 // dmaicIndicator is an indicator of a pathway marked for DMAIC.
 type dmaicIndicator struct {
 	indexedIndicator
@@ -53,10 +42,10 @@ func init() {
 		for _, d := range dmaicIndicators(c) {
 			var missing []string
 			if d.v.Frequency == "" {
-				missing = append(missing, "a frequency")
+				missing = append(missing, "frequency")
 			}
 			if d.v.DataSource == "" && (d.v.Collection == nil || d.v.Collection.System == "") {
-				missing = append(missing, "a data source")
+				missing = append(missing, "data source")
 			}
 			if len(missing) > 0 {
 				out = append(out, Finding{Path: at("indicators", d.i), Element: d.v.ID,
@@ -70,12 +59,12 @@ func init() {
 		var out []Finding
 		for _, d := range dmaicIndicators(c) {
 			n, ok := perYear(d.v.Frequency)
-			if !ok || n >= dmaicMinPointsPerYear {
+			if !ok || n >= impact.DMAICMinPoints {
 				continue
 			}
 			out = append(out, Finding{Path: at("indicators", d.i) + "/frequency", Element: d.v.ID,
-				Message: fmt.Sprintf("it is measured about %s times a year (%s); control limits need at least %d measurements, so measure it every two weeks or more often, or leave pathway %q out of DMAIC",
-					round(n), d.v.Frequency, dmaicMinPointsPerYear, d.pathwayID)})
+				Message: fmt.Sprintf("it is measured %s (%s); control limits need at least %d measurements a year, so measure it every two weeks or more often, or leave pathway %q out of DMAIC",
+					timesAYear(n), d.v.Frequency, impact.DMAICMinPoints, d.pathwayID)})
 		}
 		return out
 	})
@@ -101,10 +90,10 @@ func init() {
 			if col.SampleRate > 0 {
 				asked *= col.SampleRate
 			}
-			if per := asked / n; per < dmaicMinResponsesPerPoint {
+			if per := asked / n; per < impact.DMAICMinResponsesPerPoint {
 				out = append(out, Finding{Path: path, Element: d.v.ID,
 					Message: fmt.Sprintf("each measurement rests on about %s responses; below %d a survey score swings with chance (an NPS needs about 100 for ±10 points), so measure less often, pool across groups, or ask more people",
-						round(per), dmaicMinResponsesPerPoint)})
+						round(per), impact.DMAICMinResponsesPerPoint)})
 			}
 		}
 		return out
@@ -138,6 +127,17 @@ func perYear(iso string) (float64, bool) {
 		return 0, false
 	}
 	return daysPerYear / days, true
+}
+
+// timesAYear says how often a year something happens, in words.
+func timesAYear(n float64) string {
+	switch {
+	case n < 1.5:
+		return "about once a year"
+	case n < 2.5:
+		return "about twice a year"
+	}
+	return "about " + round(n) + " times a year"
 }
 
 // round formats a count for a message: a whole number, or one decimal below 10.
