@@ -8,6 +8,7 @@ are new.
 2. [Authoring an impact model](authoring.md): the model, and how to change it safely.
 3. [Measuring progress](measurement.md): observations, status, and what changed.
 4. [Reports and decks](reports-and-decks.md): the artifacts for each audience.
+   The [V2MOM guide](v2mom.md) maps each part of a V2MOM to the model.
 5. [Review round trip](review-round-trip.md): ask reviewers, bring answers back.
 6. [Quality and judging](quality-and-judging.md): lint, rubrics, and judges.
 7. [MCP server and agent skills](mcp-and-skills.md): working with an AI agent.

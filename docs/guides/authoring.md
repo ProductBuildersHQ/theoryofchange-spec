@@ -43,9 +43,10 @@ different things, and an impact model can make all three.
   that reader. The board, funders, and members can each lead with different
   numbers drawn from the same indicators, and every audience sees the same figure
   for an indicator.
-- **Purpose** is `context.mission` and `context.vision`: plain statements of why
-  the organization exists and what it works toward. They are not part of the
-  causal chain.
+- **Purpose** is `context.mission`, `context.vision`, and `context.values`:
+  why the organization exists, what it works toward, and the principles that
+  guide how it works, most important first. They are not part of the causal
+  chain. A V2MOM needs the vision and at least one value.
 
 ```bash
 # A pathway's North Star, and what watches it

@@ -45,7 +45,7 @@ flowchart LR
   im --> om["Outcome map"]:::method
   im --> lf["Logframe"]:::method
   im --> okr["OKRs"]:::strategy
-  im -.-> v2["V2MOM (planned)"]:::planned
+  im --> v2["V2MOM"]:::strategy
   im -.-> dm["DMAIC (planned)"]:::planned
 ```
 
@@ -82,7 +82,7 @@ Each projection answers a different question for a different reader:
 | **Logframe** | What do we promise, and how will we verify it? Narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring | `report logframe` |
 | **Metric tree and headline metrics** | What does each program steer by, and what is each audience told? | `report metric-tree`, `report headline` |
 | **OKRs and outcome journeys** | What will a team commit to this quarter, and how does a person move through the outcomes? For the [PRISM](#part-of-the-prism-ecosystem) planning tools | `export okr`, `export journey` |
-| **V2MOM** *(planned)* | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision, values, methods, obstacles, and measures, drawn from the model's vision, values, interventions, assumptions and risks, and indicators | — |
+| **V2MOM** | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision and values from the context, one method per pathway with its interventions as projects, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions. See [the mapping](docs/guides/v2mom.md) | `export v2mom` |
 | **DMAIC** *(planned)* | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them | — |
 
 Each projection leaves something out. A logic model shows the sequence from what
@@ -306,6 +306,7 @@ as a documentation site (`mkdocs serve` runs it locally):
 | Write or change an impact model | [Authoring an impact model](docs/guides/authoring.md) |
 | Measure progress | [Measuring progress](docs/guides/measurement.md) |
 | Produce reports and decks | [Reports and decks](docs/guides/reports-and-decks.md) |
+| Export a V2MOM, and see how it maps | [V2MOM](docs/guides/v2mom.md) |
 | Send an impact model out for review | [Review round trip](docs/guides/review-round-trip.md) |
 | Check quality and run a judge | [Quality and judging](docs/guides/quality-and-judging.md) |
 | Connect an AI agent | [MCP server and agent skills](docs/guides/mcp-and-skills.md) |
