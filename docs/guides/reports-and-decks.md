@@ -120,13 +120,16 @@ can tell that a PDF, a Word file, and a spreadsheet came from the same version.
 impact-model export okr impact-model.yaml -O obs-q3.yaml -o okr.json
 impact-model export journey impact-model.yaml -o journeys.json
 impact-model export v2mom impact-model.yaml -O obs-q3.yaml -o v2mom.json
+impact-model export dmaic impact-model.yaml -O obs-q3.yaml -o dmaic.json
 ```
 
 `export okr` turns each owned outcome that has measured indicators into an
 objective, with each indicator as a key result carrying baseline, target,
 current value, score, status, and confidence. `export journey` writes outcome
 journeys. `export v2mom` writes a V2MOM with one method per pathway; the
-[V2MOM guide](v2mom.md) maps each part. All three are JSON for the PRISM tools.
+[V2MOM guide](v2mom.md) maps each part. `export dmaic` writes a DMAIC metrics
+document for the pathways marked for DMAIC; the [DMAIC guide](dmaic.md) maps
+each part. All four are JSON for the PRISM tools.
 
 ## Next
 

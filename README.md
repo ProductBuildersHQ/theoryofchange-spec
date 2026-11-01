@@ -46,7 +46,7 @@ flowchart LR
   im --> lf["Logframe"]:::method
   im --> okr["OKRs"]:::strategy
   im --> v2["V2MOM"]:::strategy
-  im -.-> dm["DMAIC (planned)"]:::planned
+  im --> dm["DMAIC"]:::strategy
 ```
 
 ## What is an impact model?
@@ -83,7 +83,7 @@ Each projection answers a different question for a different reader:
 | **Metric tree and headline metrics** | What does each program steer by, and what is each audience told? | `report metric-tree`, `report headline` |
 | **OKRs and outcome journeys** | What will a team commit to this quarter, and how does a person move through the outcomes? For the [PRISM](#part-of-the-prism-ecosystem) planning tools | `export okr`, `export journey` |
 | **V2MOM** | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision and values from the context, one method per pathway with its interventions as projects, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions. See [the mapping](docs/guides/v2mom.md) | `export v2mom` |
-| **DMAIC** *(planned)* | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them | — |
+| **DMAIC** | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? One category per pathway marked `projections: [dmaic]`, its numeric indicators as metrics with observations as data points, control limits once there are enough, root causes from the problem tree, and interventions as improvement initiatives. Lint first checks that those pathways are measured often enough. See [the mapping](docs/guides/dmaic.md) | `export dmaic` |
 
 Each projection leaves something out. A logic model shows the sequence from what
 goes in to what comes out, and rarely why each step holds. A theory of change
@@ -292,8 +292,8 @@ impact-model mcp --root .                                          # serve the t
 ```
 
 Fictional, complete examples are in [`examples/`](examples/): a membership
-network, a market-adoption model, and three competing futures that share
-one actor registry.
+network, a market-adoption model, three competing futures that share one actor
+registry, and an online course catalog run with DMAIC.
 
 ## Documentation
 
@@ -307,6 +307,7 @@ as a documentation site (`mkdocs serve` runs it locally):
 | Measure progress | [Measuring progress](docs/guides/measurement.md) |
 | Produce reports and decks | [Reports and decks](docs/guides/reports-and-decks.md) |
 | Export a V2MOM, and see how it maps | [V2MOM](docs/guides/v2mom.md) |
+| Run a program with DMAIC, and see how it maps | [DMAIC](docs/guides/dmaic.md) |
 | Send an impact model out for review | [Review round trip](docs/guides/review-round-trip.md) |
 | Check quality and run a judge | [Quality and judging](docs/guides/quality-and-judging.md) |
 | Connect an AI agent | [MCP server and agent skills](docs/guides/mcp-and-skills.md) |

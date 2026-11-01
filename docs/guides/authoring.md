@@ -31,9 +31,12 @@ references are by ID.
 
 ## What a program steers by, and what each audience is told
 
-Three choices sit on top of the chain from activities to impact. They are
-different things, and an impact model can make all three.
+These choices sit on top of the chain from activities to impact. They are
+different things, and an impact model can make all of them.
 
+- **Projections** on a pathway mark what else it is meant for. `projections:
+  [dmaic]` marks a program measured often enough to improve with DMAIC; lint then
+  checks its indicators' cadence and survey sizes. See the [DMAIC guide](dmaic.md).
 - **A North Star** is the one number a program or product steers by. It is set on
   the pathway, with an optional *one metric that matters* and the guardrails that
   watch what chasing it could harm. It should measure an outcome at or below the

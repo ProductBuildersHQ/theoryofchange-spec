@@ -1,6 +1,6 @@
 # Examples
 
-Three complete examples are in the repository's
+Four complete examples are in the repository's
 [`examples/`](https://github.com/ProductBuildersHQ/impact-model/tree/main/examples)
 directory. **Everything in them is fictional**: the organizations, people,
 numbers, and URLs (all under `example.org`) are invented for illustration.
@@ -49,6 +49,24 @@ one market and share one registry of actors. Validate them together:
 impact-model validate examples/competing-futures/future-*.yaml \
   --registry examples/competing-futures/actors.yaml --futures
 ```
+
+## Course catalog
+
+`examples/course-catalog`: a fictional small nonprofit's free, on-demand
+certificate courses for staff of other nonprofits. Its one program is marked
+`projections: [dmaic]` and is measured weekly: completion rate, courses started,
+hours to a first forum answer, and a post-course Net Promoter Score from a survey
+large enough for weekly scores. Twenty-four weeks of observations give each of
+those enough points for control limits. A monthly catalog count and a yearly
+graduate survey are flagged by the DMAIC lint rules on purpose.
+
+```bash
+impact-model lint examples/course-catalog/impact-model.yaml
+impact-model export dmaic examples/course-catalog/impact-model.yaml \
+  -O examples/course-catalog/observations-2026-h1.yaml
+```
+
+See the [DMAIC guide](dmaic.md).
 
 ## Next
 
