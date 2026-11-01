@@ -12,7 +12,11 @@ func TestDefinitionsPackGolden(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	golden(t, "definitions.md", Definitions(whole, pathways))
+	out, err := Definitions(whole, pathways, doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	golden(t, "definitions.md", out)
 }
 
 func TestDefinitionsPackContainsEveryReport(t *testing.T) {
@@ -22,7 +26,10 @@ func TestDefinitionsPackContainsEveryReport(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	out := Definitions(whole, pathways)
+	out, err := Definitions(whole, pathways, doc)
+	if err != nil {
+		t.Fatal(err)
+	}
 	for _, want := range []string{"## Causal pathways", "## Logic model:", "## Metric definitions", "## Glossary"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("pack is missing %q", want)

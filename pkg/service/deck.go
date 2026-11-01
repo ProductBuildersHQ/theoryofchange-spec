@@ -90,7 +90,7 @@ func DefinitionReport(doc *impact.Model, kind, pathway string) (string, error) {
 	case "assessment":
 		return report.Assessment(whole, doc), nil
 	default:
-		return report.Definitions(whole, pathways), nil
+		return report.Definitions(whole, pathways, doc)
 	}
 }
 

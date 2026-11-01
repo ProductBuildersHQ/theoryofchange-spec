@@ -3,6 +3,9 @@ package report
 import (
 	"fmt"
 	"strings"
+
+	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
+	"github.com/ProductBuildersHQ/impact-model/pkg/problemtree"
 )
 
 // DefinitionKinds lists the definition report kinds that need no
@@ -24,16 +27,26 @@ func PathwayDiagrams(whole *View, pathways []*View) string {
 	return b.String()
 }
 
-// Definitions renders every definition report as one document, the pack a
-// workshop reviews before any data exists.
-func Definitions(whole *View, pathways []*View) string {
+// Definitions renders the definition reports as one document, the pack a
+// workshop reviews before any data exists: the problem tree, when doc records
+// causes or effects, then the causal pathways, logic models, outcome maps,
+// logframes, metric definitions, and glossary. whole and pathways are views of
+// doc.
+func Definitions(whole *View, pathways []*View, doc *impact.Model) (string, error) {
 	var b strings.Builder
 	fmt.Fprintf(&b, "# %s: definitions\n\n", mdText(whole.Document.Title))
+	if !problemtree.Build(doc).Empty() {
+		tree, err := problemtree.Report(doc, problemtree.FormatMermaid)
+		if err != nil {
+			return "", err
+		}
+		b.WriteString(tree)
+	}
 	b.WriteString(PathwayDiagrams(whole, pathways))
 	b.WriteString(LogicModels(whole, pathways))
 	b.WriteString(OutcomeMaps(whole, pathways))
 	b.WriteString(Logframes(whole, pathways))
 	b.WriteString(MetricDefinitions(whole))
 	b.WriteString(Glossary(whole))
-	return b.String()
+	return b.String(), nil
 }

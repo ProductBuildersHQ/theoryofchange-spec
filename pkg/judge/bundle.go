@@ -91,7 +91,11 @@ func narrativeOf(doc *impact.Model, g *graph.Graph) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return report.Definitions(whole, pathways) + "\n" + report.Assessment(whole, doc), nil
+	defs, err := report.Definitions(whole, pathways, doc)
+	if err != nil {
+		return "", err
+	}
+	return defs + "\n" + report.Assessment(whole, doc), nil
 }
 
 // redact returns a copy of doc with the restricted parts of evidence removed,

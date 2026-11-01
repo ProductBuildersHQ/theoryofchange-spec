@@ -6,15 +6,38 @@ model-id: "open-agent-auth"
 content-hash: "f12dc528d8e8543f76bdd6924a1246227cb922017958f83604b2769e6f9634b9"
 ---
 
+## Problem tree
+
+Causes (roots) below lead up to the core problem, which leads up to its effects (branches).
+
+![Diagram](diagrams/d1.png)
+
+### Causes
+
+| Cause | Level | Leads to | Addressed by |
+|-------|-------|----------|--------------|
+| Agents authenticate in incompatible ways. (`cause-fragmented-auth`) | structural | the core problem | set aside: Needs regulation beyond this initiative. |
+| Providers see no customer demand for a common standard. (`cause-no-demand-signal`) | underlying | There is no reference implementation to copy. (`cause-no-reference`) | Major identity providers support the standard (`oc-idp-support`) |
+| There is no reference implementation to copy. (`cause-no-reference`) | immediate | the core problem | — |
+
+### Effects
+
+| Effect | Follows from | Relieved by |
+|--------|--------------|-------------|
+| Every enterprise pays for custom identity integrations. (`eff-custom-integrations`) | the core problem | Major identity providers support the standard (`oc-idp-support`) |
+| Agent platforms adopt delegated access slowly. (`eff-slow-adoption`) | Every enterprise pays for custom identity integrations. (`eff-custom-integrations`) | set aside: Platform roadmaps are outside this initiative. |
+
+\newpage
+
 ## Causal pathways
 
 ### The theory of change on one page
 
-![Diagram](diagrams/d1.png)
+![Diagram](diagrams/d2.png)
 
 ### Supply side: providers and platforms
 
-![Diagram](diagrams/d2.png)
+![Diagram](diagrams/d3.png)
 
 \newpage
 

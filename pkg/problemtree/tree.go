@@ -61,6 +61,10 @@ type Tree struct {
 	Edges []Edge `json:"edges"`
 }
 
+// Empty reports whether the tree holds only the core problem: no cause or
+// effect has been recorded, or every one was rejected.
+func (t *Tree) Empty() bool { return len(t.Rows) <= 1 }
+
 // Build lays out the problem tree of doc. Rejected causes and effects are left
 // out, and so are references to them. A cause with no parents is one row
 // below the core problem, and any other cause is one row below its lowest

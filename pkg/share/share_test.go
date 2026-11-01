@@ -130,7 +130,11 @@ func definitions(t *testing.T, doc *impact.Model) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return report.Definitions(whole, pathways)
+	defs, err := report.Definitions(whole, pathways, doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return defs
 }
 
 func TestReportProfileGolden(t *testing.T) {
