@@ -7,6 +7,76 @@
   "maintainers": ["grokify"],
   "releases": [
     {
+      "version": "v0.4.0",
+      "date": "2026-11-01",
+      "highlights": [
+        {
+          "description": "A V2MOM projection: `export v2mom` draws the vision and values from the context, one method per pathway, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions"
+        },
+        {
+          "description": "A DMAIC projection: mark a pathway `projections: [dmaic]`, let lint check that it is measured often enough, and `export dmaic` writes metrics with data points, control limits, root causes, initiatives, and phases"
+        },
+        {
+          "description": "The impact model is described as a causal model, and a fictional course-catalog example shows a program run with DMAIC"
+        }
+      ],
+      "added": [
+        {
+          "description": "`export dmaic` writes the pathways marked `projections: [dmaic]` as a DMAIC metrics document: one category per pathway, each indicator with a numeric baseline and target as a metric, observations as data points, individuals-chart control limits from 20 or more points, root causes from the problem tree, interventions as improvement initiatives, and a phase derived by a documented convention. Indicators left out are named on standard error"
+        },
+        {
+          "description": "`pathway.projections` marks what else a pathway is meant for; `dmaic` marks a program measured often enough to improve with DMAIC. Validation reports an unknown or repeated projection (VAL-PTH-007)"
+        },
+        {
+          "description": "Lint rules IMP-DMA-001 to IMP-DMA-003 check that a DMAIC pathway's indicators state a frequency and data source, are measured at least 20 times a year, and, for surveys, get at least 30 responses per measurement; 69 rules in all"
+        },
+        {
+          "description": "`export v2mom` writes the impact model as a V2MOM: the vision and values from the context, one method per pathway with its interventions as projects and its North Star, one metric, and guardrails as measures, and obstacles from risks and from high or critical assumptions not yet shown to hold, by their assessed status with `-O`. A model without a vision, values, or a pathway is refused with a message naming what to add"
+        },
+        {
+          "description": "`context.values` lists the principles that guide how the organization works, most important first. Validation reports a value without a name (VAL-DOC-006) and a repeated value (VAL-DOC-007)"
+        }
+      ],
+      "changed": [
+        {
+          "description": "The OKR export uses the OKR types of `prism-roadmap/goals/okr`, the goal types shared across the PRISM tools, in place of `structured-goals`. The exported JSON is unchanged, but `prismx.ToOKR` now returns `*okr.OKRDocument` from `github.com/grokify/prism-roadmap/goals/okr`, so Go callers change that import (breaking for the Go API only)"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "A DMAIC guide says which programs suit DMAIC, what lint checks first, how each part of a DMAIC document maps to the model, how control limits and phases are derived, and what is left out"
+        },
+        {
+          "description": "A fictional course-catalog example: a free on-demand certificate catalog run with DMAIC, with weekly indicators and 24 weeks of observations"
+        },
+        {
+          "description": "A V2MOM guide maps each part of a V2MOM to the impact model, with one pathway followed end to end, what the V2MOM leaves out, and how to fix a refused export"
+        },
+        {
+          "description": "The README describes the impact model as a causal model, and the glossary says how each projection names an intervention"
+        },
+        {
+          "description": "Release notes for v0.4.0"
+        }
+      ],
+      "tests": [
+        {
+          "description": "The V2MOM and DMAIC exports are checked against prism-roadmap's own validation, for the documented mapping, for refusals, and for determinism; the DMAIC rules are checked by seeding each defect and repairing it"
+        },
+        {
+          "description": "Each example, including the new course catalog, stays valid, canonical, fictional, and exportable"
+        }
+      ],
+      "build": [
+        {
+          "description": "`github.com/grokify/structured-goals` is no longer a dependency, and the third-party notices drop it"
+        },
+        {
+          "description": "Bumped `github.com/grokify/prism-roadmap` from v0.21.0 to v0.22.0 and `github.com/grokify/prism-core` from v0.5.0 to v0.6.0"
+        }
+      ]
+    },
+    {
       "version": "v0.3.0",
       "date": "2026-11-01",
       "highlights": [
@@ -254,51 +324,5 @@
         }
       ]
     }
-  ],
-  "unreleased": {
-    "added": [
-      {
-        "description": "`export dmaic` writes the pathways marked `projections: [dmaic]` as a DMAIC metrics document: one category per pathway, each indicator with a numeric baseline and target as a metric, observations as data points, individuals-chart control limits from 20 or more points, root causes from the problem tree, interventions as improvement initiatives, and a phase derived by a documented convention. Indicators left out are named on standard error"
-      },
-      {
-        "description": "`pathway.projections` marks what else a pathway is meant for; `dmaic` marks a program measured often enough to improve with DMAIC. Validation reports an unknown or repeated projection (VAL-PTH-007)"
-      },
-      {
-        "description": "Lint rules IMP-DMA-001 to IMP-DMA-003 check that a DMAIC pathway's indicators state a frequency and data source, are measured at least 20 times a year, and, for surveys, get at least 30 responses per measurement; 69 rules in all"
-      },
-      {
-        "description": "`export v2mom` writes the impact model as a V2MOM: the vision and values from the context, one method per pathway with its interventions as projects and its North Star, one metric, and guardrails as measures, and obstacles from risks and from high or critical assumptions not yet shown to hold, by their assessed status with `-O`. A model without a vision, values, or a pathway is refused with a message naming what to add"
-      },
-      {
-        "description": "`context.values` lists the principles that guide how the organization works, most important first. Validation reports a value without a name (VAL-DOC-006) and a repeated value (VAL-DOC-007)"
-      }
-    ],
-    "documentation": [
-      {
-        "description": "A DMAIC guide says which programs suit DMAIC, what lint checks first, how each part of a DMAIC document maps to the model, how control limits and phases are derived, and what is left out"
-      },
-      {
-        "description": "A fictional course-catalog example: a free on-demand certificate catalog run with DMAIC, with weekly indicators and 24 weeks of observations"
-      },
-      {
-        "description": "A V2MOM guide maps each part of a V2MOM to the impact model, with one pathway followed end to end, what the V2MOM leaves out, and how to fix a refused export"
-      },
-      {
-        "description": "The README describes the impact model as a causal model, and the glossary says how each projection names an intervention"
-      }
-    ],
-    "changed": [
-      {
-        "description": "The OKR export uses the OKR types of `prism-roadmap/goals/okr`, the goal types shared across the PRISM tools, in place of `structured-goals`. The exported JSON is unchanged"
-      }
-    ],
-    "build": [
-      {
-        "description": "`github.com/grokify/structured-goals` is no longer a dependency, and the third-party notices drop it"
-      },
-      {
-        "description": "Bumped `github.com/grokify/prism-roadmap` from v0.21.0 to v0.22.0 and `github.com/grokify/prism-core` from v0.5.0 to v0.6.0"
-      }
-    ]
-  }
+  ]
 }

@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/impact-model`
-**Status:** In progress — 16 of 19 phases completed
+**Status:** In progress — 17 of 20 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, `Refs: <RMI-ID>`. Items from before the rename to impact-model are `RMI-THEORYOFCHANGESPEC-001` to `-076`; later items are `RMI-IMPACTMODEL-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -516,3 +516,12 @@
 - [ ] `RMI-IMPACTMODEL-007` Cross-check the DMAIC thresholds with prism-roadmap once it exports them
   - Type: chore · Status: proposed
   - Acceptance: prism-roadmap's goals/dmaic exports its minimum points and responses; a prismx test fails if impact.DMAICMinPoints or impact.DMAICMinResponsesPerPoint differ
+
+## Phase 20 — Release v0.4.0
+
+**Theme:** Prepare the release with the V2MOM and DMAIC projections: changelog, release notes, and the upgrade note for the OKR types
+**Status:** Completed — 1 of 1 items completed
+
+- [x] `RMI-IMPACTMODEL-008` Prepare v0.4.0: changelog, release notes, and the upgrade note for ToOKR
+  - Type: capability · Status: completed
+  - Acceptance: CHANGELOG.json has v0.4.0 and CHANGELOG.md is generated from it; docs/releases/v0.4.0.md covers V2MOM, DMAIC, the model additions, and the Go upgrade for prismx.ToOKR; mkdocs build --strict passes
