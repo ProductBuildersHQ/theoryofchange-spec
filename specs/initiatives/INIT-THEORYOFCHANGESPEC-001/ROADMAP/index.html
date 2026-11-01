@@ -1348,6 +1348,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-19-strategy-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 19 — Strategy Projections
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1761,6 +1772,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-19-strategy-projections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 19 — Strategy Projections
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1784,7 +1806,7 @@
 <h1 id="roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting">ROADMAP — Impact Model Specification — Go-first model, JSON Schema, measurement, and leadership reporting<a class="headerlink" href="#roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-THEORYOFCHANGESPEC-001</code>
 <strong>Repository:</strong> <code>github.com/ProductBuildersHQ/impact-model</code>
-<strong>Status:</strong> In progress — 16 of 18 phases completed</p>
+<strong>Status:</strong> In progress — 16 of 19 phases completed</p>
 <blockquote>
 <p>RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, <code>Refs: &lt;RMI-ID&gt;</code>. Items from before the rename to impact-model are <code>RMI-THEORYOFCHANGESPEC-001</code> to <code>-076</code>; later items are <code>RMI-IMPACTMODEL-&lt;NNN&gt;</code>. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI <code>0NN</code> corresponds to PLAN step <code>P-NN</code>; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each <code>Satisfies</code> line are defined in PRD.md and TRD.md.</p>
 </blockquote>
@@ -2249,8 +2271,8 @@
 <li>Acceptance: CHANGELOG.json has v0.2.0 and CHANGELOG.md is generated from it; docs/releases/v0.2.0.md exists; the guides cover headline metrics, composed indicators, and the layered diagram; mkdocs build --strict passes</li>
 </ul>
 <h2 id="phase-17-rename-to-impact-model">Phase 17 — Rename to impact-model<a class="headerlink" href="#phase-17-rename-to-impact-model" title="Permanent link">&para;</a></h2>
-<p><strong>Theme:</strong> One impact model, with the theory of change, logic model, and other methodologies as views of it
-<strong>Status:</strong> Completed — 3 of 3 items completed</p>
+<p><strong>Theme:</strong> One impact model, with the theory of change, logic model, and other methodologies as projections of it
+<strong>Status:</strong> Completed — 4 of 4 items completed</p>
 <ul>
 <li>[x] <code>RMI-THEORYOFCHANGESPEC-074</code> Rename the module, packages, command, kind, schemas, MCP tools, and skills to impact-model</li>
 <li>Type: capability · Status: completed</li>
@@ -2270,7 +2292,15 @@
 </li>
 <li>Type: capability · Status: completed</li>
 <li>Depends on: <code>RMI-THEORYOFCHANGESPEC-075</code></li>
-<li>Acceptance: an ADR states the decision, what changed, and what did not; CHANGELOG.json notes the breaking rename; the roadmap lists the phase</li>
+<li>
+<p>Acceptance: an ADR states the decision, what changed, and what did not; CHANGELOG.json notes the breaking rename; the roadmap lists the phase</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-002</code> Present the impact model as a ProductBuildersHQ format whose projections include the theory of change, the logic model, OKRs, and V2MOM</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-THEORYOFCHANGESPEC-076</code></li>
+<li>Acceptance: README and docs index lead with the impact model as the format and list its projections with how to get each; projection is the term for a method's rendering throughout the docs, distinct from report.View; planned projections are marked as planned</li>
 </ul>
 <h2 id="phase-18-release-v030">Phase 18 — Release v0.3.0<a class="headerlink" href="#phase-18-release-v030" title="Permanent link">&para;</a></h2>
 <p><strong>Theme:</strong> Prepare the first release as impact-model: changelog, release notes, and an upgrade guide for the rename
@@ -2279,6 +2309,14 @@
 <li>[x] <code>RMI-IMPACTMODEL-001</code> Prepare v0.3.0: changelog, release notes, and the upgrade guide for the rename</li>
 <li>Type: capability · Status: completed</li>
 <li>Acceptance: CHANGELOG.json has v0.3.0 and CHANGELOG.md is generated from it; docs/releases/v0.3.0.md maps every old name to its new one; README and docs index point to it; mkdocs build --strict passes</li>
+</ul>
+<h2 id="phase-19-strategy-projections">Phase 19 — Strategy Projections<a class="headerlink" href="#phase-19-strategy-projections" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Draw strategy formats such as V2MOM from the impact model, linked by ID and kept as separate documents
+<strong>Status:</strong> Proposed — 0 of 1 items completed</p>
+<ul>
+<li>[ ] <code>RMI-IMPACTMODEL-003</code> Export a V2MOM projection of an impact model</li>
+<li>Type: capability · Status: proposed</li>
+<li>Acceptance: context.values added; export v2mom writes vision, values, methods, obstacles, and measures from the model, linked by ID; the V2MOM document stays separate</li>
 </ul>
 
 

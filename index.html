@@ -336,15 +336,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-theory-of-change" class="md-nav__link">
+  <a href="#projections" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a theory of change?
+        Projections
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="What is a theory of change?">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-theory-of-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The theory of change
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The theory of change">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -358,18 +369,12 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#views-of-one-impact-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Views of one impact model
-      
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -377,11 +382,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1480,15 +1480,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-theory-of-change" class="md-nav__link">
+  <a href="#projections" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a theory of change?
+        Projections
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="What is a theory of change?">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-theory-of-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The theory of change
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The theory of change">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1502,18 +1513,12 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#views-of-one-impact-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Views of one impact model
-      
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1521,11 +1526,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1594,21 +1594,29 @@
 
 
 <h1 id="impact-model">Impact Model<a class="headerlink" href="#impact-model" title="Permanent link">&para;</a></h1>
-<p>An AI-native, spec-driven way to model, measure, and report on impact: how a
-program, product, or organization expects to bring about change, what it does to
-get there, and what it measures along the way. It is a Go-first data model with
+<p><strong>Impact Model</strong> is an AI-native format from
+<a href="https://github.com/ProductBuildersHQ">ProductBuildersHQ</a> for describing how a
+program, product, or organization expects to bring about change: what it does,
+why that should work, and how it will know. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the <code>impact-model</code> CLI, and an MCP server.</p>
-<p>One impact model describes the change once. The
+<p>You describe the change once, in one impact model. The
 <a href="https://en.wikipedia.org/wiki/Theory_of_change">theory of change</a>, the logic
-model, the pathway of change, the outcome map, and the logframe are different
-<strong>views</strong> of it, each made for a different reader, and none of them is a part of
-another.</p>
-<blockquote>
-<p><strong>Status:</strong> the latest release is v0.3.0, the first as <code>impact-model</code>; see the
-<a href="releases/v0.3.0/">release notes</a>. It renames the module, the command, the document <code>kind</code>,
-and the schema names, so a document written for v0.2.0 needs
-<code>kind: ImpactModel</code> and a few renamed fields. See <a href="design/adrs/0001-rename-to-impact-model/">the decision</a>.</p>
-</blockquote>
+model, the outcome map, the logframe, and strategy formats such as OKRs and V2MOM
+are <strong>projections</strong> of it. Each draws the same model for a different reader and
+leaves something out, and none of them is a part of another.</p>
+<pre class="mermaid"><code>flowchart LR
+  classDef model fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
+  classDef method fill:#eef7ee,stroke:#2e7d32,color:#111
+  classDef strategy fill:#e8eefc,stroke:#3f51b5,color:#111
+  classDef planned fill:#f3f3f3,stroke:#757575,stroke-dasharray:4 3,color:#111
+
+  im["Impact model&lt;br/&gt;outcomes, causal links, assumptions, evidence,&lt;br/&gt;interventions, indicators, audiences"]:::model
+  im --&gt; toc["Theory of change"]:::method
+  im --&gt; lm["Logic model"]:::method
+  im --&gt; om["Outcome map"]:::method
+  im --&gt; lf["Logframe"]:::method
+  im --&gt; okr["OKRs"]:::strategy
+  im -.-&gt; v2["V2MOM (planned)"]:::planned</code></pre>
 <h2 id="what-is-an-impact-model">What is an impact model?<a class="headerlink" href="#what-is-an-impact-model" title="Permanent link">&para;</a></h2>
 <p>An impact model is one structured description of <strong>how and why change is
 expected to happen</strong>. It holds:</p>
@@ -1625,10 +1633,77 @@ expected to happen</strong>. It holds:</p>
 <p>Every element records where it came from (stated, inferred, a hypothesis, or
 confirmed), so a reader can tell what an organization has claimed from what an
 assistant has proposed.</p>
-<p>The model is a graph of causes and measures. A diagram of it is a view, and a
-single model can produce several.</p>
-<h2 id="what-is-a-theory-of-change">What is a theory of change?<a class="headerlink" href="#what-is-a-theory-of-change" title="Permanent link">&para;</a></h2>
-<p>A theory of change explains <strong>how and why a program expects to bring about a
+<p>The model is a graph of causes and measures. A diagram or a table of it is a
+projection, and one model can produce many.</p>
+<h2 id="projections">Projections<a class="headerlink" href="#projections" title="Permanent link">&para;</a></h2>
+<p>Each projection answers a different question for a different reader:</p>
+<table>
+<thead>
+<tr>
+<th>Projection</th>
+<th>Answers</th>
+<th>Get it with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Theory of change</strong></td>
+<td>Why should what we do lead to the change we want, and in what order must outcomes happen? Drawn as pathways of change, from the earliest outcome at the bottom to the long-term goal at the top</td>
+<td><code>report pathway</code></td>
+</tr>
+<tr>
+<td><strong>Outcome map</strong></td>
+<td>What changes, who is responsible for each change, and how is it measured? The outcomes by level, each with its sphere, owner, cause, and indicators</td>
+<td><code>report outcome-map</code></td>
+</tr>
+<tr>
+<td><strong>Logic model</strong></td>
+<td>What goes in, what is done, and what comes out? Stages from inputs, activities, and outputs through short-, medium-, and long-term outcomes to impact, one per pathway</td>
+<td><code>report logic-model</code>, <code>logic-model-d2</code></td>
+</tr>
+<tr>
+<td><strong>Logframe</strong></td>
+<td>What do we promise, and how will we verify it? Narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring</td>
+<td><code>report logframe</code></td>
+</tr>
+<tr>
+<td><strong>Metric tree and headline metrics</strong></td>
+<td>What does each program steer by, and what is each audience told?</td>
+<td><code>report metric-tree</code>, <code>report headline</code></td>
+</tr>
+<tr>
+<td><strong>OKRs and outcome journeys</strong></td>
+<td>What will a team commit to this quarter, and how does a person move through the outcomes? For the <a href="#part-of-the-prism-ecosystem">PRISM</a> planning tools</td>
+<td><code>export okr</code>, <code>export journey</code></td>
+</tr>
+<tr>
+<td><strong>V2MOM</strong> <em>(planned)</em></td>
+<td>What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision, values, methods, obstacles, and measures, drawn from the model's vision, values, interventions, assumptions and risks, and indicators</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Each projection leaves something out. A logic model shows the sequence from what
+goes in to what comes out, and rarely why each step holds. A theory of change
+shows why, and says less about what is delivered. A logframe fits the model into
+a matrix for contracts, and OKRs keep only what a team commits to for a period.
+None is derived from another. The impact model holds what they all need, so any
+of them can be drawn from it. A logic model that arrives on its own can seed a
+<em>candidate</em> impact model, but it cannot supply the reasons and assumptions it
+never held, so those stay marked as inferred until someone confirms them.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>impact-model<span class="w"> </span>report<span class="w"> </span>pathway<span class="w"> </span>impact-model.yaml<span class="w">           </span><span class="c1"># the theory of change, as pathways of change</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>impact-model<span class="w"> </span>report<span class="w"> </span>outcome-map<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># the outcome map</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logic-model<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># a logic model for each pathway</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logframe<span class="w"> </span>impact-model.yaml<span class="w">          </span><span class="c1"># the logframe matrix</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>impact-model<span class="w"> </span>report<span class="w"> </span>definitions<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># all of them, plus metrics and glossary</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>impact-model<span class="w"> </span><span class="nb">export</span><span class="w"> </span>okr<span class="w"> </span>impact-model.yaml<span class="w">               </span><span class="c1"># OKRs for the PRISM tools</span>
+</code></pre></div>
+<p>Change the model once and every projection changes with it, so the numbers and
+labels never drift apart. (The outcome map here is the outcomes framework from the
+ActKnowledge method; it is not IDRC's <em>Outcome Mapping</em>, which tracks progress
+markers for the partners a program influences.)</p>
+<h2 id="the-theory-of-change">The theory of change<a class="headerlink" href="#the-theory-of-change" title="Permanent link">&para;</a></h2>
+<p>The theory of change is the projection most programs start from. It explains <strong>how and why a program expects to bring about a
 change</strong>. It starts from the long-term goal and works backwards: what
 conditions must exist for the goal to be reached, what must exist before each of
 those, and so on down to what the program does today. Each step is an
@@ -1659,59 +1734,7 @@ sources agree on five reasons:</p>
 <li><strong>Learning.</strong> The model is a living framework. When evidence arrives, you revise
   it instead of defending it.</li>
 </ul>
-<h3 id="views-of-one-impact-model">Views of one impact model<a class="headerlink" href="#views-of-one-impact-model" title="Permanent link">&para;</a></h3>
-<p>These are different <strong>views of one impact model</strong>. Each answers a different
-question for a different reader:</p>
-<table>
-<thead>
-<tr>
-<th>View</th>
-<th>Answers</th>
-<th>What it looks like</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Pathway of change</strong></td>
-<td>In what order must outcomes happen to reach the goal?</td>
-<td>The chains of outcomes, from the earliest at the bottom to the long-term goal at the top. A program usually has several; together they are the <em>outcomes framework</em></td>
-</tr>
-<tr>
-<td><strong>Outcome map</strong></td>
-<td>What changes, who is responsible for each change, and how is it measured?</td>
-<td>The outcomes grouped by level, each with its sphere, whether the organization owns it or only monitors it, who delivers it, the cause it addresses, and the indicators that measure it</td>
-</tr>
-<tr>
-<td><strong>Logic model</strong></td>
-<td>What goes in, what is done, and what comes out?</td>
-<td>Stages from inputs, activities, and outputs through short-term, medium-term, and long-term outcomes to impact, one model per pathway</td>
-</tr>
-<tr>
-<td><strong>Logframe</strong></td>
-<td>What do we promise, and how will we verify it?</td>
-<td>A matrix of narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring</td>
-</tr>
-</tbody>
-</table>
-<p>Each view is a projection of the model, and each leaves something out. A logic
-model shows the sequence from what goes in to what comes out, and rarely why each
-step holds. A theory of change shows why, and says less about what is delivered.
-A logframe fits the model into a matrix for contracts. None is derived from
-another. The impact model holds what they all need, so any of them can be drawn
-from it. A logic model that arrives on its own can seed a <em>candidate</em> impact
-model, but it cannot supply the reasons and assumptions it never held, so those
-stay marked as inferred until someone confirms them.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>impact-model<span class="w"> </span>report<span class="w"> </span>pathway<span class="w"> </span>impact-model.yaml<span class="w">           </span><span class="c1"># the theory of change as pathways of change, in diagrams</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>impact-model<span class="w"> </span>report<span class="w"> </span>outcome-map<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># the outcome map</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logic-model<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># a logic model for each pathway</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>impact-model<span class="w"> </span>report<span class="w"> </span>logframe<span class="w"> </span>impact-model.yaml<span class="w">          </span><span class="c1"># the logframe matrix</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>impact-model<span class="w"> </span>report<span class="w"> </span>definitions<span class="w"> </span>impact-model.yaml<span class="w">       </span><span class="c1"># all of them, plus metrics and glossary</span>
-</code></pre></div>
-<p>Change the model once and every view changes with it, so the numbers and labels
-never drift apart. (The outcome map here is the outcomes framework from the
-ActKnowledge method; it is not IDRC's <em>Outcome Mapping</em>, which tracks progress
-markers for the partners a program influences.)</p>
-<h3 id="how-the-chain-the-metrics-and-what-each-audience-sees-fit-together">How the chain, the metrics, and what each audience sees fit together<a class="headerlink" href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" title="Permanent link">&para;</a></h3>
+<h2 id="how-the-chain-the-metrics-and-what-each-audience-sees-fit-together">How the chain, the metrics, and what each audience sees fit together<a class="headerlink" href="#how-the-chain-the-metrics-and-what-each-audience-sees-fit-together" title="Permanent link">&para;</a></h2>
 <p>An impact model is the chain from resources to impact. Metrics hang off each step
 of it, and different readers should see a different few. The first diagram is one
 program, shown as a pathway. The second shows how its metrics reach each audience.</p>
@@ -1827,7 +1850,7 @@ program, shown as a pathway. The second shows how its metrics reach each audienc
 <tbody>
 <tr>
 <td><strong>A model you can trust</strong></td>
-<td>Every element records whether a source <em>stated</em> it, you <em>inferred</em> it, it is still a <em>hypothesis</em>, or reviewers <em>confirmed</em> it. Reports show how much of the theory is established and how much is our reading</td>
+<td>Every element records whether a source <em>stated</em> it, you <em>inferred</em> it, it is still a <em>hypothesis</em>, or reviewers <em>confirmed</em> it. Reports show how much of the model is established and how much is our reading</td>
 </tr>
 <tr>
 <td><strong>Edits that cannot make it worse</strong></td>

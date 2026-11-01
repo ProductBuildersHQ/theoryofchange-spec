@@ -1619,22 +1619,23 @@
 
 <h1 id="release-notes-v030">Release Notes v0.3.0<a class="headerlink" href="#release-notes-v030" title="Permanent link">&para;</a></h1>
 <p>Released: 2026-11-01</p>
-<p>The project is now <strong>impact-model</strong>. One impact model holds the outcomes and
-causal links of a program, the assumptions and evidence behind them, the
-interventions that bring them about, how progress is measured, and who is told
-which numbers. The theory of change, the logic model, the outcome map, and the
-logframe are views of that one model, each made for a different reader, and none
-of them is a part of another.</p>
+<p>The project is now <strong>impact-model</strong>, an AI-native format from ProductBuildersHQ.
+One impact model holds the outcomes and causal links of a program, the
+assumptions and evidence behind them, the interventions that bring them about,
+how progress is measured, and who is told which numbers. The theory of change,
+the logic model, the outcome map, the logframe, and OKRs are projections of that
+one model, each made for a different reader, and none of them is a part of
+another.</p>
 <p>This is the first release under the new module path and command. It renames
 names only: the format, the lint checks, the reports, and their output are the
 same as in v0.2.0. A document written for v0.2.0 needs a new <code>kind</code> and a few
 renamed fields. See <a href="#upgrading">Upgrading</a>.</p>
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>One model, several views.</strong> The README, the docs index, and the
-  <a href="../../concepts/">concepts page</a> describe one impact model with several views,
-  and why a logic model is a view beside the theory of change and not a part of
-  it.</li>
+<li><strong>One model, many projections.</strong> The README and the docs index lead with the
+  impact model as the format, list its projections and the command that draws
+  each, and explain why a logic model is a projection beside the theory of change
+  and not a part of it. A V2MOM projection is planned.</li>
 <li><strong>A new module path and command.</strong> <code>github.com/ProductBuildersHQ/impact-model</code>,
   and the <code>impact-model</code> command.</li>
 <li><strong>The decision is recorded.</strong> <a href="../../design/adrs/0001-rename-to-impact-model/">ADR 0001</a>
@@ -1755,7 +1756,7 @@ decks, <code>mmdc</code> and <code>d2</code> for diagrams, and <code>pandoc</cod
 </ul>
 <h2 id="what-did-not-change">What did not change<a class="headerlink" href="#what-did-not-change" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>The views keep their method names.</strong> <code>report pathway</code>, <code>logic-model</code>,
+<li><strong>The projections keep their method names.</strong> <code>report pathway</code>, <code>logic-model</code>,
   <code>outcome-map</code>, and <code>logframe</code> are still the names of those reports.</li>
 <li><strong>Behavior.</strong> Validation, the lint rules, measurement, reports, and decks work
   as in v0.2.0. Only the names in their output change: a report or message says
