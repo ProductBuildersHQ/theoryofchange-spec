@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/grokify/structured-goals/okr"
+	"github.com/grokify/prism-roadmap/goals/okr"
 
 	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
 	"github.com/ProductBuildersHQ/impact-model/pkg/impact"

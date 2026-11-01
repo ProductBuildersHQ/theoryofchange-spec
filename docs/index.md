@@ -2,15 +2,18 @@
 
 **Impact Model** is an AI-native format from
 [ProductBuildersHQ](https://github.com/ProductBuildersHQ) for describing how a
-program, product, or organization expects to bring about change: what it does,
-why that should work, and how it will know. It is a Go-first data model with
+program, product, or organization expects to bring about change. It is a
+[causal model](https://en.wikipedia.org/wiki/Causal_model): it states which
+interventions should change which outcomes, why each step should lead to the
+next, and how to measure whether it did. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
 You describe the change once, in one impact model. The
 [theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
-model, the outcome map, the logframe, and strategy formats such as OKRs and V2MOM
-are **projections** of it. Each draws the same model for a different reader and
-leaves something out, and none of them is a part of another.
+model, the outcome map, the logframe, strategy formats such as OKRs and V2MOM,
+and improvement formats such as DMAIC are **projections** of it. Each draws the
+same model for a different reader and leaves something out, and none of them is
+a part of another.
 
 ```mermaid
 flowchart LR
@@ -25,7 +28,8 @@ flowchart LR
   im --> om["Outcome map"]:::method
   im --> lf["Logframe"]:::method
   im --> okr["OKRs"]:::strategy
-  im -.-> v2["V2MOM (planned)"]:::planned
+  im --> v2["V2MOM"]:::strategy
+  im -.-> dm["DMAIC (planned)"]:::planned
 ```
 
 ## What is an impact model?
@@ -61,7 +65,8 @@ Each projection answers a different question for a different reader:
 | **Logframe** | What do we promise, and how will we verify it? Narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring | `report logframe` |
 | **Metric tree and headline metrics** | What does each program steer by, and what is each audience told? | `report metric-tree`, `report headline` |
 | **OKRs and outcome journeys** | What will a team commit to this quarter, and how does a person move through the outcomes? For the [PRISM](#part-of-the-prism-ecosystem) planning tools | `export okr`, `export journey` |
-| **V2MOM** *(planned)* | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision, values, methods, obstacles, and measures, drawn from the model's vision, values, interventions, assumptions and risks, and indicators | — |
+| **V2MOM** | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision and values from the context, one method per pathway with its interventions as projects, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions. See [the mapping](guides/v2mom.md) | `export v2mom` |
+| **DMAIC** *(planned)* | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? Metrics by pathway with baselines, targets, and observations over time, root causes from the problem tree, and the interventions that improve them | — |
 
 Each projection leaves something out. A logic model shows the sequence from what
 goes in to what comes out, and rarely why each step holds. A theory of change
@@ -264,6 +269,7 @@ whether it did.
 | Write or change an impact model | [Authoring an impact model](guides/authoring.md) |
 | See how far a program has come | [Measuring progress](guides/measurement.md) |
 | Produce reports and decks | [Reports and decks](guides/reports-and-decks.md) |
+| Export a V2MOM, and see how it maps | [V2MOM](guides/v2mom.md) |
 | Send an impact model out for review | [Review round trip](guides/review-round-trip.md) |
 | Judge the quality of an impact model | [Quality and judging](guides/quality-and-judging.md) |
 | Connect an AI agent | [MCP server and agent skills](guides/mcp-and-skills.md) |

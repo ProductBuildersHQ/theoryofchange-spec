@@ -119,6 +119,10 @@ func TestDocumentIssues(t *testing.T) {
 			d.Context.Market = nil
 		}, "VAL-DOC-004", "/outcomes", SeverityError},
 		{"empty problem statement", func(d *impact.Model) { d.Context.ProblemStatement = "" }, "VAL-DOC-005", "/context/problemStatement", SeverityError},
+		{"value without name", func(d *impact.Model) { d.Context.Values = []impact.Value{{Name: " "}} }, "VAL-DOC-006", "/context/values/0/name", SeverityError},
+		{"duplicate value", func(d *impact.Model) {
+			d.Context.Values = []impact.Value{{Name: "Candor"}, {Name: "Candor"}}
+		}, "VAL-DOC-007", "/context/values/1/name", SeverityError},
 		{"empty ceiling", func(d *impact.Model) { d.Ceiling = &impact.Ceiling{} }, "VAL-CEIL-001", "/ceilingOfAccountability", SeverityError},
 		{"ceiling outcome unknown", func(d *impact.Model) { d.Ceiling = &impact.Ceiling{OutcomeIDs: []string{"zzz"}} }, "VAL-REF-001", "/ceilingOfAccountability/outcomeIds/0", SeverityError},
 		{"unknown actor", func(d *impact.Model) { d.Outcomes[1].ActorIDs = []string{"act-ghost"} }, "VAL-REF-001", "/outcomes/1/actorIds/0", SeverityError},

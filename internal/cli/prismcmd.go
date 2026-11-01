@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -16,11 +17,27 @@ func newPrismExportCmd(e *env, kind string) *cobra.Command {
 outcome with measured indicators is an objective, and each of its indicators a
 key result with baseline, target, current value, score, status, and
 confidence. With observations (-O), the key results carry the latest values.`
-	if kind == "journey" {
+	switch kind {
+	case "journey":
 		short, long = "Export outcome journeys for the PRISM tools", `Export each numeric indicator as an outcome journey: where the measure stands
 now, from the latest observation or the baseline, and the dated targets it is
 meant to reach. With observations (-O), target confidence comes from the
 status.`
+	case "v2mom":
+		short, long = "Export the impact model as a V2MOM", `Export the impact model as a V2MOM (Vision, Values, Methods, Obstacles,
+Measures):
+
+  Vision     context.vision
+  Values     context.values, in order
+  Methods    one per pathway; its interventions are the method's projects
+  Measures   each pathway's focus: North Star, one metric, guardrails
+  Obstacles  risks, and high or critical assumptions not yet shown to hold
+             (their assessed status with -O); under the method of the
+             pathway they apply to, otherwise for the whole V2MOM
+
+With observations (-O), the measures carry current values, progress, and
+status. A model without a vision, values, or a pathway is refused, with a
+message naming what to add.`
 	}
 	cmd := &cobra.Command{
 		Use:     kind + " <model-file>",
@@ -52,10 +69,16 @@ func runPrismExport(e *env, cmd *cobra.Command, kind, path string) error {
 		st = in.Status
 	}
 	var v any
-	if kind == "okr" {
+	switch kind {
+	case "okr":
 		v, err = prismx.ToOKR(doc, st)
-	} else {
+	case "v2mom":
+		v, err = prismx.ToV2MOM(doc, st)
+	default:
 		v, err = prismx.ToOutcomeJourneys(doc, st)
+	}
+	if errors.Is(err, prismx.ErrNotV2MOMReady) {
+		return &ExitError{Code: ExitUsageErr, Err: fmt.Errorf("%s: %w", path, err)}
 	}
 	if err != nil {
 		return renderError(path, err)

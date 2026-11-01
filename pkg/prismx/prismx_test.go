@@ -1,13 +1,14 @@
 package prismx
 
 import (
+	"encoding/json"
 	"os/exec"
 	"slices"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/grokify/structured-goals/okr"
+	"github.com/grokify/prism-roadmap/goals/okr"
 
 	"github.com/ProductBuildersHQ/impact-model/pkg/graph"
 	"github.com/ProductBuildersHQ/impact-model/pkg/impact"
@@ -155,12 +156,27 @@ func TestOutcomeJourneys(t *testing.T) {
 
 func TestExportsAreDeterministic(t *testing.T) {
 	doc, st := example(t)
-	a, _ := ToOKR(doc, st)
-	b, _ := ToOKR(doc, st)
-	ja, _ := a.JSON()
-	jb, _ := b.JSON()
-	if string(ja) != string(jb) {
-		t.Error("two OKR exports differ")
+	exports := map[string]func() (any, error){
+		"OKR":   func() (any, error) { return ToOKR(doc, st) },
+		"V2MOM": func() (any, error) { return ToV2MOM(doc, st) },
+	}
+	for name, export := range exports {
+		var first []byte
+		for range 2 {
+			v, err := export()
+			if err != nil {
+				t.Fatalf("%s: %v", name, err)
+			}
+			b, err := json.Marshal(v)
+			if err != nil {
+				t.Fatalf("%s: %v", name, err)
+			}
+			if first == nil {
+				first = b
+			} else if string(b) != string(first) {
+				t.Errorf("two %s exports differ", name)
+			}
+		}
 	}
 }
 

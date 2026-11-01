@@ -17,7 +17,9 @@ projections of it, drawn by the `report` command:
 | Logframe | A matrix of narrative, indicators, verification, and assumptions | `logframe` |
 
 OKRs and outcome journeys are projections too, written by `export okr` and
-`export journey` for the PRISM planning tools. A V2MOM projection is planned.
+`export journey` for the PRISM planning tools, and so is a V2MOM, written by
+`export v2mom` (see the [V2MOM guide](guides/v2mom.md)). A DMAIC projection is
+planned.
 
 **Delivered by** names the roadmap item (`RMI-THEORYOFCHANGESPEC-NNN`, shown
 as `NNN`) that adds the type or field. Concepts not in v0 are listed under
@@ -132,7 +134,7 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 | Precondition | An outcome that must hold for a higher outcome; incoming links to an outcome are its preconditions |
 | Precondition group | An explicit AND / OR / k-of-n combination of preconditions |
 | Causal link | A directed claim that one outcome (or intervention) contributes to another, with a rationale |
-| Intervention | Something the actors do to bring about outcomes (program, product, policy, advocacy, partnership…) |
+| Intervention | Something the actors do to bring about outcomes (program, product, policy, advocacy, partnership…). The logic model shows interventions as activities, and the V2MOM projection shows them as a method's projects. An initiative is the organizational effort that delivers one, linked through `initiativeRefs` |
 | Assumption | A condition believed to hold for a link or outcome to work, which the initiative does not bring about |
 | Indicator | Measurable evidence that an outcome, output, or assumption is changing |
 | Ceiling of accountability | The line above which outcomes are tracked but not owned |

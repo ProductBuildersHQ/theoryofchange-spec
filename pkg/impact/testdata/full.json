@@ -39,7 +39,10 @@
     },
     "narrative": "If major identity providers implement the standard, agent platforms adopt it, and enterprises require it.",
     "mission": "Make provider interoperability routine for the enterprises that depend on it.",
-    "vision": "Enterprises sign in once and every provider they use honors it."
+    "vision": "Enterprises sign in once and every provider they use honors it.",
+    "values": [
+      {"name": "Candor", "description": "Say what the evidence shows, including when it disappoints."}
+    ]
   },
   "ceilingOfAccountability": {
     "level": "long_term",

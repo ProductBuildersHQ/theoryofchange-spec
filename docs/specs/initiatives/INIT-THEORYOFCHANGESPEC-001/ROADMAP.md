@@ -493,9 +493,17 @@
 
 ## Phase 19 — Strategy Projections
 
-**Theme:** Draw strategy formats such as V2MOM from the impact model, linked by ID and kept as separate documents
-**Status:** Proposed — 0 of 1 items completed
+**Theme:** Draw strategy and improvement formats such as V2MOM and DMAIC from the impact model, on prism-roadmap's goal types, linked by ID and kept as separate documents
+**Status:** In progress — 2 of 3 items completed
 
-- [ ] `RMI-IMPACTMODEL-003` Export a V2MOM projection of an impact model
-  - Type: capability · Status: proposed
+- [x] `RMI-IMPACTMODEL-003` Export a V2MOM projection of an impact model
+  - Type: capability · Status: completed
   - Acceptance: context.values added; export v2mom writes vision, values, methods, obstacles, and measures from the model, linked by ID; the V2MOM document stays separate
+
+- [ ] `RMI-IMPACTMODEL-005` Export a DMAIC projection of an impact model
+  - Type: capability · Status: proposed
+  - Acceptance: export dmaic writes a prism-roadmap goals/dmaic document: categories from pathways, metrics from indicators with baseline, current, target, direction, status, and data points from observations, root causes from the problem tree, and initiatives from interventions; control limits and process capability only where observations support them, never invented
+
+- [x] `RMI-IMPACTMODEL-004` Export OKRs through prism-roadmap's goals/okr instead of structured-goals
+  - Type: chore · Status: completed
+  - Acceptance: pkg/prismx imports prism-roadmap/goals/okr; structured-goals is gone from go.mod; the OKR export's golden output is unchanged

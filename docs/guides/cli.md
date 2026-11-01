@@ -74,7 +74,7 @@ The twenty element kinds are `actor`, `assumption`, `audience`, `cause`,
 | `deck workshop`, `exec`, `learning-review`, `story` | Marp slide decks (`--export` renders with `marp`) |
 | `export csv <table>` | `indicators`, `metrics`, `glossary`, `metric-selection`, `collection-plan` |
 | `export docx`, `export pptx` | Word and PowerPoint through `mmdc` and `pandoc` |
-| `export okr`, `export journey` | JSON for the PRISM tools |
+| `export okr`, `export journey`, `export v2mom` | JSON for the PRISM tools; see the [V2MOM guide](v2mom.md) for how a V2MOM maps |
 
 ### Review
 
