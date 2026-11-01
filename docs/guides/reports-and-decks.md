@@ -30,7 +30,7 @@ impact-model report definitions impact-model.yaml --out definitions.md
 | `collection-plan` | What is collected, how, how often, and the burden against the budget |
 | `glossary` | The words the impact model uses |
 | `assessment` | How much of the impact model is stated, inferred, or still a hypothesis |
-| `definitions` | All of the above as one document |
+| `definitions` | One document for a workshop: the problem tree (when the model records causes or effects), the causal pathways, logic models, outcome maps, logframes, metric definitions, and glossary |
 
 ## Status reports
 
@@ -132,11 +132,8 @@ current value, score, status, and confidence. `export journey` writes outcome
 journeys. `export v2mom` writes a V2MOM with one method per pathway; the
 [V2MOM guide](v2mom.md) maps each part. `export dmaic` writes a DMAIC metrics
 document for the pathways marked for DMAIC; the [DMAIC guide](dmaic.md) maps
-each part. All four are JSON for the PRISM tools.
-
-## Next
-
-[Review round trip](review-round-trip.md)
+each part. All four are JSON for the PRISM tools, and an agent gets the same
+exports from the MCP server's `impact_export` tool.
 
 ## The layered logic model diagram
 
@@ -157,3 +154,7 @@ Both diagrams are available, so you can compare them. The layered one is made
 by `pkg/logicmodel`, which builds a layered graph from the impact model and writes it
 through [d2vision](https://github.com/grokify/d2vision)'s diagram spec, the same
 spec that writes the D2 and the Mermaid.
+
+## Next
+
+[Review round trip](review-round-trip.md)

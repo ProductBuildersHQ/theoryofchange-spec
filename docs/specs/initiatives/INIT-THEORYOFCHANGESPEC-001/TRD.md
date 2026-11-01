@@ -514,7 +514,7 @@ Definition reports (no observations required):
 | `problem-tree` | Markdown: the problem tree as a Mermaid `flowchart BT` (causes in rows below the core problem, effects in rows above, arrows upward), then a table of causes and one of effects, each with its level or parents and the outcomes that address it or why it is set aside |
 | `problem-tree-d2` | The same diagram in D2, whose grid keeps each row in place |
 | `problem-tree-json` | The diagram document itself: the d2vision diagram spec (nodes with row, edges) that `problem-tree` and `problem-tree-d2` are rendered from |
-| `definitions` | All definition reports in one document (the workshop pack) |
+| `definitions` | The workshop pack, in this order: the problem tree (Mermaid, only when the model has a live cause or effect), causal pathways, logic models, outcome maps, logframes, metric definitions, glossary; each section is the matching report verbatim |
 
 Problem tree layering: the core problem is row 0. A cause with no parents is in
 row −1; any other cause is one row below its lowest parent (`row = min(parent
