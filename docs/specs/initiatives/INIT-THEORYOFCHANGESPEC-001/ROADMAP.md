@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/theoryofchange-spec`
-**Status:** In progress — 10 of 13 phases completed
+**Status:** In progress — 11 of 13 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry the trailer `Refs: RMI-THEORYOFCHANGESPEC-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -383,11 +383,40 @@
 
 ## Phase 13 — Headline Metrics
 
-**Theme:** Tie the causal chain to the metrics each program steers by and each audience is told: a North Star per program, guardrails, and curated headline numbers per audience
-**Status:** In progress — 0 of 1 items completed
+**Theme:** Tie the causal chain to the metrics each program steers by and each audience is told: a North Star per program, guardrails, curated headline numbers per audience, and metrics worked out from others
+**Status:** Completed — 7 of 7 items completed
 
-- [ ] `RMI-THEORYOFCHANGESPEC-062` Headline metrics per audience and a North Star per program, with a metric-chain diagram
-  - Type: capability · Status: in_progress
-  - Depends on: `RMI-THEORYOFCHANGESPEC-061`
+- [x] `RMI-THEORYOFCHANGESPEC-062` Headline metrics per audience and a North Star per program, with a metric-chain diagram
+  - Type: capability · Status: completed
   - Satisfies: PRD G-8
   - Acceptance: The README and docs index show how resources, activities, outputs, outcomes, impact, North Star metrics, and audience headline metrics link; audiences can list an ordered, worded set of headline indicators; the story report and deck use it; lint checks it
+
+- [x] `RMI-THEORYOFCHANGESPEC-063` Shared pathway and tier helpers used by every rule and report
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-062`
+  - Acceptance: One function says which pathways an indicator serves and which tier it is; PTH-002/003 and MET-001/003 agree; no rule re-derives membership
+
+- [x] `RMI-THEORYOFCHANGESPEC-064` Model headline metrics: audience headline lists, pathway focus (North Star, one metric, guardrails), product kind, mission and vision
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-063`
+  - Acceptance: Go types, JSON Schemas regenerated, references validated; existing documents still validate
+
+- [x] `RMI-THEORYOFCHANGESPEC-065` Lint the activity-to-impact chain, headline lists, and North Stars
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-064`
+  - Acceptance: Rules report an activity that leads nowhere, a link and intervention that disagree, an audience with no numbers, a North Star that is not an outcome at or below the ceiling
+
+- [x] `RMI-THEORYOFCHANGESPEC-066` Reports: metric tree, headline use in story and deck, headline report, estimates shown as estimates
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-065`
+  - Acceptance: A metric-tree report per pathway; story and deck use the audience headline list and drop the hardcoded five; an estimated value reads as an estimate
+
+- [x] `RMI-THEORYOFCHANGESPEC-067` Structured metric composition and derived indicator values
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-066`
+  - Acceptance: A metric can be a ratio or product of other metrics; a derived value is computed when its parts are observed; no cycles
+
+- [x] `RMI-THEORYOFCHANGESPEC-068` Examples, guides, MCP text, and the metric-chain diagram updated for headline metrics
+  - Type: capability · Status: completed
+  - Depends on: `RMI-THEORYOFCHANGESPEC-066`, `RMI-THEORYOFCHANGESPEC-067`
+  - Acceptance: The Riverbend example uses the new fields; a guide explains tiers, North Star, and headline; the diagram's planned boxes become solid
