@@ -447,9 +447,12 @@ named version, so that both teams work from the same agreed theory.
   `reported`, `estimated`).
 
 - **PRD-FR-119** The model MUST represent a problem tree: causes with level
-  (`immediate`, `underlying`, `structural`), parent cause, and affected
-  groups; outcomes MUST be able to declare which causes they address, so the
-  solution tree can be checked against the problem tree at every level.
+  (`immediate`, `underlying`, `structural`), the causes each contributes to
+  (`parents`: none for a direct cause of the core problem, one or more for an
+  indirect cause, so causes form a network and a tree is the case of at most
+  one parent each), and affected groups; outcomes MUST be able to declare which
+  causes they address, so the solution tree can be checked against the problem
+  tree at every level.
 - **PRD-FR-120** Outcomes MUST declare responsibility (`own`, `shared`,
   `partner`, `unaddressed`) and the actors delivering them. All outcomes are
   monitored; only `own` and `shared` outcomes count toward the perspective
@@ -475,6 +478,15 @@ named version, so that both teams work from the same agreed theory.
   default reports) so the review history stays visible.
 - **PRD-FR-125** Indicators MUST declare data availability: `public`,
   `internal_existing`, `internal_new`, `partner_held`, or `unknown`.
+- **PRD-FR-126** The problem tree MUST also represent effects, its branches:
+  the consequences of the core problem (`context.problemStatement`) and of
+  other effects, each with a statement, the effects it follows from (`parents`:
+  none for a direct effect of the core problem; a network, as for causes),
+  affected groups, evidence, an optional out-of-scope reason, and provenance.
+  Outcomes MUST be able to declare which effects they relieve
+  (`addressesEffects`), so the impact model can be checked against the harm it
+  is meant to reduce. The core problem stays a statement in the context until
+  something needs to attach to it.
 
 ### 4.2 Schema (PRD-FR-2xx)
 
@@ -499,6 +511,9 @@ named version, so that both teams work from the same agreed theory.
 - **PRD-FR-303** Lint MUST implement deterministic quality rules derived from
   the "plausible, doable, testable" criteria and the research brief, each with
   a stable ID (`TOC-<AREA>-<NNN>`), severity, and fix hint.
+- **PRD-FR-305** Lint MUST report an effect that no outcome relieves and that
+  is not set aside with a reason, and advise when effects are relieved only by
+  outcomes below the long-term level.
 - **PRD-FR-304** Lint output MUST be a structured-evaluation summary report
   (GO / NO-GO) so it plugs into existing ecosystem gates.
 
@@ -574,6 +589,13 @@ named version, so that both teams work from the same agreed theory.
   narrative, indicators, means of verification, and assumptions). Flattening
   loses the links and the "why", so every projection says it is a view and
   points back to the element IDs.
+- **PRD-FR-514** The tools MUST project the problem tree: causes (roots)
+  below, the core problem in the middle, and effects (branches) above, with
+  arrows that flow upward from the deepest causes to the core problem and on
+  to the furthest effects. The diagram is built first as a JSON diagram
+  document (nodes, edges, and layers), from which D2 and Mermaid are rendered,
+  so other tools can read or restyle it. Alongside it, tables list each cause
+  and effect with the outcomes that address it, or why it is set aside.
 - **PRD-FR-509** Indicators with a baseline and no target MUST report
   `baseline_only` rather than a failure, so a first measurement year is
   presented as establishing a baseline.

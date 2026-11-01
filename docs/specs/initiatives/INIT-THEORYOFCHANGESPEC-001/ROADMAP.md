@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/impact-model`
-**Status:** In progress — 17 of 20 phases completed
+**Status:** In progress — 17 of 21 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, `Refs: <RMI-ID>`. Items from before the rename to impact-model are `RMI-THEORYOFCHANGESPEC-001` to `-076`; later items are `RMI-IMPACTMODEL-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -525,3 +525,30 @@
 - [x] `RMI-IMPACTMODEL-008` Prepare v0.4.0: changelog, release notes, and the upgrade note for ToOKR
   - Type: capability · Status: completed
   - Acceptance: CHANGELOG.json has v0.4.0 and CHANGELOG.md is generated from it; docs/releases/v0.4.0.md covers V2MOM, DMAIC, the model additions, and the Go upgrade for prismx.ToOKR; mkdocs build --strict passes
+
+## Phase 21 — Problem Trees
+
+**Theme:** Causes as a network, effects as branches, and a problem-tree projection drawn from a JSON diagram spec, with arrows flowing up from the roots to the core problem and on to the branches
+**Status:** Proposed — 0 of 4 items completed
+
+- [ ] `RMI-IMPACTMODEL-009` Model effects and a network of causes
+  - Type: capability · Status: proposed
+  - Satisfies: PRD-FR-119, PRD-FR-126, TRD-025
+  - Acceptance: causes take parents[] and provenance; effects with statement, parents[], affected groups, evidence, out of scope, and provenance; outcomes take addressesEffects; validation per TRD 7.1 (VAL-CAU-003/004, VAL-EFF-001..004); schema regenerated; the edit engine and element commands handle effects and parents
+
+- [ ] `RMI-IMPACTMODEL-010` Lint effects that nothing relieves
+  - Type: capability · Status: proposed
+  - Depends on: `RMI-IMPACTMODEL-009`
+  - Satisfies: PRD-FR-305
+  - Acceptance: IMP-EFF-001 and IMP-EFF-002 per TRD 6.4, with seeded-defect tests
+
+- [ ] `RMI-IMPACTMODEL-011` Draw the problem tree from a JSON diagram spec
+  - Type: capability · Status: proposed
+  - Depends on: `RMI-IMPACTMODEL-009`
+  - Satisfies: PRD-FR-514, TRD-043
+  - Acceptance: pkg/problemtree layers causes below and effects above the core problem per TRD 6.6, exports a d2vision diagram spec, and renders D2 and Mermaid from it; reports problem-tree, problem-tree-d2, and problem-tree-json; golden tests
+
+- [ ] `RMI-IMPACTMODEL-012` Document problem trees and give the examples effects
+  - Type: capability · Status: proposed
+  - Depends on: `RMI-IMPACTMODEL-010`, `RMI-IMPACTMODEL-011`
+  - Acceptance: a problem tree guide with the mapping to the diagram; the examples have effects and outcomes that address them; README, concepts, CLI reference, changelog, and roadmap updated
