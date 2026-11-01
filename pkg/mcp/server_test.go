@@ -112,7 +112,7 @@ func TestEveryToolIsListed(t *testing.T) {
 			t.Errorf("tool %s lacks a description or a schema", tool.Name)
 		}
 	}
-	for _, want := range []string{"impact_schema", "impact_validate", "impact_lint", "impact_graph", "impact_status", "impact_report", "impact_patch", "impact_deck", "impact_judge_bundle", "impact_diff"} {
+	for _, want := range []string{"impact_schema", "impact_validate", "impact_lint", "impact_graph", "impact_status", "impact_report", "impact_export", "impact_patch", "impact_deck", "impact_judge_bundle", "impact_diff"} {
 		if !got[want] {
 			t.Errorf("tool %s is missing", want)
 		}
@@ -357,5 +357,32 @@ func TestInlineDocumentSizeIsLimited(t *testing.T) {
 	huge := strings.Repeat("x", 10<<20+1)
 	if _, errText := call(t, cs, "impact_validate", map[string]any{"document": huge}); errText == "" {
 		t.Error("an oversized inline document was accepted")
+	}
+}
+
+// The export tool writes the same documents as the command line, through the
+// same service function, and refuses what the format cannot draw.
+func TestExportTool(t *testing.T) {
+	cs := connect(t, workDir(t))
+	for _, kind := range []string{"okr", "journey", "v2mom"} {
+		out, errText := call(t, cs, "impact_export", map[string]any{"path": "impact-model.yaml", "observationPaths": []string{"obs.yaml"}, "kind": kind})
+		if errText != "" || out["kind"] != kind || out["document"] == nil {
+			t.Errorf("export %s: %q %.200v", kind, errText, out)
+		}
+	}
+	out, errText := call(t, cs, "impact_export", map[string]any{"path": "impact-model.yaml", "kind": "v2mom"})
+	if errText != "" {
+		t.Fatalf("v2mom without observations: %s", errText)
+	}
+	doc, ok := out["document"].(map[string]any)
+	if !ok || doc["vision"] == "" {
+		t.Errorf("v2mom document: %.200v", out["document"])
+	}
+	// The intermediary example marks no pathway for DMAIC, so DMAIC is refused.
+	if _, errText := call(t, cs, "impact_export", map[string]any{"path": "impact-model.yaml", "kind": "dmaic"}); !strings.Contains(errText, "projections: [dmaic]") {
+		t.Errorf("dmaic refusal: %q", errText)
+	}
+	if _, errText := call(t, cs, "impact_export", map[string]any{"path": "impact-model.yaml", "kind": "mystery"}); errText == "" {
+		t.Error("an unknown export was accepted")
 	}
 }

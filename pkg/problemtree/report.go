@@ -23,7 +23,7 @@ func Report(doc *impact.Model, f Format) (string, error) {
 	t := Build(doc)
 	var b strings.Builder
 	b.WriteString("## Problem tree\n\n")
-	if len(t.Rows) == 1 {
+	if t.Empty() {
 		fmt.Fprintf(&b, "No causes or effects have been recorded for the core problem: %s\n\n", oneLine(doc.Context.ProblemStatement))
 		return b.String(), nil
 	}

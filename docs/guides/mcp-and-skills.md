@@ -37,6 +37,7 @@ It makes no network calls and no model calls.
 | `impact_status` | Compute a status snapshot from observations |
 | `impact_report` | Render a definition or status report |
 | `impact_deck` | Generate a deck as Marp Markdown |
+| `impact_export` | Export for the PRISM tools as JSON: `okr`, `journey`, `v2mom`, or `dmaic`. With observations, the export carries the latest values and status. A model that lacks what the format needs is refused, naming what to add |
 | `impact_diff` | Compare two versions of an impact model |
 | `impact_judge_bundle` | Build the judge bundle |
 | `impact_patch` | Apply a JSON Patch, atomically |

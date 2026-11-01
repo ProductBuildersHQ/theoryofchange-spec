@@ -8,7 +8,7 @@ interventions should change which outcomes, why each step should lead to the
 next, and how to measure whether it did. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
-You describe the change once, in one impact model. The
+You describe the change once, in one impact model. The problem tree, the
 [theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
 model, the outcome map, the logframe, strategy formats such as OKRs and V2MOM,
 and improvement formats such as DMAIC are **projections** of it. Each draws the
@@ -20,9 +20,9 @@ flowchart LR
   classDef model fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
   classDef method fill:#eef7ee,stroke:#2e7d32,color:#111
   classDef strategy fill:#e8eefc,stroke:#3f51b5,color:#111
-  classDef planned fill:#f3f3f3,stroke:#757575,stroke-dasharray:4 3,color:#111
 
-  im["Impact model<br/>outcomes, causal links, assumptions, evidence,<br/>interventions, indicators, audiences"]:::model
+  im["Impact model<br/>problem, causes, effects, outcomes, causal links,<br/>assumptions, evidence, interventions, indicators, audiences"]:::model
+  im --> pt["Problem tree"]:::method
   im --> toc["Theory of change"]:::method
   im --> lm["Logic model"]:::method
   im --> om["Outcome map"]:::method
@@ -37,6 +37,8 @@ flowchart LR
 An impact model is one structured description of **how and why change is
 expected to happen**. It holds:
 
+- the **problem** it responds to, the **causes** that produce it, and the
+  **effects** it leads to;
 - the **outcomes** that should change, at five levels from output to impact, and
   the **causal links** between them, each with a reason to believe it;
 - the **assumptions** that must hold for a link to work, and the **evidence** for
@@ -69,7 +71,9 @@ Each projection answers a different question for a different reader:
 | **V2MOM** | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision and values from the context, one method per pathway with its interventions as projects, measures from each pathway's North Star and guardrails, and obstacles from risks and open assumptions. See [the mapping](guides/v2mom.md) | `export v2mom` |
 | **DMAIC** | Which metrics are we improving, from what baseline to what target, what causes the gap, and is the gain holding? One category per pathway marked `projections: [dmaic]`, its numeric indicators as metrics with observations as data points, control limits once there are enough, root causes from the problem tree, and interventions as improvement initiatives. Lint first checks that those pathways are measured often enough. See [the mapping](guides/dmaic.md) | `export dmaic` |
 
-Each projection leaves something out. A logic model shows the sequence from what
+Each projection leaves something out. A problem tree shows the problem, what
+causes it, and what it leads to, but not the steps by which a program changes
+it. A logic model shows the sequence from what
 goes in to what comes out, and rarely why each step holds. A theory of change
 shows why, and says less about what is delivered. A logframe fits the model into
 a matrix for contracts, and OKRs keep only what a team commits to for a period.
@@ -79,12 +83,16 @@ of them can be drawn from it. A logic model that arrives on its own can seed a
 never held, so those stay marked as inferred until someone confirms them.
 
 ```bash
+impact-model report problem-tree impact-model.yaml      # the problem tree: causes, core problem, effects
 impact-model report pathway impact-model.yaml           # the theory of change, as pathways of change
 impact-model report outcome-map impact-model.yaml       # the outcome map
 impact-model report logic-model impact-model.yaml       # a logic model for each pathway
 impact-model report logframe impact-model.yaml          # the logframe matrix
 impact-model report definitions impact-model.yaml       # all of them, plus metrics and glossary
 impact-model export okr impact-model.yaml               # OKRs for the PRISM tools
+impact-model export journey impact-model.yaml           # outcome journeys for the PRISM tools
+impact-model export v2mom impact-model.yaml             # a V2MOM
+impact-model export dmaic impact-model.yaml             # DMAIC improvement efforts
 ```
 
 Change the model once and every projection changes with it, so the numbers and
@@ -94,10 +102,11 @@ markers for the partners a program influences.)
 
 ## The theory of change
 
-The theory of change is the projection most programs start from. It explains **how and why a program expects to bring about a
-change**. It starts from the long-term goal and works backwards: what
-conditions must exist for the goal to be reached, what must exist before each of
-those, and so on down to what the program does today. Each step is an
+The theory of change is the projection most programs start from. It explains
+**how and why a program expects to bring about a change**. It starts from the
+long-term goal and works backwards: what conditions must exist for the goal to
+be reached, what must exist before each of those, and so on down to what the
+program does today. Each step is an
 **outcome**; each arrow between outcomes is a **causal link** with a reason for
 believing it holds; and each belief that has to be true for a link to work is an
 **assumption** that can be tested.
@@ -130,7 +139,6 @@ sources agree on five reasons:
   can see the same reasoning and argue with it.
 - **Learning.** The model is a living framework. When evidence arrives, you revise
   it instead of defending it.
-
 
 ## How the chain, the metrics, and what each audience sees fit together
 
@@ -253,10 +261,10 @@ Reading the second diagram:
 | **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
 | **Quality you can check** | A schema, structural validation, 72 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat |
 | **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |
-| **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR exports, all from one source and stamped with the version and hash |
+| **Artifacts for each audience** | Executive and funder reports, audience stories, slide decks, Word and PowerPoint files, CSV tables, and OKR, V2MOM, and DMAIC exports, all from one source and stamped with the version and hash |
 | **Review that comes back** | Send a packet or sheet to reviewers, import their answers as proposed changes you inspect, then record approval |
 | **Honest handling of people's data** | Stories and quotes appear only with consent, and restricted evidence is never rendered anywhere |
-| **Ready for AI agents** | An MCP server with ten tools and five skills lets an agent draft, edit, measure, and report, under the same rules as a person |
+| **Ready for AI agents** | An MCP server and agent skills let an agent draft, edit, measure, report, and export, under the same rules as a person |
 
 It is meant for program and strategy teams, evaluators, funders, and anyone who has
 to explain *why* what they do should lead to what they hope for, and then show
@@ -282,9 +290,10 @@ The [release notes](releases/v0.5.0.md) list what the latest release contains, a
 
 ## Part of the PRISM ecosystem
 
-Shared primitives come from [prism-core](https://github.com/grokify/prism-core);
-OKR and outcome-journey exports target
-[prism-roadmap](https://github.com/grokify/prism-roadmap); rubrics and GO/NO-GO
+Shared primitives come from
+[prism-core](https://github.com/grokify/prism-core). The OKR, outcome-journey,
+V2MOM, and DMAIC exports target the goals packages of
+[prism-roadmap](https://github.com/grokify/prism-roadmap). Rubrics and GO/NO-GO
 reports use [structured-evaluation](https://github.com/plexusone/structured-evaluation).
 
 ## License

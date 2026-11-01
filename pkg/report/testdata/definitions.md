@@ -1,5 +1,75 @@
 # Open agent authorization standard adoption: definitions
 
+## Problem tree
+
+Causes (roots) below lead up to the core problem, which leads up to its effects (branches).
+
+```mermaid
+flowchart BT
+  classDef cause fill:#f3e6d8,stroke:#8d5a2b
+  classDef effect fill:#e4f3e5,stroke:#2e7d32
+  classDef problem fill:#ffe0b2,stroke:#e08a1e
+  classDef row fill:transparent,stroke-width:0px
+  classDef set_aside fill:#f3f3f3,stroke:#9e9e9e
+  classDef zone fill:transparent,stroke-width:0px
+  subgraph n_effects["Effects (branches)"]
+    subgraph n_effects_r2[""]
+      n_effects_r2_eff_slow_adoption["Agent platforms adopt delegated access slowly. (set aside)"]
+    end
+    subgraph n_effects_r1[""]
+      n_effects_r1_eff_custom_integrations["Every enterprise pays for custom identity integrations."]
+    end
+  end
+  subgraph n_core["Core problem"]
+    subgraph n_core_r0[""]
+      n_core_r0_problem["AI agents act on behalf of users with credentials designed for humans, so access is over-broad and unauditable."]
+    end
+  end
+  subgraph n_causes["Causes (roots)"]
+    subgraph n_causes_r_1[""]
+      n_causes_r_1_cause_fragmented_auth["Agents authenticate in incompatible ways. (set aside)"]
+      n_causes_r_1_cause_no_reference["There is no reference implementation to copy."]
+    end
+    subgraph n_causes_r_2[""]
+      n_causes_r_2_cause_no_demand_signal["Providers see no customer demand for a common standard."]
+    end
+  end
+  n_causes_r_1_cause_fragmented_auth --> n_core_r0_problem
+  n_causes_r_2_cause_no_demand_signal --> n_causes_r_1_cause_no_reference
+  n_causes_r_1_cause_no_reference --> n_core_r0_problem
+  n_core_r0_problem --> n_effects_r1_eff_custom_integrations
+  n_effects_r1_eff_custom_integrations --> n_effects_r2_eff_slow_adoption
+  class n_effects_r2_eff_slow_adoption set_aside
+  class n_effects_r2 row
+  class n_effects_r1_eff_custom_integrations effect
+  class n_effects_r1 row
+  class n_effects zone
+  class n_core_r0_problem problem
+  class n_core_r0 row
+  class n_core zone
+  class n_causes_r_1_cause_fragmented_auth set_aside
+  class n_causes_r_1_cause_no_reference cause
+  class n_causes_r_1 row
+  class n_causes_r_2_cause_no_demand_signal cause
+  class n_causes_r_2 row
+  class n_causes zone
+```
+
+### Causes
+
+| Cause | Level | Leads to | Addressed by |
+|-------|-------|----------|--------------|
+| Agents authenticate in incompatible ways. (`cause-fragmented-auth`) | structural | the core problem | set aside: Needs regulation beyond this initiative. |
+| Providers see no customer demand for a common standard. (`cause-no-demand-signal`) | underlying | There is no reference implementation to copy. (`cause-no-reference`) | Major identity providers support the standard (`oc-idp-support`) |
+| There is no reference implementation to copy. (`cause-no-reference`) | immediate | the core problem | — |
+
+### Effects
+
+| Effect | Follows from | Relieved by |
+|--------|--------------|-------------|
+| Every enterprise pays for custom identity integrations. (`eff-custom-integrations`) | the core problem | Major identity providers support the standard (`oc-idp-support`) |
+| Agent platforms adopt delegated access slowly. (`eff-slow-adoption`) | Every enterprise pays for custom identity integrations. (`eff-custom-integrations`) | set aside: Platform roadmaps are outside this initiative. |
+
 ## Causal pathways
 
 ### The theory of change on one page

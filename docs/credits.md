@@ -19,6 +19,10 @@ full record: it summarizes each source and gives the citations.
 | *Most Significant Change* (Davies and Dart, 2005) | Stories of change coded into themes so they can be counted | Stories, themes, and the story codebook |
 | *Outcome Harvesting* (Wilson-Grau and Britt, 2012) | Outcomes found after the fact, as a kind of evidence | The `outcome_harvest` evidence type |
 | The logic model and logical framework traditions (W.K. Kellogg Foundation, 2004; USAID; UNDG, *Results-Based Management Handbook*, 2011) | The linear views of a theory | The logic-model and logframe reports |
+| Problem-tree analysis in the logical framework approach (GTZ, *ZOPP*, 1997; European Commission, *Project Cycle Management Guidelines*, 2004) | The core problem in the middle, its causes below as roots, and its effects above as branches | `effects`, `Cause.parents`, `Effect.parents`, `addressesEffects`, the problem-tree report |
+| V2MOM (Marc Benioff, Salesforce; Benioff and Adler, 2009) | Vision, values, methods, obstacles, and measures, in that order, as one alignment document | `context.values` and the V2MOM export |
+| Six Sigma's DMAIC cycle (Motorola; General Electric) | Improvement efforts that define, measure, analyze, improve, and control a metric from a baseline toward a target | `pathway.projections` with `dmaic`, the DMAIC export, and the `IMP-DMA` lint rules |
+| Statistical process control (Shewhart, 1931) | Control limits from an individuals and moving-range chart, three sigma either side of the center line | Control limits in the DMAIC export |
 
 Isabel Vogel's review of how Theory of Change is used in international development
 (DFID, 2012) makes the point, quoted in the research brief, that a logic model
@@ -29,10 +33,11 @@ document as the pathways.
 ## Projects and software
 
 This project is part of the PRISM family of projects by the same author. It uses
-[prism-core](https://github.com/grokify/prism-core) for shared types,
-[structured-goals](https://github.com/grokify/structured-goals) for OKR types,
-[prism-roadmap](https://github.com/grokify/prism-roadmap) as the target of the
-OKR and outcome-journey exports, and
+[prism-core](https://github.com/grokify/prism-core) for shared types, the goals
+packages of [prism-roadmap](https://github.com/grokify/prism-roadmap) for the
+OKR, outcome-journey, V2MOM, and DMAIC exports,
+[d2vision](https://github.com/grokify/d2vision) for the layered logic-model and
+problem-tree diagrams, and
 [structured-evaluation](https://github.com/plexusone/structured-evaluation) for
 rubrics and GO and NO-GO reports. Operating-system differences are handled by
 [oscompat](https://github.com/grokify/oscompat).
@@ -88,4 +93,8 @@ If a credit is missing or wrong, please
 - Davies, R. and Dart, J. (2005). *The 'Most Significant Change' (MSC) Technique: A Guide to Its Use*. <https://mande.co.uk/>
 - Wilson-Grau, R. and Britt, H. (2012). *Outcome Harvesting*. Ford Foundation. <https://outcomeharvesting.net/>
 - W.K. Kellogg Foundation (2004). *Logic Model Development Guide*.
+- GTZ (1997). *ZOPP: Objectives-oriented Project Planning*. Deutsche Gesellschaft für Technische Zusammenarbeit.
+- European Commission (2004). *Aid Delivery Methods, Volume 1: Project Cycle Management Guidelines*. EuropeAid.
+- Benioff, M. and Adler, C. (2009). *Behind the Cloud*. Jossey-Bass.
+- Shewhart, W. A. (1931). *Economic Control of Quality of Manufactured Product*. Van Nostrand.
 - Vogel, I. (2012). *Review of the use of 'Theory of Change' in International Development*. DFID. <https://assets.publishing.service.gov.uk/media/57a08a5ded915d3cfd00071a/DFID_ToC_Review_VogelV7.pdf>

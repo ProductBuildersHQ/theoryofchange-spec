@@ -2,7 +2,7 @@
 
 **Initiative:** `INIT-THEORYOFCHANGESPEC-001`
 **Repository:** `github.com/ProductBuildersHQ/impact-model`
-**Status:** In progress — 19 of 22 phases completed
+**Status:** In progress — 20 of 23 phases completed
 
 > RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, `Refs: <RMI-ID>`. Items from before the rename to impact-model are `RMI-THEORYOFCHANGESPEC-001` to `-076`; later items are `RMI-IMPACTMODEL-<NNN>`. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI `0NN` corresponds to PLAN step `P-NN`; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each `Satisfies` line are defined in PRD.md and TRD.md.
 
@@ -561,3 +561,20 @@
 - [x] `RMI-IMPACTMODEL-013` Prepare v0.5.0: changelog, release notes, guide updates, and the parent to parents migration
   - Type: capability · Status: completed
   - Acceptance: CHANGELOG.json has v0.5.0 and CHANGELOG.md is generated from it; docs/releases/v0.5.0.md covers problem trees and the migration from parent to parents; the user guides cover effects; mkdocs build --strict passes
+
+## Phase 23 — Exports for Agents and an Overview Refresh
+
+**Theme:** The PRISM exports through the service layer and the MCP server, the problem tree in the definitions pack, and an overview, credits, and guides that cover every projection
+**Status:** Completed — 3 of 3 items completed
+
+- [x] `RMI-IMPACTMODEL-014` Export through the service layer and from the MCP server
+  - Type: capability · Status: completed
+  - Acceptance: service.ExportPRISM draws the OKR, journey, V2MOM, and DMAIC exports for the command line and the MCP server; the impact_export tool takes observations and a status date and refuses a model the format cannot be drawn from; tests for both
+
+- [x] `RMI-IMPACTMODEL-015` Include the problem tree in the definitions pack
+  - Type: capability · Status: completed
+  - Acceptance: definitions pack opens with the problem tree when the model records causes or effects; goldens updated
+
+- [x] `RMI-IMPACTMODEL-016` Refresh the overview, credits, and guides for V2MOM, DMAIC, and problem trees
+  - Type: documentation · Status: completed
+  - Acceptance: README and docs/index.md list every projection and export; credits name V2MOM, DMAIC, and problem-tree sources; a test keeps README and docs/index.md in step

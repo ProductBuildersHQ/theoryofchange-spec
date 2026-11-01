@@ -117,8 +117,12 @@ func TestRestrictedEvidenceIsAbsentFromEveryOutput(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defs, err := Definitions(in.View, pathways, in.Doc)
+	if err != nil {
+		t.Fatal(err)
+	}
 	outputs := map[string]string{
-		"view as json": full, "definitions": Definitions(in.View, pathways), "assessment": Assessment(in.View, in.Doc),
+		"view as json": full, "definitions": defs, "assessment": Assessment(in.View, in.Doc),
 		"exec": Exec(in), "results": Results(in), "assumptions": Assumptions(in), "interventions": Interventions(in),
 		"evidence gaps": EvidenceGaps(in), "full": Full(in, Mermaid(in.View, MermaidOptions{ShowIDs: true})),
 		"story": story, "learning review": LearningReview(LearningInput{StatusInput: in, Sets: sets, Period: "2026-Q3"}),
