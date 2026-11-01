@@ -324,6 +324,8 @@ require a DAG), `ErrUnsupportedFormat`. Callers use `errors.Is`.
 | `impact_report` | `{ document \| path, observations…, kind, asOf? }` | `{ format: "markdown", content }` |
 | `impact_patch` | `{ document \| path, patch[], dryRun?, allowErrors? }` | `{ applied, document?, issuesIntroduced[], issuesResolved[] }`; with `path` and not `dryRun`, writes canonical file |
 | `impact_deck` | `{ document \| path, observations…, kind, audience? }` | `{ format: "marp", content }` (no export) |
+| `impact_export` | `{ document \| path, observations…, kind: "okr"\|"journey"\|"v2mom"\|"dmaic", asOf? }` | `{ kind, document, omissions?[] }`; a model the format cannot be drawn from is refused with an error naming what to add |
+| `impact_diff` | `{ old: { document \| path }, new: { document \| path } }` | the structural diff |
 | `impact_judge_bundle` | `{ document \| path, profile? }` | judge bundle JSON |
 
 Inline `document` is preferred for agents; `path` inputs MUST resolve inside
