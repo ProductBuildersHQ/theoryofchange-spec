@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/grokify/prism-roadmap/goals/dmaic"
 	"github.com/grokify/prism-roadmap/goals/okr"
 	"github.com/grokify/prism-roadmap/goals/v2mom"
 )
@@ -70,5 +71,38 @@ func TestExportV2MOM(t *testing.T) {
 		if !strings.Contains(refused.err, want) {
 			t.Errorf("refusal does not say %q: %s", want, refused.err)
 		}
+	}
+}
+
+func TestExportDMAIC(t *testing.T) {
+	const catalog = "../../examples/course-catalog/impact-model.yaml"
+	const catalogObs = "../../examples/course-catalog/observations-2026-h1.yaml"
+	out := filepath.Join(t.TempDir(), "dmaic.json")
+	r := run(t, "", "export", "dmaic", catalog, "-O", catalogObs, "-o", out)
+	wantCode(t, r, ExitOK)
+	doc, err := dmaic.ReadFile(out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if errs := dmaic.Errors(doc.Validate(dmaic.DefaultValidationOptions())); len(errs) != 0 {
+		t.Errorf("exported DMAIC does not validate: %+v", errs)
+	}
+	if len(doc.Categories) != 1 || len(doc.Categories[0].Metrics) == 0 {
+		t.Fatalf("categories: %+v", doc.Categories)
+	}
+	// An indicator that cannot be a metric is named on standard error.
+	if !strings.Contains(r.err, "note: ind-service-quality is left out") {
+		t.Errorf("no omission note: %q", r.err)
+	}
+	first := run(t, "", "export", "dmaic", catalog, "-O", catalogObs)
+	if again := run(t, "", "export", "dmaic", catalog, "-O", catalogObs); again.stdout != first.stdout {
+		t.Error("two exports differ")
+	}
+
+	// A model with no pathway marked for DMAIC is refused.
+	refused := run(t, "", "export", "dmaic", exTheory)
+	wantCode(t, refused, ExitUsageErr)
+	if !strings.Contains(refused.err, "projections: [dmaic]") {
+		t.Errorf("refusal does not say how to mark a pathway: %s", refused.err)
 	}
 }
