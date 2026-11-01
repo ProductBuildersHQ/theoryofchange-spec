@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/grokify/prism-roadmap/goals/okr"
+	"github.com/grokify/prism-roadmap/goals/v2mom"
 )
 
 func TestExportOKRAndJourneys(t *testing.T) {
@@ -41,4 +42,33 @@ func TestExportOKRAndJourneys(t *testing.T) {
 		t.Error("two exports differ")
 	}
 	wantCode(t, run(t, "", "export", "okr", exTheory+".none"), ExitUsageErr)
+}
+
+func TestExportV2MOM(t *testing.T) {
+	out := filepath.Join(t.TempDir(), "v2mom.json")
+	r := run(t, "", "export", "v2mom", exTheory, "-O", exObs, "-o", out)
+	wantCode(t, r, ExitOK)
+	doc, err := v2mom.ReadFile(out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if errs := v2mom.Errors(doc.Validate(v2mom.DefaultValidationOptions())); len(errs) != 0 {
+		t.Errorf("exported V2MOM does not validate: %+v", errs)
+	}
+	if doc.Vision == "" || len(doc.Values) == 0 || len(doc.Methods) == 0 {
+		t.Errorf("vision, values, or methods missing: %+v", doc)
+	}
+	first := run(t, "", "export", "v2mom", exTheory, "-O", exObs)
+	if again := run(t, "", "export", "v2mom", exTheory, "-O", exObs); again.stdout != first.stdout {
+		t.Error("two exports differ")
+	}
+
+	// A model without a vision, values, or pathways is refused, naming them.
+	refused := run(t, "", "export", "v2mom", "../../examples/market-adoption/impact-model.yaml")
+	wantCode(t, refused, ExitUsageErr)
+	for _, want := range []string{"cannot be drawn as a V2MOM", "context.vision", "context.values"} {
+		if !strings.Contains(refused.err, want) {
+			t.Errorf("refusal does not say %q: %s", want, refused.err)
+		}
+	}
 }
