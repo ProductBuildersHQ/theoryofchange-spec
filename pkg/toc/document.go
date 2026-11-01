@@ -108,7 +108,13 @@ type Context struct {
 	Market           *ExternalRef `json:"market,omitempty"`
 	Geography        string       `json:"geography,omitempty"`
 	TimeHorizon      *TimeHorizon `json:"timeHorizon,omitempty"`
-	Narrative        string       `json:"narrative,omitempty"`
+	// Mission is why the organization exists and what it does. It frames the
+	// theory and is not an outcome: nothing causes it and it is not measured.
+	Mission string `json:"mission,omitempty"`
+	// Vision is the future the organization works toward. The impact
+	// outcomes are how the theory says it is reached.
+	Vision    string `json:"vision,omitempty"`
+	Narrative string `json:"narrative,omitempty"`
 }
 
 // TimeHorizon is the period the theory covers.

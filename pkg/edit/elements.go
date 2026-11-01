@@ -183,10 +183,11 @@ func fieldPointer(k ElementKind, id, dotted string) string {
 type action int
 
 const (
-	dropValue   action = iota // remove the scalar field
-	dropItem                  // remove the entry from the array field
-	dropElement               // remove the whole element that holds the reference
-	dropMetric                // remove an indicator's metricId and the roll-up that depends on it
+	dropValue       action = iota // remove the scalar field
+	dropItem                      // remove the entry from the array field
+	dropElement                   // remove the whole element that holds the reference
+	dropMetric                    // remove an indicator's metricId and the roll-up that depends on it
+	dropComposition               // remove the composition that names the element, since its arithmetic no longer holds
 )
 
 // refSite describes a field that references other elements.
@@ -235,6 +236,7 @@ var refSites = []refSite{
 	{"indicators", []string{"metricId"}, dropMetric, 0},
 	{"indicators", []string{"pathwayIds"}, dropItem, 0},
 	{"indicators", []string{"rollupFrom"}, dropItem, 0},
+	{"indicators", []string{"composedOf", "indicatorIds"}, dropComposition, 0},
 	{"metrics", []string{"weightMetricId"}, dropElement, 0},
 	{"glossary", []string{"relatedIds"}, dropItem, 0},
 	{"indicators", []string{"population", "actorIds"}, dropItem, 0},
@@ -244,6 +246,9 @@ var refSites = []refSite{
 	{"pathways", []string{"outcomeIds"}, dropItem, 0},
 	{"pathways", []string{"interventionIds"}, dropItem, 0},
 	{"pathways", []string{"ownerActorId"}, dropValue, 0},
+	{"pathways", []string{"focus", "northStarId"}, dropValue, 0},
+	{"pathways", []string{"focus", "oneMetricId"}, dropValue, 0},
+	{"pathways", []string{"focus", "guardrailIds"}, dropItem, 0},
 	{"alignments", []string{"elementId"}, dropElement, 0},
 	{"decisions", []string{"ownerActorId"}, dropValue, 0},
 	{"decisions", []string{"relatedIds"}, dropItem, 0},
@@ -365,7 +370,7 @@ func findReference(root map[string]any, id string) (found, bool) {
 			}
 		}
 	}
-	if f, ok := findScore(root, id); ok {
+	if f, ok := findObjectRef(root, id); ok {
 		return f, true
 	}
 	for _, site := range refSites {
@@ -396,19 +401,28 @@ func findReference(root map[string]any, id string) (found, bool) {
 	return found{}, false
 }
 
-// scoreSites are the places criterion scores live: an indicator's
-// selection, and the priority of an outcome or an intervention.
-var scoreSites = []refSite{
-	{array: "indicators", field: []string{"selection", "scores"}, action: dropItem},
-	{array: "outcomes", field: []string{"priority", "scores"}, action: dropItem},
-	{array: "interventions", field: []string{"priority", "scores"}, action: dropItem},
+// objectSite is a list of objects inside an element, each of which names
+// another element by a key. Removing the referenced element removes the object.
+type objectSite struct {
+	refSite
+	key string // the key of the object that holds the reference
 }
 
-// findScore finds a score that names the criterion id. Scores are objects
-// inside their subject, so they are scanned apart from the scalar reference
-// fields.
-func findScore(root map[string]any, id string) (found, bool) {
-	for _, site := range scoreSites {
+// objectSites are the lists of objects that name an element: the criterion
+// scores of an indicator, an outcome, and an intervention, and the headline
+// list of an audience, whose entries name indicators.
+var objectSites = []objectSite{
+	{refSite{array: "indicators", field: []string{"selection", "scores"}, action: dropItem}, "criterionId"},
+	{refSite{array: "outcomes", field: []string{"priority", "scores"}, action: dropItem}, "criterionId"},
+	{refSite{array: "interventions", field: []string{"priority", "scores"}, action: dropItem}, "criterionId"},
+	{refSite{array: "audiences", field: []string{"headline"}, action: dropItem}, "indicatorId"},
+}
+
+// findObjectRef finds an object that names the element id. These are scanned
+// apart from the scalar reference fields, because the reference is a key of an
+// object inside a list and not an entry of the list.
+func findObjectRef(root map[string]any, id string) (found, bool) {
+	for _, site := range objectSites {
 		items, _ := root[site.array].([]any)
 		for ei, raw := range items {
 			el, ok := raw.(map[string]any)
@@ -419,10 +433,10 @@ func findScore(root map[string]any, id string) (found, bool) {
 			if !ok {
 				continue
 			}
-			scores, _ := holder[last].([]any)
-			for i, sc := range scores {
-				if m, ok := sc.(map[string]any); ok && m["criterionId"] == id {
-					return found{site: site, element: el, index: ei, item: i, holder: holder, left: len(scores) - 1}, true
+			objects, _ := holder[last].([]any)
+			for i, o := range objects {
+				if m, ok := o.(map[string]any); ok && m[site.key] == id {
+					return found{site: site.refSite, element: el, index: ei, item: i, holder: holder, left: len(objects) - 1}, true
 				}
 			}
 		}
@@ -462,6 +476,8 @@ func (f found) remedy() ([]Op, string, error) {
 		return f.removeElement()
 	case dropValue:
 		return one(Remove(f.fieldPointer()))
+	case dropComposition:
+		return one(Remove(f.elementPointer() + Pointer(f.site.field[0])))
 	case dropMetric:
 		ops := []Op{Remove(f.fieldPointer())}
 		if _, has := f.element["rollupFrom"]; has {

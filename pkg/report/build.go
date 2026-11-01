@@ -412,7 +412,14 @@ func (b *builder) indicators() []IndicatorView {
 		if s, ok := b.indStatus[ind.ID]; ok {
 			iv.Status = &StatusView{State: string(s.State), Health: s.Health}
 			if s.Latest != nil {
-				iv.Latest = withDate(valueText(s.Latest.Value, s.Latest.Level, ind.Unit), s.Latest.Date, "on ")
+				// An estimate reads as an estimate, so a rounded or partial figure
+				// is not mistaken for a count.
+				prefix := "on "
+				if s.Latest.Quality == toc.QualityEstimated {
+					prefix = "estimate, on "
+				}
+				iv.Latest = withDate(valueText(s.Latest.Value, s.Latest.Level, ind.Unit), s.Latest.Date, prefix)
+				iv.LatestNote = s.Latest.Note
 			}
 		}
 		out = append(out, iv)

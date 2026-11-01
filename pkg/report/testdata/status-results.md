@@ -16,7 +16,7 @@ Pathway status: At risk. Own indicators: ind-collab-maturity.
 
 | Indicator | Baseline | Targets | Latest | Status | Because |
 |-----------|----------|---------|--------|--------|---------|
-| Member collaboration maturity | Parallel (as of 2026-01-01) | Coordinating (by 2027-12-31); Cooperating (by 2028-12-31) | Parallel (on 2026-09-30) | At risk | 0% of the way to target; 19% expected by 2026-09-30 |
+| Member collaboration maturity | Parallel (as of 2026-01-01) | Coordinating (by 2027-12-31); Cooperating (by 2028-12-31) | Parallel (estimate, on 2026-09-30) | At risk | 0% of the way to target; 19% expected by 2026-09-30 |
 
 #### Members have diversified, stable funding _(inferred)_
 
@@ -162,7 +162,7 @@ Pathway status: At risk. Own indicators: ind-residents-served. Responsibility: s
 
 | Indicator | Baseline | Targets | Latest | Status | Because |
 |-----------|----------|---------|--------|--------|---------|
-| Residents served by member organizations | 61000 residents (as of 2026-01-01) | 63000 residents (by 2026-12-31); 66000 residents (by 2027-12-31); 70000 residents (by 2028-12-31) | 62000 residents (on 2026-09-30) | On track | 11% of the way to target; 17% expected by 2026-09-30 |
+| Residents served by member organizations | 61000 residents (as of 2026-01-01) | 63000 residents (by 2026-12-31); 66000 residents (by 2027-12-31); 70000 residents (by 2028-12-31) | 62000 residents (estimate, on 2026-09-30) | On track | 11% of the way to target; 17% expected by 2026-09-30 |
 
 #### Residents' priorities shape local public decisions _(hypothesis)_
 

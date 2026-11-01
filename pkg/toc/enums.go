@@ -547,6 +547,7 @@ type PathwayKind string
 
 const (
 	PathwayProgram   PathwayKind = "program"
+	PathwayProduct   PathwayKind = "product"
 	PathwayStrategy  PathwayKind = "strategy"
 	PathwayTheme     PathwayKind = "theme"
 	PathwayGeography PathwayKind = "geography"
@@ -555,7 +556,7 @@ const (
 
 // AllPathwayKinds returns all pathway kinds.
 func AllPathwayKinds() []PathwayKind {
-	return []PathwayKind{PathwayProgram, PathwayStrategy, PathwayTheme, PathwayGeography, PathwaySegment}
+	return []PathwayKind{PathwayProgram, PathwayProduct, PathwayStrategy, PathwayTheme, PathwayGeography, PathwaySegment}
 }
 
 // Valid reports whether v is a known PathwayKind.
@@ -590,6 +591,33 @@ func AllAggregations() []Aggregation {
 
 // Valid reports whether v is a known Aggregation.
 func (v Aggregation) Valid() bool { return slices.Contains(AllAggregations(), v) }
+
+// CompositionOp is the arithmetic that builds one indicator's value from the
+// values of others.
+type CompositionOp string
+
+const (
+	// CompositionRatio divides the first indicator by the second, such as
+	// cost divided by changes applied, which gives the cost per change.
+	CompositionRatio CompositionOp = "ratio"
+	// CompositionProduct multiplies the indicators.
+	CompositionProduct CompositionOp = "product"
+	// CompositionSum adds the indicators.
+	CompositionSum CompositionOp = "sum"
+	// CompositionDifference subtracts the second indicator from the first.
+	CompositionDifference CompositionOp = "difference"
+)
+
+// AllCompositionOps returns all composition operations.
+func AllCompositionOps() []CompositionOp {
+	return []CompositionOp{CompositionRatio, CompositionProduct, CompositionSum, CompositionDifference}
+}
+
+// Valid reports whether v is a known CompositionOp.
+func (v CompositionOp) Valid() bool { return slices.Contains(AllCompositionOps(), v) }
+
+// Pair reports whether the operation takes exactly two indicators, in order.
+func (v CompositionOp) Pair() bool { return v == CompositionRatio || v == CompositionDifference }
 
 // MetricLayer says whether a metric applies across all pathways or to
 // particular ones.

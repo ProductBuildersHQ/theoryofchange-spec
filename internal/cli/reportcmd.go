@@ -95,13 +95,15 @@ any data exists. Kinds: ` + strings.Join(report.DefinitionKinds, ", ") + `.
 Status reports describe how far the theory has come, from observation files
 (-o) as of a date (--as-of, or the latest date in the observations). Kinds:
 exec, results, assumptions, interventions, evidence-gaps, full, story
-(--audience), learning-review (--period), portfolio, narrative, actors, and
+(--audience), headline (--audience narrows it), metric-tree (--pathway narrows it), learning-review (--period), portfolio, narrative, actors, and
 custom (--template, a Go text/template over the report view). narrative,
 actors, and custom also work with no observations.`,
 		Example: `  theoryofchange report definitions theory.yaml --out definitions.md
   theoryofchange report logic-model theory.yaml --pathway pw-supply
   theoryofchange report exec theory.yaml -O obs-q3.yaml --prev status-q2.json
   theoryofchange report story theory.yaml -O obs-q3.yaml --audience aud-funders
+  theoryofchange report headline theory.yaml -O obs-q3.yaml
+  theoryofchange report metric-tree theory.yaml -O obs-q3.yaml --pathway pw-supply
   theoryofchange report custom theory.yaml --template board.tmpl`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -121,10 +123,10 @@ actors, and custom also work with no observations.`,
 		},
 	}
 	f := cmd.Flags()
-	f.String("pathway", "", "restrict a definition report to one pathway ID")
+	f.String("pathway", "", "restrict a definition report, or the metric-tree report, to one pathway ID")
 	f.Bool("diagram", false, "draw the logic-model report as a left-to-right diagram")
 	f.StringP("out", "o", "", "write to this file instead of standard output")
-	f.String("audience", "", "the audience ID, for the story report")
+	f.String("audience", "", "the audience ID, for the story report; narrows the headline report")
 	f.String("period", "", "the period label, for the learning-review report")
 	f.StringSlice("prev-observations", nil, "the earlier period's observation files, for the learning-review report")
 	f.String("template", "", "the Go text/template file, for the custom report")
@@ -188,7 +190,7 @@ func observationPaths(cmd *cobra.Command) []string {
 }
 
 func statusReportText(cmd *cobra.Command, kind string, in report.StatusInput, sets []*toc.ObservationSet, withStatus bool) (string, error) {
-	p := service.ReportParams{Audience: flagString(cmd, "audience"), Period: flagString(cmd, "period")}
+	p := service.ReportParams{Audience: flagString(cmd, "audience"), Period: flagString(cmd, "period"), Pathway: flagString(cmd, "pathway")}
 	if kind == "story" && p.Audience == "" {
 		return "", usageErr("the story report needs --audience")
 	}

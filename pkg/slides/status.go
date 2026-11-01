@@ -382,29 +382,27 @@ func Story(in report.StatusInput, sets []*toc.ObservationSet, audienceID string,
 		views[v.ID] = v
 	}
 	var caveats []string
-	var rows []toc.Indicator
-	for _, ind := range in.Doc.Indicators {
-		if !ind.Provenance.IsRejected() && containsString(ind.AudienceIDs, audienceID) {
-			rows = append(rows, ind)
-		}
+	// An audience's chosen headline list is shown whole, in its order and
+	// wording. Without one, the first few indicators reported to it are shown.
+	const unchosenLimit = 5
+	rows, chosen := report.AudienceNumbers(in.Doc, audienceID)
+	if !chosen && len(rows) > unchosenLimit {
+		rows = rows[:unchosenLimit]
 	}
-	const headline = 5
 	if len(rows) > 0 {
 		d.slide("")
 		d.line("# The numbers")
 		d.line("")
 		d.line("| Measure | Latest | Status |")
 		d.line("|---------|--------|--------|")
-		for i, ind := range rows {
-			if i == headline {
-				break
-			}
+		for _, n := range rows {
+			ind := n.Indicator
 			v := views[ind.ID]
 			note := ""
 			if ind.EffectiveClaim() == toc.ClaimContribution {
 				note = " *"
 			}
-			d.line("| %s%s | %s | %s |", cell(cut(v.Name, 70)), note, cell(dashText(v.Latest)), label(string(byInd[ind.ID].State)))
+			d.line("| %s%s | %s | %s |", cell(cut(n.Label, 70)), note, cell(dashText(v.Latest)), label(string(byInd[ind.ID].State)))
 			for _, c := range ind.Caveats {
 				if !containsString(caveats, c) {
 					caveats = append(caveats, c)

@@ -21,6 +21,58 @@ An indicator's **claim** says what the organization can say about it:
 `attribution` (we caused this) or `contribution` (we contributed to it). The
 default is contribution.
 
+### Where an indicator sits in the chain
+
+What an indicator measures decides its **tier**, which is never stored:
+
+| Tier | The indicator measures | For example |
+|------|------------------------|-------------|
+| `activity` | an intervention | hours delivered, dollars spent |
+| `output` | an output-level outcome | people reached |
+| `outcome` | a short-term, intermediate, or long-term outcome | skills gained, practice applied. These are the *driver* metrics |
+| `impact` | an impact outcome | residents served, reported as a contribution |
+
+Resources are measured as activity-tier indicators with a unit such as hours or
+dollars. `theoryofchange report metric-tree` lays a pathway's indicators out in
+this order.
+
+### North Star, guardrails, and headline lists
+
+Three choices sit on top of the tiers, and they are different things:
+
+- **A North Star** is the one number a program or product steers by. Set it in the
+  pathway's `focus`, with an optional `oneMetricId` and the `guardrailIds` that watch
+  what pursuing it could harm. It should measure an outcome at or below the ceiling
+  of accountability, never an output or an activity.
+- **A headline list** is what an audience is told: a short, ordered list on the
+  audience, each entry an indicator with an optional `label` and `note` worded for
+  that reader. Every audience sees the same figure for an indicator; only the label
+  and note differ. A North Star may lead one list and not appear in another.
+- **Purpose** is `context.mission` and `context.vision`, plain statements. They are
+  not part of the causal chain.
+
+`theoryofchange report headline` shows what each audience is told, and the story
+report and deck use the same lists. `theoryofchange lint` checks all of it: the
+`TOC-NSM-*`, `TOC-HLN-*`, `TOC-AUD-002`, and `TOC-CTX-001` rules.
+
+### Working a metric out from others
+
+Some of the numbers people ask for are arithmetic on others, such as the cost per
+applied change. Give that indicator a `composedOf`:
+
+```yaml
+composedOf:
+  op: ratio              # ratio, difference, product, or sum
+  indicatorIds: [ind-cost, ind-changes-applied]   # cost divided by changes
+```
+
+A ratio and a difference take exactly two indicators, in order. When the indicator
+has no observation of its own, its value is worked out from the latest value of each
+part, and it is marked as an estimate if any part is. If a part is missing, or a
+divisor is zero, there is no value and nothing is guessed. A composition is
+arithmetic, not a causal link, and an indicator is either composed or rolled up,
+not both.
+
 ## Observations
 
 Measurements go in an **observation set**, a separate file that refers to the

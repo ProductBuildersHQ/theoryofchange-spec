@@ -591,6 +591,16 @@ func (c *checker) pathways() {
 		c.refs(p+"/outcomeIds", pw.ID, pw.OutcomeIDs, toc.ElementOutcome)
 		c.refs(p+"/interventionIds", pw.ID, pw.InterventionIDs, toc.ElementIntervention)
 		c.docRef(p+"/childToc", pw.ID, pw.ChildToc)
+		if f := pw.Focus; f != nil {
+			c.ref(p+"/focus/northStarId", pw.ID, f.NorthStarID, toc.ElementIndicator)
+			c.ref(p+"/focus/oneMetricId", pw.ID, f.OneMetricID, toc.ElementIndicator)
+			c.refs(p+"/focus/guardrailIds", pw.ID, f.GuardrailIDs, toc.ElementIndicator)
+			for j, id := range f.GuardrailIDs {
+				if slices.Contains(f.GuardrailIDs[:j], id) {
+					c.errorf("VAL-PTH-006", p+"/focus/guardrailIds/"+strconv.Itoa(j), pw.ID, "guardrail %q is listed more than once", id)
+				}
+			}
+		}
 	}
 }
 
@@ -639,6 +649,7 @@ func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
 	c.ref(p+"/metricId", ind.ID, ind.MetricID, toc.ElementMetric)
 	c.refs(p+"/pathwayIds", ind.ID, ind.PathwayIDs, toc.ElementPathway)
 	c.refs(p+"/rollupFrom", ind.ID, ind.RollupFrom, toc.ElementIndicator)
+	c.composition(p, ind)
 	if len(ind.RollupFrom) == 0 {
 		return
 	}
@@ -659,6 +670,56 @@ func (c *checker) indicatorMetric(p string, ind toc.Indicator) {
 			c.errorf("VAL-MET-002", sp, ind.ID, "%q instantiates metric %q, not %q", srcID, src.MetricID, ind.MetricID)
 		}
 	}
+}
+
+// composition checks that an indicator's composition is well formed: a known
+// operation with the right number of parts, parts that exist, and no part that
+// leads back to the indicator itself.
+func (c *checker) composition(p string, ind toc.Indicator) {
+	comp := ind.ComposedOf
+	if comp == nil {
+		return
+	}
+	cp := p + "/composedOf"
+	enum(c, cp+"/op", ind.ID, comp.Op)
+	c.refs(cp+"/indicatorIds", ind.ID, comp.IndicatorIDs, toc.ElementIndicator)
+	switch {
+	case comp.Op == "":
+		c.errorf("VAL-MET-007", cp+"/op", ind.ID, "composedOf needs an op")
+	case comp.Op.Pair() && len(comp.IndicatorIDs) != 2:
+		c.errorf("VAL-MET-007", cp+"/indicatorIds", ind.ID, "a %s takes exactly two indicators, in order; this has %d", comp.Op, len(comp.IndicatorIDs))
+	case comp.Op.Valid() && len(comp.IndicatorIDs) < 2:
+		c.errorf("VAL-MET-007", cp+"/indicatorIds", ind.ID, "a %s takes at least two indicators; this has %d", comp.Op, len(comp.IndicatorIDs))
+	}
+	if len(ind.RollupFrom) > 0 {
+		c.errorf("VAL-MET-009", cp, ind.ID, "an indicator is either rolled up from others of its metric or composed of other metrics, not both")
+	}
+	for i, id := range comp.IndicatorIDs {
+		if id == ind.ID {
+			c.errorf("VAL-MET-008", cp+"/indicatorIds/"+strconv.Itoa(i), ind.ID, "an indicator cannot be composed of itself")
+		} else if c.composesFrom(id, ind.ID, map[string]bool{}) {
+			c.errorf("VAL-MET-008", cp+"/indicatorIds/"+strconv.Itoa(i), ind.ID, "%q is itself composed, directly or not, of this indicator, so the arithmetic is circular", id)
+		}
+	}
+}
+
+// composesFrom reports whether the indicator is composed, through any chain of
+// compositions, of the target.
+func (c *checker) composesFrom(id, target string, seen map[string]bool) bool {
+	if seen[id] {
+		return false
+	}
+	seen[id] = true
+	ind, ok := c.doc.Indicator(id)
+	if !ok || ind.ComposedOf == nil {
+		return false
+	}
+	for _, part := range ind.ComposedOf.IndicatorIDs {
+		if part == target || c.composesFrom(part, target, seen) {
+			return true
+		}
+	}
+	return false
 }
 
 // provenance checks every element's provenance block.
@@ -801,6 +862,20 @@ func (c *checker) audiencesAndThemes() {
 	for i, a := range c.doc.Audiences {
 		if strings.TrimSpace(a.Name) == "" {
 			c.errorf("VAL-AUD-001", "/audiences/"+strconv.Itoa(i)+"/name", a.ID, "audience has no name")
+		}
+		for j, h := range a.Headline {
+			hp := "/audiences/" + strconv.Itoa(i) + "/headline/" + strconv.Itoa(j)
+			if strings.TrimSpace(h.IndicatorID) == "" {
+				c.errorf("VAL-AUD-003", hp+"/indicatorId", a.ID, "headline entry names no indicator")
+				continue
+			}
+			c.ref(hp+"/indicatorId", a.ID, h.IndicatorID, toc.ElementIndicator)
+			for _, earlier := range a.Headline[:j] {
+				if earlier.IndicatorID == h.IndicatorID {
+					c.errorf("VAL-AUD-002", hp+"/indicatorId", a.ID, "indicator %q is in the headline list more than once", h.IndicatorID)
+					break
+				}
+			}
 		}
 	}
 	for i, t := range c.doc.Themes {
