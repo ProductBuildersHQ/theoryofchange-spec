@@ -488,6 +488,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../guides/problem-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem Tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../guides/v2mom/" class="md-nav__link">
         
   
@@ -2413,9 +2441,12 @@ named version, so that both teams work from the same agreed theory.</p>
 </li>
 <li>
 <p><strong>PRD-FR-119</strong> The model MUST represent a problem tree: causes with level
-  (<code>immediate</code>, <code>underlying</code>, <code>structural</code>), parent cause, and affected
-  groups; outcomes MUST be able to declare which causes they address, so the
-  solution tree can be checked against the problem tree at every level.</p>
+  (<code>immediate</code>, <code>underlying</code>, <code>structural</code>), the causes each contributes to
+  (<code>parents</code>: none for a direct cause of the core problem, one or more for an
+  indirect cause, so causes form a network and a tree is the case of at most
+  one parent each), and affected groups; outcomes MUST be able to declare which
+  causes they address, so the solution tree can be checked against the problem
+  tree at every level.</p>
 </li>
 <li><strong>PRD-FR-120</strong> Outcomes MUST declare responsibility (<code>own</code>, <code>shared</code>,
   <code>partner</code>, <code>unaddressed</code>) and the actors delivering them. All outcomes are
@@ -2445,6 +2476,15 @@ named version, so that both teams work from the same agreed theory.</p>
 </li>
 <li><strong>PRD-FR-125</strong> Indicators MUST declare data availability: <code>public</code>,
   <code>internal_existing</code>, <code>internal_new</code>, <code>partner_held</code>, or <code>unknown</code>.</li>
+<li><strong>PRD-FR-126</strong> The problem tree MUST also represent effects, its branches:
+  the consequences of the core problem (<code>context.problemStatement</code>) and of
+  other effects, each with a statement, the effects it follows from (<code>parents</code>:
+  none for a direct effect of the core problem; a network, as for causes),
+  affected groups, evidence, an optional out-of-scope reason, and provenance.
+  Outcomes MUST be able to declare which effects they relieve
+  (<code>addressesEffects</code>), so the impact model can be checked against the harm it
+  is meant to reduce. The core problem stays a statement in the context until
+  something needs to attach to it.</li>
 </ul>
 <h3 id="42-schema-prd-fr-2xx">4.2 Schema (PRD-FR-2xx)<a class="headerlink" href="#42-schema-prd-fr-2xx" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2469,6 +2509,10 @@ named version, so that both teams work from the same agreed theory.</p>
 <li><strong>PRD-FR-303</strong> Lint MUST implement deterministic quality rules derived from
   the "plausible, doable, testable" criteria and the research brief, each with
   a stable ID (<code>TOC-&lt;AREA&gt;-&lt;NNN&gt;</code>), severity, and fix hint.</li>
+<li><strong>PRD-FR-305</strong> Lint MUST report an effect that no outcome relieves and that
+  is not set aside with a reason, advise when effects are relieved only by
+  outcomes below the long-term level, and report a cause that contributes to a
+  deeper cause, which usually means the link was written backwards.</li>
 <li><strong>PRD-FR-304</strong> Lint output MUST be a structured-evaluation summary report
   (GO / NO-GO) so it plugs into existing ecosystem gates.</li>
 </ul>
@@ -2544,6 +2588,13 @@ named version, so that both teams work from the same agreed theory.</p>
   narrative, indicators, means of verification, and assumptions). Flattening
   loses the links and the "why", so every projection says it is a view and
   points back to the element IDs.</li>
+<li><strong>PRD-FR-514</strong> The tools MUST project the problem tree: causes (roots)
+  below, the core problem in the middle, and effects (branches) above, with
+  arrows that flow upward from the deepest causes to the core problem and on
+  to the furthest effects. The diagram is built first as a JSON diagram
+  document (nodes, edges, and layers), from which D2 and Mermaid are rendered,
+  so other tools can read or restyle it. Alongside it, tables list each cause
+  and effect with the outcomes that address it, or why it is set aside.</li>
 <li><strong>PRD-FR-509</strong> Indicators with a baseline and no target MUST report
   <code>baseline_only</code> rather than a failure, so a first measurement year is
   presented as establishing a baseline.</li>

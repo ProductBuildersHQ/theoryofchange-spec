@@ -488,6 +488,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../problem-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem Tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../v2mom/" class="md-nav__link">
         
   
@@ -1603,7 +1631,7 @@ at least one file has errors.</p>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>impact-model<span class="w"> </span>lint<span class="w"> </span>--list
 </code></pre></div>
 <p>Validation says a document is well formed; lint says whether the impact model is
-sound. There are 69 deterministic rules, each with an ID such as <code>IMP-LOG-001</code>,
+sound. There are 72 deterministic rules, each with an ID such as <code>IMP-LOG-001</code>,
 grouped by what they look at:</p>
 <table>
 <thead>
@@ -1651,7 +1679,11 @@ grouped by what they look at:</p>
 </tr>
 <tr>
 <td>Equity, causes, audiences (<code>EQU</code>, <code>CAU</code>, <code>AUD</code>)</td>
-<td>Outcomes for target groups are measured by those groups; each deeper cause is addressed or set aside with a reason; every audience is the target of something reported</td>
+<td>Outcomes for target groups are measured by those groups; each deeper cause is addressed or set aside with a reason, and no cause contributes to a deeper one; every audience is the target of something reported</td>
+</tr>
+<tr>
+<td>Effects (<code>EFF</code>)</td>
+<td>Each effect in the problem tree is relieved by an outcome or set aside with a reason, and effects are relieved by long-term or impact outcomes, not only earlier ones</td>
 </tr>
 <tr>
 <td>Pathways and validation (<code>PTH</code>, <code>VAL</code>)</td>

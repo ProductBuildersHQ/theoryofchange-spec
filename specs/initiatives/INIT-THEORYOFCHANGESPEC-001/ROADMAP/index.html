@@ -488,6 +488,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../guides/problem-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem Tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../guides/v2mom/" class="md-nav__link">
         
   
@@ -1426,6 +1454,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-21-problem-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 21 — Problem Trees
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1889,6 +1928,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#phase-21-problem-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 21 — Problem Trees
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1912,7 +1962,7 @@
 <h1 id="roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting">ROADMAP — Impact Model Specification — Go-first model, JSON Schema, measurement, and leadership reporting<a class="headerlink" href="#roadmap-impact-model-specification-go-first-model-json-schema-measurement-and-leadership-reporting" title="Permanent link">&para;</a></h1>
 <p><strong>Initiative:</strong> <code>INIT-THEORYOFCHANGESPEC-001</code>
 <strong>Repository:</strong> <code>github.com/ProductBuildersHQ/impact-model</code>
-<strong>Status:</strong> In progress — 17 of 20 phases completed</p>
+<strong>Status:</strong> In progress — 18 of 21 phases completed</p>
 <blockquote>
 <p>RMI IDs are stable and permanent. Commits implementing an item carry its own ID as the trailer, <code>Refs: &lt;RMI-ID&gt;</code>. Items from before the rename to impact-model are <code>RMI-THEORYOFCHANGESPEC-001</code> to <code>-076</code>; later items are <code>RMI-IMPACTMODEL-&lt;NNN&gt;</code>. Phase status is derived from member RMIs — a phase is complete only when all its RMIs are complete. RMI <code>0NN</code> corresponds to PLAN step <code>P-NN</code>; phases order the work, so numbers are not sequential across phases. Phases 1–5 are the thin slice (adopter milestones M0 and M1). Requirements in each <code>Satisfies</code> line are defined in PRD.md and TRD.md.</p>
 </blockquote>
@@ -2460,6 +2510,41 @@
 <li>[x] <code>RMI-IMPACTMODEL-008</code> Prepare v0.4.0: changelog, release notes, and the upgrade note for ToOKR</li>
 <li>Type: capability · Status: completed</li>
 <li>Acceptance: CHANGELOG.json has v0.4.0 and CHANGELOG.md is generated from it; docs/releases/v0.4.0.md covers V2MOM, DMAIC, the model additions, and the Go upgrade for prismx.ToOKR; mkdocs build --strict passes</li>
+</ul>
+<h2 id="phase-21-problem-trees">Phase 21 — Problem Trees<a class="headerlink" href="#phase-21-problem-trees" title="Permanent link">&para;</a></h2>
+<p><strong>Theme:</strong> Causes as a network, effects as branches, and a problem-tree projection drawn from a JSON diagram spec, with arrows flowing up from the roots to the core problem and on to the branches
+<strong>Status:</strong> Completed — 4 of 4 items completed</p>
+<ul>
+<li>[x] <code>RMI-IMPACTMODEL-009</code> Model effects and a network of causes</li>
+<li>Type: capability · Status: completed</li>
+<li>Satisfies: PRD-FR-119, PRD-FR-126, TRD-025</li>
+<li>
+<p>Acceptance: causes take parents[] and provenance; effects with statement, parents[], affected groups, evidence, out of scope, and provenance; outcomes take addressesEffects; validation per TRD 7.1 (VAL-CAU-003/004, VAL-EFF-001..004); schema regenerated; the edit engine and element commands handle effects and parents</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-010</code> Lint effects that nothing relieves</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-IMPACTMODEL-009</code></li>
+<li>Satisfies: PRD-FR-305</li>
+<li>
+<p>Acceptance: IMP-EFF-001 and IMP-EFF-002 per TRD 6.4, with seeded-defect tests</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-011</code> Draw the problem tree from a JSON diagram spec</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-IMPACTMODEL-009</code></li>
+<li>Satisfies: PRD-FR-514, TRD-043</li>
+<li>
+<p>Acceptance: pkg/problemtree layers causes below and effects above the core problem per TRD 6.6, exports a d2vision diagram spec, and renders D2 and Mermaid from it; reports problem-tree, problem-tree-d2, and problem-tree-json; golden tests</p>
+</li>
+<li>
+<p>[x] <code>RMI-IMPACTMODEL-012</code> Document problem trees and give the examples effects</p>
+</li>
+<li>Type: capability · Status: completed</li>
+<li>Depends on: <code>RMI-IMPACTMODEL-010</code>, <code>RMI-IMPACTMODEL-011</code></li>
+<li>Acceptance: a problem tree guide with the mapping to the diagram; the examples have effects and outcomes that address them; README, concepts, CLI reference, changelog, and roadmap updated</li>
 </ul>
 
 

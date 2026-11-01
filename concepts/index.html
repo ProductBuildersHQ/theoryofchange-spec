@@ -488,6 +488,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../guides/problem-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem Tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../guides/v2mom/" class="md-nav__link">
         
   
@@ -1663,6 +1691,11 @@ projections of it, drawn by the <code>report</code> command:</p>
 </thead>
 <tbody>
 <tr>
+<td>Problem tree</td>
+<td>The core problem, its causes (roots) below and its effects (branches) above, with the outcomes that address each</td>
+<td><code>problem-tree</code>, <code>problem-tree-d2</code>, <code>problem-tree-json</code></td>
+</tr>
+<tr>
 <td>Theory of change</td>
 <td>Pathways of change, with the reasons and assumptions behind each link</td>
 <td><code>pathway</code></td>
@@ -1743,9 +1776,14 @@ as <code>NNN</code>) that adds the type or field. Concepts not in v0 are listed 
 <td>004</td>
 </tr>
 <tr>
-<td>Problem tree: immediate / underlying / structural causes (UNDG)</td>
-<td><code>Model.Causes[]</code> (<code>Cause</code>)</td>
-<td>044</td>
+<td>Problem tree: immediate / underlying / structural causes (UNDG), each contributing to others</td>
+<td><code>Model.Causes[]</code> (<code>Cause</code>, <code>Parents</code>)</td>
+<td>044, IMPACTMODEL-009</td>
+</tr>
+<tr>
+<td>Problem tree: effects of the core problem (branches)</td>
+<td><code>Model.Effects[]</code> (<code>Effect</code>); <code>Outcome.AddressesEffects</code></td>
+<td>IMPACTMODEL-009</td>
 </tr>
 <tr>
 <td>Target groups (UNDG equity)</td>
@@ -2115,6 +2153,18 @@ as <code>NNN</code>) that adds the type or field. Concepts not in v0 are listed 
 <tr>
 <td>Output</td>
 <td>A direct product of an intervention, within the organization's control</td>
+</tr>
+<tr>
+<td>Core problem</td>
+<td>The problem the impact model responds to, <code>context.problemStatement</code>; the middle of the problem tree</td>
+</tr>
+<tr>
+<td>Cause</td>
+<td>A condition that leads to the core problem, directly or through other causes; a root of the problem tree</td>
+</tr>
+<tr>
+<td>Effect</td>
+<td>A consequence of the core problem, directly or through other effects; a branch of the problem tree</td>
 </tr>
 <tr>
 <td>Precondition</td>

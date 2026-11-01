@@ -488,6 +488,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../guides/problem-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem Tree
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../guides/v2mom/" class="md-nav__link">
         
   
@@ -2772,8 +2800,8 @@ no persistence, no statistical inference).</p>
 </tr>
 <tr>
 <td>TRD-025</td>
-<td><code>pkg/impact</code> MUST define <code>Cause</code>, <code>Consultation</code>, <code>TargetGroup</code>, outcome <code>responsibility</code> / <code>deliveredBy</code> / <code>addressesCauses</code>, <code>priority</code> scores, and the assumption and risk fields in §7.1</td>
-<td>PRD-FR-105, 108, 119…123</td>
+<td><code>pkg/impact</code> MUST define <code>Cause</code>, <code>Effect</code>, <code>Consultation</code>, <code>TargetGroup</code>, outcome <code>responsibility</code> / <code>deliveredBy</code> / <code>addressesCauses</code> / <code>addressesEffects</code>, <code>priority</code> scores, and the assumption and risk fields in §7.1</td>
+<td>PRD-FR-105, 108, 119…123, 126</td>
 <td>Round-trip tests; schema lint</td>
 </tr>
 <tr>
@@ -2877,6 +2905,12 @@ no persistence, no statistical inference).</p>
 <td><code>skills/toc-share-google</code> per §6.11, with manual fallback</td>
 <td>PRD-FR-607</td>
 <td>Skill smoke test with recorded tool outputs</td>
+</tr>
+<tr>
+<td>TRD-043</td>
+<td><code>pkg/problemtree</code> MUST build the problem tree as layered nodes and edges, export it as a d2vision diagram spec (JSON), and render D2 and Mermaid from that spec; the <code>problem-tree</code>, <code>problem-tree-d2</code>, and <code>problem-tree-json</code> reports per §6.6</td>
+<td>PRD-FR-514</td>
+<td>Golden diagram tests on the examples; layering and cycle tests</td>
 </tr>
 </tbody>
 </table>
@@ -3599,6 +3633,11 @@ reject <code>..</code> escapes and symlinks leaving the root.</p>
 <td>When causes are declared, outcomes address ≥ 1 non-<code>immediate</code> cause (root causes, not only immediate ones)</td>
 </tr>
 <tr>
+<td>IMP-CAU-003</td>
+<td>warning</td>
+<td>A cause contributes only to causes at its own level or nearer the problem (<code>structural</code> → <code>underlying</code> → <code>immediate</code>); a parent at a deeper level usually means the link was written backwards</td>
+</tr>
+<tr>
 <td>IMP-RSP-001</td>
 <td>warning</td>
 <td>Outcomes with responsibility <code>partner</code> or <code>shared</code> name ≥ 1 delivering actor; <code>shared</code> names ≥ 2</td>
@@ -3667,6 +3706,16 @@ reject <code>..</code> escapes and symlinks leaving the root.</p>
 <td>IMP-DMA-003</td>
 <td>warning</td>
 <td>A survey indicator of a DMAIC pathway gets ≥ 30 responses per measurement (<code>collection.respondentsPerYear</code> × <code>sampleRate</code> ÷ measurements per year), and states <code>respondentsPerYear</code></td>
+</tr>
+<tr>
+<td>IMP-EFF-001</td>
+<td>warning</td>
+<td>Every effect is relieved by ≥ 1 outcome (<code>addressesEffects</code>) or marked <code>outOfScope</code> with a reason</td>
+</tr>
+<tr>
+<td>IMP-EFF-002</td>
+<td>info</td>
+<td>Outcomes that relieve effects include ≥ 1 at <code>long_term</code> or <code>impact</code> level (effects are what the program ultimately reduces; causes are what it works on)</td>
 </tr>
 </tbody>
 </table>
@@ -3884,11 +3933,29 @@ assumptions, and pathways, ordered per INV-3.</p>
 <td>Glossary terms and theme codebook</td>
 </tr>
 <tr>
+<td><code>problem-tree</code></td>
+<td>Markdown: the problem tree as a Mermaid <code>flowchart BT</code> (causes in rows below the core problem, effects in rows above, arrows upward), then a table of causes and one of effects, each with its level or parents and the outcomes that address it or why it is set aside</td>
+</tr>
+<tr>
+<td><code>problem-tree-d2</code></td>
+<td>The same diagram in D2, whose grid keeps each row in place</td>
+</tr>
+<tr>
+<td><code>problem-tree-json</code></td>
+<td>The diagram document itself: the d2vision diagram spec (nodes with row, edges) that <code>problem-tree</code> and <code>problem-tree-d2</code> are rendered from</td>
+</tr>
+<tr>
 <td><code>definitions</code></td>
 <td>All definition reports in one document (the workshop pack)</td>
 </tr>
 </tbody>
 </table>
+<p>Problem tree layering: the core problem is row 0. A cause with no parents is in
+row −1; any other cause is one row below its lowest parent (<code>row = min(parent
+rows) − 1</code>), so every arrow from a cause points up. Effects mirror this upward:
+an effect with no parents is in row +1, any other is one row above its highest
+parent. Rejected causes and effects are left out. Within a row, nodes keep file
+order.</p>
 <p><code>report.View</code> is a documented, versioned struct (<code>ViewVersion = "1"</code>);
 changing field names is a breaking change.</p>
 <h3 id="67-reference-grammar-pkgref">6.7 Reference grammar (<code>pkg/ref</code>)<a class="headerlink" href="#67-reference-grammar-pkgref" title="Permanent link">&para;</a></h3>
@@ -4257,13 +4324,18 @@ unless marked required.</p>
 </tr>
 <tr>
 <td><code>Outcome</code></td>
-<td><code>id</code>, <code>title</code> (req; a positive condition, not an activity), <code>description</code>, <code>level</code> (req: <code>impact</code>, <code>long_term</code>, <code>medium_term</code>, <code>short_term</code>, <code>output</code>), <code>sphere</code> (<code>control</code>, <code>influence</code>, <code>interest</code>), <code>logic</code> {<code>type</code>: <code>all</code>/<code>any</code>/<code>at_least</code>, <code>k</code>} over ungrouped incoming links (default <code>all</code>), <code>category</code> (open string; recommended vocabularies: ORS <code>impact</code>/<code>influence</code>/<code>leverage</code>/<code>capacity</code>, COM-B <code>reach</code>/<code>capability</code>/<code>opportunity</code>/<code>motivation</code>/<code>behavior</code>/<code>direct_benefit</code>/<code>wellbeing</code>, MSD AAER <code>adopt</code>/<code>adapt</code>/<code>expand</code>/<code>respond</code>), <code>changeType</code> (<code>knowledge</code>, <code>attitude</code>, <code>skill</code>, <code>behavior</code>, <code>practice</code>, <code>policy</code>, <code>norm</code>, <code>condition</code>, <code>investment</code>, <code>adoption</code>), <code>population</code>, <code>actorIds[]</code> (who changes / co-owners — supports collective outcomes), <code>contributesTo[]</code> (outcomes in a parent theory, as <code>model:&lt;doc&gt;#&lt;outcome&gt;</code> references; resolved by <code>validate --parent</code> / <code>validate.Family</code>), <code>responsibility</code> (<code>own</code> default, <code>shared</code>, <code>partner</code>, <code>unaddressed</code>), <code>deliveredBy[]</code> (actor IDs), <code>addressesCauses[]</code> (cause IDs), <code>targetGroupIds[]</code>, <code>priority?</code> {<code>scores[]</code> {criterionId, score 1–5, note}, <code>rationale</code>}, <code>tags[]</code></td>
+<td><code>id</code>, <code>title</code> (req; a positive condition, not an activity), <code>description</code>, <code>level</code> (req: <code>impact</code>, <code>long_term</code>, <code>medium_term</code>, <code>short_term</code>, <code>output</code>), <code>sphere</code> (<code>control</code>, <code>influence</code>, <code>interest</code>), <code>logic</code> {<code>type</code>: <code>all</code>/<code>any</code>/<code>at_least</code>, <code>k</code>} over ungrouped incoming links (default <code>all</code>), <code>category</code> (open string; recommended vocabularies: ORS <code>impact</code>/<code>influence</code>/<code>leverage</code>/<code>capacity</code>, COM-B <code>reach</code>/<code>capability</code>/<code>opportunity</code>/<code>motivation</code>/<code>behavior</code>/<code>direct_benefit</code>/<code>wellbeing</code>, MSD AAER <code>adopt</code>/<code>adapt</code>/<code>expand</code>/<code>respond</code>), <code>changeType</code> (<code>knowledge</code>, <code>attitude</code>, <code>skill</code>, <code>behavior</code>, <code>practice</code>, <code>policy</code>, <code>norm</code>, <code>condition</code>, <code>investment</code>, <code>adoption</code>), <code>population</code>, <code>actorIds[]</code> (who changes / co-owners — supports collective outcomes), <code>contributesTo[]</code> (outcomes in a parent theory, as <code>model:&lt;doc&gt;#&lt;outcome&gt;</code> references; resolved by <code>validate --parent</code> / <code>validate.Family</code>), <code>responsibility</code> (<code>own</code> default, <code>shared</code>, <code>partner</code>, <code>unaddressed</code>), <code>deliveredBy[]</code> (actor IDs), <code>addressesCauses[]</code> (cause IDs), <code>addressesEffects[]</code> (effect IDs), <code>targetGroupIds[]</code>, <code>priority?</code> {<code>scores[]</code> {criterionId, score 1–5, note}, <code>rationale</code>}, <code>tags[]</code></td>
 <td>Graph node. Indicators reference outcomes, not vice versa. <code>partner</code> / <code>unaddressed</code> outcomes stay in the graph and are monitored (UNDG: monitor the whole solution tree) but are excluded from accountability counts.</td>
 </tr>
 <tr>
 <td><code>Cause</code></td>
-<td><code>id</code>, <code>statement</code> (req), <code>level</code> (req: <code>immediate</code>, <code>underlying</code>, <code>structural</code>), <code>parent?</code> (cause ID it contributes to), <code>affectedGroupIds[]</code>, <code>evidenceIds[]</code>, <code>outOfScope?</code> {reason}</td>
-<td>Problem tree; outcomes map to causes via <code>addressesCauses</code>.</td>
+<td><code>id</code>, <code>statement</code> (req), <code>level</code> (req: <code>immediate</code>, <code>underlying</code>, <code>structural</code>), <code>parents[]</code> (cause IDs it contributes to; empty for a direct cause of the core problem), <code>affectedGroupIds[]</code>, <code>evidenceIds[]</code>, <code>outOfScope?</code> {reason}, <code>provenance?</code></td>
+<td>Problem tree roots; outcomes map to causes via <code>addressesCauses</code>. Causes form a network; validation rejects a cause among its own parents (VAL-CAU-003) and a parent chain that loops (VAL-CAU-004).</td>
+</tr>
+<tr>
+<td><code>Effect</code></td>
+<td><code>id</code>, <code>statement</code> (req), <code>parents[]</code> (effect IDs it follows from; empty for a direct effect of the core problem), <code>affectedGroupIds[]</code>, <code>evidenceIds[]</code>, <code>outOfScope?</code> {reason}, <code>provenance?</code></td>
+<td>Problem tree branches; outcomes map to effects via <code>addressesEffects</code>. Validation: a statement (VAL-EFF-001), no effect among its own parents (VAL-EFF-002), no looping parent chain (VAL-EFF-003), a reason when set aside (VAL-EFF-004). The core problem is <code>context.problemStatement</code>.</td>
 </tr>
 <tr>
 <td><code>TargetGroup</code></td>
@@ -4879,6 +4951,12 @@ logic-model views are in scope). The UNDG problem tree is in scope as
 <td>2026-10-29</td>
 <td>John Wang</td>
 <td>Public-source drafting with element provenance and data availability, assessment report, sharing exports (pandoc profile, review packet and sheet, export stamps), ReviewResponse import as proposals, approval, impact-draft-from-sources and toc-share-google skills over external Google tooling</td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>2026-11-01</td>
+<td>John Wang</td>
+<td>Problem trees: causes become a network (<code>parents[]</code>), effects (branches) with <code>addressesEffects</code>, lint IMP-EFF-001/002, and the problem-tree reports built from a JSON diagram spec (TRD-043)</td>
 </tr>
 </tbody>
 </table>
