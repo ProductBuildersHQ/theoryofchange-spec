@@ -7,6 +7,55 @@
   "maintainers": ["grokify"],
   "releases": [
     {
+      "version": "v0.5.0",
+      "date": "2026-11-01",
+      "highlights": [
+        {
+          "description": "Problem trees: the core problem with its causes (roots) below and effects (branches) above, drawn with arrows flowing upward from a JSON diagram spec, and checked so every cause and effect is addressed or set aside"
+        },
+        {
+          "description": "Causes and effects form a network: each can lead to several others, and a tree is the case of one parent each (breaking: `parent` is now `parents`)"
+        }
+      ],
+      "added": [
+        {
+          "description": "Problem tree effects: `effects` are the branches of the problem tree, what the core problem leads to, directly or through other effects; outcomes name the effects they relieve with `addressesEffects`. Validation reports an effect without a statement (VAL-EFF-001), one among its own parents (VAL-EFF-002), a looping chain (VAL-EFF-003), and one set aside without a reason (VAL-EFF-004)"
+        },
+        {
+          "description": "`report problem-tree`, `problem-tree-d2`, and `problem-tree-json` draw the core problem with causes below and effects above, arrows flowing upward, from a JSON diagram spec; the Markdown reports add tables of what addresses each cause and effect"
+        },
+        {
+          "description": "Lint rules IMP-EFF-001 and IMP-EFF-002 check that effects are relieved, and by long-term or impact outcomes; IMP-CAU-003 reports a cause that contributes to a deeper one; 72 rules in all"
+        },
+        {
+          "description": "The `effect` element command, and `--relieves` on outcomes"
+        }
+      ],
+      "changed": [
+        {
+          "description": "A cause's `parent` is now `parents`, a list, so causes form a network and a tree is the case of at most one parent each; causes also take provenance. In Go, `impact.Cause.Parent` is now `Parents []string` (breaking for documents and Go code that set `parent`)"
+        }
+      ],
+      "fixed": [
+        {
+          "description": "The examples linked their causes the wrong way round, from the nearer cause to the deeper one; they now point from deeper causes toward the problem"
+        }
+      ],
+      "documentation": [
+        {
+          "description": "A problem tree guide maps each part of the diagram to the model, says which way links point, and how the tree is laid out; the examples gain effects"
+        },
+        {
+          "description": "The authoring, CLI, examples, and getting-started guides cover effects and the problem tree; release notes for v0.5.0"
+        }
+      ],
+      "tests": [
+        {
+          "description": "Problem tree layering is checked for networks, rejected and set-aside elements, loops, and upward edges, and the three reports are checked against golden files; validation and lint rules are checked by seeding each defect"
+        }
+      ]
+    },
+    {
       "version": "v0.4.0",
       "date": "2026-11-01",
       "highlights": [
@@ -324,36 +373,5 @@
         }
       ]
     }
-  ],
-  "unreleased": {
-    "added": [
-      {
-        "description": "Problem tree effects: `effects` are the branches of the problem tree, what the core problem leads to, directly or through other effects; outcomes name the effects they relieve with `addressesEffects`. Validation reports an effect without a statement (VAL-EFF-001), one among its own parents (VAL-EFF-002), a looping chain (VAL-EFF-003), and one set aside without a reason (VAL-EFF-004)"
-      },
-      {
-        "description": "`report problem-tree`, `problem-tree-d2`, and `problem-tree-json` draw the core problem with causes below and effects above, arrows flowing upward, from a JSON diagram spec; the Markdown reports add tables of what addresses each cause and effect"
-      },
-      {
-        "description": "Lint rules IMP-EFF-001 and IMP-EFF-002 check that effects are relieved, and by long-term or impact outcomes; IMP-CAU-003 reports a cause that contributes to a deeper one; 72 rules in all"
-      },
-      {
-        "description": "The `effect` element command, and `--relieves` on outcomes"
-      }
-    ],
-    "changed": [
-      {
-        "description": "A cause's `parent` is now `parents`, a list, so causes form a network and a tree is the case of at most one parent each; causes also take provenance (breaking for documents that set `parent`)"
-      }
-    ],
-    "fixed": [
-      {
-        "description": "The examples linked their causes the wrong way round, from the nearer cause to the deeper one; they now point from deeper causes toward the problem"
-      }
-    ],
-    "documentation": [
-      {
-        "description": "A problem tree guide maps each part of the diagram to the model, says which way links point, and how the tree is laid out; the examples gain effects"
-      }
-    ]
-  }
+  ]
 }
