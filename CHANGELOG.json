@@ -254,5 +254,17 @@
         }
       ]
     }
-  ]
+  ],
+  "unreleased": {
+    "changed": [
+      {
+        "description": "The OKR export uses the OKR types of `prism-roadmap/goals/okr`, the goal types shared across the PRISM tools, in place of `structured-goals`. The exported JSON is unchanged"
+      }
+    ],
+    "build": [
+      {
+        "description": "`github.com/grokify/structured-goals` is no longer a dependency; third-party notices drop it and the modules only it needed"
+      }
+    ]
+  }
 }
