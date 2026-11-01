@@ -1410,6 +1410,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../releases/v0.5.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.5.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../releases/v0.4.0/" class="md-nav__link">
         
   
@@ -1760,11 +1788,16 @@ canonical; put notes in <code>description</code> and <code>narrative</code> fiel
 <p>This renders the pathways, logic models, metric definitions, and glossary as one
 Markdown document. It needs no observations, so a workshop can review it before
 any data exists.</p>
+<p>To start from the problem rather than the solution, draw the problem tree: the
+core problem, its causes below, and its effects above. See the
+<a href="../problem-tree/">problem tree guide</a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>impact-model<span class="w"> </span>report<span class="w"> </span>problem-tree<span class="w"> </span>impact-model.yaml<span class="w"> </span>--out<span class="w"> </span>problem-tree.md
+</code></pre></div>
 <h2 id="measure-progress">Measure progress<a class="headerlink" href="#measure-progress" title="Permanent link">&para;</a></h2>
 <p>Once you have numbers, put them in an observation set (see
 <a href="../measurement/">Measuring progress</a>) and ask how far the impact model has come:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>impact-model<span class="w"> </span>status<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>observations.yaml
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>impact-model<span class="w"> </span>report<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>observations.yaml<span class="w"> </span>-o<span class="w"> </span>exec.md
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>impact-model<span class="w"> </span>status<span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>observations.yaml
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>impact-model<span class="w"> </span>report<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>impact-model.yaml<span class="w"> </span>-O<span class="w"> </span>observations.yaml<span class="w"> </span>-o<span class="w"> </span>exec.md
 </code></pre></div>
 <h2 id="working-in-a-git-repository">Working in a Git repository<a class="headerlink" href="#working-in-a-git-repository" title="Permanent link">&para;</a></h2>
 <p>Specifications are meant to be diffed and reviewed. Two habits help:</p>
@@ -1775,8 +1808,8 @@ any data exists.</p>
   canonical form is byte-exact LF, and a checkout that converts to CRLF will
   look non-canonical.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>* text=auto eol=lf
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>*.csv -text
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>* text=auto eol=lf
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>*.csv -text
 </code></pre></div>
 <p>CSV files exported by the tool follow RFC 4180 and keep their CRLF, so they
   are left alone.</p>
