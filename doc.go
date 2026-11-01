@@ -1,7 +1,8 @@
 // Package impactmodel is a Go-first specification for representing,
 // measuring, and reporting on an impact: why a program expects to bring about
-// change, what it does, and what it measures. The impact model, the logic
-// model, the outcome map, and the logframe are views of one impact model.
+// change, what it does, and what it measures. The theory of change, the logic
+// model, the outcome map, the logframe, and OKRs are projections of one impact
+// model.
 //
 // Go structs are the source of truth; JSON Schemas are generated from them
 // and embedded. Tooling built on the model validates documents, analyzes

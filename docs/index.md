@@ -1,20 +1,32 @@
 # Impact Model
 
-An AI-native, spec-driven way to model, measure, and report on impact: how a
-program, product, or organization expects to bring about change, what it does to
-get there, and what it measures along the way. It is a Go-first data model with
+**Impact Model** is an AI-native format from
+[ProductBuildersHQ](https://github.com/ProductBuildersHQ) for describing how a
+program, product, or organization expects to bring about change: what it does,
+why that should work, and how it will know. It is a Go-first data model with
 generated JSON Schema, plus an SDK, the `impact-model` CLI, and an MCP server.
 
-One impact model describes the change once. The
+You describe the change once, in one impact model. The
 [theory of change](https://en.wikipedia.org/wiki/Theory_of_change), the logic
-model, the pathway of change, the outcome map, and the logframe are different
-**views** of it, each made for a different reader, and none of them is a part of
-another.
+model, the outcome map, the logframe, and strategy formats such as OKRs and V2MOM
+are **projections** of it. Each draws the same model for a different reader and
+leaves something out, and none of them is a part of another.
 
-> **Status:** the latest release is v0.3.0, the first as `impact-model`; see the
-> [release notes](releases/v0.3.0.md). It renames the module, the command, the document `kind`,
-> and the schema names, so a document written for v0.2.0 needs
-> `kind: ImpactModel` and a few renamed fields. See [the decision](design/adrs/0001-rename-to-impact-model.md).
+```mermaid
+flowchart LR
+  classDef model fill:#fff4cc,stroke:#b8860b,stroke-width:2px,color:#111
+  classDef method fill:#eef7ee,stroke:#2e7d32,color:#111
+  classDef strategy fill:#e8eefc,stroke:#3f51b5,color:#111
+  classDef planned fill:#f3f3f3,stroke:#757575,stroke-dasharray:4 3,color:#111
+
+  im["Impact model<br/>outcomes, causal links, assumptions, evidence,<br/>interventions, indicators, audiences"]:::model
+  im --> toc["Theory of change"]:::method
+  im --> lm["Logic model"]:::method
+  im --> om["Outcome map"]:::method
+  im --> lf["Logframe"]:::method
+  im --> okr["OKRs"]:::strategy
+  im -.-> v2["V2MOM (planned)"]:::planned
+```
 
 ## What is an impact model?
 
@@ -34,12 +46,49 @@ Every element records where it came from (stated, inferred, a hypothesis, or
 confirmed), so a reader can tell what an organization has claimed from what an
 assistant has proposed.
 
-The model is a graph of causes and measures. A diagram of it is a view, and a
-single model can produce several.
+The model is a graph of causes and measures. A diagram or a table of it is a
+projection, and one model can produce many.
 
-## What is a theory of change?
+## Projections
 
-A theory of change explains **how and why a program expects to bring about a
+Each projection answers a different question for a different reader:
+
+| Projection | Answers | Get it with |
+|------------|---------|-------------|
+| **Theory of change** | Why should what we do lead to the change we want, and in what order must outcomes happen? Drawn as pathways of change, from the earliest outcome at the bottom to the long-term goal at the top | `report pathway` |
+| **Outcome map** | What changes, who is responsible for each change, and how is it measured? The outcomes by level, each with its sphere, owner, cause, and indicators | `report outcome-map` |
+| **Logic model** | What goes in, what is done, and what comes out? Stages from inputs, activities, and outputs through short-, medium-, and long-term outcomes to impact, one per pathway | `report logic-model`, `logic-model-d2` |
+| **Logframe** | What do we promise, and how will we verify it? Narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring | `report logframe` |
+| **Metric tree and headline metrics** | What does each program steer by, and what is each audience told? | `report metric-tree`, `report headline` |
+| **OKRs and outcome journeys** | What will a team commit to this quarter, and how does a person move through the outcomes? For the [PRISM](#part-of-the-prism-ecosystem) planning tools | `export okr`, `export journey` |
+| **V2MOM** *(planned)* | What do we want, what matters, how will we get it, what is in the way, and how will we know? Vision, values, methods, obstacles, and measures, drawn from the model's vision, values, interventions, assumptions and risks, and indicators | — |
+
+Each projection leaves something out. A logic model shows the sequence from what
+goes in to what comes out, and rarely why each step holds. A theory of change
+shows why, and says less about what is delivered. A logframe fits the model into
+a matrix for contracts, and OKRs keep only what a team commits to for a period.
+None is derived from another. The impact model holds what they all need, so any
+of them can be drawn from it. A logic model that arrives on its own can seed a
+*candidate* impact model, but it cannot supply the reasons and assumptions it
+never held, so those stay marked as inferred until someone confirms them.
+
+```bash
+impact-model report pathway impact-model.yaml           # the theory of change, as pathways of change
+impact-model report outcome-map impact-model.yaml       # the outcome map
+impact-model report logic-model impact-model.yaml       # a logic model for each pathway
+impact-model report logframe impact-model.yaml          # the logframe matrix
+impact-model report definitions impact-model.yaml       # all of them, plus metrics and glossary
+impact-model export okr impact-model.yaml               # OKRs for the PRISM tools
+```
+
+Change the model once and every projection changes with it, so the numbers and
+labels never drift apart. (The outcome map here is the outcomes framework from the
+ActKnowledge method; it is not IDRC's *Outcome Mapping*, which tracks progress
+markers for the partners a program influences.)
+
+## The theory of change
+
+The theory of change is the projection most programs start from. It explains **how and why a program expects to bring about a
 change**. It starts from the long-term goal and works backwards: what
 conditions must exist for the goal to be reached, what must exist before each of
 those, and so on down to what the program does today. Each step is an
@@ -76,41 +125,8 @@ sources agree on five reasons:
 - **Learning.** The model is a living framework. When evidence arrives, you revise
   it instead of defending it.
 
-### Views of one impact model
 
-These are different **views of one impact model**. Each answers a different
-question for a different reader:
-
-| View | Answers | What it looks like |
-|------|---------|--------------------|
-| **Pathway of change** | In what order must outcomes happen to reach the goal? | The chains of outcomes, from the earliest at the bottom to the long-term goal at the top. A program usually has several; together they are the *outcomes framework* |
-| **Outcome map** | What changes, who is responsible for each change, and how is it measured? | The outcomes grouped by level, each with its sphere, whether the organization owns it or only monitors it, who delivers it, the cause it addresses, and the indicators that measure it |
-| **Logic model** | What goes in, what is done, and what comes out? | Stages from inputs, activities, and outputs through short-term, medium-term, and long-term outcomes to impact, one model per pathway |
-| **Logframe** | What do we promise, and how will we verify it? | A matrix of narrative, indicators with targets, means of verification, and assumptions, for contracts and monitoring |
-
-Each view is a projection of the model, and each leaves something out. A logic
-model shows the sequence from what goes in to what comes out, and rarely why each
-step holds. A theory of change shows why, and says less about what is delivered.
-A logframe fits the model into a matrix for contracts. None is derived from
-another. The impact model holds what they all need, so any of them can be drawn
-from it. A logic model that arrives on its own can seed a *candidate* impact
-model, but it cannot supply the reasons and assumptions it never held, so those
-stay marked as inferred until someone confirms them.
-
-```bash
-impact-model report pathway impact-model.yaml           # the theory of change as pathways of change, in diagrams
-impact-model report outcome-map impact-model.yaml       # the outcome map
-impact-model report logic-model impact-model.yaml       # a logic model for each pathway
-impact-model report logframe impact-model.yaml          # the logframe matrix
-impact-model report definitions impact-model.yaml       # all of them, plus metrics and glossary
-```
-
-Change the model once and every view changes with it, so the numbers and labels
-never drift apart. (The outcome map here is the outcomes framework from the
-ActKnowledge method; it is not IDRC's *Outcome Mapping*, which tracks progress
-markers for the partners a program influences.)
-
-### How the chain, the metrics, and what each audience sees fit together
+## How the chain, the metrics, and what each audience sees fit together
 
 An impact model is the chain from resources to impact. Metrics hang off each step
 of it, and different readers should see a different few. The first diagram is one
@@ -227,7 +243,7 @@ Reading the second diagram:
 
 | Benefit | How |
 |---------|-----|
-| **A model you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the theory is established and how much is our reading |
+| **A model you can trust** | Every element records whether a source *stated* it, you *inferred* it, it is still a *hypothesis*, or reviewers *confirmed* it. Reports show how much of the model is established and how much is our reading |
 | **Edits that cannot make it worse** | One validated, atomic patch engine behind the CLI, the SDK, and the AI tools. A change that adds structural errors is rejected, and `--dry-run` shows the result first |
 | **Quality you can check** | A schema, structural validation, 66 deterministic lint rules, and a rubric for human or AI judges, so "is this a good impact model?" has an answer you can repeat |
 | **Progress you can measure** | Load a spreadsheet of numbers and see which indicators, outcomes, and pathways are on track, with assumptions that can cap a result and a confidence score for each route to impact |

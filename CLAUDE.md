@@ -4,8 +4,9 @@ Go-first impact model specification: Go structs in `pkg/impact` are the
 source of truth; JSON Schemas under `schema/` are generated from them and
 embedded. The SDK, the `impact-model` CLI (Cobra), and the MCP server are
 thin layers over one service layer. The theory of change, the logic model, the
-outcome map, and the logframe are views of one impact model; none is part of
-another.
+outcome map, the logframe, and OKRs are projections of one impact model, and a
+V2MOM projection is planned; none is part of another. "Projection" is the term
+for a method's rendering; `report.View` is the data a report is built from.
 
 ## Specs first
 

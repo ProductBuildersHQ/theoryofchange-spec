@@ -11,7 +11,7 @@
       "date": "2026-11-01",
       "highlights": [
         {
-          "description": "The project is now `impact-model`: one impact model, drawn as a theory of change, a logic model, an outcome map, or a logframe, none of them a part of another (breaking)"
+          "description": "The project is now `impact-model`, an AI-native format from ProductBuildersHQ: one impact model, with the theory of change, the logic model, the outcome map, the logframe, and OKRs as projections of it, none of them a part of another (breaking)"
         },
         {
           "description": "The first release under the module path `github.com/ProductBuildersHQ/impact-model` and the command `impact-model`"
@@ -19,7 +19,7 @@
       ],
       "changed": [
         {
-          "description": "The project is now the impact model, and the theory of change, the logic model, the outcome map, and the logframe are views of it. The module is `github.com/ProductBuildersHQ/impact-model`, the command is `impact-model`, and the packages are `pkg/impact` and `pkg/impactio`, with the root type `Model`"
+          "description": "The project is now the impact model, and the theory of change, the logic model, the outcome map, the logframe, and OKRs are projections of it. The module is `github.com/ProductBuildersHQ/impact-model`, the command is `impact-model`, and the packages are `pkg/impact` and `pkg/impactio`, with the root type `Model`"
         },
         {
           "description": "The document says `kind: ImpactModel` (and `ImpactModelStatus` for a status), the schemas are `impact-model` and `impact-model-status`, and a file is named `impact-model.yaml`. The fields `tocId` and `childToc` are `modelId` and `childModel`, and a cross-document reference starts `model:` where it started `toc:`"
@@ -33,7 +33,7 @@
       ],
       "documentation": [
         {
-          "description": "The README, the docs index, and the concepts page describe one impact model with several views, and say that none of them is a part of another"
+          "description": "The README and the docs index lead with the impact model as the format and list its projections, from the theory of change to OKRs, with the command that draws each and V2MOM marked as planned; the concepts page and the ADR use projection for a method's rendering, apart from `report.View`"
         },
         {
           "description": "ADR 0001 records the rename: what changed, what did not, and the alternatives"
@@ -43,6 +43,12 @@
         },
         {
           "description": "Release notes for v0.3.0, with a table of every old name and its new one"
+        }
+      ],
+      "build": [
+        {
+          "description": "Depend on oscompat v0.13.0",
+          "commit": "b97e62c"
         }
       ]
     },

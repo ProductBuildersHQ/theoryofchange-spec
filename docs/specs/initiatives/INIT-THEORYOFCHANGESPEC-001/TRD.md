@@ -2,7 +2,7 @@
 
 > **Note on names.** This specification was written when the product was called
 > the Theory of Change specification. It is now the impact model, and the theory
-> of change, the logic model, the outcome map, and the logframe are views of it.
+> of change, the logic model, the outcome map, and the logframe are projections of it.
 > Below, "theory" means the impact model document unless it names the method.
 > See [the decision](../../../design/adrs/0001-rename-to-impact-model.md).
 
