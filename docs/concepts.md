@@ -7,14 +7,17 @@ implications) maps to the Go model in `pkg/impact`. The
 this page is the index.
 
 The model is one impact model. The methods the research brief describes are
-views of it, drawn by the `report` command:
+projections of it, drawn by the `report` command:
 
-| Method | View | Report kinds |
+| Method | Projection shows | Report kinds |
 |--------|------|--------------|
 | Theory of change | Pathways of change, with the reasons and assumptions behind each link | `pathway` |
 | Logic model | Inputs, activities, outputs, and outcomes by level, for each pathway | `logic-model`, `logic-model-layered`, `logic-model-d2` |
 | Outcome map | Outcomes by level, with who is responsible for each | `outcome-map` |
 | Logframe | A matrix of narrative, indicators, verification, and assumptions | `logframe` |
+
+OKRs and outcome journeys are projections too, written by `export okr` and
+`export journey` for the PRISM planning tools. A V2MOM projection is planned.
 
 **Delivered by** names the roadmap item (`RMI-THEORYOFCHANGESPEC-NNN`, shown
 as `NNN`) that adds the type or field. Concepts not in v0 are listed under
@@ -116,7 +119,6 @@ as `NNN`) that adds the type or field. Concepts not in v0 are listed under
 |------------------|--------|---------------|
 | Contribution claims (Mayne's Contribution Analysis) | Needs evaluation workflow beyond v0 | `contributionClaims` |
 | Substantiated observed outcomes (Outcome Harvesting) | Stories cover v0; substantiation workflow later | `observedOutcomes` |
-| Logframe matrix projection | Logic-model views cover v0 needs | — |
 | Weighted precondition logic | `at_least` k-of-n covers v0 | — |
 
 ## Glossary

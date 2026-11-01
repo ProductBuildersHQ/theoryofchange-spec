@@ -17,8 +17,8 @@ Two things made the name wrong:
 
 - **Scope.** The name says the document is a Theory of Change, and the other
   methods look like parts of it or exports from it. A logic model is not a part of
-  a theory of change. It is a more operational view of the same underlying thing,
-  and each view leaves out what another keeps.
+  a theory of change. It is a more operational projection of the same underlying
+  thing, and each projection leaves out what another keeps.
 - **Direction.** The project is aimed at more than nonprofits. A product team has
   the same need to say why an intervention should move a metric, and to keep what
   it believes apart from what it has observed.
@@ -29,7 +29,10 @@ little.
 ## Decision
 
 The project is the **impact model**. The theory of change, the logic model, the
-pathway of change, the outcome map, and the logframe are views of it.
+pathway of change, the outcome map, and the logframe are projections of it, and
+so are strategy formats: OKRs, which the model already exports, and V2MOM, which
+is among the follow-ups. "Projection" names a method's rendering of the model.
+It is not `report.View`, the data a report is built from.
 
 | Was | Is |
 |-----|----|
@@ -49,7 +52,7 @@ pathway of change, the outcome map, and the logframe are views of it.
 ## What did not change
 
 - **The method names.** `report pathway`, `logic-model`, `outcome-map`, and
-  `logframe` are still the names of those views, and the research brief still
+  `logframe` are still the names of those projections, and the research brief still
   describes the Theory of Change method.
 - **`specVersion`**, which stays `0.1`. The reader accepts any `0.x`.
 - **Identifiers of the work.** The initiative `INIT-THEORYOFCHANGESPEC-001` and the
@@ -59,7 +62,7 @@ pathway of change, the outcome map, and the logframe are views of it.
   initiative.
 - **The quality rubric and the specification template** in `spec/`. They are the
   theory of change quality checklist and outline, and will become the rubric of
-  that view.
+  that projection.
 - **The example's own title.** The membership network example is a theory of
   change, and says so.
 
@@ -93,9 +96,9 @@ unrelated and independent, and nothing here depends on it.
 
 ## Follow-ups, not decided here
 
-- A `theory-of-change` report kind, so each method is a named view.
+- A `theory-of-change` report kind, so each method is a named projection.
 - `context.values`, and an export to V2MOM beside the existing export to OKRs, with
   the OKR and V2MOM documents staying separate and linked to the model by ID.
-- A report saying which views a given model has enough information to draw.
+- A report saying which projections a given model has enough information to draw.
 - Relations between indicators, such as one predicting another, with the evidence
   for each.
