@@ -2,7 +2,7 @@
 title: "Open agent authorization standard adoption"
 version: "0.1"
 toc-id: "open-agent-auth"
-content-hash: "fa550e46d581313b8c508451a69c170e1ce4b107842f1b7bf7a613b67ee7c129"
+content-hash: "f59a711aecf7ba5c7595c35c36171958de9dc71331c018a0a1bb9bd793eb0958"
 ---
 
 # The problem
@@ -61,7 +61,7 @@ Ask the people who run this pathway to correct it. What do you do that is not on
 | Activities | Run interoperability events; Publish reference implementations |
 | Outputs | Interop test suite; Event reports; Open reference implementations are available |
 | Short-term outcomes | A stable, interoperable specification exists |
-| Intermediate outcomes | Major identity providers support the standard [inferred]; Agent platforms support the standard |
+| Medium-term outcomes | Major identity providers support the standard [inferred]; Agent platforms support the standard |
 | Long-term outcomes | Enterprises require the standard in procurement [hypothesis] |
 | Impact | Agent access across the market is scoped and auditable |
 
@@ -146,4 +146,4 @@ Work down this list. For each: agree, change, remove, or not sure. Record what t
 
 # Export details
 
-Theory of Change open-agent-auth · version 0.1 · hash fa550e46d581
+Theory of Change open-agent-auth · version 0.1 · hash f59a711aecf7

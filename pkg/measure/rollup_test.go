@@ -122,7 +122,7 @@ func TestPathwayLogic(t *testing.T) {
 func TestPathwayPropagatesUpward(t *testing.T) {
 	d := toc.NewDocument("t", "p")
 	d.Outcomes = []toc.Outcome{
-		{ID: "oc-top", Title: "T", Level: toc.LevelImpact}, {ID: "oc-mid", Title: "M", Level: toc.LevelIntermediate}, {ID: "oc-low", Title: "L", Level: toc.LevelShortTerm},
+		{ID: "oc-top", Title: "T", Level: toc.LevelImpact}, {ID: "oc-mid", Title: "M", Level: toc.LevelMediumTerm}, {ID: "oc-low", Title: "L", Level: toc.LevelShortTerm},
 	}
 	d.Links = []toc.CausalLink{{ID: "l1", From: "oc-low", To: "oc-mid"}, {ID: "l2", From: "oc-mid", To: "oc-top"}}
 	got := pathway(t, d, map[string]toc.State{"oc-low": off, "oc-mid": ach, "oc-top": ach})

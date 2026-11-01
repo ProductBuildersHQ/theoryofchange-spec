@@ -228,7 +228,7 @@ func TestCeilingVariants(t *testing.T) {
 	// a(output) > b(short) > c(inter) > d(long) > e(impact); x(short) side branch to nothing.
 	mk := func(c *toc.Ceiling) *Graph {
 		s := newSpec().outcome("e", toc.LevelImpact).outcome("d", toc.LevelLongTerm).
-			outcome("c", toc.LevelIntermediate).outcome("b", toc.LevelShortTerm).
+			outcome("c", toc.LevelMediumTerm).outcome("b", toc.LevelShortTerm).
 			outcome("a", toc.LevelOutput).outcome("x", toc.LevelShortTerm).
 			link("a>b", "b>c", "c>d", "d>e")
 		doc := s.doc()
@@ -240,7 +240,7 @@ func TestCeilingVariants(t *testing.T) {
 		return g
 	}
 	eq(t, "nil ceiling", mk(nil).OwnedOutcomes(), []string{"e", "d", "c", "b", "a", "x"})
-	eq(t, "level", mk(&toc.Ceiling{Level: toc.LevelIntermediate}).OwnedOutcomes(), []string{"c", "b", "a", "x"})
+	eq(t, "level", mk(&toc.Ceiling{Level: toc.LevelMediumTerm}).OwnedOutcomes(), []string{"c", "b", "a", "x"})
 	eq(t, "outcome ids", mk(&toc.Ceiling{OutcomeIDs: []string{"c"}}).OwnedOutcomes(), []string{"c", "b", "a"})
 	eq(t, "both", mk(&toc.Ceiling{Level: toc.LevelShortTerm, OutcomeIDs: []string{"c"}}).OwnedOutcomes(), []string{"c", "b", "a", "x"})
 	eq(t, "ids with nothing else", mk(&toc.Ceiling{OutcomeIDs: []string{"a"}}).OwnedOutcomes(), []string{"a"})
@@ -248,7 +248,7 @@ func TestCeilingVariants(t *testing.T) {
 
 func TestCycleWithoutFeedback(t *testing.T) {
 	s := newSpec().outcome("i", toc.LevelImpact).outcome("a", toc.LevelShortTerm).
-		outcome("b", toc.LevelIntermediate).outcome("c", toc.LevelLongTerm).outcome("z", toc.LevelOutput).
+		outcome("b", toc.LevelMediumTerm).outcome("c", toc.LevelLongTerm).outcome("z", toc.LevelOutput).
 		link("z>a", "a>b", "b>c", "c>a", "c>i")
 	g := s.build(t)
 	eq(t, "cycles", g.Cycles(), [][]string{{"a", "b", "c"}})
@@ -328,7 +328,7 @@ func TestMaxPathsTruncation(t *testing.T) {
 	s := newSpec().outcome("i", toc.LevelImpact).outcome("s", toc.LevelOutput)
 	for k := range 4 {
 		m := fmt.Sprintf("m%d", k)
-		s.outcome(m, toc.LevelIntermediate).link("s>"+m, m+">i")
+		s.outcome(m, toc.LevelMediumTerm).link("s>"+m, m+">i")
 	}
 	g := s.build(t)
 	all := g.PathsToImpact("s", 0)
@@ -347,7 +347,7 @@ func TestDiamondPathCounting(t *testing.T) {
 	var links []string
 	for k := range 5 {
 		a, b, top := fmt.Sprintf("a%d", k), fmt.Sprintf("b%d", k), fmt.Sprintf("t%d", k)
-		s.outcome(a, toc.LevelIntermediate).outcome(b, toc.LevelIntermediate).outcome(top, toc.LevelIntermediate)
+		s.outcome(a, toc.LevelMediumTerm).outcome(b, toc.LevelMediumTerm).outcome(top, toc.LevelMediumTerm)
 		links = append(links, a+">"+prev, b+">"+prev, top+">"+a, top+">"+b)
 		prev = top
 	}
@@ -465,7 +465,7 @@ func TestDeepGraphNoStackIssues(t *testing.T) {
 	s := newSpec().outcome("n0", toc.LevelImpact)
 	var links []string
 	for k := 1; k < n; k++ {
-		s.outcome(fmt.Sprintf("n%d", k), toc.LevelIntermediate)
+		s.outcome(fmt.Sprintf("n%d", k), toc.LevelMediumTerm)
 		links = append(links, fmt.Sprintf("n%d>n%d", k, k-1))
 	}
 	g := s.link(links...).build(t)

@@ -115,7 +115,7 @@ func TestChainAndHeadlineRulesFindSeededDefectsAndAcceptRepairs(t *testing.T) {
 			d.Pathways[0].Focus.NorthStarID = "ind-ns2"
 		}},
 		{"TOC-NSM-002", "pw-1", func(d *toc.Document) {
-			d.Ceiling = &toc.Ceiling{Level: toc.LevelIntermediate}
+			d.Ceiling = &toc.Ceiling{Level: toc.LevelMediumTerm}
 			addIndicator(d, "ind-ns", "oc-impact")
 			d.Pathways[0].OutcomeIDs = append(d.Pathways[0].OutcomeIDs, "oc-impact")
 			focus(d, toc.Focus{NorthStarID: "ind-ns"})

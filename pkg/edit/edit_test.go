@@ -97,7 +97,7 @@ func TestOperations(t *testing.T) {
 			}
 		}},
 		{"test then replace", []Op{
-			must(Test("/outcomes/@oc-idp-support/level", "intermediate")),
+			must(Test("/outcomes/@oc-idp-support/level", "medium_term")),
 			must(Replace("/outcomes/@oc-idp-support/level", "short_term")),
 		}, func(t *testing.T, d *toc.Document) {
 			if o, _ := d.Outcome("oc-idp-support"); o.Level != toc.LevelShortTerm {

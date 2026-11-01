@@ -38,7 +38,7 @@ Confidence is a rule-based score from evidence and assumptions, not a probabilit
 |-------|----------|----------------|
 | Impact | 2 | 2 at risk |
 | Long-term outcome | 4 | 3 at risk · 1 not started |
-| Intermediate outcome | 6 | 3 at risk · 2 not started · 1 on track |
+| Medium-term outcome | 6 | 3 at risk · 2 not started · 1 on track |
 | Short-term outcome | 6 | 1 at risk · 2 not started · 1 unmeasured · 2 on track |
 | Output | 4 | 3 not started · 1 on track |
 
@@ -73,7 +73,7 @@ flowchart BT
       n_oc_lt_sustainable["Members have diversified, stable funding<br/><i>«inferred» · At risk</i>"]
       n_oc_lt_collective_voice["Local government and funders consult members through a coordinated channel<br/><i>«hypothesis» · At risk</i>"]
     end
-    subgraph lv_intermediate["Intermediate outcomes"]
+    subgraph lv_medium_term["Medium-term outcomes"]
       n_oc_im_leaders_practice["Member leaders apply improved management practices<br/><i>On track</i>"]
       n_oc_im_peer_network["Members turn to each other for advice and joint work<br/><i>«inferred» · At risk</i>"]
       n_oc_im_lower_overhead["Members spend less staff time and money on back-office work<br/><i>Not started</i>"]

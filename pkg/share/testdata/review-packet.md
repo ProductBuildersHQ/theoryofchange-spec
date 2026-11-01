@@ -12,8 +12,8 @@ Rows marked inferred or hypothesis are our reading, not something the organizati
 |----|-----------|-------|---------|----------|------------------|---------|
 | oc-safer-agents | Impact: Agent access across the market is scoped and auditable | — | — |  |  |  |
 | oc-enterprise-require | Long-term outcome: Enterprises require the standard in procurement | hypothesis | — |  |  |  |
-| oc-idp-support | Intermediate outcome: Major identity providers support the standard | inferred | ev-survey: Industry survey on agent access controls |  |  |  |
-| oc-platform-support | Intermediate outcome: Agent platforms support the standard | — | — |  |  |  |
+| oc-idp-support | Medium-term outcome: Major identity providers support the standard | inferred | ev-survey: Industry survey on agent access controls |  |  |  |
+| oc-platform-support | Medium-term outcome: Agent platforms support the standard | — | — |  |  |  |
 | oc-spec-stable | Short-term outcome: A stable, interoperable specification exists | stated | ev-survey: Industry survey on agent access controls |  |  |  |
 | oc-reference-impl | Output: Open reference implementations are available | — | — |  |  |  |
 

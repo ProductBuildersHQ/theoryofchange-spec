@@ -1,8 +1,8 @@
 kind,id,statement,basis,sources,decision,suggested_change,comment
 outcome,oc-safer-agents,Impact: Agent access across the market is scoped and auditable,,,,,
 outcome,oc-enterprise-require,Long-term outcome: Enterprises require the standard in procurement,hypothesis,,,,
-outcome,oc-idp-support,Intermediate outcome: Major identity providers support the standard,inferred,ev-survey: Industry survey on agent access controls,,,
-outcome,oc-platform-support,Intermediate outcome: Agent platforms support the standard,,,,,
+outcome,oc-idp-support,Medium-term outcome: Major identity providers support the standard,inferred,ev-survey: Industry survey on agent access controls,,,
+outcome,oc-platform-support,Medium-term outcome: Agent platforms support the standard,,,,,
 outcome,oc-spec-stable,"Short-term outcome: A stable, interoperable specification exists",stated,ev-survey: Industry survey on agent access controls,,,
 outcome,oc-reference-impl,Output: Open reference implementations are available,,,,,
 link,ln-spec-idp,"A stable, interoperable specification exists → Major identity providers support the standard. Providers implement only stable specifications.",stated,ev-survey: Industry survey on agent access controls,,,

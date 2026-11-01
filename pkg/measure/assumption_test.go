@@ -105,7 +105,7 @@ func TestWeightsAreOptions(t *testing.T) {
 // chain3: a -> b -> top, with an assumption on the first link.
 func chain3() (*toc.Document, *graph.Graph) {
 	d := toc.NewDocument("t", "p")
-	d.Outcomes = []toc.Outcome{{ID: "a", Title: "a", Level: toc.LevelShortTerm}, {ID: "b", Title: "b", Level: toc.LevelIntermediate}, {ID: "top", Title: "top", Level: toc.LevelImpact}, {ID: "side", Title: "side", Level: toc.LevelShortTerm}}
+	d.Outcomes = []toc.Outcome{{ID: "a", Title: "a", Level: toc.LevelShortTerm}, {ID: "b", Title: "b", Level: toc.LevelMediumTerm}, {ID: "top", Title: "top", Level: toc.LevelImpact}, {ID: "side", Title: "side", Level: toc.LevelShortTerm}}
 	d.Links = []toc.CausalLink{
 		{ID: "ln-ab", From: "a", To: "b", Rationale: "r", AssumptionIDs: []string{"asm"}},
 		{ID: "ln-bt", From: "b", To: "top", Rationale: "r"},

@@ -68,7 +68,7 @@ flowchart BT
     subgraph lv_long_term["Long-term outcomes"]
       n_oc_enterprise_require["Enterprises require the standard in procurement<br/><i>«hypothesis»</i>"]
     end
-    subgraph lv_intermediate["Intermediate outcomes"]
+    subgraph lv_medium_term["Medium-term outcomes"]
       n_oc_idp_support["Major identity providers support the standard<br/><i>«inferred»</i>"]
       n_oc_platform_support["Agent platforms support the standard"]
     end
@@ -127,7 +127,7 @@ flowchart BT
     subgraph lv_long_term["Long-term outcomes"]
       n_oc_enterprise_require["Enterprises require the standard in procurement<br/><i>«hypothesis»</i>"]
     end
-    subgraph lv_intermediate["Intermediate outcomes"]
+    subgraph lv_medium_term["Medium-term outcomes"]
       n_oc_idp_support["Major identity providers support the standard<br/><i>«inferred»</i>"]
       n_oc_platform_support["Agent platforms support the standard"]
     end
@@ -173,7 +173,7 @@ Ask the people who run this pathway to correct it. What do you do that is not on
 | Activities | Run interoperability events; Publish reference implementations |
 | Outputs | Interop test suite; Event reports; Open reference implementations are available |
 | Short-term outcomes | A stable, interoperable specification exists |
-| Intermediate outcomes | Major identity providers support the standard _(inferred)_; Agent platforms support the standard |
+| Medium-term outcomes | Major identity providers support the standard _(inferred)_; Agent platforms support the standard |
 | Long-term outcomes | Enterprises require the standard in procurement _(hypothesis)_ |
 | Impact | Agent access across the market is scoped and auditable |
 
