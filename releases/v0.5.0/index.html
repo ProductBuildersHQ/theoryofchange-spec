@@ -1391,6 +1391,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#the-definitions-pack-opens-with-the-problem-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The definitions pack opens with the problem tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exports-from-the-mcp-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exports from the MCP server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1750,6 +1772,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#the-definitions-pack-opens-with-the-problem-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The definitions pack opens with the problem tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exports-from-the-mcp-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exports from the MCP server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#examples" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1886,8 +1930,10 @@ a program exists to solve in the middle, its causes below as roots, and its
 effects above as branches, and checks that every cause and effect is addressed
 by an outcome or set aside with a reason. Causes, and the new effects, form a
 network: each can lead to several others.</p>
-<p>This release has one breaking change: a cause's <code>parent</code> is now <code>parents</code>, a
-list. See <a href="#upgrading">Upgrading</a>.</p>
+<p>AI agents can now produce every PRISM export, and the definitions pack opens
+with the problem tree.</p>
+<p>One change breaks documents: a cause's <code>parent</code> is now <code>parents</code>, a list. Go
+code that calls <code>report.Definitions</code> also changes. See <a href="#upgrading">Upgrading</a>.</p>
 <h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Problem trees.</strong> <code>report problem-tree</code> draws the core problem with causes
@@ -1899,6 +1945,9 @@ list. See <a href="#upgrading">Upgrading</a>.</p>
   an effect can follow from several, so <code>parents</code> is a list.</li>
 <li><strong>JSON first.</strong> The diagram is built as a JSON diagram document, from which D2
   and Mermaid are rendered, and <code>report problem-tree-json</code> prints it.</li>
+<li><strong>Exports for agents.</strong> The MCP tool <code>impact_export</code> writes the OKR,
+  outcome-journey, V2MOM, and DMAIC documents, through the same code as the
+  command line.</li>
 </ul>
 <h2 id="new-features">New Features<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h2>
 <h3 id="problem-tree-reports">Problem tree reports<a class="headerlink" href="#problem-tree-reports" title="Permanent link">&para;</a></h3>
@@ -1977,6 +2026,23 @@ elements.</p>
   the problem, which catches a link written the wrong way round</li>
 </ul>
 <p>The cause rules now skip rejected causes.</p>
+<h3 id="the-definitions-pack-opens-with-the-problem-tree">The definitions pack opens with the problem tree<a class="headerlink" href="#the-definitions-pack-opens-with-the-problem-tree" title="Permanent link">&para;</a></h3>
+<p><code>report definitions</code>, the pack a workshop reviews before any data exists, now
+starts with the problem tree when the model records causes or effects, ahead of
+the causal pathways, logic models, outcome maps, logframes, metric definitions,
+and glossary. A model with no causes or effects gets the same pack as before.
+The pack's Word, PowerPoint, and Pandoc exports, and the judge bundle's
+narrative, include it too.</p>
+<h3 id="exports-from-the-mcp-server">Exports from the MCP server<a class="headerlink" href="#exports-from-the-mcp-server" title="Permanent link">&para;</a></h3>
+<p>The new <code>impact_export</code> tool takes a model, inline or by path, and an export
+kind: <code>okr</code>, <code>journey</code>, <code>v2mom</code>, or <code>dmaic</code>. With observations, or a status
+date, the export carries the latest values and status. It returns the document,
+and for DMAIC the indicators it left out and why:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dmaic&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;document&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;...&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;omissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;indicatorId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ind-nps&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;it has no numeric target&quot;</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>A model the format cannot be drawn from is refused with the same message the
+command line gives, naming what to add. Both now export through
+<code>service.ExportPRISM</code>, so they cannot drift apart.</p>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <p>The examples linked their causes the wrong way round, from the nearer cause to
 the deeper one, and now point from deeper causes toward the problem. In the
@@ -1989,30 +2055,39 @@ problems, each relieved by a long-term or impact outcome.</p>
 <li>The <a href="../../guides/authoring/">authoring</a>, <a href="../../guides/cli/">CLI</a>,
   <a href="../../guides/examples/">examples</a>, and
   <a href="../../guides/getting-started/">getting started</a> guides cover effects and the
-  problem tree, and the README and concepts page list it as a projection.</li>
+  problem tree, and the concepts page lists it as a projection.</li>
+<li>The README and the <a href="../../">documentation home</a> list the problem tree
+  among the projections, add the problem, causes, and effects to what an impact
+  model holds, and show the journey, V2MOM, and DMAIC exports. A test keeps the
+  two in step.</li>
+<li>The <a href="../../guides/reports-and-decks/">reports guide</a> lists what the
+  definitions pack contains, and the
+  <a href="../../guides/mcp-and-skills/">MCP guide</a> lists <code>impact_export</code>.</li>
+<li><a href="../../credits/">Credits</a> name problem-tree analysis in the logical framework
+  approach, V2MOM, Six Sigma's DMAIC, and Shewhart's control charts.</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>go<span class="w"> </span>install<span class="w"> </span>github.com/ProductBuildersHQ/impact-model/cmd/impact-model@v0.5.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>go<span class="w"> </span>install<span class="w"> </span>github.com/ProductBuildersHQ/impact-model/cmd/impact-model@v0.5.0
 </code></pre></div>
 <p>Go 1.26.5 or later. To draw the D2 diagram you also need the <code>d2</code> tool.</p>
 <h2 id="upgrading">Upgrading<a class="headerlink" href="#upgrading" title="Permanent link">&para;</a></h2>
 <h3 id="documents-parent-is-now-parents">Documents: <code>parent</code> is now <code>parents</code><a class="headerlink" href="#documents-parent-is-now-parents" title="Permanent link">&para;</a></h3>
 <p>A cause that names a parent must name it in a list. Validation refuses the old
 field:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>error VAL-SCH-001 /causes/2: additional properties &#39;parent&#39; not allowed
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>error VAL-SCH-001 /causes/2: additional properties &#39;parent&#39; not allowed
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># was</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">causes</span><span class="p">:</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-fast-food</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">underlying</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">parent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-busy</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># is</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nt">causes</span><span class="p">:</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-fast-food</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">underlying</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="nt">parents</span><span class="p">:</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-busy</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># was</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">causes</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-fast-food</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">underlying</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">parent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-busy</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># is</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nt">causes</span><span class="p">:</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-fast-food</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">underlying</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nt">parents</span><span class="p">:</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cause-busy</span>
 </code></pre></div>
 <p>In JSON, <code>"parent": "cause-busy"</code> becomes <code>"parents": ["cause-busy"]</code>. Nothing
 else in a document changes; <code>specVersion</code> stays <code>"0.1"</code>.</p>
@@ -2024,12 +2099,27 @@ underlying or structural one as its parent, the link is reversed, and
 <p><code>cause add</code> and <code>cause set</code> take <code>--parents</code>, which accepts several IDs, in
 place of <code>--parent</code>.</p>
 <h3 id="go-code">Go code<a class="headerlink" href="#go-code" title="Permanent link">&para;</a></h3>
-<p><code>impact.Cause.Parent string</code> is now <code>Parents []string</code>. Other changes are
-additions: <code>impact.Effect</code>, <code>Model.Effects</code>, <code>Outcome.AddressesEffects</code>,
-<code>Cause.Provenance</code>, and the <code>problemtree</code> package.</p>
+<p><code>impact.Cause.Parent string</code> is now <code>Parents []string</code>.</p>
+<p><code>report.Definitions</code> takes the impact model, to draw its problem tree, and
+returns an error, since drawing it can fail:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// was</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nx">pack</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Definitions</span><span class="p">(</span><span class="nx">whole</span><span class="p">,</span><span class="w"> </span><span class="nx">pathways</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1">// is</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nx">pack</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">report</span><span class="p">.</span><span class="nx">Definitions</span><span class="p">(</span><span class="nx">whole</span><span class="p">,</span><span class="w"> </span><span class="nx">pathways</span><span class="p">,</span><span class="w"> </span><span class="nx">doc</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>Other changes are additions: <code>impact.Effect</code>, <code>Model.Effects</code>,
+<code>Outcome.AddressesEffects</code>, <code>Cause.Provenance</code>, the <code>problemtree</code> package with
+<code>Tree.Empty</code>, and <code>service.ExportPRISM</code>, <code>PRISMExport</code>, <code>PRISMExportKinds</code>, and
+<code>IsPRISMExport</code>. <code>prismx.Omission</code> gains JSON field names, <code>indicatorId</code> and
+<code>reason</code>.</p>
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
-<p>An API comparison against v0.4.0 reports one incompatible change, the removal of
-<code>Cause.Parent</code>, and the additions above as compatible. The command line keeps
+<p>An API comparison against v0.4.0 reports two incompatible changes, the removal
+of <code>Cause.Parent</code> and the new signature of <code>report.Definitions</code>, and the
+additions above as compatible. The command line keeps
 its exit codes, and a model with no causes or effects is unaffected.</p>
 <h2 id="known-limitations">Known Limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
