@@ -65,8 +65,9 @@ impact-model graph impact-model.yaml --format dot | dot -Tsvg > graph.svg
 impact-model report definitions impact-model.yaml --out definitions.md
 ```
 
-This renders the pathways, logic models, metric definitions, and glossary as one
-Markdown document. It needs no observations, so a workshop can review it before
+This renders the problem tree (once the model records causes or effects), the
+pathways, logic models, outcome maps, logframes, metric definitions, and
+glossary as one Markdown document. It needs no observations, so a workshop can review it before
 any data exists.
 
 To start from the problem rather than the solution, draw the problem tree: the
